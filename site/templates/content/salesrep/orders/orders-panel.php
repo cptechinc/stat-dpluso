@@ -7,31 +7,7 @@
 
 	$insertafter = 'salesrep';
 	$paginator = new Paginator($orderpanel->pagenbr, $orderpanel->count, $orderpanel->pageurl->getUrl(), $insertafter, $orderpanel->ajaxdata);
-	//SETUP AJAX
-	$ajax = new stdClass();
-	$ajax->loadinto = "#orders-panel"; //WHERE TO LOAD AJAX LOADED DATA
-	$ajax->focus = "#orders-panel"; //WHERE TO FOCUS AFTER LOADED DATA IS LOADED
-	$ajax->searchlink = $config->pages->ajax.'load/order-search/';  //LINK TO THE SEARCH PAGE FOR THIS OBJECT
-	$ajax->data = 'data-loadinto="'.$ajax->loadinto.'" data-focus="'.$ajax->focus.'"'; //DATA FIELDS FOR JAVASCRIPT
-
-	$ajax->url = $page->fullURL;
-	$ajax->url->path->setDplusPath("load/orders/salesrep/", $input->urlSegmentsStr."/");
-	$ajax->url->query->setData(array("display" => false, "ajax" => false));
-
-	$ajax->path = $ajax->url->path; //MODAL TO LOAD INTO IF NEED BE
-	$ajax->querystring = $ajax->url->query;//BASE QUERYSTRING NEEDED FOR AJAX
-	$ajax->link = $ajax->url; //LINK TO THE AJAX FILE
-
-
-	$ajax->insertafter = 'salesrep';
-
-    if ($config->ajax) {$collapse = '';} else {$collapse = 'collapse'; }
-
-
-	include $config->paths->content.'recent-orders/setup.php';
-	$ordercount =  count_salesreporders(session_id(), false);
-	$totalcount = $ordercount;
-
+	
 ?>
 <div class="panel panel-primary not-round" id="orders-panel">
     <div class="panel-heading not-round" id="order-panel-heading">

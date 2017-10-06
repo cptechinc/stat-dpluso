@@ -1,6 +1,8 @@
 <?php
     $editpage = new \Purl\Url($page->fullURL->getUrl());
-    $editpage->path->setDplusPath('contacts/', 'contacts/edit/');
+    $editpage->path->remove(6);
+    $editpage->path->add('edit');
+    
 ?>
 
 <div class="panel panel-primary not-round">
@@ -38,6 +40,6 @@
         </div>
     </div>
     <div class="panel-footer">
-        <a href="<?= $editpage; ?>" class="btn btn-warning btn-sm"> <i class="fa fa-pencil" aria-hidden="true"></i> Edit Contact</a>
+        <a href="<?= $editpage->getUrl(); ?>" class="btn btn-warning btn-sm"> <i class="fa fa-pencil" aria-hidden="true"></i> Edit Contact</a>
     </div>
 </div>

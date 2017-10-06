@@ -7,7 +7,7 @@
 	$ajax->data = 'data-loadinto="'.$ajax->loadinto.'" data-focus="'.$ajax->focus.'"'; //DATA FIELDS FOR JAVASCRIPT
 
 	$ajax->url = $page->fullURL;
-	$ajax->url->path->setDplusPath("load/quotes/cust/", $input->urlSegmentsStr."/");
+	$ajax->url->path = $config->pages->ajax.'load/quote-search/cust/'.$custID."/";
 	$ajax->url->query->setData(array("display" => false, "ajax" => false));
 
 	$ajax->path = $ajax->url->path; //MODAL TO LOAD INTO IF NEED BE
@@ -15,6 +15,7 @@
 	$ajax->link = $ajax->url; //LINK TO THE AJAX FILE
 
 	if ($shipID != '') {
+		$ajax->url->path->add('shipto-'.$shipID);
 		$ajax->insertafter = 'shipto-'.$shipID;
 		$ajax->searchlink .=	"shipto-".$shipID."/";
 	} else {

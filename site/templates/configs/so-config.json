@@ -1,0 +1,15 @@
+{
+    "config": {
+        "use_discount": false,
+        "change_list_price": false,
+        "show_cost": false,
+        "show_listprice": false,
+        "show_originalprice": false,
+        "show_margin": false,
+        "change_price": true,
+        "special_orders": {
+            "special_order": "S",
+            "dropship": "D"
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{  
+	"detail": {
+		"Invoice Number": "41119000",
+		"Customer PO Number": "411 Plus",
+		"Transaction Type": "IN",
+		"Hold/Release": "Hold",
+		"Invoice Date": "04/17/2017",
+		"Discount Date": "04/17/2017",
+		"Due Date": "04/17/2017",
+		"Terms Code": "10",
+		"Amount - Total": "121.63",
+		"Amount - Current": "",
+		"Amount - Aging 1": "121.63",
+		"Amount - Aging 2": "",
+		"Amount - Aging 3": ""
+    }
+}

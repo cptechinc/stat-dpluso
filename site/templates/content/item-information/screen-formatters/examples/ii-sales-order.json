@@ -1,0 +1,37 @@
+{
+	"detail": {
+		"Sales Order Number": "4220100",
+		"Data Source": "",
+		"Customer PO Number": "RBD",
+		"Customer ID": "BECKER",
+		"Customer Name": "BECKER GOLF SUPPLY",
+		"Order Date": "01/31/17",
+		"Ship-To ID": "123456",
+		"Ship-To Name": "BECKER GOLF SUPPLY",
+		"Ship-To City/State/Zip": "SAVAGE           MN 55378",
+		"Customer Item ID": "B100",
+		"Order Status": "New",
+		"Warehouse Code": "BU",
+		"Pick Date": "03/14/17",
+		"Verify Date": "03/14/17",
+		"Arrive Date": "01/31/17",
+		"Sales Unit of Measure": "EACH",
+		"Quantity Ordered": "2.00000",
+		"Quantity Shipped": "0.00000",
+		"Quantity Backordered": "0.00000",
+		"Quantity To Ship": "2.00000",
+		"Price": "80.00000",
+		"Amount": "160.00000",
+		"Requested Date": "01/31/17",
+		"Ship Date": "03/14/17",
+		"Cancel Date": "01/04/17",
+		"Special Order": "Y",
+		"Reference Purchase Order": "42234",
+		"Item Reference": "R-100",
+		"Non-Stock Vendor ID": "HPELECT",
+		"Non-Stock Vendor Item ID": "VN-RDB100",
+		"Non-Stock Vend Item Desc1": "VN-RDB100 desc1",
+		"Non-Stock Vend Item Desc2": "VN-RDB100 desc 2"
+	}
+	
+}

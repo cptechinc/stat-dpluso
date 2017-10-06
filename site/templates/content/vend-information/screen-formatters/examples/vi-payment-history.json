@@ -1,0 +1,18 @@
+{
+    "detail": {
+        "Purchase Order Number": "123456",
+        "Invoice Number": "106038",
+        "Check Number": "1010102",
+        "Check Status": "O",
+        "Check Date": "02/18/16",
+        "Invoice Date": "07/25/07",
+        "Due Date": "07/25/07",
+        "Discount Date": "07/25/07",
+        "Void Date": "07/25/07",
+        "Payment Days": "3130",
+        "Overdue Days": "3130",
+        "Paid + Discount Amount": "516.30",
+        "Payment Amount": "600.00",
+        "Discount Amount": "83.70"
+    }
+}

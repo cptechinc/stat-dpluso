@@ -1,0 +1,36 @@
+{
+    "header": {
+        "Purchase Order Number": "123456",
+        "Order Date": "10/01/2017",
+        "Reference": "ABC123",
+        "Ship-From ID": "",
+        "Ship-To Name": "",
+        "Ship-To City/State/Zip": "",
+        "Ship Via Code": "",
+        "Ship Via Description": "",
+        "Terms Code": "",
+        "Terms Description": "",
+        "FOB": "",
+        "Expected Date": ""
+    },
+    "detail": {
+        "Line Number": "",
+        "Item ID": "12345",
+        "Item Description 1": "WEST CURE BLANKET-ULTRA CURE NCF",
+        "Item Description 2": "",
+        "Vendor Item ID": "",
+        "Warehouse Code": "",
+        "Purchase Unit of Measure": "",
+        "Special Order": "",
+        "Release (Yes/No)": "",
+        "Line Status": "",
+        "Ship Date": "",
+        "Expected Date": "",
+        "Acknowledgment Date": "",
+        "Cancel Date": "",
+        "Quantity Ordered": "1200.000",
+        "Quantity Received": "",
+        "Quantity on Order": "",
+        "Unit Cost": "0.130"
+    }
+}

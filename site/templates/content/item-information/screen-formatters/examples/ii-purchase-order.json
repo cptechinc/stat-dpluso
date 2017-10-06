@@ -1,0 +1,25 @@
+{
+	"detail": {
+		"Order Number": "7019",
+		"Data Source": "",
+		"Order Date": "20150406",
+		"Expected Date": "20150512",
+		"Cancel Date": "",
+		"Acknowledgment/ETA Date": "20150524",
+		"Ship Date": "",
+		"Vendor ID": "",
+		"Vendor Name": "",
+		"Warehouse Code": "",
+		"Purchase Unit of Measure": "",
+		"Quantity On Order": "100.000",
+		"Quantity Due In": "",
+		"Unit Cost": "70.000",
+		"Amount": "7000.00000",
+		"Special Order": "",
+		"Reference Sales Order": "",
+		"Non-Stock Vendor Item ID": "",
+		"Non-Stock Vend Item Desc1": "",
+		"Non-Stock Vend Item Desc2": ""
+	}
+	
+}

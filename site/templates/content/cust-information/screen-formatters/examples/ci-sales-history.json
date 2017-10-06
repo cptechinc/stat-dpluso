@@ -1,0 +1,77 @@
+{
+	"header": {
+        "Invoice Number": "4210300",
+        "Order Number": "4210300",
+        "Customer PO Number": "STEVE",
+        "Order Date": "10/27/16",
+        "Invoice Date": "10/27/16",
+        "Ship-To ID": "2",
+        "Ship-To Name": "DOWN TOWN EAST COMMONS",
+        "Ship-To City/State/Zip": "",
+        "Ship Via Code": "COTR",
+        "Ship Via Description": "COMPANY TRUCK",
+        "Terms Code": "CRED",
+        "Terms Description": "CREDIT CARD TERMS",
+        "Salesperson 1 ID": "200",
+        "Salesperson 1 Name": "MIKE MCCABE",
+        "Salesperson 2 ID": "",
+        "Salesperson 2 Name": "",
+        "Salesperson 3 ID": "",
+        "Salesperson 3 Name": "",
+        "Release Number": "",
+        "Pick Date": "",
+        "Verify Date": "10/27/16"
+	},
+	"detail": {
+        "Item ID": "280910",
+        "Item Description 1": "WEST CURE BLANKET-ULTRA CURE NCF",
+        "Item Description 2": "",
+        "Customer Item ID": "",
+        "Warehouse ID": "BU",
+        "Sales Unit of Measure": "SF",
+        "Special Order": "N",
+        "Item Reference": "",
+        "Requested Date": "10/26/16",
+        "Ship Date": "10/27/16",
+        "Quantity Ordered": "1200.00000",
+        "Quantity Shipped": "1000.00000",
+        "Quantity Backordered": "200.00000",
+        "Unit Price": "0.13000",
+        "Total Amount": "130.00000",
+        "Unit Cost": "0.00000",
+        "Total Cost": "90.00000",
+        "Picker Initials": "",
+        "Non-Stock Vendor ID": "",
+        "Non-Stock PO Number": "",
+        "Non-Stock Vendor Item": ""
+	},
+    "detailnotes": {
+        "Detail Notes": "These are detail line notes"
+    },
+    "ordernotes": {
+        "Order Notes": "This is my order note."
+    },
+    "lotserial": {
+        "Lot/Serial Number": "Q102700002",
+        "Lot/Serial Qty Shipped": "5.00000",
+        "Batch": "",
+        "Cure Date": "",
+        "Lot Reference": ""
+    },
+    "total": {
+        "Subtotal": "600.00000",
+        "Tax": "44.40000",
+        "Freight": "0.00000",
+        "Miscellaneous": "0.00000",
+        "Order Total": "644.40000"
+    },
+    "shipments": {
+        "Tracking Number": "Z123456789012345",
+        "Weight": "25.00000",
+        "Service Type": "Ground",
+        "Shipment Date": "04/17/17",
+        "Bill-of-Lading Number": "Bill-Of-Lading",
+        "Number of Boxes": "1"
+    }
+
+}

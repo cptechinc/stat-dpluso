@@ -1,0 +1,33 @@
+{
+	"detail": {
+		"Purchase Order Number": "7055",
+		"Vendor ID": "ROBEC",
+		"Vendor Name": "ROBEC DISTRIBUTING CO",
+		"Order Date": "201304014",
+		"Ship Date": "201304014",
+		"Expected Date": "201304014",
+		"Receipt Date": "201305014",
+		"Purchase Unit of Measure": "EACH",
+		"Quantity Received": "35",
+		"Received Unit Cost": "",
+		"Received Amount": "",
+		"Special Order": "",
+		"Non-Stock Vendor Item ID": "",
+		"Non-Stock Vend Item Desc1": "",
+		"Non-Stock Vend Item Desc2": "",
+		"Invoice Number": "",
+		"Invoice Date": "",
+		"Quantity Invoiced": "35",
+		"Invoiced Unit Cost": "90.22",
+		"Invoiced Amount": "",
+		"Landed Unit Cost": "102.35",
+		"Landed Total Cost": "3582.25"
+
+		
+	},
+	"lotserial": {
+		"Lot/Serial Number": "N051400002",
+		"Bin Number": "",
+		"Lot/Serial Qty Received": "35"
+	} 
+}

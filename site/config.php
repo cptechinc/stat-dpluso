@@ -89,9 +89,9 @@
 
 	$config->prependTemplateFile = '_init.php';
 	$config->maxUrlSegments = 7;
-	$config->cgi = "CRMTEST";
-	$config->cptechcustomer = 'cptech';
-	$config->COMPANYNBR = '3';
+	$config->cgi = "CRM";
+	$config->cptechcustomer = 'stat';
+	$config->COMPANYNBR = '2';
 	$config->companyfiles = "/var/www/html/data".$config->COMPANYNBR."/";
 	$config->documentstorage = "/orderfiles/";
 	$config->documentstoragedirectory = "/var/www/html/orderfiles/";

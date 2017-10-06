@@ -847,6 +847,7 @@ class ProcessWire extends Wire {
 			'wire' => "$wireDir/",
 			'site' => "$siteDir/",
 			'modules' => "$wireDir/modules/",
+			'vendor' => "vendor/",
 			'siteModules' => "$siteDir/modules/",
 			'core' => "$coreDir/",
 			'assets' => "$assetsDir/",
@@ -855,6 +856,7 @@ class ProcessWire extends Wire {
 			'files' => "$assetsDir/files/",
 			'tmp' => "$assetsDir/tmp/",
 			'templates' => "$siteDir/templates/",
+			'content' => "$siteDir/templates/content/",
 			'fieldTemplates' => "$siteDir/templates/fields/",
 			'adminTemplates' => "$wireDir/$adminTplDir/",
 		), true);
@@ -898,5 +900,3 @@ class ProcessWire extends Wire {
 	}
 
 }
-
-

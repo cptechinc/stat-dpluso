@@ -32,13 +32,17 @@
         	<div class="panel-body">
 				<div class="row">
 					<div class="col-xs-4">
-                        <select name="" id="" class="form-control change-action-type" data-link="<?php echo $actionpanel->getactiontyperefreshlink(); ?>" <?= $ajax->data; ?>>
-                            <?php $actiontypes = $pages->get('/activity/')->children(); ?>
-                            <?php foreach ($actiontypes as $actiontype) : ?>
-								<?php if ($actiontype->name == $actionpanel->getactiontypepage()) : ?>
-									<option value="<?= $actiontype->name; ?>" selected><?= $actiontype->title; ?></option>
+						<?php $types = $pages->get('/activity/')->children(); ?>
+						<?php foreach ($types as $type) : ?>
+							<p><?= $type->title; ?></p>
+						<?php endforeach; ?>
+                        <select name="" id="" class="form-control change-action-type" data-link="<?= $actionpanel->getactiontyperefreshlink(); ?>" <?= $ajax->data; ?>>
+                            <?php $types = $pages->get('/activity/')->children(); ?>
+                            <?php foreach ($types as $type) : ?>
+								<?php if ($type->name == $actionpanel->getactiontypepage()) : ?>
+									<option value="<?= $type->name; ?>" selected><?= ucfirst($type->name); ?></option>
 								<?php else : ?>
-									<option value="<?= $actiontype->name; ?>"><?= $actiontype->title; ?></option>
+									<option value="<?= $type->name; ?>"><?= ucfirst($type->name); ?></option>
 								<?php endif; ?>
                             <?php endforeach; ?>
                         </select>

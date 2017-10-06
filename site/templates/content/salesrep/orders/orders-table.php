@@ -53,9 +53,7 @@
 
              <tr class="detail last-detail">
              	<td colspan="2">
-             		<a href="<?= $config->pages->orders."redir/?action=get-order-details&print=true&ordn=".$order->orderno; ?>" target="_blank">
-						<span class="h3"><i class="glyphicon glyphicon-print" aria-hidden="true"></i></span> <span>View Printable Order</span>
-					</a>
+             		<?= $order->generate_viewprintlink($orderpanel); ?>
              	</td>
 				<td colspan="3">
 					<a href="<?= $config->pages->actions.'all/load/list/order/?ordn='.$order->orderno.'&modal=modal'; ?>" class="load-into-modal" data-modal="#ajax-modal">
@@ -63,9 +61,7 @@
 					</a>
 				</td>
                 <td>
-                	<a class="btn btn-primary btn-sm" onClick="reorder()">
-                    	<span class="glyphicon glyphicon-shopping-cart" title="re-order"></span> Reorder Order
-                    </a>
+                	<?= $order->generate_viewrelatedactionslink($orderpanel); ?>
                 </td>
                 <td></td>  <td></td>
                 <td colspan="2">

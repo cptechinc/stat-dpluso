@@ -215,18 +215,31 @@
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-sm btn-primary $addclass|$ajaxdata", $icon);
 		}
 		
+		public function generate_viewprintlink(SalesOrderPanel $orderpanel) {
+			$bootstrap = new Contento();
+			$href = $this->generate_viewprinturl($orderpanel);
+			$icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-print'));
+			return $bootstrap->openandclose('a', "href=$href|target=_blank", $icon." View Printable Order");
+		}
+		
+		public function generate_viewrelatedactionslink(SalesOrderPanel $orderpanel) {
+			$bootstrap = new Contento();
+			$href = $this->generate_relatedactionsurl($orderpanel);
+			$icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-check'));
+			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal|data-modal=$orderpanel->modal", $icon." View Associated Actions");
+		}
 		/* =============================================================
 			URL FUNCTIONS -> FUNCTIONS THAT GENERATE URLS 
 		============================================================ */
 		public function generate_dplusnotesrequesturl(SalesOrderPanel $orderpanel, $linenbr) {
-			$url = $orderpanel->pageurl;
+			$url = new \Purl\Url($orderpanel->pageurl->getUrl());
 			$url->path = wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-order-notes','ordn' => $this->orderno, 'linenbr' => $linenbr));
 			return $url->getUrl();
 		}
 		
 		public function generate_trackingrequesturl(SalesOrderPanel $orderpanel) {
-			$url = $url = $this->generate_ordersredirurl();
+			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'get-order-tracking', 'ordn' => $this->orderno, 'page' => $orderpanel->pagenbr, 'orderby' => $orderpanel->tablesorter->orderbystring));
 			if ($orderpanel->type == 'cust') {
 				$url->query->set('custID', $this->custid);
@@ -242,6 +255,7 @@
 			}
 			return $url->getUrl();
 		}
+		
 		
 		public function generate_editorderurl() {
 			$url = $this->generate_ordersredirurl();
@@ -265,9 +279,8 @@
 		}
 		
 		public function generate_closedetailsurl(SalesOrderPanel $orderpanel) { 
-			$url = $orderpanel->pageurl;
-			$sorting = false;
-			$url->query->setData(array('ordn' => false, 'show' => false, 'orderby' => false));
+			$url = new \Purl\Url($orderpanel->pageurl->getUrl());
+			$url->query->setData(array('ordn' => false, 'show' => false));
 			return $url->getUrl();
 		}
 		
@@ -293,8 +306,15 @@
 		}
 				
 		public function generate_viewprinturl(SalesOrderPanel $orderpanel) {
-			$url = generate_getorderdetailsurl($orderpanel);
+			$url = new \Purl\Url($this->generate_getorderdetailsurl($orderpanel));
 			$url->query->set('print', 'true');
+			return $url->getUrl();
+		}
+		
+		public function generate_relatedactionsurl(SalesOrderPanel $orderpanel) {
+			$url = new \Purl\Url($orderpanel->pageurl->getUrl());
+			$url->path = wire('config')->pages->actions."all/load/list/order/";
+			$url->query->setData(array('ordn' => $this->orderno));
 			return $url->getUrl();
 		}
 		

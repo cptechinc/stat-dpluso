@@ -51,14 +51,10 @@
 
              <tr class="detail last-detail">
              	<td colspan="2">
-					<a href="<?= $config->pages->orders."redir/?action=get-order-details&print=true&ordn=".$order->orderno; ?>" target="_blank">
-						<span class="h3"><i class="glyphicon glyphicon-print" aria-hidden="true"></i></span> <span>View Printable Order</span>
-					</a>
+					<?= $order->generate_viewprintlink($orderpanel); ?>
 				</td>
 				<td colspan="3">
-					<a href="<?= $config->pages->actions.'all/load/list/order/?ordn='.$order->orderno.'&modal=modal'; ?>" class="load-into-modal" data-modal="#ajax-modal">
-						<span class="h3"><i class="glyphicon glyphicon-check" aria-hidden="true"></i></span> <span>View Associated Actions</span>
-					</a>
+					<?= $order->generate_viewrelatedactionslink($orderpanel); ?>
 				</td>
                 <td>
                 	<a class="btn btn-primary btn-sm" onClick="reorder()">
@@ -67,7 +63,7 @@
                 </td>
                 <td></td>  <td></td>
                 <td colspan="2">
-                    <div class="pull-right"> <a class="btn btn-danger btn-sm load-link" href="<?php echo $order->generate_closedetailsurl($orderpanel); ?>" <?php echo $orderpanel->ajaxdata; ?>>Close</a> </div>
+                    <div class="pull-right"> <a class="btn btn-danger btn-sm load-link" href="<?= $order->generate_closedetailsurl($orderpanel); ?>" <?php echo $orderpanel->ajaxdata; ?>>Close</a> </div>
                 </td>
              	<td></td>
              </tr>

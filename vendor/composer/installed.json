@@ -1,5 +1,54 @@
 [
     {
+        "name": "eoghanobrien/php-simple-mail",
+        "version": "1.7.0",
+        "version_normalized": "1.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/eoghanobrien/php-simple-mail.git",
+            "reference": "0fd0eb6f4766aee69cf991484e61b2b832fa6614"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/eoghanobrien/php-simple-mail/zipball/0fd0eb6f4766aee69cf991484e61b2b832fa6614",
+            "reference": "0fd0eb6f4766aee69cf991484e61b2b832fa6614",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8",
+            "squizlabs/php_codesniffer": "~2.8"
+        },
+        "time": "2017-02-17T07:32:04+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "class.simple_mail.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Eoghan O'Brien",
+                "email": "eoghan@eoghanobrien.com",
+                "homepage": "http://www.eoghanobrien.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "Provides a simple, chainable wrapper for creating and sending emails using the PHP mail() function.",
+        "homepage": "https://github.com/eoghanobrien/php-simple-mail",
+        "keywords": [
+            "email",
+            "php5"
+        ]
+    },
+    {
         "name": "jeremykendall/php-domain-parser",
         "version": "1.3.1",
         "version_normalized": "1.3.1.0",
@@ -54,32 +103,25 @@
     },
     {
         "name": "jwage/purl",
-        "version": "v0.0.7",
-        "version_normalized": "0.0.7.0",
+        "version": "dev-cptechinc",
+        "version_normalized": "dev-cptechinc",
         "source": {
             "type": "git",
-            "url": "https://github.com/jwage/purl.git",
-            "reference": "1242069b4d900f176ae7339700d4af5b556b25bf"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jwage/purl/zipball/1242069b4d900f176ae7339700d4af5b556b25bf",
-            "reference": "1242069b4d900f176ae7339700d4af5b556b25bf",
-            "shasum": ""
+            "url": "https://github.com/cptechinc/purl.git",
+            "reference": "c206fc61c11a2b35c5da533ff6f0bcc89c7fedf6"
         },
         "require": {
             "jeremykendall/php-domain-parser": "1.3.1",
             "php": ">=5.3.0"
         },
-        "time": "2016-03-05T16:40:31+00:00",
+        "time": "2017-10-07T02:48:32+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-0": {
                 "Purl": "src/"
             }
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
@@ -97,52 +139,42 @@
         ]
     },
     {
-        "name": "eoghanobrien/php-simple-mail",
-        "version": "1.7.0",
-        "version_normalized": "1.7.0.0",
+        "name": "cptechinc/dpluso-processwire-classes",
+        "version": "v1.0.1",
+        "version_normalized": "1.0.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/eoghanobrien/php-simple-mail.git",
-            "reference": "0fd0eb6f4766aee69cf991484e61b2b832fa6614"
+            "url": "https://github.com/cptechinc/dpluso-processwire-classes.git",
+            "reference": "44435efbfe21940e3e2ae3dc2c2c73bda77eb781"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/eoghanobrien/php-simple-mail/zipball/0fd0eb6f4766aee69cf991484e61b2b832fa6614",
-            "reference": "0fd0eb6f4766aee69cf991484e61b2b832fa6614",
+            "url": "https://api.github.com/repos/cptechinc/dpluso-processwire-classes/zipball/44435efbfe21940e3e2ae3dc2c2c73bda77eb781",
+            "reference": "44435efbfe21940e3e2ae3dc2c2c73bda77eb781",
             "shasum": ""
         },
-        "require": {
-            "php": ">=5.2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8",
-            "squizlabs/php_codesniffer": "~2.8"
-        },
-        "time": "2017-02-17T07:32:04+00:00",
+        "time": "2017-10-07T01:30:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "classmap": [
-                "class.simple_mail.php"
+                "src/Contact.class.php",
+                "src/DplusDateTime.class.php",
+                "src/Table.class.php",
+                "src/UserAction.class.php",
+                "src/UserActionPanel.class.php",
+                "src/Contento.class.php",
+                "src/SalesOrder.class.php",
+                "src/SalesOrderPanel.class.php",
+                "src/TablePageSorter.class.php",
+                "src/Paginator.class.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Eoghan O'Brien",
-                "email": "eoghan@eoghanobrien.com",
-                "homepage": "http://www.eoghanobrien.com",
-                "role": "Developer"
-            }
-        ],
-        "description": "Provides a simple, chainable wrapper for creating and sending emails using the PHP mail() function.",
-        "homepage": "https://github.com/eoghanobrien/php-simple-mail",
+        "description": "URL Manipulation for PHP 5.3",
+        "homepage": "http://github.com/cptechinc/dpluso-processwire-classes",
         "keywords": [
-            "email",
-            "php5"
+            "crm"
         ]
     }
 ]

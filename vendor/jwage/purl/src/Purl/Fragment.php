@@ -67,7 +67,7 @@ class Fragment extends AbstractPart
     {
         $this->initialize();
         $this->data[$key] = $this->preparePartValue($key, $value);
-        
+
         return $this;
     }
 

@@ -56,23 +56,17 @@ abstract class AbstractPart implements \ArrayAccess
      *
      * @param array $data
      */
-     public function setData(array $data) {
-         if ($this->isInitialized()) {
-             $original = $this->data;
-             $new = $data;
-             $this->data = array_merge($original, $new);
-         } else {
-             $this->initialize();
-             $this->data = $data;
-         }
-
+    public function setData(array $data)
+    {
+        $this->initialize();
+        $this->data = $data;
          foreach ($data as $key => $value) {
              if (empty($value) && $value !== '0') {
                  unset($this->data[$key]);
              }
          }
          return $this;
-     }
+    }
 
     /**
      * Check if this part has been initialized yet.
@@ -118,13 +112,7 @@ abstract class AbstractPart implements \ArrayAccess
     public function set($key, $value)
     {
         $this->initialize();
-        if (!$value) {
-            if (array_key_exists($key, $this->data)) {
-                unset($this->data[$key]);
-            }
-        } else {
-            $this->data[$key] = $value;
-        }
+        $this->data[$key] = $value;
 
         return $this;
     }

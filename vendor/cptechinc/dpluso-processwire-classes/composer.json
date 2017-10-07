@@ -1,4 +1,9 @@
 {
+	"name": "cptechinc/dpluso-processwire-classes",
+    "type": "library",
+    "description": "URL Manipulation for PHP 5.3",
+    "keywords": ["crm"],
+    "homepage": "http://github.com/cptechinc/dpluso-processwire-classes",
 	"autoload": {
 		"classmap": [
 			"src/Contact.class.php",

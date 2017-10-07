@@ -13,9 +13,16 @@
       "role": "Developer"
     }
   ],
+  "repositories": [{
+      "type": "git",
+      "url": "https://github.com/cptechinc/purl.git"
+  }],
   "require": {
     "php": ">=5.3.8",
-    "ext-gd": "*"
+    "ext-gd": "*",
+    "eoghanobrien/php-simple-mail": "^1.7",
+    "jwage/purl": "dev-cptechinc",
+    "cptechinc/dpluso-processwire-classes": "^1.0"
   },
   "autoload": {
     "files": [ "wire/core/ProcessWire.php" ]

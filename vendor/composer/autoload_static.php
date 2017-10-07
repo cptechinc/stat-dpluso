@@ -4,10 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitaaf93569a92e3a693aba24b0e09354b2
+class ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639
 {
     public static $files = array (
-        '4ba1167ff053aab3afcc2d28993cfca7' => __DIR__ . '/../..' . '/wire/core/ProcessWire.php',
+        '9e18ce4281630de2b98d43ef0289b581' => __DIR__ . '/../..' . '/wire/core/ProcessWire.php',
     );
 
     public static $prefixesPsr0 = array (
@@ -25,14 +25,24 @@ class ComposerStaticInitaaf93569a92e3a693aba24b0e09354b2
     );
 
     public static $classMap = array (
+        'Contact' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/Contact.class.php',
+        'Contento' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/Contento.class.php',
+        'DplusDateTime' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/DplusDateTime.class.php',
+        'Paginator' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/Paginator.class.php',
+        'SalesOrder' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/SalesOrder.class.php',
+        'SalesOrderPanel' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/SalesOrderPanel.class.php',
         'SimpleMail' => __DIR__ . '/..' . '/eoghanobrien/php-simple-mail/class.simple_mail.php',
+        'Table' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/Table.class.php',
+        'TablePageSorter' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/TablePageSorter.class.php',
+        'UserAction' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/UserAction.class.php',
+        'UserActionPanel' => __DIR__ . '/..' . '/cptechinc/dpluso-processwire-classes/src/UserActionPanel.class.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixesPsr0 = ComposerStaticInitaaf93569a92e3a693aba24b0e09354b2::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitaaf93569a92e3a693aba24b0e09354b2::$classMap;
+            $loader->prefixesPsr0 = ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639::$classMap;
 
         }, null, ClassLoader::class);
     }

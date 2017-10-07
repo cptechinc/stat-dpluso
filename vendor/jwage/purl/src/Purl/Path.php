@@ -57,29 +57,6 @@ class Path extends AbstractPart
         $this->path = $path;
     }
 
-
-
-    public function setDplusPath($path, $path2) {
-        if ($path2 == '/') {
-            $path2 = '';
-        }
-        if (strpos($this->path, $path) !== false) { // IF Path1 is in $this->path
-            // Do Nothing
-             if (strpos($path2, $path) !== false) {
-                 $path2 = str_replace($path, '', $path2);
-             }
-		} else {
-            $this->path .= $path;
-        }
-        if (!empty($path2)) {
-            if (strpos($this->path, $path2) !== false) { // IF Path1 is in Path2
-    			//DO Nothing
-    		} else {
-                $this->path .= $path2;
-            }
-        }
-    }
-
     /**
      * Get the array of segments that make up the path.
      *

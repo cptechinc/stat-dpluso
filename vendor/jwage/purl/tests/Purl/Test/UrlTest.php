@@ -233,13 +233,14 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     public function testExtract()
     {
-        $urls = Url::extract("test\nmore test https://google.com ftp://jwage.com ftps://jwage.com http://google.com\ntesting this out http://jwage.com more text");
-        $this->assertEquals(5, count($urls));
+        $urls = Url::extract("test\nmore test https://google.com ftp://jwage.com ftps://jwage.com http://google.com\ntesting this out http://jwage.com more text https://we-are-a-professional-studio-of.photography");
+        $this->assertEquals(6, count($urls));
         $this->assertEquals('https://google.com/', (string) $urls[0]);
         $this->assertEquals('ftp://jwage.com/', (string) $urls[1]);
         $this->assertEquals('ftps://jwage.com/', (string) $urls[2]);
         $this->assertEquals('http://google.com/', (string) $urls[3]);
         $this->assertEquals('http://jwage.com/', (string) $urls[4]);
+        $this->assertEquals('https://we-are-a-professional-studio-of.photography/', (string) $urls[5]);
     }
 
     public function testManualObjectConstruction()
@@ -306,6 +307,28 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
         $url = Url::fromCurrent();
         $this->assertEquals('http://user:passwd123@jwage.com/', (string) $url);
+    }
+    
+    public function testRelativeUrl() 
+    {
+        // test all resource parts
+        $url = new Url('/path1/path2?x=1&y=2#frag');
+        $this->assertFalse($url->isAbsolute());        
+        $this->assertEquals('/path1/path2?x=1&y=2#frag', (string)$url);
+        
+        // test base path        
+        $url = new Url('/path1');        
+        $this->assertEquals('/path1', (string)$url);
+        
+        // test minimal path
+        $url = new Url('/');       
+        $this->assertEquals('/', (string)$url);
+        
+        // test feature request
+        $url = new Url('/events');
+        $url->query->set('param1', 'value1');
+        $this->assertEquals('/events?param1=value1', (string)$url);
+       
     }
 }
 

@@ -6,5 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Contact' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/Contact.class.php',
+    'Contento' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/Contento.class.php',
+    'DplusDateTime' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/DplusDateTime.class.php',
+    'Paginator' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/Paginator.class.php',
+    'SalesOrder' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/SalesOrder.class.php',
+    'SalesOrderPanel' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/SalesOrderPanel.class.php',
     'SimpleMail' => $vendorDir . '/eoghanobrien/php-simple-mail/class.simple_mail.php',
+    'Table' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/Table.class.php',
+    'TablePageSorter' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/TablePageSorter.class.php',
+    'UserAction' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/UserAction.class.php',
+    'UserActionPanel' => $vendorDir . '/cptechinc/dpluso-processwire-classes/src/UserActionPanel.class.php',
 );

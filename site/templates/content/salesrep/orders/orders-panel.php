@@ -15,7 +15,7 @@
         	<a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">
 				Searching for <?php echo $_SESSION['order-search']; ?> <span class="caret"></span> <span class="badge"><?php echo $orderpanel->count; ?></span>
             </a>
-    	<?php elseif ($ordercount > 0) : ?>
+    	<?php elseif ($orderpanel->count > 0) : ?>
             <a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">Your Orders <span class="caret"></span></a> &nbsp; <span class="badge"> <?php echo $orderpanel->count; ?></span> &nbsp; | &nbsp;
             <?php echo $orderpanel->generate_refreshorderslink(); ?>
         <?php else : ?>

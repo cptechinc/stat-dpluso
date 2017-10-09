@@ -4,7 +4,7 @@
     </thead>
     <tbody>
     	<?php if ($input->get->ordn) : ?>
-			<?php if ($ordercount == 0 && $sanitizer->text($input->get->ordn) == '') : ?>
+			<?php if ($orderpanel->count == 0 && $sanitizer->text($input->get->ordn) == '') : ?>
                 <tr> <td colspan="12" class="text-center">No Orders found! Try using a date range to find the order(s) you are looking for.</td> </tr>
             <?php endif; ?>
         <?php endif; ?>
@@ -60,8 +60,10 @@
 						<span class="h3"><i class="glyphicon glyphicon-check" aria-hidden="true"></i></span> <span>View Associated Actions</span>
 					</a>
 				</td>
-                <td>
-                	<?= $order->generate_viewrelatedactionslink($orderpanel); ?>
+				<td>
+                	<a class="btn btn-primary btn-sm" onClick="reorder('<?= $order->orderno; ?>')">
+                    	<span class="glyphicon glyphicon-shopping-cart" title="re-order"></span> Reorder Order
+                    </a>
                 </td>
                 <td></td>  <td></td>
                 <td colspan="2">

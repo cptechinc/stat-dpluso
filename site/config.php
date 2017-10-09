@@ -118,6 +118,8 @@
 	$config->pages->login = $config->urls->root . 'user/account/login/';
 	$config->pages->userscreens = $config->urls->root . 'user/user-screens/';
 	$config->pages->ajax = $config->urls->root . 'ajax/';
+	$config->pages->ajaxjson = $config->urls->root . 'ajax/json/';
+	$config->pages->ajaxload = $config->urls->root . 'ajax/load/';
 	$config->pages->cart = $config->urls->root . 'cart/';
 	$config->pages->customer = $config->urls->root . 'customers/';
 	$config->pages->custinfo = $config->urls->root . 'customers/cust-info/';

@@ -111,6 +111,7 @@
 	$config->nonstockitems = array('N');
 	$config->salesrepcustomer = true;
 	$config->fob_array = array('Origin' => 'O', 'Delivery' => 'D');
+	
 	$config->pages = new Paths($rootURL);
 	$config->pages->index = $config->urls->root;
 	$config->pages->account = $config->urls->root . 'user/account/';
@@ -143,6 +144,9 @@
 	$config->pages->actions = $config->urls->root . 'activity/';
 	$config->pages->documentation = $config->urls->root . "documentation/";
 	$config->pages->documentstorage = $config->documentstorage;
+	$config->pages->vendor = $config->urls->root . "vendors/";
+	$config->pages->vendorinfo = $config->urls->root . "vendors/vend-info/";
+	
 	$config->dplusnotes = array (
 		'order' => array(
 			'width' => '35', 'type' => 'SORD', 'forms' => 4, 'form1' => 'Pick Ticket', 'form2' => 'Pack Ticket', 'form3' => 'Invoice', 'form4' => 'Acknowledgement'

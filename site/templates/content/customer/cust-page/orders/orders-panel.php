@@ -20,8 +20,11 @@
             </a>  |
 			<?= $orderpanel->generate_refreshorderslink(); ?>
     	<?php elseif ($orderpanel->count > 0) : ?>
-            <a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">Customer Orders <span class="caret"></span></a> <span class="badge"> <?php echo $orderpanel->count; ?></span> &nbsp; | &nbsp;
+            <a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">Customer Orders <span class="caret"></span></a> <span class="badge"> <?= $orderpanel->count; ?></span> &nbsp; | &nbsp;
             <?= $orderpanel->generate_refreshorderslink(); ?>
+		<?php elseif (isset($input->get->ordn)) : ?>
+			<a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">Customer Orders <span class="caret"></span></a> <span class="badge"> <?= $orderpanel->count; ?></span> &nbsp; | &nbsp;
+			<?= $orderpanel->generate_refreshorderslink(); ?>
         <?php else : ?>
         	<?= $orderpanel->generate_loadorderslink(); ?>
         <?php endif; ?>

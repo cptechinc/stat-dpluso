@@ -3,7 +3,7 @@
        <?php include $config->paths->content.'customer/cust-page/orders/orders-thead-rows.php'; ?>
     </thead>
     <tbody>
-    	<?php if ($input->get->ordn) : ?>
+    	<?php if (isset($input->get->ordn)) : ?>
 			<?php if ($orderpanel->count == 0 && $input->get->text('ordn') == '') : ?>
                 <tr> <td colspan="12" class="text-center">No Orders found! Try using a date range to find the order(s) you are looking for.</td> </tr>
             <?php endif; ?>
@@ -41,7 +41,7 @@
 					<?php include $config->paths->content.'customer/cust-page/orders/order-tracking-rows.php'; ?>
                <?php endif; ?>
 
-        	<?php if ($order->haserror) : ?>
+        	<?php if ($order->has_error()) : ?>
                 <tr class="detail bg-danger" >
                     <td colspan="2" class="text-center"><b class="text-danger">Error:</b></td>
                     <td colspan="2"><?php echo $order['errormsg']; ?></td> <td></td> <td></td>

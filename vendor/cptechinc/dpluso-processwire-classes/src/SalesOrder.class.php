@@ -91,24 +91,12 @@
 		public $prntfmtdisp;
 		public $dummy;       
 		
-		public $hasdocuments = false;
-		public $hastracking = false;
-		public $hasnotes = false;
-		public $canedit = false;
-		public $haserror = false;
-		public $phoneinternational = false;
-		
 		public function __construct() {
 			$this->update_properties();
 		}
 		
 		public function update_properties() {
-			if ($this->havedoc == 'Y') { $this->hasdocuments = true; }
-			if ($this->havetrk == 'Y') { $this->hastracking = true; }
-			if ($this->havenote == 'Y') { $this->hasnotes = true; }
-			if ($this->editord == 'Y') { $this->canedit = true; }
-			if ($this->phintl == 'Y') { $this->phoneinternational = true; }
-			if ($this->error == 'Y') { $this->haserror = true; }
+			
 		}
 		
 		public function has_documents() {
@@ -142,12 +130,12 @@
 			$bootstrap = new Contento();
 			$href = $this->generate_dplusnotesrequesturl($orderpanel, $linenbr);
 			
-			if ($this->canedit) {
-				$title = ($this->hasnotes) ? "View and Create Order Notes" : "Create Order Notes";
-				$addclass = ($this->hasnotes) ? '' : 'text-muted';
+			if ($this->can_edit()) {
+				$title = ($this->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
+				$addclass = ($this->has_notes()) ? '' : 'text-muted';
 			} else {
-				$title = ($this->hasnotes) ? "View Order Notes" : "View Order Notes";
-				$addclass = ($this->hasnotes) ? '' : 'text-muted';
+				$title = ($this->has_notes()) ? "View Order Notes" : "View Order Notes";
+				$addclass = ($this->has_notes()) ? '' : 'text-muted';
 			}
 			$content = $bootstrap->createicon('material-icons md-36', '&#xE0B9;');
 			$link = $bootstrap->openandclose('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$orderpanel->modal", $content);
@@ -157,7 +145,7 @@
 		public function generate_loadtrackinglink(SalesOrderPanel $orderpanel) { // TODO add logic to handle if for customer / rep
 			$bootstrap = new Contento();
 			
-			if ($this->hastracking) {
+			if ($this->has_tracking()) {
 				$href = $this->generate_trackingrequesturl($orderpanel);
 				$content = $bootstrap->openandclose('span', "class=sr-only", 'View Tracking');
 				$content .= $bootstrap->createicon('glyphicon glyphicon-plane hover');
@@ -173,7 +161,7 @@
 		public function generate_loaddocumentslink(SalesOrderPanel $orderpanel, $linenbr) { // TODO add logic to handle if for customer / rep
 			$bootstrap = new Contento();
 			
-			if ($this->hasdocuments) {
+			if ($this->has_documents()) {
 				$href = $this->generate_documentsrequesturl($orderpanel);
 				$content = $bootstrap->openandclose('span', "class=sr-only", 'View Documents');
 				$content .= $bootstrap->createicon('material-icons md-36', '&#xE873;');
@@ -197,7 +185,7 @@
 				L = YOU'VE LOCKED THIS ORDER
 			*/
 
-			if ($this->canedit) {
+			if ($this->can_edit()) {
 				$icon = $bootstrap->createicon('glyphicon glyphicon-pencil');
 				$title = "Edit this Order";
 			} elseif ($this->editord == 'L') {
@@ -284,7 +272,7 @@
 		public function generate_editorderurl() {
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'get-order-details','ordn' => $this->orderno));
-			if ($this->canedit) {
+			if ($this->can_edit()) {
 				$url->query->set('lock', 'lock');
 			} elseif ($this->editord == 'L') {
 				if (wire('user')->hasorderlocked) {
@@ -392,12 +380,6 @@
 		}
 		
 		public static function remove_nondbkeys($array) {
-			unset($array['canedit']);
-			unset($array['hasnotes']);
-			unset($array['hasdocuments']);
-			unset($array['hastracking']);
-			unset($array['haserror']);
-			unset($array['phoneinternational']);
 			return $array;
 		}
 		

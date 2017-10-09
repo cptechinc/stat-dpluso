@@ -145,15 +145,15 @@
         "source": {
             "type": "git",
             "url": "https://github.com/cptechinc/dpluso-processwire-classes.git",
-            "reference": "c07591a9f2343fed8491dd1a791871ddbae3d7cd"
+            "reference": "0560aa0132000bad4590b92d1386e857e59dee22"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cptechinc/dpluso-processwire-classes/zipball/c07591a9f2343fed8491dd1a791871ddbae3d7cd",
-            "reference": "c07591a9f2343fed8491dd1a791871ddbae3d7cd",
+            "url": "https://api.github.com/repos/cptechinc/dpluso-processwire-classes/zipball/0560aa0132000bad4590b92d1386e857e59dee22",
+            "reference": "0560aa0132000bad4590b92d1386e857e59dee22",
             "shasum": ""
         },
-        "time": "2017-10-07T04:17:27+00:00",
+        "time": "2017-10-09T18:46:05+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {

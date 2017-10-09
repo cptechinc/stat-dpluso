@@ -327,10 +327,10 @@
 	function get_topxsellingcustomers($loginID, $numberofcustomers, $restrictions, $debug) {
 		$SHARED_ACCOUNTS = wire('config')->sharedaccounts;
 		if ($restrictions) {
-			$sql = wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND shiptoid = '' ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
+			$sql = wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid, shiptoid ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
 			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS); $withquotes = array(true, true);
 		} else {
-			$sql = wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex WHERE shiptoid = '' ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
+			$sql = wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex GROUP BY custid, shiptoid ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
 			$switching = array(); $withquotes = array();
 		}
 

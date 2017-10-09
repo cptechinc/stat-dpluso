@@ -111,6 +111,30 @@
 			if ($this->error == 'Y') { $this->haserror = true; }
 		}
 		
+		public function has_documents() {
+			return $this->havedoc == 'Y' ? true : false;
+		}
+
+		public function has_tracking() {
+			return $this->havetrk == 'Y' ? true : false;
+		}
+
+		public function has_notes() {
+			return $this->havenote == 'Y' ? true : false;
+		}
+
+		public function can_edit() {
+			return $this->editord == 'Y' ? true : false;
+		}
+
+		public function is_phoneintl() {
+			return $this->phintl == 'Y' ? true : false;
+		}
+
+		public function has_error() {
+			return $this->error == 'Y' ? true : false;
+		}
+		
 		/* =============================================================
 			LINK FUNCTIONS FUNCTIONS THAT GENERATE HTML LINK
 		============================================================ */

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc3ec0b78f28a34ae1f3d85a4644a0ec",
+    "content-hash": "e30f698b804105aa917aba4a91772177",
     "packages": [
         {
             "name": "cptechinc/dpluso-processwire-classes",
-            "version": "v1.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cptechinc/dpluso-processwire-classes.git",
-                "reference": "44435efbfe21940e3e2ae3dc2c2c73bda77eb781"
+                "reference": "c07591a9f2343fed8491dd1a791871ddbae3d7cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cptechinc/dpluso-processwire-classes/zipball/44435efbfe21940e3e2ae3dc2c2c73bda77eb781",
-                "reference": "44435efbfe21940e3e2ae3dc2c2c73bda77eb781",
+                "url": "https://api.github.com/repos/cptechinc/dpluso-processwire-classes/zipball/c07591a9f2343fed8491dd1a791871ddbae3d7cd",
+                "reference": "c07591a9f2343fed8491dd1a791871ddbae3d7cd",
                 "shasum": ""
             },
             "type": "library",
@@ -41,7 +41,7 @@
             "keywords": [
                 "crm"
             ],
-            "time": "2017-10-07T01:30:08+00:00"
+            "time": "2017-10-07 04:17:27"
         },
         {
             "name": "eoghanobrien/php-simple-mail",

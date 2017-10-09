@@ -24,11 +24,14 @@
 					<div class="tab-pane fade" id="<?= cleanforjs($item['itemid']); ?>-stock-tab"><br><?php include $config->paths->content."products/product-results/stock-table.php"; ?></div>
 				</div>
 				<?php if (!empty($item['lastqty'])) : ?>
-					<table class="table">
+					<table class="table table-condensed">
+						<thead>
+							<tr><th colspan="3"><?= $custID."'s " .$item['itemid']; ?> History</th></tr>
+						</thead>
 						<tr>
 							<td>Last Sold: <?= DplusDateTime::formatdate($item['lastsold']); ?></td>
-							<td>Price: $<?= $item['lastprice']; ?></td>
-							<td>Qty Bought: <?= $item['lastqty']; ?></td>
+							<td>Price: $ <?= $item['lastprice']; ?></td>
+							<td>Qty Sold: <?= $item['lastqty']; ?></td>
 						</tr>
 					</table>
 				<?php endif; ?>

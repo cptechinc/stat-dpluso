@@ -1,5 +1,5 @@
 <?php
-    
+    // TODO fIX class to be more obj oriented and handle more logic
     class UserActionPanel {
         public $type = 'cust';
         public $actiontype;
@@ -132,7 +132,7 @@
 		function getaddactionlink() {
             $link = new \Purl\Url(wire('page')->httpUrl);
         	$link->path = '';
-        	$link->join(wire('config')->pages->actions.$this->actiontype."/add/new/");
+        	$link->join(wire('config')->pages->actions.$this->getactiontypepage()."/add/new/");
 			switch ($this->type) {
 				case 'cust':
                     $link->query->set('custID', $this->custID);
@@ -154,10 +154,32 @@
 			}
 			return $link->getUrl();
 		}
+        
+        function generate_addactiontypelink() {
+            $bootstrap = new Contento();
+            $href = $this->generate_addactiontypeurl();
+            $icon = $bootstrap->createicon('material-icons md-18', '&#xE146;');
+            if (wire('config')->cptechcustomer == 'stempf') {
+                return $bootstrap->openandclose('a', "href=$href|class=btn btn-info btn-xs load-into-modal pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
+            }
+            return $bootstrap->openandclose('a', "href=$href|class=btn btn-info btn-xs add-action pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
+        }
+        
+        function generate_addactiontypeurl() {
+            if (wire('config')->cptechcustomer == 'stempf') {
+                $addlink = $this->getaddactionlink();
+                if ($this->getactiontypepage() == 'all') {
+                    $addlink = str_replace($this->getactiontypepage(), 'tasks', $addlink);
+                }
+            } else {
+                $addlink = $this->getaddactiontypelink();
+            }
+            return $addlink;
+        }
 
         function getactiontyperefreshlink($keepactiontype = false) {
             $refreshlink = $this->getpanelpaginationlink();
-            if ($keepactiontype){
+            if ($keepactiontype) {
                 return $refreshlink;
             } else {
                 return str_replace($this->getactiontypepage(), '{replace}', $refreshlink);

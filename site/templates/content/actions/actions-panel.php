@@ -16,9 +16,7 @@
         </a>
 
 		<?php if ($actionpanel->needsaddactionlink()) : ?>
-			<a href="<?= $actionpanel->getaddactiontypelink(); ?>" class="btn btn-info btn-xs add-action pull-right hidden-print" data-modal="<?= $actionpanel->modal; ?>" role="button" title="Add Action">
-	            <i class="material-icons md-18">&#xE146;</i>
-	        </a>
+			<?= $actionpanel->generate_addactiontypelink(); ?>
 		<?php endif; ?>
 
         <span class="pull-right">&nbsp; &nbsp;&nbsp; &nbsp;</span>

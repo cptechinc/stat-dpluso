@@ -10,7 +10,7 @@
 			<?php if ($resultscount > 0) : ?>
 				<?php
 					if ($input->get->q) {
-						$customer_records = search_custindexpaged($user->loginid, $config->showonpage, $input->pageNum,  $user->hascontactrestrictions, $input->get->q, false);
+						$customer_records = search_custindexpaged($user->loginid, $config->showonpage, $input->pageNum, $user->hascontactrestrictions, $input->get->q, false);
 					} else {
 						$customer_records = get_distinctcustindexpaged($user->loginid, $config->showonpage, $input->pageNum, $user->hascontactrestrictions, false);
 					}

@@ -14,52 +14,53 @@
 <?php endif; ?>
 
 <form action="<?php echo $formaction; ?>" method="post" id="<?= $linedetail['itemid'].'-form'; ?>">
-    <input type="hidden" class="action" name="action" value="update-line">
-    <input type="hidden" name="ordn" value="<?= $ordn; ?>">
-    <input type="hidden" class="listprice" value="<?= formatmoney($linedetail['listprice']); ?>">
-    <input type="hidden" class="linenumber" name="linenbr" value="<?= $linedetail['linenbr']; ?>">
-    <input type="hidden" class="originalprice" value="<?= formatmoney($linedetail['price']); ?>">
-    <input type="hidden" class="discountprice" value="<?= formatmoney($linedetail['price']); ?>">
-    <input type="hidden" class="cost" value="<?= formatmoney($linedetail['cost']); ?>">
+	<input type="hidden" class="action" name="action" value="update-line">
+	<input type="hidden" name="ordn" value="<?= $ordn; ?>">
+	<input type="hidden" name="custID" value="<?= $custID; ?>">
+	<input type="hidden" class="listprice" value="<?= formatmoney($linedetail['listprice']); ?>">
+	<input type="hidden" class="linenumber" name="linenbr" value="<?= $linedetail['linenbr']; ?>">
+	<input type="hidden" class="originalprice" value="<?= formatmoney($linedetail['price']); ?>">
+	<input type="hidden" class="discountprice" value="<?= formatmoney($linedetail['price']); ?>">
+	<input type="hidden" class="cost" value="<?= formatmoney($linedetail['cost']); ?>">
 	<input type="hidden" class="minprice" value="<?= formatmoney($linedetail['minprice']); ?> ">
-    <input type="hidden" class="calculate-from" value="percent">
-    <?php if (!$soconfig['config']['use_discount']): ?>
-        <input type="hidden" class="discpct" name="discount" value="<?= formatmoney($linedetail['discpct']); ?>">
-    <?php endif; ?>
-    <?php if (!$soconfig['config']['change_price']) : ?>
-        <input type="hidden" name="price" value="<?= formatmoney($linedetail['price']); ?>">
-    <?php endif; ?>
-    <div class="row">
-    	<div class="col-sm-8 item-information">
-    		<div class="jumbotron item-detail-heading"> <div> <h4>Item Info</h4> </div> </div>
-            <?php include $config->paths->content."edit/pricing/item-info.php"; ?>
+	<input type="hidden" class="calculate-from" value="percent">
+	<?php if (!$soconfig['config']['use_discount']): ?>
+		<input type="hidden" class="discpct" name="discount" value="<?= formatmoney($linedetail['discpct']); ?>">
+	<?php endif; ?>
+	<?php if (!$soconfig['config']['change_price']) : ?>
+		<input type="hidden" name="price" value="<?= formatmoney($linedetail['price']); ?>">
+	<?php endif; ?>
+	<div class="row">
+		<div class="col-sm-8 item-information">
+			<div class="jumbotron item-detail-heading"> <div> <h4>Item Info</h4> </div> </div>
+			<?php include $config->paths->content."edit/pricing/item-info.php"; ?>
 
-            <br><br>
-            <div class="row">
-            	<div class="col-sm-6">
-            		<div class="jumbotron item-detail-heading"> <div> <h4>Item Pricing</h4> </div> </div>
-            		<?php include $config->paths->content."edit/pricing/item-price-breaks.php"; ?>
-            	</div>
-            	<div class="col-sm-6">
-            		<div class="jumbotron item-detail-heading"> <div class=""> <h4><?= get_customername($custID); ?> History</h4> </div> </div>
-          			<?php include $config->paths->content."edit/pricing/item-history.php"; ?>
-            	</div>
-            </div>
+			<br><br>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="jumbotron item-detail-heading"> <div> <h4>Item Pricing</h4> </div> </div>
+					<?php include $config->paths->content."edit/pricing/item-price-breaks.php"; ?>
+				</div>
+				<div class="col-sm-6">
+					<div class="jumbotron item-detail-heading"> <div class=""> <h4><?= get_customername($custID); ?> History</h4> </div> </div>
+					<?php include $config->paths->content."edit/pricing/item-history.php"; ?>
+				</div>
+			</div>
 
-            <div class="jumbotron item-detail-heading"> <div class=""> <h4>Item Availability</h4> </div> </div>
-            <?php include $config->paths->content."edit/pricing/item-stock.php"; ?>
-    	</div>
-    	<div class="col-sm-4 item-form">
-    		<h4>Current Price</h4>
-            <?php
-                if ($soconfig['config']['change_price']) {
-                    include $config->paths->content.'edit/pricing/tables/price-edit-table.php';
-                } else {
-                    include $config->paths->content.'edit/pricing/tables/price-static-table.php';
-                }
-            ?>
+			<div class="jumbotron item-detail-heading"> <div class=""> <h4>Item Availability</h4> </div> </div>
+			<?php include $config->paths->content."edit/pricing/item-stock.php"; ?>
+		</div>
+		<div class="col-sm-4 item-form">
+			<h4>Current Price</h4>
+			<?php
+				if ($soconfig['config']['change_price']) {
+					include $config->paths->content.'edit/pricing/tables/price-edit-table.php';
+				} else {
+					include $config->paths->content.'edit/pricing/tables/price-static-table.php';
+				}
+			?>
 
-   			<table class="table table-bordered table-striped table-condensed">
+			<table class="table table-bordered table-striped table-condensed">
 				<tr>
 					<td>Requested Ship Date</td>
 					<td>
@@ -72,7 +73,7 @@
 				<tr>
 					<td>Warehouse</td><td><input type="text" class="form-control input-sm qty <?= $linedetail['itemid']."-whse"; ?>" name="whse" value="<?= $linedetail['whse']; ?>"></td>
 				</tr>
-                <tr>
+				<tr>
 					<td>Special Order </td>
 					<td>
 						<select name="specialorder" class="form-control input-sm">
@@ -119,16 +120,16 @@
 						<td>Group</td>
 						<td>
 							<?php $groups = getitemgroups(false); ?>
-                            <select name="group" class="form-control input-sm">
-                                <option value="">None</option>
-                                <?php foreach ($groups as $group) : ?>
+							<select name="group" class="form-control input-sm">
+								<option value="">None</option>
+								<?php foreach ($groups as $group) : ?>
 									<?php if ($group['code'] == $linedetail['nsitemgroup']) : ?>
 										<option value="<?= $group['code']; ?>" selected><?= $group['desc']; ?></option>
 									<?php else: ?>
 										<option value="<?= $group['code']; ?>"><?= $group['desc']; ?></option>
 									<?php endif; ?>
-                                <?php endforeach; ?>
-                            </select>
+								<?php endforeach; ?>
+							</select>
 						</td>
 					</tr>
 					<tr>
@@ -144,11 +145,11 @@
 
 
 			<?php if ($linedetail['can-edit']) :?>
-		    	<button type="submit" class="btn btn-success btn-block"><i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> Save Changes</button>
+				<button type="submit" class="btn btn-success btn-block"><i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> Save Changes</button>
 				<br>
 				<button type="button" class="btn btn-danger btn-block remove-item"><i class="fa fa-trash" aria-hidden="true"></i> Delete Line</button>
-		    <?php endif; ?>
+			<?php endif; ?>
 
-    	</div>
-    </div>
+		</div>
+	</div>
 </form>

@@ -12,6 +12,7 @@ return array(
     'Paginator' => $baseDir . '/src/Paginator.class.php',
     'SalesOrder' => $baseDir . '/src/SalesOrder.class.php',
     'SalesOrderPanel' => $baseDir . '/src/SalesOrderPanel.class.php',
+    'StringerBell' => $baseDir . '/src/Stringer.class.php',
     'Table' => $baseDir . '/src/Table.class.php',
     'TablePageSorter' => $baseDir . '/src/TablePageSorter.class.php',
     'UserAction' => $baseDir . '/src/UserAction.class.php',

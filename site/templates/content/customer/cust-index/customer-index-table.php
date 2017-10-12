@@ -19,14 +19,14 @@
 					<tr>
 						<td>
 							<a href="<?= $cust->generatecustloadurl(); ?>">
-								<?= highlight($cust->custid, $input->get->q,'<span class="highlight">{ele}</span>');?>
+								<?= $page->stringerbell->highlight($cust->custid, $input->get->q);?>
 							</a> &nbsp; <span class="glyphicon glyphicon-share"></span>
 						</td>
-						<td><?= highlight($cust->name, $input->get->q,'<span class="highlight">{ele}</span>'); ?></td>
-						<td><?= highlight($cust->shiptoid, $input->get->q,'<span class="highlight">{ele}</span>'); ?></td>
-						<td><?= highlight($cust->generateaddress(), $input->get->q, '<span class="highlight">{ele}</span>'); ?></td>
-						<td><a href="<?= $cust->generatecontacturl(); ?>"><?= highlight($cust->contact, $input->get->q, '<span class="highlight">{ele}</span>'); ?></a></td>
-						<td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= highlight($cust->cphone, $input->get->q,'<span class="highlight">{ele}</span>'); ?></a></td>
+						<td><?= $page->stringerbell->highlight($cust->name, $input->get->q); ?></td>
+						<td><?= $page->stringerbell->highlight($cust->shiptoid, $input->get->q); ?></td>
+						<td><?= $page->stringerbell->highlight($cust->generateaddress(), $input->get->q); ?></td>
+						<td><a href="<?= $cust->generatecontacturl(); ?>"><?= $page->stringerbell->highlight($cust->contact, $input->get->q); ?></a></td>
+						<td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->cphone, $input->get->q); ?></a></td>
 						<td class="text-right">$ <?= formatmoney($cust->amountsold); ?></td>
 						<td class="text-right"> <?= $cust->timesold; ?></td>
 						<td> <?= DplusDateTime::formatdate($cust->lastsaledate); ?></td>

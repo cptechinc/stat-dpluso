@@ -22,13 +22,13 @@
                         <tr>
                             <td>
                                 <a href="<?= $cust->generateciloadurl(); ?>">
-                                    <?= highlight($cust->custid, $input->get->text('q'),'<span class="highlight">{ele}</span>');?>
+                                    <?= $page->stringerbell->highlight($cust->custid, $input->get->text('q'));?>
                                 </a> &nbsp; <span class="glyphicon glyphicon-share"></span>
                             </td>
-                            <td><?= highlight($cust->name, $input->get->q,'<span class="highlight">{ele}</span>'); ?></td>
-                            <td><?= highlight($cust->shiptoid, $input->get->q,'<span class="highlight">{ele}</span>'); ?></td>
-                            <td><?= highlight($cust->generateaddress(), $input->get->q, '<span class="highlight">{ele}</span>'); ?></td>
-                            <td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= highlight($cust->cphone, $input->get->q,'<span class="highlight">{ele}</span>'); ?></a></td>
+                            <td><?= $page->stringerbell->highlight($cust->name, $input->get->q); ?></td>
+                            <td><?= $page->stringerbell->highlight($cust->shiptoid, $input->get->q); ?></td>
+                            <td><?= $page->stringerbell->highlight($cust->generateaddress(), $input->get->q); ?></td>
+                            <td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->cphone, $input->get->q); ?></a></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else : ?>

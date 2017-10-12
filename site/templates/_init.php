@@ -25,6 +25,7 @@
 	}
 	
 	$page->bootstrap = new Contento();
+	$page->stringerbell = new StringerBell();
 
 	$page->querystring = $querystring = $page->fullURL->query;
 	$page->PageURL = $page->httpUrl.'?'.$page->querystring;

@@ -15,7 +15,8 @@
 			"src/SalesOrder.class.php",
 			"src/SalesOrderPanel.class.php",
 			"src/TablePageSorter.class.php",
-			"src/Paginator.class.php"
+			"src/Paginator.class.php",
+			"src/Stringer.class.php"
 		]
 	}
 }

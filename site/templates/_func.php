@@ -144,7 +144,7 @@
 /* =============================================================
    HTML CONTENT FUNCTIONS
  ============================================================ */
-	function highlight($haystack, $needle, $element) { //\b(\w*".$needle."\w*)\b
+	function highlight($haystack, $needle, $element) { //\b(\w*".$needle."\w*)\b //DEPRECATED now use vend/StringerBell
 		$regex = "/(".$needle.")/i";
 		$contains = preg_match($regex, $haystack, $matches);
 		if ($contains) {

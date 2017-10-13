@@ -1,4 +1,4 @@
-var sitedirectory = 'dpluso';
+var sitedirectory = 'crm';
 var sitepath = '/';
 if (sitedirectory.length > 0) {
     sitepath = "/" + sitedirectory + "/";

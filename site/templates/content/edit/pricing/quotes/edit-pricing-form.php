@@ -15,12 +15,12 @@
 
 <form action="<?php echo $formaction; ?>" method="post" id="<?= $linedetail['itemid'].'-form'; ?>">
     <input type="hidden" class="action" name="action" value="update-line">
-    <input type="hidden" name="ordn" value="<?= $ordn; ?>">
+    <input type="hidden" name="qnbr" value="<?= $qnbr; ?>">
     <input type="hidden" class="listprice" value="<?= formatmoney($linedetail['listprice']); ?>">
     <input type="hidden" class="linenumber" name="linenbr" value="<?= $linedetail['linenbr']; ?>">
-    <input type="hidden" class="originalprice" value="<?= formatmoney($linedetail['price']); ?>">
-    <input type="hidden" class="discountprice" value="<?= formatmoney($linedetail['price']); ?>">
-    <input type="hidden" class="cost" value="<?= formatmoney($linedetail['cost']); ?>">
+    <input type="hidden" class="originalprice" value="<?= formatmoney($linedetail['quotprice']); ?>">
+    <input type="hidden" class="discountprice" value="<?= formatmoney($linedetail['quotprice']); ?>">
+    <input type="hidden" class="cost" value="<?= formatmoney($linedetail['quotcost']); ?>">
 	<input type="hidden" class="minprice" value="<?= formatmoney($linedetail['minprice']); ?> ">
     <input type="hidden" class="calculate-from" value="percent">
     <?php if (!$soconfig['config']['use_discount']): ?>

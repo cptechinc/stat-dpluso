@@ -101,7 +101,7 @@
 		case 'load-cust-quotes':
 			$custID = $input->get->text('custID');
 			$data = array('DBNAME' => $config->dbName, 'LOADCUSTQUOTEHEAD' => false, 'TYPE' => 'QUOTE', 'CUSTID' => $custID);
-			$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$link_addon;
+			$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$linkaddon;
 			$session->{'quotes-loaded-for'} = $custID;
 			$session->{'quotes-updated'} = date('m/d/Y h:i A');
 			break;
@@ -112,7 +112,7 @@
 			if ($input->get->lock) {
 				$session->loc = $config->pages->editquote."?qnbr=".$qnbr;
 			} else {
-				$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$qnbr.$link_addon;
+				$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$qnbr.$linkaddon;
 			}
 			break;
 		case 'get-quote-details-print':

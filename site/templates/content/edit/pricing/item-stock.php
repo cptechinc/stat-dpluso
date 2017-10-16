@@ -16,12 +16,12 @@
                 </thead>
                 <tbody>
                     <?php foreach ($jsonstock['data'] as $warehouse) : ?>
-                        <tr class="warehouse-tr <?= $warehouse['Warehouse ID']."-row"; ?>">
+                        <tr class="warehouse-tr <?= $warehouse['whse']."-row"; ?>">
                             <?php foreach ($columns as $column) : ?>
-                                <?php if (is_numeric($warehouse[$column]) && $column != 'Warehouse ID') : ?>
+                                <?php if (is_numeric($warehouse[$column]) && $column != 'whse') : ?>
                                     <td class="text-right"><?= $warehouse[$column]; ?></td>
                                 <?php else : ?>
-                                    <?php if ($column == 'Warehouse ID') : ?>
+                                    <?php if ($column == 'whse') : ?>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-xs" onclick="chooseitemwhse('<?= $jsonstock['itemid']; ?>', '<?= $warehouse[$column]; ?>')"><?= $warehouse[$column]; ?></button>
                                         </td>

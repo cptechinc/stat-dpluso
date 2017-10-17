@@ -1,4 +1,4 @@
-<?php $order = get_orderhead(session_id(), $ordn, false); ?>
+<?php $order = get_orderhead(session_id(), $ordn, false, false); ?>
 <div id="sales-order-details ">
 	<div class="form-group"><?php include $config->paths->content.'edit/orders/order-details/order-details.php'; ?></div>
 	<div class="text-center form-group">

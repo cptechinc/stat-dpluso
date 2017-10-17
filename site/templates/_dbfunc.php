@@ -1228,13 +1228,17 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 		return $sql->fetchColumn();
 	}
 
-	function get_orderhead($sessionID, $ordn, $debug) {
+	function get_orderhead($sessionID, $ordn, $useclass = false, $debug) {
 		$sql = wire('database')->prepare("SELECT * FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn AND type = 'O'");
 		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		$sql->execute($switching);
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
+			$sql->execute($switching);
+			if (!empty($useclass)) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, $useclass); // CAN BE SalesOrder|SalesOrderEdit
+				return $sql->fetch();
+			}
 			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}
@@ -1284,7 +1288,7 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 	}
 
 	function edit_orderhead($sessionID, $ordn, $order, $debug) {
-		$orginalorder = get_orderhead(session_id(), $ordn, false);
+		$orginalorder = get_orderhead(session_id(), $ordn, false, false);
 		$query = returnpreppedquery($orginalorder, $order);
 		$sql = wire('database')->prepare("UPDATE ordrhed SET ".$query['setstatement']." WHERE sessionid = :sessionID AND orderno = :ordn");
 		$query['switching'][':sessionID'] = $sessionID; $query['switching'][':ordn'] = $ordn;

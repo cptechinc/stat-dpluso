@@ -32,6 +32,22 @@
 			if ($this->cphext != '') { $this->hasphoneextension = true; }
 
         }
+        
+        /**
+         * Returns if Contact has a shiptoid
+         * @return boolean [description]
+         */
+        protected function has_shipto() {
+            return ($this->shiptoid != '') ? true : false;
+        }
+        
+        /**
+         * Returns if contact has phone extension 
+         * @return boolean [description]
+         */
+        protected function has_extension() {
+            return ($this->cphext != '') ? true : false;
+        }
 
         public function generatecustomerurl() {
             return wire('config')->pages->customer."redir/?action=load-customer&custID=".urlencode($this->custid);
@@ -42,7 +58,7 @@
         }
 
 		public function generatecustloadurl() {
-			if ($this->hasshipto) {
+			if ($this->has_shipto()) {
 				return $this->generateshiptourl();
 			} else {
 				return $this->generatecustomerurl();
@@ -50,7 +66,7 @@
 		}
 
         public function generatecontacturl() {
-            if ($this->hasshipto) {
+            if ($this->has_shipto()) {
                 return wire('config')->pages->customer.urlencode($this->custid) . "/shipto-".urlencode($this->shiptoid)."/contacts/?id=".urlencode($this->contact);
             } else {
                 return wire('config')->pages->customer.urlencode($this->custid)."/contacts/?id=".urlencode($this->contact);
@@ -66,13 +82,18 @@
 		}
 
 		function generateciurl() {
-			 if ($this->hasshipto) {
+			 if ($this->has_shipto()) {
                 return wire('config')->pages->custinfo.urlencode($this->custid) . "/shipto-".urlencode($this->shiptoid)."/";
             } else {
                 return wire('config')->pages->custinfo.urlencode($this->custid)."/";
             }
 		}
-
+        
+        /**
+         * Outputs the javascript function name with parameter
+         * @param String $function which II function
+         * @return String          Function name with parameter for the call
+         */
         function generateiifunction($function) {
             switch ($function) {
                 case 'ii':

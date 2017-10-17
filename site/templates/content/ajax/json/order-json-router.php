@@ -5,8 +5,8 @@
 
 	switch ($input->urlSegment(2)) {
 		case 'orderhead':
-			$order = get_orderhead(session_id(), $ordn, false);
-			echo json_encode(array("response" => array("order" => $order)));
+			$order = get_orderhead(session_id(), $ordn, 'SalesOrder', false);
+			echo json_encode(array("response" => array("order" => $order->toJson())));
 			break;
 		case 'details':
 			$orderdetails = getorderdetails(session_id(), $ordn, false);

@@ -238,7 +238,6 @@
 					$data['DATETHRU'] = $datethru;
 					$session->ordersearch =  $searchvalu . ' in '.$os;
 				}
-
 			}
 
 			$session->loc = $config->pages->ajax."load/orders/cust/".urlencode($custID)."/";
@@ -286,6 +285,7 @@
 			$ccno = '';
 			$xpd = '';
 			$ccv = '';
+			
 			if ($intl == 'Y') {
 				$order['phone'] = $input->post->text("office-accesscode") . $input->post->text("office-countrycode") . $input->post->text("intl-office");
 				$order['extension'] = $input->post->text("intl-ofice-ext");
@@ -305,8 +305,10 @@
 			$session->sql = edit_orderhead(session_id(), $ordn, $order, false);
 			$session->sql .= '<br>'. edit_orderhead_credit(session_id(), $ordn, $paytype, $ccno, $xpd, $ccv);
 			$data = array('DBNAME' => $config->dbName, 'SALESHEAD' => false, 'ORDERNO' => $ordn);
+			
 			if ($input->post->exitorder) {
-				$session->loc = $config->pages->confirmorder."?ordn=$ordn";
+				$session->loc = $config->pages->orders."redir/?action=unlock-order&ordn=$ordn";
+				$data['UNLOCK'] = false;
 			} else {
 				$session->loc = $config->pages->editorder."?ordn=$ordn";
 			}
@@ -347,6 +349,7 @@
 			$orderdetail['spcord'] = 'S';
 			$session->sql = edit_orderline(session_id(), $ordn, $orderdetail, false);
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => '0', 'ITEMID' => 'N', 'QTY' => $qty, 'CUSTID' => $custID);
+		
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} else {
@@ -381,6 +384,7 @@
 
 			$session->sql = edit_orderline(session_id(), $ordn, $orderdetail, false);
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => $linenbr);
+			
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} else {
@@ -405,11 +409,8 @@
 			break;
 		case 'unlock-order':
 			$ordn = $input->get->text('ordn');
-			$custID = get_custid_from_order(session_id(), $ordn);
-			$shipID = get_shiptoid_from_order(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'UNLOCK' => false, 'ORDERNO' => $ordn);
-			$session->loc = $config->pages->customer.urlencode($custID)."/";
-			if ($shipID != '') { $session->loc .= "shipto-".urlencode($shipID)."/"; }
+			$session->loc = $config->pages->confirmorder."?ordn=$ordn";
 			break;
 		default:
 			$data = array('DBNAME' => $config->dbName, 'REPORDRHED' => false, 'TYPE' => 'O');

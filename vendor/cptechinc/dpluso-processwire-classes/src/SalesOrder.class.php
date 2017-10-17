@@ -158,7 +158,7 @@
 			}
 		}
 		
-		public function generate_loaddocumentslink(SalesOrderPanel $orderpanel, $linenbr) { // TODO add logic to handle if for customer / rep
+		public function generate_loaddocumentslink(SalesOrderPanel $orderpanel, $linenbr = '0') { // TODO add logic to handle if for customer / rep
 			$bootstrap = new Contento();
 			
 			if ($this->has_documents()) {
@@ -170,9 +170,8 @@
 			} else {
 				$content = $bootstrap->openandclose('span', "class=sr-only", 'No Documents Available');
 				$content .= $bootstrap->createicon('material-icons md-36', '&#xE873;');
-				return $bootstrap->openandclose('a', "|class=text-muted h3|title=No Documents Available", $content);
+				return $bootstrap->openandclose('a', "href=#|class=text-muted h3|title=No Documents Available", $content);
 			}
-			
 		}
 		
 		public function generate_editorderlink() {
@@ -331,7 +330,7 @@
 		}
 		
 		public function generate_ordersredirurl() {
-			$url = new \Purl\Url(wire('page')->httpUrl);
+			$url = new \Purl\Url(wire('config')->pages->orders);
 			$url->path = wire('config')->pages->orders."redir/";
 			return $url;
 		}
@@ -374,7 +373,6 @@
 	   /* =============================================================
 		   GENERATE ARRAY FUNCTIONS 
 	   ============================================================ */
-		
 		public static function generate_classarray() {
 			return SalesOrder::remove_nondbkeys(get_class_vars('SalesOrder'));
 		}
@@ -383,6 +381,9 @@
 			return $array;
 		}
 		
+		public function toJson() {
+			return $this::generate_classarray();
+		}
 	}
 	
 	

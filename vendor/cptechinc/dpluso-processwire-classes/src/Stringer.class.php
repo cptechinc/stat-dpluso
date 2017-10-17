@@ -1,4 +1,4 @@
-<?php 
+<?php
     class StringerBell {
         
         function highlight($haystack, $needle) {

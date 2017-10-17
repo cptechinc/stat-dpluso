@@ -142,8 +142,6 @@
 					</tr>
 				</table>
 			</div>
-
-
 			<?php if ($linedetail['can-edit']) :?>
 				<button type="submit" class="btn btn-success btn-block"><i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> Save Changes</button>
 				<br>

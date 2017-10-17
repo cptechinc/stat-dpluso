@@ -5,18 +5,33 @@
     "keywords": ["crm"],
     "homepage": "http://github.com/cptechinc/dpluso-processwire-classes",
 	"autoload": {
-		"classmap": [
+		"files": [
 			"src/Contact.class.php",
 			"src/DplusDateTime.class.php",
 			"src/Table.class.php",
 			"src/UserAction.class.php",
 			"src/UserActionPanel.class.php",
 			"src/Contento.class.php",
-			"src/SalesOrder.class.php",
+			"src/OrderDisplay.class.php",
+			"src/OrderDisplay.interface.php",
+			"src/OrderPanel.class.php",
+			"src/OrderPanel.interface.php",
+			"src/OrderPanelCustomer.interface.php",
+			"src/OrderPanelCustomer.trait.php",
+			"src/SalesOrderDisplay.interface.php",
+			"src/SalesOrderDisplay.trait.php",
+			"src/SalesOrderDisplay.class.php",
+			"src/SalesOrderDisplayEdit.class.php",
+			"src/SalesOrderPanel.interface.php",
 			"src/SalesOrderPanel.class.php",
+			"src/SalesOrderPanelRep.class.php",
+			"src/SalesOrderPanelCustomer.class.php",
+			"src/Order.class.php",
+			"src/SalesOrder.class.php",
 			"src/TablePageSorter.class.php",
 			"src/Paginator.class.php",
-			"src/Stringer.class.php"
+			"src/Stringer.class.php",
+			"src/OrderCreditCard.class.php"
 		]
 	}
 }

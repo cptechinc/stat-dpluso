@@ -1,0 +1,54 @@
+<?php 
+    class SalesOrderDisplay extends OrderDisplay implements OrderDisplayInterface, SalesOrderDisplayInterface {
+        protected $ordn;
+        protected $order;
+        protected $modal;
+        use SalesOrderDisplayTraits;
+        
+        public function __construct($sessionID, \Purl\Url $pageurl, $modal, $ordn) {
+            parent::__construct($sessionID, $pageurl);
+            $this->ordn = $ordn;
+            $this->modal = $modal;
+        }
+        
+        public function get_order($debug = false) {
+            return get_orderhead($this->sessionID, $this->ordn, 'SalesOrder', false);
+        }
+        
+        public function get_creditcard($debug = false) {
+            return get_ordercreditcard($this->sessionID, $this->ordn, false);
+        }
+        
+        public function showhide_creditcard(Order $order) {
+            return ($order->paytype == 'cc') ? '' : 'hidden';
+        }
+        
+        public function generate_getorderdetailsurl(Order $order) {
+			$url = $this->generate_ordersredirurl();
+			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->orderno));
+			return $url->getUrl();
+		}
+        
+        public function generate_documentsrequesturl(Order $order) {
+            return $this->generate_documentsrequesturltrait($order);
+        }
+        
+        public function generate_trackingrequesturl(Order $order) {
+            return $this->generate_trackingrequesturltrait($order);
+        }
+        
+        public function generate_editlink(Order $order) {
+            $bootstrap = new Contento();
+            $href = $this->generate_editurl($order);
+            $icon = $bootstrap->createicon('material-icons', '&#xE150;');
+            return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-warning", $icon. " Edit Order");   
+        }
+        
+        public function generate_customershiptolink(Order $order) {
+            $bootstrap = new Contento();
+            $href = $this->generate_customershiptourl($order);
+            $icon = $bootstrap->createicon('fa fa-user');
+            return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-primary", $icon. " Go to Customer Page");   
+        }
+        
+    }

@@ -42,8 +42,6 @@ $(function() {
         form.find('input[name=action]').val('remove-line');
         form.submit();
     });
-
-
 });
 
 

@@ -71,13 +71,10 @@
                                     <i class="fa fa-pencil fa-1-5x" aria-hidden="true"></i><span class="sr-only">Edit</span>
                                 </a>&nbsp;
                             <?php endif; ?>
-                            <form class="inline-block" action="<?php echo $config->pages->cart."redir/"; ?>" method="post">
-                                <input type="hidden" name="action" value="remove-line">
-                                <input type="hidden" name="linenbr" value="<?= $detail['linenbr']; ?>">
-                                <button type="submit" class="btn btn-sm btn-danger" name="button">
-                                    <i class="fa fa-trash fa-1-5x" aria-hidden="true"></i><span class="sr-only">Delete</span>
-                                </button>
-                            </form>
+                            <?php $href = $config->pages->quotes."redir/?action=remove-line-get&qnbr=$qnbr&linenbr=".$detail['linenbr']."&page=".urlencode($page->fullURL->getUrl()); ?>
+                            <a href="<?= $href; ?>" class="btn btn-sm btn-danger" name="button">
+                                <i class="fa fa-trash fa-1-5x" aria-hidden="true"></i><span class="sr-only">Delete</span>
+                            </a>
                         </div>
                     </div>
                 </td>

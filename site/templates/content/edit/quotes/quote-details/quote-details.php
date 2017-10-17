@@ -68,8 +68,9 @@
                                     <i class="fa fa-pencil fa-1-5x" aria-hidden="true"></i><span class="sr-only">Edit</span>
                                 </a>&nbsp;
                             <?php endif; ?>
-                            <form class="inline-block" action="<?php echo $config->pages->cart."redir/"; ?>" method="post">
+                            <form class="inline-block" action="<?php echo $config->pages->quotes."redir/"; ?>" method="post">
                                 <input type="hidden" name="action" value="remove-line">
+                                <input type="hidden" name="qnbr" value="<?= $qnbr; ?>">
                                 <input type="hidden" name="linenbr" value="<?= $detail['linenbr']; ?>">
                                 <button type="submit" class="btn btn-sm btn-danger" name="button">
                                     <i class="fa fa-trash fa-1-5x" aria-hidden="true"></i><span class="sr-only">Delete</span>

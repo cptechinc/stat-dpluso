@@ -1,10 +1,10 @@
-<?php $order = get_orderhead(session_id(), $ordn, false);  ?>
+<?php $order = get_orderhead(session_id(), $ordn, true, false);  ?>
 <div class="row">
 	<div class="col-sm-6">
-		<img src="<?php echo $config->urls->files."images/dplus.png"; ?>" alt="">
+		<img src="<?= $config->urls->files."images/dplus.png"; ?>" alt="">
 	</div>
 	<div class="col-sm-6 text-right">
-		<h1>Order # <?php echo $ordn; ?></h1>
+		<h1>Order # <?= $ordn; ?></h1>
 	</div>
 </div>
 <div class="row">
@@ -12,11 +12,11 @@
 
 	<div class="col-sm-6">
 		<table class="table table-bordered table-striped table-condensed">
-			<tr> <td>Order Date</td> <td><?php echo $order['orderdate']; ?></td> </tr>
-			<tr> <td>Request Date</td> <td><?php echo $order['rqstdate']; ?></td> </tr>
-			<tr> <td>Status</td> <td><?php echo $order['status']; ?></td> </tr>
-			<tr> <td>CustID</td> <td><?php echo $order['custid']; ?></td> </tr>
-			<tr> <td>Customer PO</td> <td><?php echo $order['custpo']; ?></td> </tr>
+			<tr> <td>Order Date</td> <td><?= $order->orderdate; ?></td> </tr>
+			<tr> <td>Request Date</td> <td><?= $order->rqstdate; ?></td> </tr>
+			<tr> <td>Status</td> <td><?= $order->status; ?></td> </tr>
+			<tr> <td>CustID</td> <td><?= $order->custid; ?></td> </tr>
+			<tr> <td>Customer PO</td> <td><?= $order->custpo; ?></td> </tr>
 		</table>
 	</div>
 </div>
@@ -24,23 +24,23 @@
 	<div class="col-sm-6">
 		<h4>Bill-to</h4>
 		<address>
-			<?= $order['custname']; ?><br>
-			<?php echo $order['btadr1']; ?><br>
-			<?php if (strlen($order['btadr2']) > 0) : ?>
-				<?php echo $order['btadr2']; ?><br>
+			<?= $order->custname; ?><br>
+			<?= $order->btadr1; ?><br>
+			<?php if (strlen($order->btadr2) > 0) : ?>
+				<?= $order->btadr2; ?><br>
 			<?php endif; ?>
-			<?php echo $order['btcity'].", ".$order['btstate']." ".$order['btzip']; ?>
+			<?= $order->btcity.", ".$order->btstate." ".$order->btzip; ?>
 		</address>
 	</div>
 	<div class="col-sm-6">
 		<h4>Ship-to</h4>
 		<address>
-			<?= $order['sname']; ?><br>
-			<?php echo $order['saddress']; ?><br>
-			<?php if (strlen($order['saddress2']) > 0) : ?>
-				<?php echo $order['saddress2']; ?><br>
+			<?= $order->sname; ?><br>
+			<?= $order->saddress; ?><br>
+			<?php if (strlen($order->saddress2) > 0) : ?>
+				<?= $order->saddress2; ?><br>
 			<?php endif; ?>
-			<?php echo $order['scity'].", ".$order['sst']." ".$order['szip']; ?>
+			<?= $order->scity.", ".$order->sst." ".$order->szip; ?>
 		</address>
 	</div>
 </div>
@@ -60,28 +60,27 @@
 				<br>
 				<small><?= $detail['desc1']. ' ' . $detail['desc2'] ; ?></small>
 			</td>
-			<td class="text-right"> <?php echo $qtyo ; ?> </td>
-			<td class="text-right">$ <?php echo formatmoney($detail['price']); ?></td>
-			<td class="text-right">$ <?php echo formatmoney($detail['price'] * $qtyo) ?> </td>
+			<td class="text-right"> <?= $qtyo ; ?> </td>
+			<td class="text-right">$ <?= formatmoney($detail['price']); ?></td>
+			<td class="text-right">$ <?= formatmoney($detail['price'] * $qtyo) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>
-		<td></td> <td>Subtotal</td> <td></td> <td class="text-right">$ <?php echo formatmoney($order['odrsubtot']); ?></td>
+		<td></td> <td>Subtotal</td> <td></td> <td class="text-right">$ <?= formatmoney($order->odrsubtot); ?></td>
 
 	</tr>
 	<tr>
-		<td></td><td>Tax</td> <td></td> <td colspan="2" class="text-right">$ <?php echo formatmoney($order['odrtax']); ?></td>
+		<td></td><td>Tax</td> <td></td> <td colspan="2" class="text-right">$ <?= formatmoney($order->odrtax); ?></td>
+	</tr>
+	<tr>
+		<td></td><td>Freight</td> <td></td> <td class="text-right">$ <?= formatmoney($order->odrfrt); ?></td>
 
 	</tr>
 	<tr>
-		<td></td><td>Freight</td> <td></td> <td class="text-right">$ <?php echo formatmoney($order['odrfrt']); ?></td>
+		<td></td><td>Misc.</td> <td></td><td class="text-right">$ <?= formatmoney($order->odrmis); ?></td>
 
 	</tr>
 	<tr>
-		<td></td><td>Misc.</td> <td></td><td class="text-right">$ <?php echo formatmoney($order['odrmis']); ?></td>
-
-	</tr>
-	<tr>
-		<td></td><td>Total</td> <td></td> <td class="text-right">$ <?php echo formatmoney($order['odrtotal']); ?></td>
+		<td></td><td>Total</td> <td></td> <td class="text-right">$ <?= formatmoney($order->odrtotal); ?></td>
 	</tr>
 </table>

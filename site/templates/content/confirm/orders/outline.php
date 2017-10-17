@@ -1,4 +1,6 @@
-<?php $order = get_orderhead(session_id(), $ordn, true, false);  ?>
+<div class="form-group hidden-print">
+	<?= $orderdisplay->generate_viewprintlink($order); ?>
+</div>
 <div class="row">
 	<div class="col-sm-6">
 		<img src="<?= $config->urls->files."images/dplus.png"; ?>" alt="">
@@ -88,3 +90,12 @@
 		<td></td><td><b>Total</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($order->odrtotal); ?></td>
 	</tr>
 </table>
+<hr>
+<div class="row">
+	<div class="col-sm-6 form-group">
+		<?= $orderdisplay->generate_editlink($order); ?>
+	</div>
+	<div class="col-sm-6 form-group">
+		<?= $orderdisplay->generate_customershiptolink($order); ?>
+	</div>
+</div>

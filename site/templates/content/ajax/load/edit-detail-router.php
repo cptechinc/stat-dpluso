@@ -18,7 +18,7 @@
             $ordn = $input->get->text('ordn');
             $custID = get_custid_from_order(session_id(), $ordn);
             $linedetail = getorderlinedetail(session_id(), $ordn, $linenbr, false);
-            if (caneditorder(session_id(), $ordn, false) && $ordn == getlockedordn(session_id())) {
+            if (can_editorder(session_id(), $ordn, false) && $ordn == getlockedordn(session_id())) {
                 $linedetail['can-edit'] = true;
                 $formaction = $config->pages->orders."redir/";
                 $page->title = 'Edit Pricing for '. $linedetail['itemid'];

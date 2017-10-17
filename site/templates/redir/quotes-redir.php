@@ -262,7 +262,8 @@
 
 			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
 			$session->detail = $quotedetail;
-			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr);
+			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'CUSTID' => $custID);
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} else {
@@ -278,9 +279,27 @@
 			$quotedetail['linenbr'] = $input->post->text('linenbr');
 			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
 			$session->detail = $quotedetail;
-			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0');
+			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
+			} else {
+				$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
+			}
+			$session->editdetail = true;
+			break;
+		case 'remove-line-get':
+			$qnbr = $input->get->text('qnbr');
+			$linenbr = $input->get->text('linenbr');
+			$quotedetail = getquotelinedetail(session_id(), $qnbr, $linenbr, false);
+			$quotedetail['quotunit'] = '0';
+			$quotedetail['linenbr'] = $input->post->text('linenbr');
+			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
+			$session->detail = $quotedetail;
+			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
+			if ($input->get->page) {
+				$session->loc = $input->get->text('page');
 			} else {
 				$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
 			}

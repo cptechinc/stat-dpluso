@@ -68,7 +68,7 @@
 	*		CUSTID=$custID
 	*		SHIPTOID=$shipID
 	*		break;
-	*	case 'remove':
+	*	case 'remove-line':
 	*		DBNAME=$config->DBNAME
 	*		CARTDET
 	*		LINENO=$linenbr
@@ -167,6 +167,7 @@
 			$cartdetail['qtyordered'] = '0';
 			$session->sql = edit_cartline(session_id(), $cartdetail, false);
 			$session->loc = $config->pages->cart;
+			$custID = getcartcustomer(session_id(), false);
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $input->post->linenbr, 'QTY' => '0');
 
 			if ($custID == '') {$custID = $config->defaultweb;}

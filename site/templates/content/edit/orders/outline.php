@@ -1,8 +1,5 @@
 <?php
-    $activetab = 'orderhead';
-    if ($input->get->show) {
-        $activetab = $input->get->text('show');
-    }
+    $activetab = (empty($input->get->show)) ? 'orderhead' : $input->get->text('show');
     $tabs = array(
         'orderhead' => array('href' => 'orderhead', "id" => 'orderhead-link', 'text' => 'Sales Order Header', 'tabcontent' => 'edit/orders/orderhead-form.php'),
         'details' => array('href' => 'details', "id" => 'salesdetail-link', 'text' => 'Sales Order Details', 'tabcontent' => 'edit/orders/order-details/details-page.php'),
@@ -11,7 +8,7 @@
         'actions' => array('href' => 'actions', "id" => 'actions-tab-link', 'text' => 'View Actions', 'tabcontent' => 'edit/orders/actions-page.php')
     );
 ?>
-<?php if ((!$editorder['canedit'])) : ?>
+<?php if ((!$ordereditdisplay->canedit)) : ?>
    <div class="row">
        <div class="col-xs-12"><?php include $config->paths->content.'edit/orders/read-only-msg.php'; ?></div>
     </div>

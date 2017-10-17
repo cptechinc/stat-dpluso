@@ -2,19 +2,13 @@
     switch ($page->name) { //$page->name is what we are editing
         case 'order':
             $ordn = $input->get->text('ordn');
-            $editorder = array();
-            $editorder['ordn'] = $ordn;
-            $editorder['custID'] = get_custid_from_order(session_id(), $ordn); $custID = $editorder['custID'];
-            $editorder['canedit'] = caneditorder(session_id(), $ordn, false);
-            if ($input->get->readonly) {
-                $editorder['canedit'] = false;
-            }
-            if ($editorder['canedit']) {
-                $page->title = "Editing Order #" . $editorder['ordn'] . ' for ' . get_customer_name_from_order(session_id(), $editorder['ordn']);
-            } else {
-                $page->title = "Viewing Order #" . $editorder['ordn'] . ' for ' . get_customer_name_from_order(session_id(), $editorder['ordn']);
-            }
-            $editorder['unlock-url'] = $config->pages->orders."redir/?action=unlock-order&ordn=".$ordn;
+            $custID = get_custid_from_order(session_id(), $ordn);
+            $ordereditdisplay = new EditSalesOrderDisplay(session_id(), $page->fullURL, '#ajax-modal', $ordn);
+        	$order = $ordereditdisplay->get_order(); 
+            $ordereditdisplay->canedit = ($input->get->readonly) ? $ordereditdisplay->canedit = false : $order->can_edit();
+            $prefix = ($ordereditdisplay->canedit) ? 'Editing' : 'Viewing';
+            $page->title = "$prefix Order #" . $ordn . ' for ' . get_customer_name_from_order(session_id(), $ordn);
+            
             $config->scripts->append(hashtemplatefile('scripts/dplusnotes/order-notes.js'));
 			$config->scripts->append(hashtemplatefile('scripts/edit/card-validate.js'));
 			$config->scripts->append(hashtemplatefile('scripts/edit/edit-orders.js'));
@@ -44,6 +38,8 @@
             $editquote['canedit'] = true;
             $page->title = "Creating a Sales Order from Quote #" . $qnbr;
             $page->body = $config->paths->content."edit/quote-to-order/outline.php";
+            $config->scripts->append(hashtemplatefile('scripts/edit/edit-quote-to-order.js'));
+            $config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
             break;
     }
  ?>

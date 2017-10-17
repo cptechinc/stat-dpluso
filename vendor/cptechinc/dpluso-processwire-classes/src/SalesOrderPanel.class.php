@@ -1,165 +1,66 @@
-<?php 
-
-	class SalesOrderPanel {
-		public $type = 'cust';
-		public $modal;
-		public $focus;
-		public $loadinto;
-		public $ajaxdata;
-		public $pageurl;
-		public $throughajax;
-		public $sessionID;
-		public $collapse = 'collapse';
-		public $tablesorter; // Will be instatnce of TablePageSorter
-		public $nextorder;
-		public $orderby;
-		public $pagenbr; // Will be instance of \Purl\Url
-		public $active;
-		public $custID;
-		public $shipID;
-		public $count;
+<?php 	
+	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
 		public $orders = array();
-		private $debugorders;
-		public $listorders = true;
+		use SalesOrderDisplayTraits;
 		
-		public function __construct($type, \Purl\Url $pageurl, $modal, $loadinto, $ajax, $sessionID) {
-			$this->type = $type;
-			$this->setup_listorders();
+		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
+			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
 			$this->pageurl = $this->setup_pageurl($pageurl);
-			$this->modal = $modal;
-			$this->loadinto = $this->focus = $loadinto;
-			$this->ajaxdata = 'data-loadinto="'.$this->loadinto.'" data-focus="'.$this->focus.'"';
-			$this->sessionID = $sessionID;
-			
-			$this->setup_tablesorter();
-			
-			if ($ajax) {
-				$this->collapse = '';
-			} else {
-				$this->collapse = 'collapse';
-			}
 		}
 		
 		/* =============================================================
-			SETUP FUNCTIONS = FUNCTIONS THAT PREPARE THE SALES ORDER PANEL
+			OrderPanelInterface Functions
 		============================================================ */
-		public function setup_listorders() {
-			switch ($this->type) {
-				case 'edit-order':
-					$this->listorders = false;
-					break;
-				default: 
-					$this->listorders = true;
-					break;
-			}
-		}
-		
-		public function setup_tablesorter() {
-			if ($this->listorders) {
-				$this->tablesorter = new TablePageSorter($this->pageurl->query->get('orderby'));
-			}
-		}
-		
-		public function setup_pageurl($pageurl) {
+		public function setup_pageurl(\Purl\Url $pageurl) {
 			$url = $pageurl;
-			if ($this->listorders) {
-				$url->path = wire('config')->pages->ajax."load/orders/";
-				$url->query->remove('display');
-				$url->query->remove('ajax');
-			}
+			$url->path = wire('config')->pages->ajax."load/orders/";
+			$url->query->remove('display');
+			$url->query->remove('ajax');
 			return $url;
 		}
 		
-		public function setup_customerpanel($custID, $shipID) {
-			$this->custID = $custID;
-			$this->shipID = $shipID;
-			$this->pageurl->path->add('cust')->add("$custID");
-			if (!empty($shipID)) $this->pageurl->path->add("shipto-$shipID");
-		}
-		
-		public function setup_reppanel() {
-			$this->pageurl->path->add('salesrep');
-		}
-		
-		public function set_activeorder($ordn) {
-			$this->active = $ordn;
-		}
-		
-		public function setup_editorderpanel($pageurl) {
-			$this->pageurl = $pageurl;
-		}
-		
-		/* =============================================================
-			ORDER RETREIVAL FUNCTIONS
-		============================================================ */
-		public function get_orderclass() {
-			switch ($this->type) {
-				case 'edit-order':
-					return 'SalesOrderEdit';
-					break;
-				default: 
-					return 'SalesOrder';
-					break;
-			}
-		}
-		
-		public function get_orders() {
-			if ($this->type == 'cust') {
-				$this->orders = $this->get_customerorders();
-				$this->debugorders = $this->get_customerorders(true);
+		public function generate_expandorcollapselink(Order $order) {
+			$bootstrap = new Contento();
+			
+			if ($order->orderno == $this->activeID) {
+				$href = $this->generate_closedetailsurl($order);
+				$ajaxdata = $this->generate_ajaxdataforcontento();
+				$addclass = 'load-link';
+				$icon = '-';
 			} else {
-				$this->orders = $this->get_salesreporders(); // TODO
+				$href = $this->generate_getorderdetailsurl($order);
+				$ajaxdata = "data-loadinto=$this->loadinto|data-focus=#$order->orderno";
+				$addclass = 'generate-load-link';
+				$icon = '+';
 			}
+			return $bootstrap->openandclose('a', "href=$href|class=btn btn-sm btn-primary $addclass|$ajaxdata", $icon);
 		}
 		
-		public function get_ordercount() {
-			if ($this->type == 'cust') {
-				$this->count = $this->get_customerordercount();
-			} else {
-				$this->count = $this->get_repordercount(); // TODO
-			}
+		// public function generate_getorderdetailsurl() Defined In SalesOrderTraits
+		
+		public function generate_closedetailsurl() { 
+			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url->query->setData(array('ordn' => false, 'show' => false));
+			return $url->getUrl();
 		}
 		
-		protected function get_customerordercount() {
-			return count_customerorders($this->sessionID, $this->custID, false);
+		public function generate_rowclass(Order $order) {
+			return  ($this->activeID == $order->orderno) ? 'selected' : '';
 		}
 		
-		protected function get_repordercount() {
-			return count_salesreporders($this->sessionID, false);
+		function generate_shiptopopover(Order $order) {
+			$bootstrap = new Contento();
+			$address = $order->saddress.'<br>';
+			$address .= (!empty($order->saddress2)) ? $order->saddress2."<br>" : '';
+			$address .= $order->scity.", ". $order->sst.' ' . $order->szip;
+			$attr = "tabindex=0|role=button|class=btn btn-default bordered btn-sm|data-toggle=popover";
+			$attr .= "|data-placement=top|data-trigger=focus|data-html=true|title=Ship-To Address|data-content=$address";
+			return $bootstrap->openandclose('a', $attr, '<b>?</b>');
 		}
 		
-		protected function get_customerorders($debug = false) {
-			$useclass = true;
-			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'orderdate') {
-					return get_customerordersorderdate($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
-				} else {
-					return get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
-				}
-			} else {
-				$this->tablesorter->sortrule = 'DESC'; $this->tablesorter->orderby = 'orderno';
-				return get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
-			}
-		}
+		//public function generate_ajaxdataforcontento() defined in OrderPanel 
 		
-		protected function get_salesreporders($debug = false) {
-			$useclass = true; 
-			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'orderdate') {
-					return get_salesrepordersorderdate($this->sessionID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, false);
-				} else {
-					return get_salesrepordersorderby($this->sessionID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, false);
-				}
-			} else {
-				$this->tablesorter->sortrule = 'DESC'; $this->tablesorter->orderby = 'orderno';
-				return get_salesrepordersorderby($this->sessionID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, false);
-			}
-		}
-		
-		/* =============================================================
-			CONTENT FUNCTIONS
-		============================================================ */
-		public function generate_salesordericonlegend() {
+		public function generate_iconlegend() {
 			$bootstrap = new Contento();
 			$content = $bootstrap->openandclose('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
 			$content .= $bootstrap->openandclose('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>'; 
@@ -171,91 +72,142 @@
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
 			return $bootstrap->openandclose('a', $attr, 'Icon Definitions');
 		}
+
+		// public function generate_loadlink() Defined in OrderPanel
 		
-		/* =============================================================
-			LINK FUNCTIONS -> FUNCTIONS THAT CREATE THE HTML LINKS
-		============================================================ */
-		public function generate_loadorderslink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_loadordersurl();
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Orders");
+		public function generate_loadurl() { 
+			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url->path = wire('config')->pages->orders.'redir/';
+			$url->query->setData(array('action' => 'load-orders'));
+			return $url->getUrl();
 		}
 		
-		public function generate_refreshorderslink() {
+		public function generate_searchlink() {
 			$bootstrap = new Contento();
-			$href = $this->generate_loadordersurl();
-			$icon = $bootstrap->createicon('fa fa-refresh');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Orders");
-		}
-		
-		public function generate_clearsearchlink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_loadordersurl();
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-warning generate-load-link|$ajaxdata", "Clear Search");
-		}
-		
-		function generate_ordersearchlink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_ordersearchurl();
+			$href = $this->generate_searchurl();
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-default bordered load-into-modal|data-modal=$this->modal", "Search Orders");
 		}
 		
-		public function generate_clearsortlink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_clearsorturl();
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-warning btn-sm load-link|$ajaxdata", '(Clear Sort)');
-		}
-		
-		/* =============================================================
-			URL FUNCTIONS -> FUNCTIONS THAT CREATE URL FOR LINKS
-		============================================================ */
-		public function generate_loadordersurl() { //USED BY generate_clearsearchlink(), generate_loadorderslink(), generate_refreshorderslink() 
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = wire('config')->pages->orders.'redir/';
-			if ($this->type == 'cust') {
-				$url->query->setData(array('action' => 'load-cust-orders', 'custID' => $this->custID));
-			} else {
-				$url->query->setData(array('action' => 'load-orders'));
-			}
-			return $url->getUrl();
-		}
-		
-		public function generate_ordersearchurl() {
+		public function generate_searchurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = wire('config')->pages->ajax.'load/orders/search/';
 			$url->query = '';
-			if ($this->type = 'cust') {
-				$url->path->add('cust');
-				$url->query->set('custID', $this->custID);
-				if ($this->shipID) {
-					$url->query->set('shipID', $this->shipID);
+			return $url->getUrl();
+		}
+		
+		// public function generate_clearsearchlink() Defined in OrderPanel
+		// public function generate_clearsortlink() Defined in OrderPanel
+		// public function generate_clearsorturl() Defined in OrderPanel
+		
+		public function generate_getorderdetailsurl(Order $order) {
+			$url = $this->generate_ordersredirurl();
+			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->orderno, 'page' => $this->pagenbr, 'orderby' => $this->tablesorter->orderbystring));
+			return $url->getUrl();
+		}
+		
+		public function generate_documentsrequesturl(Order $order) {
+            $url = new \Purl\Url($this->generate_documentsrequesturltrait($order));
+			$url->query->set('page', $this->pagenbr);
+			$url->query->set('orderby', $this->tablesorter->orderbystring);
+            return $url->getUrl();
+        }
+		
+		public function generate_trackingrequesturl(Order $order) {
+            $url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
+			$url->query->set('page', $this->pagenbr);
+			$url->query->set('orderby', $this->tablesorter->orderbystring);
+            return $url->getUrl();
+        }
+		
+		public function generate_viewlinkeduseractionslink(Order $order) {
+			$bootstrap = new Contento();
+			$href = $this->generate_viewlinkeduseractionsurl($order);
+			$icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-check'));
+			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
+		}
+		
+		
+		
+		public function generate_editlink(Order $order) {
+			$bootstrap = new Contento();
+			/*
+				ORDER LOCK LOGIC
+				-------------------------------------
+				N = PICKED, INVOICED, ETC CANNOT EDIT
+				Y = CAN EDIT
+				L = YOU'VE LOCKED THIS ORDER
+			*/
+
+			if ($order->can_edit()) {
+				$icon = $bootstrap->createicon('glyphicon glyphicon-pencil');
+				$title = "Edit this Order";
+			} elseif ($order->editord == 'L') {
+				if (wire('user')->hasorderlocked) {
+					if ($order->orderno == wire('user')->lockedordn) {
+						$icon = $bootstrap->createicon('glyphicon glyphicon-wrench');
+						$title = "Edit this Order";
+					} else {
+						$icon = $bootstrap->createicon('material-icons md-36', '&#xE897;');
+						$title = "You have this order locked, but you can still view it";
+					}
+				} else {
+					$icon = $bootstrap->createicon('material-icons md-36', '&#xE897;');
+					$title = "You have this order locked, but you can still view it";
 				}
+			} else {
+				$icon = $bootstrap->createicon('glyphicon glyphicon-eye-open');
+				$title = "Open in read-only mode";
 			}
-			return $url->getUrl();
+			$href = $this->generate_editurl($order);
+			return $bootstrap->openandclose('a', "href=$href|class=edit-order h3|title=$title", $icon);
 		}
 		
-		public function generate_tableorderbyurl($column) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->query->set("orderby", "$column-".$this->tablesorter->generate_columnsortingrule($column));
-			return $url->getUrl();
+		public function generate_loaddocumentslink(Order $order) {
+            $bootstrap = new Contento();
+            $href = $this->generate_documentsrequesturl($order);
+            $icon = $bootstrap->createicon('material-icons md-36', '&#xE873;');
+            $ajaxdata = $this->generate_ajaxdataforcontento();
+            
+            if ($order->has_documents()) {
+                return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
+            } else {
+                return $bootstrap->openandclose('a', "href=#|class=text-muted|title=No Documents Available", $icon);
+            }
+        }
+		
+		public function generate_loadtrackinglink(Order $order) { 
+			$bootstrap = new Contento();
+			if ($order->has_tracking()) {
+				$href = $this->generate_trackingrequesturl($order);
+				$content = $bootstrap->openandclose('span', "class=sr-only", 'View Tracking');
+				$content .= $bootstrap->createicon('glyphicon glyphicon-plane hover');
+				$ajaxdata = $this->generate_ajaxdataforcontento();
+				return $bootstrap->openandclose('a', "href=$href|class=h3 generate-load-link|title=Click to view Tracking|$ajaxdata", $content);
+			} else {
+				$content = $bootstrap->openandclose('span', "class=sr-only", 'No Tracking Information Available');
+				$content .= $bootstrap->createicon('glyphicon glyphicon-plane hover');
+				return $bootstrap->openandclose('a', "href=#|class=h3 text-muted|title=No Tracking Info Available", $content);
+			}
 		}
 		
-		public function generate_clearsorturl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->query->remove("orderby");
-			return $url->getUrl();
+		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
+			$bootstrap = new Contento();
+			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
+			
+			if ($order->can_edit()) {
+				$title = ($order->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
+				$addclass = ($order->has_notes()) ? '' : 'text-muted';
+			} else {
+				$title = ($order->has_notes()) ? "View Order Notes" : "View Order Notes";
+				$addclass = ($order->has_notes()) ? '' : 'text-muted';
+			}
+			$content = $bootstrap->createicon('material-icons md-36', '&#xE0B9;');
+			$link = $bootstrap->openandclose('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
+			return $link;
 		}
 		
-		/* =============================================================
-			STRING FUNCTIONS
-		============================================================ */
-		public function generate_ajaxdataforcontento() {
-			return str_replace(' ', '|', str_replace("'", "", str_replace('"', '', $this->ajaxdata)));
+		public function get_ordercount() {
 		}
-		
-		
+		public function get_orders($debug = false) {
+        }
 	}

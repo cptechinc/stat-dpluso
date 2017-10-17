@@ -1,8 +1,8 @@
 <?php
-	$orderpanel = new SalesOrderPanel('cust', $page->fullURL, '#ajax-modal', '#orders-panel', $config->ajax, session_id());
-	$orderpanel->setup_customerpanel($custID, $shipID);
+	$orderpanel = new CustomerSalesOrderPanel(session_id(), $page->fullURL, '#ajax-modal', '#orders-panel', $config->ajax);
+	$orderpanel->set_customer($custID, $shipID);
 	$orderpanel->pagenbr = $input->pageNum;
-	$orderpanel->active = !empty($input->get->ordn) ? $input->get->text('ordn') : false;
+	$orderpanel->activeID = !empty($input->get->ordn) ? $input->get->text('ordn') : false;
 	$orderpanel->get_ordercount();
 	
 	if (!empty($shipID)) {
@@ -18,15 +18,15 @@
         	<a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">
 				Searching for <?= $session->ordersearch; ?> <span class="caret"></span> <span class="badge"><?= $orderpanel->count; ?></span>
             </a>  |
-			<?= $orderpanel->generate_refreshorderslink(); ?>
+			<?= $orderpanel->generate_refreshlink(); ?>
     	<?php elseif ($orderpanel->count > 0) : ?>
             <a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">Customer Orders <span class="caret"></span></a> <span class="badge"> <?= $orderpanel->count; ?></span> &nbsp; | &nbsp;
-            <?= $orderpanel->generate_refreshorderslink(); ?>
+            <?= $orderpanel->generate_refreshlink(); ?>
 		<?php elseif (isset($input->get->ordn)) : ?>
 			<a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">Customer Orders <span class="caret"></span></a> <span class="badge"> <?= $orderpanel->count; ?></span> &nbsp; | &nbsp;
-			<?= $orderpanel->generate_refreshorderslink(); ?>
+			<?= $orderpanel->generate_refreshlink(); ?>
         <?php else : ?>
-        	<?= $orderpanel->generate_loadorderslink(); ?>
+        	<?= $orderpanel->generate_loadlink(); ?>
         <?php endif; ?>
 		&nbsp; &nbsp;
 		<?php
@@ -45,7 +45,7 @@
 					<?= $paginator->generate_showonpage(); ?>
                 </div>
                 <div class="col-sm-4">
-                	<?= $orderpanel->generate_ordersearchlink(); ?>
+                	<?= $orderpanel->generate_searchlink(); ?>
                     &nbsp; &nbsp; &nbsp;
                     <?php if ($session->ordersearch) : ?>
 						<?= $orderpanel->generate_clearsearchlink(); ?>

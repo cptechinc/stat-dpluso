@@ -3,11 +3,16 @@
         $vendresults = search_vendorspaged($config->showonpage, $input->pageNum, $input->get->text('q'),  false);
         $resultscount = count_searchvendors($input->get->text('q'), false);
     }
+    
+    $vendlink = new \Purl\Url($page->fullURL);
+    $vendlink->path = $config->pages->vendor.'redir/';
+    $vendlink->query = '';
+    $vendlink->query->set('action', 'vi-vendor');
 ?>
 
 <div id="vend-results">
     <?php if ($input->get->q) : ?>
-        <table id="vend-index" class="table table-striped table-bordered">
+        <table id="vend-index" class="table table-striped table-bordered table-condensed">
             <thead>
                 <tr>
                     <th width="100">VendID</th> <th>Vendor Name</th> <th>Ship-From</th> <th>Address</th> <th>City</th> <th>State</th> <th>Zip</th> <th width="100">Phone</th>
@@ -16,9 +21,10 @@
             <tbody>
                 <?php if ($resultscount > 0) : ?>
                     <?php foreach ($vendresults as $vend) : ?>
+                         <?php $vendlink->query->set('vendorID', $vend['vendid']); ?>
                         <tr>
                             <td>
-                                <a href="#">
+                                <a href="<?= $vendlink; ?>">
                                     <?= $page->stringerbell->highlight($vend['vendid'], $input->get->text('q'));?>
                                 </a> &nbsp; <span class="glyphicon glyphicon-share"></span>
                             </td>

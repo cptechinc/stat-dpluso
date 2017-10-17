@@ -2,7 +2,7 @@
 <table class="table table-striped table-bordered table-condensed">
 	<tr>
     	<td class="control-label">Contact Name</td>
-        <td> <input type="text" name="contact" class="form-control input-sm required" id="shiptocontact" value="<?= $billing->contact; ?>"> </td>
+        <td> <input type="text" name="contact" class="form-control input-sm required" id="shiptocontact" value="<?= $order->contact; ?>"> </td>
     </tr>
     <?php if ($config->phoneintl) : ?>
 		<tr>
@@ -10,7 +10,7 @@
 			<td>
 				<select class="form-control input-sm" name="intl" onChange="showphone(this.value)">
 					<?php foreach ($config->yesnoarray as $key => $value) : ?>
-						<?php if ($billing->phintl == $value) {$selected = 'selected';} else {$selected = '';} ?>
+						<?php if ($order->phintl == $value) {$selected = 'selected';} else {$selected = '';} ?>
 						<option value="<?= $value; ?>" <?= $selected; ?>><?= $key; ?></option>
 					<?php endforeach; ?>
 				</select>
@@ -24,20 +24,20 @@
     
     <tr>
     	<td class="control-label">Contact Email</td>
-        <td> <input type="email" name="contact-email" class="form-control input-sm required email" value="<?= $billing->email; ?>"> </td>
+        <td> <input type="email" name="contact-email" class="form-control input-sm email" value="<?= $order->email; ?>"> </td>
     </tr>
 </table>
 
 <legend>Sales Order</legend>
 <table class="table table-striped table-bordered table-condensed">
 	<tr class="bg-info">
-    	<td class="control-label">Sales Person</td> <td> <p class="form-control-static"><?= $billing->sp1; ?> - <?= $billing->sp1name; ?></p> </td>
+    	<td class="control-label">Sales Person</td> <td> <p class="form-control-static"><?= $order->sp1; ?> - <?= $order->sp1name; ?></p> </td>
     </tr>
 	<tr>
-    	<td class="control-label">Cust PO<b class="text-danger">*</b></td> <td> <input type="text" name="custpo" class="form-control input-sm required" value="<?= $billing->custpo; ?>"> </td>
+    	<td class="control-label">Cust PO<b class="text-danger">*</b></td> <td> <input type="text" name="custpo" class="form-control input-sm required" value="<?= $order->custpo; ?>"> </td>
     </tr>
     <tr>
-    	<td class="control-label">Release #</td> <td> <input type="text" name="release-number" class="form-control input-sm" value="<?= $billing->releasenbr; ?>"> </td>
+    	<td class="control-label">Release #</td> <td> <input type="text" name="release-number" class="form-control input-sm" value="<?= $order->releasenbr; ?>"> </td>
     </tr>
 	<tr>
     	<td>Shipvia</td>
@@ -45,23 +45,23 @@
             <select name="shipvia" class="form-control input-sm">
 				<?php $shipvias = getshipvias(session_id()); ?>
                 <?php foreach($shipvias as $shipvia) : ?>
-					<?php if ($billing->shipviacd == $shipvia['code']) {$selected = 'selected'; } else {$selected = ''; } ?>
+					<?php if ($order->shipviacd == $shipvia['code']) {$selected = 'selected'; } else {$selected = ''; } ?>
                     <option value="<?= $shipvia['code']; ?>" <?= $selected; ?>><?= $shipvia['via']; ?> </option>
                 <?php endforeach; ?>
             </select>
         </td>
     </tr>
 	<tr>
-    	<td class="control-label">Terms Code</td> <td class="value"><?= $billing->termcode; ?> - <?= $billing->termdesc; ?></td>
+    	<td class="control-label">Terms Code</td> <td class="value"><?= $order->termcode; ?> - <?= $order->termdesc; ?></td>
     </tr>
     <tr>
-    	<td class="control-label">Order Date</td> <td class="value text-right"><?= $billing->orderdate; ?></td>
+    	<td class="control-label">Order Date</td> <td class="value text-right"><?= $order->orderdate; ?></td>
     </tr>
     <tr>
     	<td class="control-label">Request Date</td>
         <td>
 			<div class="input-group date">
-                <?php $name = 'rqstdate'; $value = $billing->rqstdate; ?>
+                <?php $name = 'rqstdate'; $value = $order->rqstdate; ?>
 				<?php include $config->paths->content."common/date-picker.php"; ?>
             </div>
         </td>
@@ -71,33 +71,28 @@
         <td>
 			<select name="ship-complete" class="form-control input-sm">
 				<?php foreach ($config->yesnoarray as $key => $value) : ?>
-                    <?php if ($billing->shipcom == $value) {$selected = 'selected'; } else {$selected = ''; } ?>
+                    <?php if ($order->shipcom == $value) {$selected = 'selected'; } else {$selected = ''; } ?>
                     <option value="<?= $value; ?>" <?= $selected; ?>><?= $key; ?></option>
                 <?php endforeach; ?>
             </select>
         </td>
     </tr>
-    <?php if ($billing->termtype == 'STD') : ?>
-    	<?php if ($billing->paytype == 'cc') { $cchidden = ''; } else { $cchidden = 'hidden';} ?>
+    <?php if ($order->termtype == 'STD') : ?>
         <tr>
             <td class="control-label">Payment Type</td>
             <td>
                 <select name="paytype" class="form-control input-sm required" onChange="showcredit(this.value)">
-                    <option value="<?= $billing->paytype; ?>">-- Choose Payment Type -- </option>
-                    <option value="billacc" <?php if ($billing->paytype == 'bill') echo 'selected'; ?> >Bill To Account</option>
-                    <option value="cc" <?php if ($billing->paytype == 'cc') {echo 'selected';} ?>>Credit Card</option>
+                    <option value="<?= $order->paytype; ?>">-- Choose Payment Type -- </option>
+                    <option value="billacc" <?php if ($order->paytype == 'bill') echo 'selected'; ?> >Bill To Account</option>
+                    <option value="cc" <?php if ($order->paytype == 'cc') {echo 'selected';} ?>>Credit Card</option>
                 </select>
             </td>
         </tr>
-    <?php else :  ?>
-
     <?php endif; ?>
-
 </table>
-<?php $creditcard = getordercreditcard(session_id(), $ordn, false); ?>
-
-<?php if ($billing->termtype == 'STD') : ?>
-    <div id="credit" class="<?= $cchidden; ?>">
+<?php $creditcard = $ordereditdisplay->get_creditcard(); ?>
+<?php if ($order->termtype == 'STD') : ?>
+    <div id="credit" class="<?= $ordereditdisplay->showhide_creditcard($order); ?>">
         <?php include $config->paths->content.'edit/orders/orderhead/credit-card-form.php'; ?>
     </div>
 <?php else : ?>

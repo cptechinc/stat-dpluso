@@ -33,26 +33,4 @@
 		</div>
 		<button type="submit" class="btn btn-primary"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Push Items To Order</button>
 	</form>
-
 </div>
-<script>
-	$(function() {
-		$('.select-item').change(function() {
-			var checkbox = $(this);
-			if (checkbox.is(':checked')) {
-				checkbox.closest('tr').removeClass('item-not-selected');
-			} else {
-				checkbox.closest('tr').addClass('item-not-selected');
-			}
-		});
-		$('#select-all').change(function() {
-			var checkbox = $(this);
-			if (checkbox.is(':checked')) {
-				console.log('is checked');
-				$('.select-item').prop('checked', true).change();;
-			} else {
-				$('.select-item').prop('checked', false).change();
-			}
-		})
-	});
-</script>

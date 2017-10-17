@@ -15,7 +15,7 @@
 </tr>
 <tr class="international <?= $hidden_intl; ?>">
     <td class="control-label">Ext.</td>
-    <td> <input type="text" class="form-control input-sm" name="intl-office-ext" value="<?= $billing->extension; ?>"> </td>
+    <td> <input type="text" class="form-control input-sm" name="intl-office-ext" value="<?= $order->extension; ?>"> </td>
 </tr>
 
 <tr class="international <?= $hidden_intl; ?>">

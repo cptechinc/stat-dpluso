@@ -3,30 +3,30 @@
        <?php include $config->paths->content.'salesrep/orders/orders-thead-rows.php'; ?>
     </thead>
     <tbody>
-    	<?php if ($input->get->ordn) : ?>
-			<?php if ($orderpanel->count == 0 && $sanitizer->text($input->get->ordn) == '') : ?>
+    	<?php if (isset($input->get->ordn)) : ?>
+			<?php if ($orderpanel->count == 0 && $input->get->text('ordn') == '') : ?>
                 <tr> <td colspan="12" class="text-center">No Orders found! Try using a date range to find the order(s) you are looking for.</td> </tr>
             <?php endif; ?>
         <?php endif; ?>
 		<?php $orderpanel->get_orders(); ?>
         <?php foreach($orderpanel->orders as $order) : ?>
-            <tr class="<?= $order->generate_rowclass($orderpanel); ?>" id="<?php echo $order->orderno; ?>">
-            	<td class="text-center"><?= $order->generate_clicktoexpandlink($orderpanel); ?></td>
-                <td><?php echo $order->orderno; ?></td>
+            <tr class="<?= $orderpanel->generate_rowclass($order); ?>" id="<?= $order->orderno; ?>">
+            	<td class="text-center"><?= $orderpanel->generate_expandorcollapselink($order); ?></td>
+                <td><?= $order->orderno; ?></td>
                 <td><?= $order->custid; ?><br><?= get_customer_name_from_order(session_id(), $order->orderno); ?></td>
-                <td><?php echo $order->custpo; ?></td>
+                <td><?= $order->custpo; ?></td>
                 <td>
-					<a href="<?= $order->generate_customershiptourl(); ?>"><?= $order->shiptoid; ?></a>
-                    <?= $order->generate_shiptopopover(); ?>
+					<a href="<?= $orderpanel->generate_customershiptourl($order); ?>"><?= $order->shiptoid; ?></a>
+                    <?= $orderpanel->generate_shiptopopover($order); ?>
                 </td>
-                <td align="right">$ <?php echo formatmoney($order->odrtotal); ?></td>
-                <td align="right" ><?php echo $order->orderdate; ?></td>
-                <td align="right"><?php echo $order->status; ?></td>
+                <td align="right">$ <?= formatmoney($order->odrtotal); ?></td>
+                <td align="right"><?= $order->orderdate; ?></td>
+                <td align="right"><?= $order->status; ?></td>
                 <td colspan="3">
-                    <span class="col-xs-3"><?= $order->generate_loaddocumentslink($orderpanel, '0'); ?></span>
-                    <span class="col-xs-3"><?= $order->generate_loadtrackinglink($orderpanel); ?></span>
-                    <span class="col-xs-3"><?= $order->generate_loadnoteslink($orderpanel, '0'); ?></span>
-                    <span class="col-xs-3"><?= $order->generate_editorderlink(); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_loaddocumentslink($order, '0'); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_loadtrackinglink($order); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_loaddplusnoteslink($order, '0'); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_editlink($order); ?></span>
                 </td>
             </tr>
 
@@ -46,19 +46,17 @@
         	<?php if ($order->error == 'Y') : ?>
                 <tr class="detail bg-danger" >
                     <td colspan="2" class="text-center"><b class="text-danger">Error:</b></td>
-                    <td colspan="2"><?php echo $order->errormsg; ?></td> <td></td> <td></td>
+                    <td colspan="2"><?= $order->errormsg; ?></td> <td></td> <td></td>
                     <td colspan="2"> </td> <td></td> <td></td> <td></td>
                 </tr>
             <?php endif; ?>
 
              <tr class="detail last-detail">
              	<td colspan="2">
-             		<?= $order->generate_viewprintlink($orderpanel); ?>
+             		<?= $orderpanel->generate_viewprintlink($order); ?>
              	</td>
 				<td colspan="3">
-					<a href="<?= $config->pages->actions.'all/load/list/order/?ordn='.$order->orderno.'&modal=modal'; ?>" class="load-into-modal" data-modal="#ajax-modal">
-						<span class="h3"><i class="glyphicon glyphicon-check" aria-hidden="true"></i></span> <span>View Associated Actions</span>
-					</a>
+					<?= $orderpanel->generate_viewlinkeduseractionslink($order); ?>
 				</td>
 				<td>
                 	<a class="btn btn-primary btn-sm" onClick="reorder('<?= $order->orderno; ?>')">
@@ -67,7 +65,7 @@
                 </td>
                 <td></td>  <td></td>
                 <td colspan="2">
-                    <div class="pull-right"> <a class="btn btn-danger btn-sm load-link" href="<?php echo $orderlink; ?>" <?php echo $orderpanel->ajaxdata; ?>>Close</a> </div>
+                    <div class="pull-right"> <a class="btn btn-danger btn-sm load-link" href="<?= $orderpanel->generate_closedetailsurl($order); ?>" <?= $orderpanel->ajaxdata; ?>>Close</a> </div>
                 </td>
              	<td></td>
              </tr>

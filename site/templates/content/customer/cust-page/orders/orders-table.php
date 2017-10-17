@@ -10,21 +10,21 @@
         <?php endif; ?>
         <?php $orderpanel->get_orders(); ?>
         <?php foreach($orderpanel->orders as $order) : ?>
-            <tr class="<?= $order->generate_rowclass($orderpanel); ?>" id="<?= $order->orderno; ?>">
-            	<td class="text-center"><?= $order->generate_clicktoexpandlink($orderpanel); ?></td>
+            <tr class="<?= $orderpanel->generate_rowclass($order); ?>" id="<?= $order->orderno; ?>">
+            	<td class="text-center"><?= $orderpanel->generate_expandorcollapselink($order);?></td>
                 <td> <?= $order->orderno; ?></td>
                 <td><?= $order->custpo; ?></td>
                 <td>
-                    <a href="<?= $order->generate_customershiptourl(); ?>"><?= $order->shiptoid; ?></a>
-                    <?= $order->generate_shiptopopover(); ?>
+                    <a href="<?= $orderpanel->generate_customershiptourl($order); ?>"><?= $order->shiptoid; ?></a>
+                    <?= $orderpanel->generate_shiptopopover($order); ?>
                 </td>
                 <td align="right">$ <?= formatmoney($order->odrtotal); ?></td> <td align="right" ><?= $order->orderdate; ?></td>
                 <td align="right"><?=  $order->status; ?></td>
                 <td colspan="4">
-                    <span class="col-xs-3"><?= $order->generate_loaddocumentslink($orderpanel, '0'); ?></span>
-                    <span class="col-xs-3"><?= $order->generate_loadtrackinglink($orderpanel); ?></span>
-                    <span class="col-xs-3"><?= $order->generate_loadnoteslink($orderpanel, '0'); ?></span>
-                    <span class="col-xs-3"><?= $order->generate_editorderlink(); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_loaddocumentslink($order, '0'); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_loadtrackinglink($order); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_loaddplusnoteslink($order, '0'); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_editlink($order); ?></span>
                 </td>
             </tr>
 
@@ -44,17 +44,17 @@
         	<?php if ($order->has_error()) : ?>
                 <tr class="detail bg-danger" >
                     <td colspan="2" class="text-center"><b class="text-danger">Error:</b></td>
-                    <td colspan="2"><?php echo $order['errormsg']; ?></td> <td></td> <td></td>
+                    <td colspan="2"><?= $order->errormsg; ?></td> <td></td> <td></td>
                     <td colspan="2"> </td> <td></td> <td></td> <td></td>
                 </tr>
             <?php endif; ?>
 
              <tr class="detail last-detail">
              	<td colspan="2">
-					<?= $order->generate_viewprintlink($orderpanel); ?>
+					<?= $orderpanel->generate_viewprintlink($order); ?>
 				</td>
 				<td colspan="3">
-					<?= $order->generate_viewrelatedactionslink($orderpanel); ?>
+					<?= $orderpanel->generate_viewlinkeduseractionslink($order); ?>
 				</td>
                 <td>
                 	<a class="btn btn-primary btn-sm" onClick="reorder()">
@@ -63,7 +63,7 @@
                 </td>
                 <td></td>  <td></td>
                 <td colspan="2">
-                    <div class="pull-right"> <a class="btn btn-danger btn-sm load-link" href="<?= $order->generate_closedetailsurl($orderpanel); ?>" <?php echo $orderpanel->ajaxdata; ?>>Close</a> </div>
+                    <div class="pull-right"> <a class="btn btn-danger btn-sm load-link" href="<?= $orderpanel->generate_closedetailsurl($order); ?>" <?php echo $orderpanel->ajaxdata; ?>>Close</a> </div>
                 </td>
              	<td></td>
              </tr>

@@ -1061,6 +1061,13 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
+	
+	function get_vendorname($vendorID) {
+		$sql = wire('database')->prepare("SELECT name FROM vendors WHERE vendid = :vendorID LIMIT 1");
+		$switching = array(':vendorID' => $vendorID);
+		$sql->execute($switching);
+		return $sql->fetchColumn();
+	}
 
 /* =============================================================
 	CART FUNCTIONS
@@ -1202,7 +1209,7 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 /* =============================================================
 	EDIT ORDER FUNCTIONS
 ============================================================ */
-	function caneditorder($sessionID, $ordn, $debug) {
+	function can_editorder($sessionID, $ordn, $debug) {
 		$sql = wire('database')->prepare("SELECT editord FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn LIMIT 1");
 		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
 		if ($debug) {
@@ -1235,8 +1242,8 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
 			$sql->execute($switching);
-			if (!empty($useclass)) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, $useclass); // CAN BE SalesOrder|SalesOrderEdit
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder'); // CAN BE SalesOrder|SalesOrderEdit
 				return $sql->fetch();
 			}
 			return $sql->fetch(PDO::FETCH_ASSOC);
@@ -1339,14 +1346,15 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 		}
 	}
 
-	function getordercreditcard($sessionID, $ordn, $debug) {
-		$sql = wire('database')->prepare("SELECT AES_DECRYPT(ccno , HEX(sessionid)) AS cardnumber, AES_DECRYPT(ccvalidcode , HEX(sessionid)) AS validation, AES_DECRYPT(xpdate, HEX(sessionid)) AS expiredate FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn AND type = 'O'");
+	function get_ordercreditcard($sessionID, $ordn, $debug) {
+		$sql = wire('database')->prepare("SELECT sessionid, AES_DECRYPT(ccno , HEX(sessionid)) AS cardnumber, AES_DECRYPT(ccvalidcode , HEX(sessionid)) AS cardcode, AES_DECRYPT(xpdate, HEX(sessionid)) AS expiredate FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn AND type = 'O'");
 		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
 		$sql->execute($switching);
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
-			return $sql->fetch(PDO::FETCH_ASSOC);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'OrderCreditCard');
+			return $sql->fetch();
 		}
 	}
 

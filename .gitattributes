@@ -18,3 +18,7 @@
 *.png binary
 *.gif binary
 *.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.otf binary

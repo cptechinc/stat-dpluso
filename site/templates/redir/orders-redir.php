@@ -277,11 +277,11 @@
 			$order['rqstdate'] = $input->post->text("rqstdate");
 			$order['shipcom'] = $input->post->text("shipcomplete");
 			$order['btname'] = $input->post->text('cust-name');
-			$order['btadr1'] = $input->post->text('cust-address');
-			$order['btadr2'] = $input->post->text('cust-address2');
-			$order['btcity'] = $input->post->text('cust-city');
-			$order['btstate'] = $input->post->text('cust-state');
-			$order['btzip'] = $input->post->text('cust-zip');
+			// $order['btadr1'] = $input->post->text('cust-address');
+			// $order['btadr2'] = $input->post->text('cust-address2');
+			// $order['btcity'] = $input->post->text('cust-city');
+			// $order['btstate'] = $input->post->text('cust-state');
+			// $order['btzip'] = $input->post->text('cust-zip');
 			$ccno = '';
 			$xpd = '';
 			$ccv = '';

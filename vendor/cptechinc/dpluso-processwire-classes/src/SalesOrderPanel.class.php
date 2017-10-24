@@ -8,16 +8,43 @@
 			$this->pageurl = $this->setup_pageurl($pageurl);
 		}
 		
-		/* =============================================================
-			OrderPanelInterface Functions
-		============================================================ */
 		public function setup_pageurl(\Purl\Url $pageurl) {
 			$url = $pageurl;
 			$url->path = wire('config')->pages->ajax."load/orders/";
 			$url->query->remove('display');
 			$url->query->remove('ajax');
+			$this->paginationinsertafter = 'orders';
 			return $url;
 		}
+		
+		public function generate_lastloadeddescription() {
+            if (wire('session')->{'orders-loaded-for'}) {
+                if (wire('session')->{'orders-loaded-for'} == wire('user')->loginid) {
+                    return 'Last Updated : ' . wire('session')->{'orders-updated'};
+                }
+                return '';
+            }
+            return '';
+        }
+		
+		/* =============================================================
+            SalesOrderPanelInterface Functions
+            LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+        ============================================================ */
+		public function get_ordercount() { }
+		public function get_orders($debug = false) { }
+		
+		/* =============================================================
+			OrderPanelInterface Functions
+			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+		============================================================ */
+		public function generate_refreshlink() {
+            $bootstrap = new Contento();
+            $href = $this->generate_loadurl();
+            $icon = $bootstrap->createicon('fa fa-refresh');
+            $ajaxdata = $this->generate_ajaxdataforcontento();
+            return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Orders");
+        }
 		
 		public function generate_expandorcollapselink(Order $order) {
 			$bootstrap = new Contento();
@@ -28,15 +55,13 @@
 				$addclass = 'load-link';
 				$icon = '-';
 			} else {
-				$href = $this->generate_getorderdetailsurl($order);
+				$href = $this->generate_loaddetailsurl($order);
 				$ajaxdata = "data-loadinto=$this->loadinto|data-focus=#$order->orderno";
 				$addclass = 'generate-load-link';
 				$icon = '+';
 			}
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-sm btn-primary $addclass|$ajaxdata", $icon);
 		}
-		
-		// public function generate_getorderdetailsurl() Defined In SalesOrderTraits
 		
 		public function generate_closedetailsurl() { 
 			$url = new \Purl\Url($this->pageurl->getUrl());
@@ -58,8 +83,6 @@
 			return $bootstrap->openandclose('a', $attr, '<b>?</b>');
 		}
 		
-		//public function generate_ajaxdataforcontento() defined in OrderPanel 
-		
 		public function generate_iconlegend() {
 			$bootstrap = new Contento();
 			$content = $bootstrap->openandclose('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
@@ -73,8 +96,6 @@
 			return $bootstrap->openandclose('a', $attr, 'Icon Definitions');
 		}
 
-		// public function generate_loadlink() Defined in OrderPanel
-		
 		public function generate_loadurl() { 
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = wire('config')->pages->orders.'redir/';
@@ -95,25 +116,35 @@
 			return $url->getUrl();
 		}
 		
-		// public function generate_clearsearchlink() Defined in OrderPanel
-		// public function generate_clearsortlink() Defined in OrderPanel
-		// public function generate_clearsorturl() Defined in OrderPanel
-		
-		public function generate_getorderdetailsurl(Order $order) {
-			$url = $this->generate_ordersredirurl();
-			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->orderno, 'page' => $this->pagenbr, 'orderby' => $this->tablesorter->orderbystring));
+		public function generate_loaddetailsurl(Order $order) {
+			$url = new \Purl\Url($this->generate_loaddetailsurltrait($order));
+			$url->query->set('page', $this->pagenbr);
+			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
+		}
+		
+		/* =============================================================
+            OrderDisplayInterface Functions
+            LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+        ============================================================ */
+		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
+			$bootstrap = new Contento();
+			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
+			
+			if ($order->can_edit()) {
+				$title = ($order->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
+				$addclass = ($order->has_notes()) ? '' : 'text-muted';
+			} else {
+				$title = ($order->has_notes()) ? "View Order Notes" : "View Order Notes";
+				$addclass = ($order->has_notes()) ? '' : 'text-muted';
+			}
+			$content = $bootstrap->createicon('material-icons md-36', '&#xE0B9;');
+			$link = $bootstrap->openandclose('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
+			return $link;
 		}
 		
 		public function generate_documentsrequesturl(Order $order) {
             $url = new \Purl\Url($this->generate_documentsrequesturltrait($order));
-			$url->query->set('page', $this->pagenbr);
-			$url->query->set('orderby', $this->tablesorter->orderbystring);
-            return $url->getUrl();
-        }
-		
-		public function generate_trackingrequesturl(Order $order) {
-            $url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
             return $url->getUrl();
@@ -125,8 +156,6 @@
 			$icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-check'));
 			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
-		
-		
 		
 		public function generate_editlink(Order $order) {
 			$bootstrap = new Contento();
@@ -175,6 +204,10 @@
             }
         }
 		
+		/* =============================================================
+            SalesOrderDisplayInterface Functions
+            LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+        ============================================================ */
 		public function generate_loadtrackinglink(Order $order) { 
 			$bootstrap = new Contento();
 			if ($order->has_tracking()) {
@@ -190,24 +223,10 @@
 			}
 		}
 		
-		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
-			$bootstrap = new Contento();
-			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
-			
-			if ($order->can_edit()) {
-				$title = ($order->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
-				$addclass = ($order->has_notes()) ? '' : 'text-muted';
-			} else {
-				$title = ($order->has_notes()) ? "View Order Notes" : "View Order Notes";
-				$addclass = ($order->has_notes()) ? '' : 'text-muted';
-			}
-			$content = $bootstrap->createicon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->openandclose('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
-			return $link;
-		}
-		
-		public function get_ordercount() {
-		}
-		public function get_orders($debug = false) {
+		public function generate_trackingrequesturl(Order $order) {
+            $url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
+			$url->query->set('page', $this->pagenbr);
+			$url->query->set('orderby', $this->tablesorter->orderbystring);
+            return $url->getUrl();
         }
 	}

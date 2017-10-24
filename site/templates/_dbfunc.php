@@ -566,7 +566,7 @@
 		return $sql->fetchColumn();
 	}
 
-	function get_cust_quote_count($sessionID, $custID, $debug) {
+	function count_customerquotes($sessionID, $custID, $debug) {
 		$sql = wire('database')->prepare("SELECT COUNT(*) as count FROM quothed WHERE sessionid = :sessionID AND custid = :custID");
 		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true,true);
 		if ($debug) {
@@ -577,7 +577,7 @@
 		}
 	}
 
-	function get_cust_quotes($sessionID, $custID, $limit, $page, $debug) {
+	function get_customerquotes($sessionID, $custID, $limit, $page, $useclass = false, $debug) {
 		$limiting = returnlimitstatement($limit, $page);
 		$sql = wire('database')->prepare("SELECT * FROM quothed WHERE sessionid = :sessionID AND custid = :custID $limiting");
 		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
@@ -585,6 +585,10 @@
 			returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
 			$sql->execute($switching);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
+				return $sql->fetchAll();
+			}
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
@@ -611,13 +615,17 @@
 		}
 	}
 
-	function get_quotehead($sessionID, $qnbr, $debug) {
+	function get_quotehead($sessionID, $qnbr, $useclass = false, $debug) {
 		$sql = wire('database')->prepare("SELECT * FROM quothed WHERE sessionid = :sessionID AND quotnbr = :qnbr");
 		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr); $withquotes = array(true, true);
 		if ($debug) {
 			returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
 			$sql->execute($switching);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
+				return $sql->fetch();
+			}
 			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}

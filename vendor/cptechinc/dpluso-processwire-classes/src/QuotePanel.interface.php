@@ -1,5 +1,5 @@
 <?php
-    interface QuotesPanelInterface {
+    interface QuotePanelInterface {
         public function get_quotecount();
         public function get_quotes();
     }

@@ -38,6 +38,18 @@
             }
         }
         
+        /**
+         * Sets up a common url function for getting tracking request url, classes that have this trait 
+         * will definve generate_documentsrequesturltrait(Order $order)
+         * @param  Order  $order [description]
+         * @return String        URL to the order redirect to make the get order documents request
+         */
+        public function generate_documentsrequesturltrait(Order $order) {
+            $url = $this->generate_ordersredirurl();
+            $url->query->setData(array('action' => 'get-order-documents', 'ordn' => $order->orderno));
+            return $url->getUrl();
+        }
+        
         public function generate_editurl(Order $order) {
             $url = $this->generate_ordersredirurl();
             $url->query->setData(array('action' => 'get-order-details','ordn' => $order->orderno));
@@ -65,7 +77,7 @@
         }
         
         public function generate_viewprinturl(Order $order) {
-            $url = new \Purl\Url($this->generate_getorderdetailsurl($order));
+            $url = new \Purl\Url($this->generate_loaddetailsurl($order));
             $url->query->set('print', 'true');
             return $url->getUrl();
         }
@@ -83,6 +95,18 @@
             return $url->getUrl();
         }
         
+        /**
+         * Return String URL to orders redir to request order details
+         * This is here for the use of getting the Print link
+         * @param  Order  $order [description]
+         * @return String        [description]
+         */
+        public function generate_loaddetailsurltrait(Order $order) {
+			$url = $this->generate_ordersredirurl();
+			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->orderno));
+			return $url->getUrl();
+		}
+        
         /* =============================================================
             SalesOrderDisplayInterface Functions
         ============================================================ */
@@ -97,14 +121,14 @@
             } else {
                 return $bootstrap->openandclose('a', "href=#|class=btn btn-default|title=No Tracking Available", $icon. ' No Tracking Available');
             }
-        }
+        }    
         
-        public function generate_documentsrequesturltrait(Order $order) {
-            $url = $this->generate_ordersredirurl();
-            $url->query->setData(array('action' => 'get-order-documents', 'ordn' => $order->orderno));
-            return $url->getUrl();
-        }
-        
+        /**
+         * Sets up a common url function for getting tracking request url, classes that have this trait 
+         * will definve generate_documentsrequesturltrait(Order $order)
+         * @param  Order  $order [description]
+         * @return String        URL to the order redirect to make the get order documents request
+         */
         public function generate_trackingrequesturltrait(Order $order) {
             $url = $this->generate_ordersredirurl();
             $url->query->setData(array('action' => 'get-order-tracking', 'ordn' => $order->orderno));

@@ -436,7 +436,7 @@
 		}
 		wire('user')->hasquotelocked = hasaquotelocked(session_id());
 		if (wire('user')->hasquotelocked) {
-			$user->lockedquote = getlockedquotenbr(session_id());
+			$user->lockedqnbr = getlockedquotenbr(session_id());
 		}
 	}
     

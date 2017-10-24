@@ -7,6 +7,7 @@ $(function() {
             checkbox.closest('tr').addClass('item-not-selected');
         }
     });
+    
     $('#select-all').change(function() {
         var checkbox = $(this);
         if (checkbox.is(':checked')) {
@@ -15,5 +16,5 @@ $(function() {
         } else {
             $('.select-item').prop('checked', false).change();
         }
-    })
+    });
 });

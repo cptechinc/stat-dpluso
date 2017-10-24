@@ -7,7 +7,7 @@
         //'documents' => array('href' => 'documents', "id" => 'documents-link', 'text' => 'View Documents', 'tabcontent' => 'edit/quotes/documents-page.php'),
     );
 ?>
-<?php if (!$editquote['canedit']) : ?>
+<?php if (!$editquotedisplay->canedit) : ?>
    <div class="row">
        <div class="col-xs-12"><?php include $config->paths->content.'edit/quotes/read-only-msg.php'; ?></div>
     </div>

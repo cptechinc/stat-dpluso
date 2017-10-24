@@ -409,10 +409,18 @@ $(document).ready(function() {
 			var resultsurl = $(formid+ " .resultsurl").val();
 			var addonurl = $(formid+ " .addonurl").val();
 			var loadinto = '#' + $(this).closest('.modal').attr('id') + ' .results';
-			$(loadinto).empty();
 			var loadingdiv = "<div class='loading-item-results'>"+darkloadingwheel+"</div>";
-			$(loadingdiv).appendTo(loadinto);
-			$(formid).postformsync({formdata: false, jsoncallback: false}, function() { //{formdata: data/false, jsoncallback: true/false}
+			
+			$.ajax({
+				async: false,
+				beforeSend: function () {
+					$(loadinto).empty();
+					$(loadingdiv).appendTo(loadinto);
+				},
+				url: $(formid).attr('action'),
+				method: "POST", 
+				data: $(formid).serialize()
+			}).done(function() {
 				$(loadinto).loadin(resultsurl, function() {
 					
 				});

@@ -9,7 +9,7 @@
 		function __construct($pagenbr, $count, $pageurl, $insertafter, $ajaxdata = false) {
 			$this->pagenbr = $pagenbr;
 			$this->count = $count;
-			$this->pageurl = $pageurl;
+			$this->pageurl = new \Purl\Url($pageurl);
 			$this->insertafter = $insertafter;
 			$this->ajaxdata = $ajaxdata;
 			
@@ -29,12 +29,12 @@
 		public function paginate($pagenbr) {
 			if (strpos($this->pageurl, 'page') !== false) {
 				$regex = "((page)\d{1,3})";
-				if ($pagenbr > 1) { $replace = "page".$pagenbr; } else {$replace = ""; }
+				$replace = ($pagenbr > 1) ? $replace = "page".$pagenbr : "";
 				$newurl = preg_replace($regex, $replace, $this->pageurl);
 			} else {
 				$this->insertafter = str_replace('/', '', $this->insertafter)."/";
 				$regex = "(($this->insertafter))";
-				if ($pagenbr > 1) { $replace = $this->insertafter."page".$pagenbr."/";} else {$replace = $this->insertafter; }
+				$replace = ($pagenbr > 1) ? $this->insertafter."page".$pagenbr."/" : $replace = $this->insertafter;
 				$newurl = preg_replace($regex, $replace, $this->pageurl);
 			}
 			return $newurl;
@@ -76,23 +76,23 @@
 				$link = $bootstrap->openandclose('a', 'href=#|aria-label=Previous', '<span aria-hidden="true">&laquo;</span>');
 				$list .= $bootstrap->openandclose('li', 'class=disabled', $link);
 			} else {
-				$url = $this->paginate($this->pagenbr - 1);
-				$ajaxdata = $this->generate_ajaxdataforcontento();
-				$link = $bootstrap->openandclose('a', "href=$url|aria-label=Previous|class=load-link|$ajaxdata", '<span aria-hidden="true">&laquo;</span>');
+				$href = $this->paginate($this->pagenbr - 1);
+				$ajaxdetails = (!empty($this->ajaxdata)) ? "class=load-link|".$this->generate_ajaxdataforcontento() : '';
+				$link = $bootstrap->openandclose('a', "href=$href|aria-label=Previous|$ajaxdetails ", '<span aria-hidden="true">&laquo;</span>');
 				$list .= $bootstrap->openandclose('li', '', $link);
 			}
 			
 			for ($i = ($this->pagenbr - 3); $i < ($this->pagenbr + 4); $i++) {
 				if ($i > 0) {
 					if ($this->pagenbr == $i) {
-						$url = $this->paginate($i);
-						$ajaxdata = $this->generate_ajaxdataforcontento();
-						$link = $bootstrap->openandclose('a', "href=$url|class=load-link|$ajaxdata", $i);
+						$href = $this->paginate($i);
+						$ajaxdetails = (!empty($this->ajaxdata)) ? "class=load-link|".$this->generate_ajaxdataforcontento() : '';
+						$link = $bootstrap->openandclose('a', "href=$href|$ajaxdetails", $i);
 						$list .= $bootstrap->openandclose('li', 'class=active', $link);
 					} elseif ($i < ($totalpages + 1)) {
-						$url = $this->paginate($i);
-						$ajaxdata = $this->generate_ajaxdataforcontento();
-						$link = $bootstrap->openandclose('a', "href=$url|class=load-link|$ajaxdata", $i);
+						$href = $this->paginate($i);
+						$ajaxdetails = (!empty($this->ajaxdata)) ? "class=load-link|".$this->generate_ajaxdataforcontento() : '';
+						$link = $bootstrap->openandclose('a', "href=$href|$ajaxdetails", $i);
 						$list .= $bootstrap->openandclose('li', '', $link);
 					}
 				}
@@ -102,9 +102,9 @@
 				$link = $bootstrap->openandclose('a', 'href=#|aria-label=Next', '<span aria-hidden="true">&raquo;</span>');
 				$list .= $bootstrap->openandclose('li', 'class=disabled', $link);
 			} else {
-				$url = $this->paginate($this->pagenbr + 1);
-				$ajaxdata = $this->generate_ajaxdataforcontento();
-				$link = $bootstrap->openandclose('a', "href=$url|aria-label=Next|class=load-link|$ajaxdata", '<span aria-hidden="true">&raquo;</span>');
+				$href = $this->paginate($this->pagenbr + 1);
+				$ajaxdetails = (!empty($this->ajaxdata)) ? "class=load-link|".$this->generate_ajaxdataforcontento() : '';
+				$link = $bootstrap->openandclose('a', "href=$href|aria-label=Next|$ajaxdetails", '<span aria-hidden="true">&raquo;</span>');
 				$list .= $bootstrap->openandclose('li', '', $link);
 			}
 			$ul = $bootstrap->openandclose('ul', 'class=pagination', $list);

@@ -5,12 +5,7 @@
 	$orderpanel->activeID = !empty($input->get->ordn) ? $input->get->text('ordn') : false;
 	$orderpanel->get_ordercount();
 	
-	if (!empty($shipID)) {
-		$insertafter = 'shipto-'.$shipID;
-	} else {
-		$insertafter = $custID;
-	}
-	$paginator = new Paginator($orderpanel->pagenbr, $orderpanel->count, $orderpanel->pageurl->getUrl(), $insertafter, $orderpanel->ajaxdata);
+	$paginator = new Paginator($orderpanel->pagenbr, $orderpanel->count, $orderpanel->pageurl->getUrl(), $orderpanel->paginationinsertafter, $orderpanel->ajaxdata);
 ?>
 <div class="panel panel-primary not-round" id="orders-panel">
     <div class="panel-heading" id="orders-panel-heading">
@@ -29,14 +24,8 @@
         	<?= $orderpanel->generate_loadlink(); ?>
         <?php endif; ?>
 		&nbsp; &nbsp;
-		<?php
-			if ($session->{'orders-loaded-for'}) {
-				if ($session->{'orders-loaded-for'} == $custID) {
-					echo 'Last Updated : ' . $session->{'orders-updated'};
-				}
-			}
-		?>
-        <span class="pull-right"><?php if ($input->pageNum > 1 ) {echo 'Page '.$input->pageNum;} ?></span>
+		<?= $orderpanel->generate_lastloadeddescription(); ?>
+        <span class="pull-right"><?= $orderpanel->generate_pagenumberdescription(); ?></span>
     </div>
     <div id="orders-div" class="<?= $orderpanel->collapse; ?>">
         <div class="panel-body">

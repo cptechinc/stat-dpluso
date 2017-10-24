@@ -23,18 +23,20 @@
             return ($order->paytype == 'cc') ? '' : 'hidden';
         }
         
-        public function generate_getorderdetailsurl(Order $order) {
-			$url = $this->generate_ordersredirurl();
-			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->orderno));
-			return $url->getUrl();
-		}
-        
-        public function generate_documentsrequesturl(Order $order) {
-            return $this->generate_documentsrequesturltrait($order);
+        public function showhide_phoneintl(Order $order) {
+            return $order->is_phoneintl() ? '' : 'hidden';
         }
         
-        public function generate_trackingrequesturl(Order $order) {
-            return $this->generate_trackingrequesturltrait($order);
+        public function showhide_phonedomestic(Order $order) {
+            return $order->is_phoneintl() ? 'hidden' : '';
+        }
+        
+        /* =============================================================
+            OrderDisplayInterface Functions
+            LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+        ============================================================ */
+        public function generate_documentsrequesturl(Order $order) {
+            return $this->generate_documentsrequesturltrait($order);
         }
         
         public function generate_editlink(Order $order) {
@@ -44,11 +46,28 @@
             return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-warning", $icon. " Edit Order");   
         }
         
+        /* =============================================================
+            SalesOrderDisplayInterface Functions
+            LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+        ============================================================ */
+        public function generate_trackingrequesturl(Order $order) {
+            return $this->generate_trackingrequesturltrait($order);
+        }
+        
+        /* =============================================================
+            Class specific Functions
+            
+        ============================================================ */
         public function generate_customershiptolink(Order $order) {
             $bootstrap = new Contento();
             $href = $this->generate_customershiptourl($order);
             $icon = $bootstrap->createicon('fa fa-user');
             return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-primary", $icon. " Go to Customer Page");   
+        }
+        
+        public function generate_loaddetailsurl(Order $order) {
+			$url = new \Purl\Url($this->generate_loaddetailsurltrait());
+            return $url->getUrl();    
         }
         
     }

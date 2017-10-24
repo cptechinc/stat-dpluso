@@ -6,7 +6,7 @@
         'details' => array('href' => 'details', "id" => 'quotedetail-link', 'text' => 'Quote Details', 'tabcontent' => 'edit/quote-to-order/quote-details/details-page.php')
     );
 ?>
-<?php if (!$editquote['canedit']) : ?>
+<?php if (!$editquotedisplay->canedit) : ?>
    <div class="row">
        <div class="col-xs-12"><?php include $config->paths->content.'edit/quotes/read-only-msg.php'; ?></div>
     </div>
@@ -39,7 +39,7 @@
 </div>
 
 <br>
-<?php if (!$editquote['canedit']) : ?>
+<?php if (!$editquotedisplay->canedit) : ?>
    <a href="<?php echo $editquote['unlock-url']; ?>" class="btn btn-block btn-success save-unlock-order">Finished with quote</a>
    <br>
    <a href="<?php echo $editquote['unlock-url']; ?>" class="btn btn-block btn-warning">Discard Changes, unlock quote</a>

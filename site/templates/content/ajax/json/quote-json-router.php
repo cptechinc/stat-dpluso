@@ -4,7 +4,7 @@
 
 	switch ($input->urlSegment(2)) {
 		case 'quotehead':
-			$quote = get_quotehead(session_id(), $qnbr, false);
+			$quote = get_quotehead(session_id(), $qnbr, false, false);
 			echo json_encode(array("response" => array("quote" => $quote)));
 			break;
 		case 'details':

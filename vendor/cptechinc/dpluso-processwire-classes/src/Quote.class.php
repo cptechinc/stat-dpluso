@@ -1,84 +1,12 @@
 <?php 
-
-    class Quote {
+    class Quote extends Order {
         public $sessionid;
         public $recno;
         public $date;
         public $time;
-        public $type;
-        public $custid;
-        public $shiptoid;
-        public $custname;
-        public $orderno;
-        public $custpo;
-        public $custref;
+        public $quotnbr; 
         public $status;
-        public $orderdate;
-        public $careof;
-        public $quotdate;
-        public $invdate;
-        public $shipdate;
-        public $revdate;
-        public $expdate;
-        public $havedoc;
-        public $havetrk;
-        public $odrsubtot;
-        public $odrtax;
-        public $odrfrt;
-        public $odrmis;
-        public $odrtotal;
-        public $havenote;
-        public $editord;
-        public $error;
-        public $errormsg;
-        public $sconame;
-        public $sname;
-        public $saddress;
-        public $saddress2;
-        public $scity;
-        public $sst;
-        public $szip;
-        public $scountry;
-        public $contact;
-        public $phintl;
-        public $phone;
-        public $extention;
-        public $faxnumber;
-        public $email;
-        public $releasenbr;
-        public $shipviacd;
-        public $shipviadesc;
-        public $priccode;
-        public $pricdesc;
-        public $pricdisp;
-        public $taxcode;
-        public $taxcodedesc;
-        public $taxcodedisp;
-        public $termcode;
-        public $termtype;
-        public $termdesc;
-        public $rqstdate;
-        public $shipcom;
-        public $sp1;
-        public $sptname;
-        public $sp2;
-        public $sp2name;
-        public $sp2disp;
-        public $sp3;
-        public $sp3name;
-        public $sp3disp;
-        public $fob;
-        public $deliverydesc;
-        public $whse;
-        public $ccno;
-        public $xpdate;
-        public $ccvalidcode;
-        public $ccapproval;
-        public $costtot;
-        public $totdisc;
-        public $paytype;
-        public $srcdatefrom;
-        public $srcdatethru;
+        public $custid;
         public $btname;
         public $btadr1;
         public $btadr2;
@@ -87,17 +15,88 @@
         public $btcity;
         public $btstate;
         public $btzip;
-        public $prntfmt;
-        public $prntfmtdisp;
+        public $shiptoid;
+        public $stname;
+        public $stadr1;
+        public $stadr2;
+        public $stadr3;
+        public $stctry;
+        public $stcity;
+        public $ststate;
+        public $stzip;
+        public $contact; 
+        public $telenbr;
+        public $faxnbr;
+        public $emailadr;
+        public $careof; 
+        public $quotdate;
+        public $revdate;
+        public $expdate;
+        public $priccode;
+        public $priccodedesc; 
+        public $taxcode;
+        public $taxcodedesc; 
+        public $termcode;
+        public $termcodedesc; 
+        public $sviacode;
+        public $sviacodedesc; 
+        public $sp1;
+        public $sp1pct;
+        public $sp1name; 
+        public $sp2;
+        public $sp2pct;
+        public $sp2name; 
+        public $sp3;
+        public $sp3pct;
+        public $sp3name; 
+        public $fob;
+        public $deliverydesc; 
+        public $whse;
+        public $custpo; 
+        public $custref;
+        public $notes;
+        public $error;
+        public $errormsg;
+        public $subtotal;
+        public $salestax;
+        public $freight;
+        public $miscellaneous;
+        public $order_total;
+        public $cost_total;
+        public $margin_amt;
+        public $margin_pct;
         public $dummy;
-        
-        public $canedit = true;
-        public $hasnotes = false;
-        
+                
         
         public function __construct() {
-            if ($this->havenote == 'Y') { $this->hasnotes = true; }
-        }
+			$this->update_properties();
+		}
+		
+		public function update_properties() {
+			
+		}
+		
+		public function has_documents() {
+			//return $this->havedoc == 'Y' ? true : false;
+			return false;
+		}
+
+		public function has_notes() {
+			return $this->notes == 'Y' ? true : false;
+		}
+
+		public function can_edit() {
+			//return $this->editord == 'Y' ? true : false;
+			return true;
+		}
+
+		// public function is_phoneintl() {
+		// 	return $this->phintl == 'Y' ? true : false;
+		// }
+
+		public function has_error() {
+			return $this->error == 'Y' ? true : false;
+		}
 
         
         public static function returnclassarray() {

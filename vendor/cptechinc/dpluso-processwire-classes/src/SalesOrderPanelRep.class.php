@@ -6,6 +6,7 @@
 			$url->path = wire('config')->pages->ajax."load/orders/salesrep/";
 			$url->query->remove('display');
 			$url->query->remove('ajax');
+            $this->paginationinsertafter = 'salesrep';
 			return $url;
 		}
         

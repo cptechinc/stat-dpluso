@@ -1,4 +1,3 @@
-<?php $quote = get_quotehead(session_id(), $qnbr, false); ?>
 <div id="sales-order-details">
 	<form action="<?= $config->pages->quotes.'redir/'; ?>" method="post" id="select-items-form">
 		<input type="hidden" name="action" value="send-quote-to-order">
@@ -10,23 +9,23 @@
 		    	<table class="table-condensed table table-striped">
 		        	<tr>
 		        		<td>Subtotal</td>
-		        		<td class="text-right">$ <?php echo formatmoney($quote['subtotal']); ?></td>
+		        		<td class="text-right">$ <?php echo formatmoney($quote->subtotal); ?></td>
 		        	</tr>
 		        	<tr>
 		        		<td>Tax</td>
-		        		<td class="text-right">$ <?php echo formatmoney($quote['salestax']); ?></td>
+		        		<td class="text-right">$ <?php echo formatmoney($quote->salestax); ?></td>
 		        	</tr>
 		        	<tr>
 		        		<td>Freight</td>
-		        		<td class="text-right">$ <?php echo formatmoney($quote['freight']); ?></td>
+		        		<td class="text-right">$ <?php echo formatmoney($quote->freight); ?></td>
 		        	</tr>
 		        	<tr>
 		        		<td>Misc.</td>
-		        		<td class="text-right">$ <?php echo formatmoney($quote['miscellaneous']); ?></td>
+		        		<td class="text-right">$ <?php echo formatmoney($quote->miscellaneous); ?></td>
 		        	</tr>
 		        	<tr>
 		        		<td>Total</td>
-		        		<td class="text-right">$ <?php echo formatmoney($quote['order_total']); ?></td>
+		        		<td class="text-right">$ <?php echo formatmoney($quote->order_total); ?></td>
 		        	</tr>
 		        </table>
 		    </div>

@@ -3,6 +3,7 @@
         public $focus;
         public $loadinto;
         public $ajaxdata;
+        public $paginationinsertafter;
         public $throughajax;
         public $sessionID;
         public $collapse = 'collapse';
@@ -27,17 +28,17 @@
             }
         }
         
+        public function generate_pagenumberdescription() {
+            return ($this->pagenbr > 1) ? "Page $this->pagenbr" : '';
+        }
+        
+        public function generate_paginationinsertafter() {
+            
+        }
+        
         /* =============================================================
             OrderPanelInterface Functions
         ============================================================ */
-        public function generate_refreshlink() {
-            $bootstrap = new Contento();
-            $href = $this->generate_loadurl();
-            $icon = $bootstrap->createicon('fa fa-refresh');
-            $ajaxdata = $this->generate_ajaxdataforcontento();
-            return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Orders");
-        }
-        
         public function generate_clearsearchlink() {
             $bootstrap = new Contento();
             $href = $this->generate_loadurl();

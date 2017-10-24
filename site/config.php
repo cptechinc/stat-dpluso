@@ -82,7 +82,7 @@
 	 * Installer: HTTP Hosts Whitelist
 	 * 
 	 */
-	$config->httpHosts = array('216.17.51.114');
+	$config->httpHosts = array('216.17.51.114', 'salesportal.stat-technologies.com');
 
 
 	$config->debug = true;

@@ -1,4 +1,4 @@
-var sitedirectory = 'crm';
+var sitedirectory = '';
 var sitepath = '/';
 if (sitedirectory.length > 0) {
     sitepath = "/" + sitedirectory + "/";

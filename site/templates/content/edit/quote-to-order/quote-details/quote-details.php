@@ -62,7 +62,7 @@
                         <div class="col-xs-3"> <span class="visible-xs-block action-label">Docs</span> <?= $detaildocumenticon; ?></div>
                         <div class="col-xs-2"> <span class="visible-xs-block action-label">Notes</span> <?= $detnoteicon; ?></div>
                         <div class="col-xs-4"> <span class="visible-xs-block action-label">Edit</span>
-                            <?php if ($editquote['canedit']) : ?>
+                            <?php if ($editquotedisplay->canedit) : ?>
                                 <a href="<?= $editdetail; ?>" class="btn btn-sm btn-warning update-line" data-line="<?= $detail['recno']; ?>" data-itemid="<?= $detail['itemid']; ?>" data-kit="<?php echo $detail['kititemflag']; ?>"  data-custid="<?= $quote->custid; ?>">
                                     <i class="fa fa-pencil fa-1-5x" aria-hidden="true"></i><span class="sr-only">Edit</span>
                                 </a>&nbsp;

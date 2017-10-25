@@ -5,21 +5,22 @@
             $orderdisplay = new SalesOrderDisplay(session_id(), $page->fullURL, '#ajax-modal', $ordn);
             $order = get_orderhead(session_id(), $ordn, true, false); 
             $page->title = 'Summary for Order # '.$ordn;
-			$page->body = $config->paths->content."confirm/orders/outline.php";
+            $page->body = $config->paths->content."confirm/orders/outline.php";
             break;
         case 'quote':
             $qnbr = $input->get->text('qnbr');
+            $quotedisplay = new QuoteDisplay(session_id(), $page->fullURL, '#ajax-modal', $qnbr);
             $page->title = 'Summary for Quote # '.$qnbr;
             $page->body = $config->paths->content."confirm/quotes/outline.php";
             break;
     }
  ?>
  <?php include('./_head.php'); // include header markup ?>
- 	<div class="jumbotron pagetitle">
- 		<div class="container">
- 			<h1><?php echo $page->get('pagetitle|headline|title') ; ?></h1>
- 		</div>
- 	</div>
+    <div class="jumbotron pagetitle">
+        <div class="container">
+            <h1><?php echo $page->get('pagetitle|headline|title') ; ?></h1>
+        </div>
+    </div>
      <div class="container page" id="edit-page">
         <?php include ($page->body); ?>
      </div>

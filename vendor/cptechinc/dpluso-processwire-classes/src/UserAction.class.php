@@ -166,7 +166,7 @@
 			} elseif ($this->hasnotelink) {
 				$replace .= " CRM Note #" . $this->notelink;
 			} elseif ($this->hasactionlink) {
-				$replace .= " Action #" . $this->tasklink;
+				$replace .= " Action #" . $this->actionlink;
 			}
 			$replace = trim($replace);
 

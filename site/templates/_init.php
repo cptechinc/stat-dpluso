@@ -10,11 +10,12 @@
  * we are using it just to include another file with shared functions.
  *
  */
-
 	include_once("./_func.php"); // include our shared functions
 	include_once("./_dbfunc.php");
 	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/src/utfport.php"); // UTF8 conversion library functions
 	include_once($config->paths->content."common/initialize.php");  // includes class files
+	include_once($config->paths->templates."_init.js.php");
+	
 	$session->sessionName = session_name();
 
 	$page->fullURL = new \Purl\Url($page->httpUrl);
@@ -34,7 +35,7 @@
 	$config->styles->append(hashtemplatefile('styles/libraries.css'));
 	$config->styles->append(hashtemplatefile('styles/styles.css'));
 
-	$config->scripts->append(hashtemplatefile('scripts/js-config.js'));
+	//$config->scripts->append(hashtemplatefile('scripts/js-config.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libraries.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/key-listener.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/datatables.js'));

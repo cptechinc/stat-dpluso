@@ -1,5 +1,8 @@
 <?php 
     $config->js('pwconfig', [
+        'appconfig' => [
+            'cptechcustomer' => $config->cptechcustomer
+        ],
         'edit' => [
             'pricing' => [
                 'show_minpriceerror' => false

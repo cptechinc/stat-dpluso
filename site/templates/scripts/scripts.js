@@ -696,20 +696,22 @@ $(document).ready(function() {
 							wait(500, function() {
 								$(elementreload + " .actions-refresh").click();
 								$(modal).modal('hide');
-							 	swal({
-									title: "Your "+json.response.actiontype+" was created!",
-									text: "Would you like to create an action for this "+json.response.actiontype+"?",
-									type: "success",
-									showCancelButton: true,
-									confirmButtonText: "Yes, Create Action",
-								}).then(function () {
-									swal.close();
-									var href = new URI($('#actions-panel .add-action').attr('href')).addQuery('actionID', json.response.actionid).toString();
-									console.log(href);
-									$('#actions-panel .add-action').attr('href', href).click();
-									href = URI(href).removeQuery('actionID').toString();
-									$('#actions-panel .add-action').attr('href', href);
-								}).catch(swal.noop);
+								if (config.appconfig.cptechcustomer != 'stempf') {
+									swal({
+										title: "Your "+json.response.actiontype+" was created!",
+										text: "Would you like to create an action for this "+json.response.actiontype+"?",
+										type: "success",
+										showCancelButton: true,
+										confirmButtonText: "Yes, Create Action",
+									}).then(function () {
+										swal.close();
+										var href = new URI($('#actions-panel .add-action').attr('href')).addQuery('actionID', json.response.actionid).toString();
+										console.log(href);
+										$('#actions-panel .add-action').attr('href', href).click();
+										href = URI(href).removeQuery('actionID').toString();
+										$('#actions-panel .add-action').attr('href', href);
+									}).catch(swal.noop);
+								}
 							});
 						}
 					});
@@ -733,7 +735,7 @@ $(document).ready(function() {
 			var custID = $(this).data('custid');
 			var modal = config.modals.ajax;
 			var loadinto = modal + " .modal-content";
-			if ($.inArray(itemID, nonstockitems) > -1) {
+			if ($.inArray(itemID, config.products.nonstockitems) > -1) {
 				console.log('skipping item get');
 				$(loadinto).loadin(url, function() {
 					hideajaxloading();

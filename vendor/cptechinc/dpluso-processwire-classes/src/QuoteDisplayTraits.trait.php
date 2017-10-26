@@ -52,15 +52,7 @@
         
         public function generate_editurl(Order $quote) {
             $url = $this->generate_quotesredirurl();
-            $url->query->setData(array('action' => 'load-quote-details', 'qnbr' => $quote->quotnbr));
-            
-            if (wire('user')->hasquotelocked) {
-                $queryset = ($quote->quotnbr == wire('user')->lockedordn) ?  'lock' : 'readonly';
-                $url->query->set($queryset, $queryset);
-            } else {
-                $url->query->set('lock', 'lock');
-            }
-            
+            $url->query->setData(array('action' => 'edit-quote', 'qnbr' => $quote->quotnbr));
             return $url->getUrl();
         }
         

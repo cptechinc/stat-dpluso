@@ -106,11 +106,12 @@ function shipto() { //CAN BE USED IF SHIPTO IS DEFINED
 
 function contact() {
 	var custID = $(custlookupform + " .custID").val();
+	var shipID = $(custlookupform + " .shipID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_contacts).addQuery("custID", custID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.load.ci_contacts).addQuery("custID", custID).addQuery('shipID', shipID).addQuery('modal', 'modal').query(cleanparams).toString();
 	showajaxloading();
-	ci_contacts(custID, function() {
+	ci_contacts(custID, shipID, function() {
 		loadin(href, loadinto, function() {
 			hideajaxloading(); console.log(href);
 			$(modal).find('.modal-body').addClass('modal-results');

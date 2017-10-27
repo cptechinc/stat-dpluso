@@ -47,8 +47,8 @@
 		$.get(url, function() { callback();});
 	}
 
-	function ci_contacts(custID, callback) {
-		var url = config.urls.customer.redir.ci_contacts+"&custID="+urlencode(custID);
+	function ci_contacts(custID, shipID, callback) {
+		var url = config.urls.customer.redir.ci_contacts+"&custID="+urlencode(custID)+'&shipID='+urlencode(shipID);
 		$.get(url, function() { callback();});
 	}
 

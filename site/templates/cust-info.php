@@ -13,6 +13,8 @@
 			$shiptojson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-cishiptoinfo.json"), true);
 			$shipID = urldecode(str_replace('shipto-', '', $input->urlSegment(2)));
 			$page->title .= ' - ' . $shipID;
+            $buttonsjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-cistbuttons.json"), true);
+            
 			for ($i = 1; $i < sizeof($custshiptos['data']) + 1; $i++) {
 				if ($custshiptos['data']["$i"]['shipid'] == $shipID) {
 					$i++;
@@ -26,7 +28,7 @@
 			$nextshipid = $custshiptos['data']["$i"]['shipid'];
 		} else {
 			if (isset($custshiptos['data'])) {
-					if (sizeof($custshiptos['data'])) {
+				if (sizeof($custshiptos['data'])) {
 					$nextshipid = $custshiptos['data']["1"]['shipid'];
 				} else {
 					$nextshipid = false;

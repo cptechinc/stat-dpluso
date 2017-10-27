@@ -1,5 +1,5 @@
+<?php $date = date("m/d/y", strtotime("- 365 day"));  //TODO HAVE THIS SET IN USERCONFIG; ?>
 <div>
-
     <form action="<?= $config->pages->customer.'redir/'; ?>" method="get" id="cust-sales-history-form">
         <input type="hidden" name="action" value="ci-sales-history">
         <input type="hidden" name="custID" value="<?php echo $input->get->text('custID'); ?>">
@@ -8,7 +8,7 @@
         <div class="form-group">
             <label for="">Starting Invoice Date</label>
             <div class="input-group date">
-                <?php $name = 'date'; $value = '';?>
+                <?php $name = 'date'; $value = $date;?>
                 <?php include $config->paths->content."common/date-picker.php"; ?>
             </div>
         </div>

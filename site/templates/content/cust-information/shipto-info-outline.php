@@ -37,6 +37,7 @@
 						<?php endforeach; ?>
 					</tbody>
 				</table>
+				<a href="<?= $config->pages->customer."redir/?action=ci-customer&custID=$custID"; ?>" class="btn btn-warning btn-sm"><i class="fa fa-minus-circle" aria-hidden="true"></i> Clear Shipto </a>
 			</div>
 		</div>
 		<div class="row">

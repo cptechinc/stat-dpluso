@@ -28,12 +28,15 @@
 
 						if ($i == 1 && !empty($order['Order Number'])) {
 							$ordn = $order['Ordn'];
-							$onclick = 'loadorderdocuments("'.$ordn.'")';
-							$celldata = Table::generatejsoncelldata($fieldsjson['data']['header'][$column['id']]['type'], $order, $column);
-							$celldata .= "&nbsp; <a href='#' title='load order documents' data-load='#ajax-modal' onclick='$onclick'><i class='fa fa-folder-open' aria-hidden='true'></i></a>";
+							$onclick = "loadorderdocuments('$ordn')";
+							$celldata = $page->bootstrap->openandclose('b', '', $column['label']). ': ';
+							$celldata .= Table::generatejsoncelldata($fieldsjson['data']['header'][$column['id']]['type'], $order, $column);
+							$icon = $page->bootstrap->createicon('fa fa-folder-open');
+							$celldata .= '&nbsp;'.$page->bootstrap->openandclose('a', "href=#|title=load order documents|data-load=#ajax-modal|onclick=$onclick", $icon);
 							$tb->td('colspan='.$colspan.'|class='.$class, $celldata);
 						} else {
-							$celldata = Table::generatejsoncelldata($fieldsjson['data']['header'][$column['id']]['type'], $order, $column);
+							$celldata = $page->bootstrap->openandclose('b', '', $column['label']). ': ';
+							$celldata .= Table::generatejsoncelldata($fieldsjson['data']['header'][$column['id']]['type'], $order, $column);
 							$tb->td('colspan='.$colspan.'|class='.$class, $celldata);
 						}
 						if ($colspan > 1) { $i = $i + ($colspan - 1); }

@@ -29,7 +29,7 @@
 						$tb->td("class=$class", $docjson['data'][$doc][$column]);
 					}
 					$content = $page->bootstrap->openandclose('button', "class=btn btn-sm btn-primary load-doc|data-doc=$doc", '<i class="fa fa-file-o" aria-hidden="true"></i> Load');
-					$tb->td("class=$class", $docjson['data'][$doc][$column]);
+					$tb->td("class=$class", $content);
 				}
 			$tb->closetablesection('tbody');
 			echo $tb->close();

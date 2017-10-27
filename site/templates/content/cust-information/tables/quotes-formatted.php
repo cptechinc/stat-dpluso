@@ -41,7 +41,7 @@
 						$column = $table['header']['rows'][$x]['columns'][$i];
 						$class = $config->textjustify[$fieldsjson['data']['header'][$column['id']]['datajustify']];
 						$colspan = $column['col-length'];
-						$celldata = '<b>'.$column['label'].'</b>: '.generatecelldata($fieldsjson['data']['header'][$column['id']]['type']);
+						$celldata = '<b>'.$column['label'].'</b>: '.Table::generatejsoncelldata($fieldsjson['data']['header'][$column['id']]['type'], $quote, $column);
 						$tb->td('colspan='.$colspan.'|class='.$class, $celldata);
 						if ($colspan > 1) { $i = $i + ($colspan - 1); }
 					} else {
@@ -58,7 +58,7 @@
 							$column = $table['detail']['rows'][$x]['columns'][$i];
 							$class = $config->textjustify[$fieldsjson['data']['detail'][$column['id']]['datajustify']];
 							$colspan = $column['col-length'];
-							$celldata = generatecelldata($fieldsjson['data']['detail'][$column['id']]['type'], $item, $column, false);
+							$celldata = Table::generatejsoncelldata($fieldsjson['data']['detail'][$column['id']]['type'], $item, $column);
 							$tb->td('colspan='.$colspan.'|class='.$class, $celldata);
 							if ($colspan > 1) { $i = $i + ($colspan - 1); }
 						} else {

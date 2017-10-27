@@ -16,6 +16,9 @@
 
         <script src="<?= hashtemplatefile('scripts/libs/jquery.js'); ?>"></script>
 		<script src="<?= hashtemplatefile('scripts/libs/moment.js'); ?>"></script>
+		<script>
+			var config = <?= json_encode($config->js('pwconfig')); ?>
+		</script>
 	</head>
     <body>
 		<?php include ($config->paths->content.'nav/nav-test.php'); ?>

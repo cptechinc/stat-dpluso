@@ -146,6 +146,11 @@
                     'vi_shipfrom' => $config->pages->ajaxload."vi/vi-shipfrom/",
                     'vi_payment' => $config->pages->ajaxload."vi/vi-payment/",
                     'vi_openinv' => $config->pages->vajaxload."vi/vi-openinv/",
+                    'vi_purchasehist' => $config->pages->ajaxload."vi/vi-purchasehist/",
+                    'vi_purchasehist_form' => $config->pages->ajaxload."vi/vi-purchasehist/form/"
+                ],
+                'json' => [
+                    'vi_shipfromlist' => $config->pages->ajaxjson."vi/vi-shipfrom-list/"
                     'vi_purchasehist' => $config->pages->ajaxload."vi/vi-purchasehist/"
                 ],
                 'json' => [

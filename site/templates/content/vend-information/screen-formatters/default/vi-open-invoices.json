@@ -57,7 +57,7 @@
                 "after-decimal": false,
                 "date-format": "m/d/Y"
             },
-            "Total Amount": {
+            "Amount - Total": {
                 "line": 1,
                 "column": 5,
     			"col-length": 1,
@@ -66,7 +66,7 @@
                 "after-decimal": 2,
                 "date-format": false
             },
-            "Discount Amount": {
+            "Amount - Discount": {
                 "line": 0,
                 "column": 0,
     			"col-length": 1,
@@ -75,7 +75,7 @@
                 "after-decimal": 2,
                 "date-format": false
             },
-            "Current Amount": {
+            "Amount - Current": {
                 "line": 0,
                 "column": 0,
     			"col-length": 1,
@@ -84,7 +84,7 @@
                 "after-decimal": 2,
                 "date-format": false
             },
-            "Aging 1 Amount": {
+            "Amount - Aging 1": {
                 "line": 0,
                 "column": 0,
     			"col-length": 1,
@@ -93,7 +93,7 @@
                 "after-decimal": 2,
                 "date-format": false
             },
-            "Aging 2 Amount": {
+            "Amount - Aging 2": {
                 "line": 0,
                 "column": 0,
     			"col-length": 1,
@@ -102,7 +102,7 @@
                 "after-decimal": 2,
                 "date-format": false
             },
-            "Aging 3 Amount": {
+            "Amount - Aging 3": {
                 "line": 0,
                 "column": 0,
     			"col-length": 1,

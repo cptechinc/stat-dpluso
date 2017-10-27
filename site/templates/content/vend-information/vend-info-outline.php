@@ -1,159 +1,91 @@
+<?php
+$vendjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-vivendor.json"), true);
+// $vendjson = json_decode(file_get_contents($config->jsonfilepath."vitest-vivendor.json"), true);
+?>
+
 <div class="row">
     <div class="col-sm-6">
         <table class="table table-striped table-bordered table-condensed table-excel">
-            <tr>
-                <td>Vendor ID</td>
-                <td>
-                    <form action="/dpluso/ajax/load/customers/cust-index/" method="POST" id="vi-cust-lookup">
-                        <input type="hidden" name="action" value="ci-item-lookup">
-                        <input type="hidden" name="shipID" class="shipID" value="">
-                        <input type="hidden" name="nextshipID" class="nextshipID" value="KRAMER">
-                        <input type="hidden" name="shiptocount" class="shiptocount" value="1">
-                        <div class="form-group">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control input-sm not-round custID" name="custID" placeholder="Search custID" value="KRAMER">
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-sm btn-default not-round"> 
-                                        <span class="glyphicon glyphicon-search"></span> 
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>ABETECH</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>NCB-23</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>PO BOX 1150</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>MINNEAPOLIS, MN 55480-1150</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>UNITED STATES</td>
-            </tr>
-            <tr>
-                <td>Number of Ship-From</td>
-                <td>0</td>
-            </tr>
+        <?php $topcolumns = array_keys($vendjson['columns']['top']); ?>
+        <?php foreach ($topcolumns as $column ) : ?>
+            <?php if ($vendjson['columns']['top'][$column]['heading'] == '' && $vendjson['data']['top'][$column] == '') : ?>
+            <?php else : ?>
+                <tr>
+                    <td class="<?= $config->textjustify[$vendjson['columns']['left'][$column]['headingjustify']]; ?>">
+                        <?php echo $vendjson['columns']['top'][$column]['heading']; ?>
+                    </td>
+                    <td>
+                        <?php
+                            if ($column == 'vendorid') {
+                                include $config->paths->content."vend-information/forms/vend-page-form.php";
+                            } else {
+                                echo $vendjson['data']['top'][$column];
+                            }
+                        ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        <?php endforeach; ?>
         </table>
         <table class="table table-striped table-bordered table-condensed table-excel">
-            <tr>
-                <td>Phone</td>
-                <td>763-428-3170</td>
-            </tr>
-            <tr>
-                <td>Fax</td>
-                <td>763-428-3166</td>
-            </tr>
-            <tr>
-                <td>Our Acct</td>
-                <td>CAPSTO</td>
-            </tr>
-            <tr>
-                <td>Buyer</td>
-                <td>RDB Ron Becker</td>
-            </tr>
-            <tr>
-                <td>Ship Via</td>
-                <td>UPSG UPS GROUND</td>
-            </tr>
-            <tr>
-                <td>Terms</td>
-                <td>10 Net 10 Days</td>
-            </tr>
-            <tr>
-                <td>Type Code</td>
-                <td>SUP SUPPLIERS FOR COS</td>
-            </tr>
-            <tr>
-                <td>Notes</td>
-                <td>No</td>
-            </tr>
+            <?php $leftcolumns = array_keys($vendjson['columns']['left']); ?>
+            <?php foreach ($leftcolumns as $column) : ?>
+                <?php if ($vendjson['columns']['left'][$column]['heading'] == '' && $vendjson['data']['left'][$column] == '') : ?>
+                <?php else : ?>
+                    <tr>
+                        <td class="<?= $config->textjustify[$vendjson['columns']['left'][$column]['headingjustify']]; ?>">
+                            <?php echo $vendjson['columns']['left'][$column]['heading']; ?>
+                        </td>
+                        <td>
+                            <?php echo $vendjson['data']['left'][$column]; ?>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </table>
     </div>
     <div class="col-sm-6">
         <table class="table table-striped table-bordered table-condensed table-excel">
-            <thead>
-                <th>Activity</th>
-                <th class="text-right">Number</th>
-                <th class="text-right">Amount</th>
-            </thead>
-            <tr>
-                <td>Purchase Orders</td>
-                <td class="text-right">5</td>
-                <td class="text-right">1809.21</td>
-            </tr>
-            <tr>
-                <td>Open Invoices</td>
-                <td class="text-right">0</td>
-                <td class="text-right">.00</td>
-            </tr>
-            <tr class="last-section-row">
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <thead>
-                <th>History</th>
-                <th class="text-right">Number</th>
-                <th class="text-right">Amount</th>
-            </thead>
-            <tr>
-                <td>MTD Receipts</td>
-                <td class="text-right">0</td>
-                <td class="text-right">.00</td>
-            </tr>
-            <tr>
-                <td>MTD Invoices</td>
-                <td class="text-right">0</td>
-                <td class="text-right">.00</td>
-            </tr>
-            <tr>
-                <td>YTD Receipts</td>
-                <td class="text-right">0</td>
-                <td class="text-right">.00</td>
-            </tr>
-            <tr>
-                <td>YTD Invoices</td>
-                <td class="text-right">0</td>
-                <td class="text-right">.00</td>
-            </tr>
-            <tr>
-                <td>Lst 12mo Rcpts</td>
-                <td class="text-right">0</td>
-                <td class="text-right">.00</td>
-            </tr>
-            <tr>
-                <td>Lst 12mo Invcs</td>
-                <td class="text-right">0</td>
-                <td class="text-right">.00</td>
-            </tr>
-            <tr class="last-section-row">
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Date Entered</td>
-                <td>10/16/1997</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Last Rcpt/Inc Date</td>
-                <td>08/19/2014</td>
-                <td></td>
-            </tr>
+            <?php $rightsection = array_keys($vendjson['columns']['right']); ?>
+            <?php foreach ($rightsection as $section) : ?>
+                <?php if ($section != 'misc') : ?>
+                    <tr>
+                        <?php foreach ($vendjson['columns']['right'][$section] as $column) : ?>
+                            <th class="<?= $config->textjustify[$column['headingjustify']]; ?>">
+                                <?php echo $column['heading']; ?>
+                            </th>
+                        <?php endforeach; ?>
+                    </tr>
+
+                    <?php $rows = array_keys($vendjson['data']['right'][$section] ); ?>
+                    <?php foreach ($rows as $row) : ?>
+                        <tr>
+                            <?php $columns = array_keys($vendjson['data']['right'][$section][$row]); ?>
+                            <?php foreach ($columns as $column) : ?>
+                                <td class="<?= $config->textjustify[$vendjson['columns']['right'][$section][$column]['datajustify']]; ?>">
+                                    <?php echo $vendjson['data']['right'][$section][$row][$column]; ?>
+                                </td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                    <tr class="last-section-row"> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            
+            <?php $misccolumns = array_keys($vendjson['data']['right']['misc']); ?>
+            <?php foreach ($misccolumns as $misc) : ?>
+                <?php if ($misc != 'rfml') : ?>
+                    <tr>
+                        <td class="<?= $config->textjustify[$vendjson['columns']['right']['misc'][$misc]['headingjustify']]; ?>">
+                            <?php echo $vendjson['columns']['right']['misc'][$misc]['heading']; ?>
+                        </td>
+                        <td class="<?= $config->textjustify[$vendjson['columns']['right']['misc'][$misc]['datajustify']]; ?>">
+                            <?php echo $vendjson['data']['right']['misc'][$misc]; ?>
+                        </td>
+                        <td></td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </table>
     </div>
 </div>

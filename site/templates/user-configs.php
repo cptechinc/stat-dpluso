@@ -1,7 +1,7 @@
 <?php
-    if ($input->urlSegment1) {
-        $configtype = $input->urlSegment;
-        switch ($input->urlSegment1) {
+    if ($input->urlSegment(1)) {
+        $configtype = $input->urlSegment(1);
+        switch ($input->urlSegment(1)) {
             case 'iio':
                 $page->title = "Item Information Configurations";
                 $include = $config->paths->content.'salesrep/configs/item-info-config.php';
@@ -17,7 +17,7 @@
     $configurations = array(
         'CI Configurations' => 'cio',
         'II Configurations' => 'iio'
-                       );
+    );
 ?>
 <?php include('./_head.php'); // include header markup ?>
     <div class="jumbotron pagetitle">

@@ -29,9 +29,9 @@
 		
 		/* =============================================================
             SalesOrderPanelInterface Functions
-            LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+            
         ============================================================ */
-		public function get_ordercount() { }
+		public function get_ordercount($debug = false) { }
 		public function get_orders($debug = false) { }
 		
 		/* =============================================================
@@ -123,6 +123,21 @@
 			return $url->getUrl();
 		}
 		
+		public function generate_detailreorderform(Order $order, OrderDetail $detail) {
+            if (empty($detail->itemid)) return '';
+            $action = wire('config')->pages->cart.'redir/';
+            $id = $order->orderno.'-'.$detail->itemid.'-form';
+            $form = new FormMaker("method=post|action=$action|class=item-reorder|id=$id");
+            $form->input("type=hidden|name=action|value=reorder");
+            $form->input("type=hidden|name=ordn|value=$order->orderno");
+            $form->input("type=hidden|name=custID|value=$order->custid");
+            $form->input("type=hidden|name=itemID|value=$detail->itemid");
+            $form->input("type=hidden|name=qty|value=".intval($detail->qtyordered));
+            $form->input("type=hidden|name=desc|value=$detail->desc1");
+            $form->button("type=submit|class=btn btn-primary btn-xs", $form->createicon('glyphicon glyphicon-shopping-cart'). $form->openandclose('span', 'class=sr-only', 'Submit Reorder'));
+            return $form->finish();
+        }
+		
 		/* =============================================================
             OrderDisplayInterface Functions
             LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
@@ -143,8 +158,8 @@
 			return $link;
 		}
 		
-		public function generate_documentsrequesturl(Order $order) {
-            $url = new \Purl\Url($this->generate_documentsrequesturltrait($order));
+		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
+            $url = new \Purl\Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
             return $url->getUrl();
@@ -191,9 +206,9 @@
 			return $bootstrap->openandclose('a', "href=$href|class=edit-order h3|title=$title", $icon);
 		}
 		
-		public function generate_loaddocumentslink(Order $order) {
+		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
             $bootstrap = new Contento();
-            $href = $this->generate_documentsrequesturl($order);
+            $href = $this->generate_documentsrequesturl($order, $orderdetail);
             $icon = $bootstrap->createicon('material-icons md-36', '&#xE873;');
             $ajaxdata = $this->generate_ajaxdataforcontento();
             
@@ -202,6 +217,12 @@
             } else {
                 return $bootstrap->openandclose('a', "href=#|class=text-muted|title=No Documents Available", $icon);
             }
+        }
+		
+		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
+            $bootstrap = new Contento();
+            $href = $this->generate_detailviewediturl($order, $detail);
+            return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);    
         }
 		
 		/* =============================================================

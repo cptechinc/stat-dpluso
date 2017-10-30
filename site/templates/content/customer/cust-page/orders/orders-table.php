@@ -21,7 +21,7 @@
                 <td align="right">$ <?= formatmoney($order->odrtotal); ?></td> <td align="right" ><?= $order->orderdate; ?></td>
                 <td align="right"><?=  $order->status; ?></td>
                 <td colspan="4">
-                    <span class="col-xs-3"><?= $orderpanel->generate_loaddocumentslink($order, '0'); ?></span>
+                    <span class="col-xs-3"><?= $orderpanel->generate_loaddocumentslink($order); ?></span>
                     <span class="col-xs-3"><?= $orderpanel->generate_loadtrackinglink($order); ?></span>
                     <span class="col-xs-3"><?= $orderpanel->generate_loaddplusnoteslink($order, '0'); ?></span>
                     <span class="col-xs-3"><?= $orderpanel->generate_editlink($order); ?></span>

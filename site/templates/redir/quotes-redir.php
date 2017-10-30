@@ -37,7 +37,7 @@
 	*		QUOTENO=$qnbr
 	*		CUSTID=$custID
 	*		break;
-	*	case 'get-quote-details-print':
+	*	case 'get-quote-details-print': // DEPRECATED 10/30/2017
 	*		DBNAME=$config->DBNAME
 	*		LOADQUOTEDETAIL
 	*		QUOTENO=$qnbr
@@ -111,11 +111,13 @@
 			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
 			if ($input->get->lock) {
 				$session->loc = $config->pages->editquote."?qnbr=".$qnbr;
+			} elseif ($input->get->print) {
+				$session->loc = $config->pages->print."quote/?qnbr=".$qnbr;
 			} else {
 				$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$qnbr.$linkaddon;
 			}
 			break;
-		case 'get-quote-details-print':
+		case 'get-quote-details-print': // DEPRECATED 10/30/2017
 			$qnbr = $input->get->text('qnbr');
 			$custID = getquotecustomer(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);

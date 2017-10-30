@@ -25,9 +25,9 @@
             return $url->getUrl();
         }
         
-        public function generate_loaddocumentslink(Order $quote) {
+        public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
             $bootstrap = new Contento();
-            $href = $this->generate_documentsrequesturl($quote);
+            $href = $this->generate_documentsrequesturl($quote, $quotedetail);
             $icon = $bootstrap->createicon('material-icons', '&#xE873;');
             $ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
             
@@ -39,14 +39,18 @@
         }
         
         /**
-         * Sets up a common url function for getting tracking request url, classes that have this trait 
-         * will definve generate_documentsrequesturltrait(Order $quote)
+         * Sets up a common url function for getting documents request url, classes that have this trait 
+         * will define generate_documentsrequesturl(Order $quote)
+         * Not used as of 10/25/2017
          * @param  Order  $quote [description]
          * @return String        URL to the order redirect to make the get order documents request
          */
-        public function generate_documentsrequesturltrait(Order $quote) {
+        public function generate_documentsrequesturltrait(Order $quote, OrderDetail $quotedetail = null) {
             $url = $this->generate_quotesredirurl();
             $url->query->setData(array('action' => 'get-quote-documents', 'qnbr' => $quote->quotnbr));
+            if ($quotedetail) {
+                $url->query->set('itemdoc', $quotedetail->itemid);
+            }
             return $url->getUrl();
         }
         
@@ -69,7 +73,6 @@
             $url->query->setData(array('qnbr' => $quote->quotnbr));
             return $url->getUrl();
         }
-        
         
         public function generate_viewprintlink(Order $quote) {
             $bootstrap = new Contento();
@@ -108,6 +111,16 @@
 			$url->query->setData(array('action' => 'load-quote-details', 'qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
+        
+        public function generate_detailviewediturl(Order $quote, OrderDetail $detail) {
+            $url = new \Purl\Url(wire('config')->pages->ajaxload.'edit-detail/quote/');
+            $url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
+            return $url->getUrl();
+        }
+        
+        public function get_quotedetails(Order $quote, $debug = false) {
+            return get_quotedetails($this->sessionID, $quote->quotnbr, true, $debug);
+        }
         
         /* =============================================================
             URL Helper Functions

@@ -8,30 +8,21 @@
     <th></th>
 </tr>
 
-<?php $quotedetails = get_quote_details(session_id(), $quote->quotnbr, false); ?>
-<?php foreach ($quotedetails as $quotedetail) : ?>
-    <?php
-        $detailnoteurl = $config->pages->notes.'redir/?action=get-quote-notes&qnbr='.$quote->quotnbr.'&linenbr='.$quotedetail['linenbr'].'&modal=modal';
-        if ($quotedetail['notes'] == 'Y') {
-            $detnoteicon = '<a class="h3 load-notes" href="'.$detailnoteurl.'" data-modal="<?= $quotepanel->modal; ?>"> <i class="material-icons" title="View quote notes">&#xE0B9;</i></a>';
-        } else {
-            $detnoteicon = '<a class="h3 load-notes text-muted" href="'.$detailnoteurl.'" data-modal="<?= $quotepanel->modal; ?>"><i class="material-icons" title="View quote notes">&#xE0B9;</i></a>';
-        }
-    ?>
+<?php $details = $quotepanel->get_quotedetails($quote); ?>
+
+<?php foreach ($details as $detail) : ?>
     <tr class="detail">
         <td class="text-center">
-            <a href="<?= $config->pages->ajax."load/edit-detail/quote/?qnbr=".$quotedetail['quotenbr']."&line=".$quotedetail['linenbr']."&readonly=readonly"; ?>" class="update-line" data-itemid="<?= $quotedetail['itemid']; ?>" data-kit="<?= $quotedetail['kititemflag']; ?>" data-custid="<?= $quote->custid; ?>">
-                <?= $quotedetail['itemid']; ?>
-            </a>
+            <?= $quotepanel->generate_detailvieweditlink($quote, $detail); ?>
         </td>
         <td colspan="2">
-            <?php if (strlen($quotedetail['vendoritemid'])) { echo ' '.$quotedetail['vendoritemid']."<br>";} ?>
-            <?= $quotedetail['desc1']; ?>
+            <?php if (strlen($detail->vendoritemid)) { echo ' '.$detail->vendoritemid."<br>";} ?>
+            <?= $detail->desc1; ?>
         </td>
-        <td class="text-right">$ <?= $quotedetail['quotprice']; ?></td>
-        <td class="text-right"><?= $quotedetail['quotunit']; ?></td>
-        <td class="text-right">$ <?= formatmoney($quotedetail['quotprice'] * $quotedetail['quotunit']); ?></td>
-        <td><?= $detnoteicon; ?></td>
+        <td class="text-right">$ <?= formatmoney($detail->quotprice); ?></td>
+        <td class="text-right"><?= intval($detail->quotunit); ?></td>
+        <td class="text-right">$ <?= formatmoney($detail->quotprice * $detail->quotunit); ?></td>
+        <td><?= $quotepanel->generate_loaddplusnoteslink($quote, $detail->linenbr); ?></td>
         <td></td>
     </tr>
 <?php endforeach; ?>

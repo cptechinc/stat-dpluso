@@ -1342,9 +1342,9 @@ a.bg-danger:focus {
   background-color: #d62c1a;
 }
 .page-header {
-  padding-bottom: 9.5px;
+  /* padding-bottom: 9.5px; */
   margin: 42px 0 21px;
-  border-bottom: 1px solid transparent;
+  border-bottom: 2px solid #2c3e50;
 }
 ul,
 ol {

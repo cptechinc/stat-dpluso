@@ -16,8 +16,8 @@
             SalesOrderPanelInterface Functions
             
         ============================================================ */
-        public function get_ordercount() {
-			$this->count = count_customerorders($this->sessionID, $this->custID, false);
+        public function get_ordercount($debug = false) {
+			$this->count = count_customerorders($this->sessionID, $this->custID, $debug);
 		}
         
         public function get_orders($debug = false) {
@@ -65,8 +65,8 @@
             OrderDisplayInterface Functions
             LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
         ============================================================ */
-        public function generate_documentsrequesturl(Order $order) {
-            $url = new \Purl\Url(parent::generate_documentsrequesturl($order));
+        public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
+            $url = new \Purl\Url(parent::generate_documentsrequesturl($order, $orderdetail));
             $url->query->set('custID', $this->custID);
             return $url->getUrl();
         }

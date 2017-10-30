@@ -1,5 +1,5 @@
 <?php 
     interface SalesOrderPanelInterface {
-        public function get_ordercount();
-        public function get_orders();
+        public function get_ordercount($debug = false);
+		public function get_orders($debug = false);
     }

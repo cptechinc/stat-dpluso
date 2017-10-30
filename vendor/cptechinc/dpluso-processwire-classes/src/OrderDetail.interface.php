@@ -1,8 +1,7 @@
 <?php
-
     interface OrderDetailInterface {
-        public function has_error(OrderDetail $detail);
-        public function is_kititem($detail)
-        public function has_note($detail)
-        public function has_documents($detail)
+        public function has_error();
+        public function is_kititem();
+        public function has_note();
+        public function has_documents();
     }

@@ -1,5 +1,5 @@
 <?php 	
-	class QuotePanel extends OrderPanel implements OrderDisplayInterface, QuotePanelInterface {
+	class QuotePanel extends OrderPanel implements OrderDisplayInterface, QuoteDisplayInterface, QuotePanelInterface {
 		public $quotes = array();
 		use QuoteDisplayTraits;
 		
@@ -132,8 +132,8 @@
 			return $link;
 		}
 		
-		public function generate_documentsrequesturl(Order $quote) {
-            $url = new \Purl\Url($this->generate_documentsrequesturltrait($quote));
+		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
+            $url = new \Purl\Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
             return $url->getUrl();
@@ -166,9 +166,9 @@
 			return $bootstrap->openandclose('a', "href=$href|class=edit-order h3|title=$title", $icon);
 		}
 		
-		public function generate_loaddocumentslink(Order $quote) {
+		public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
             $bootstrap = new Contento();
-            $href = $this->generate_documentsrequesturl($quote);
+            $href = $this->generate_documentsrequesturl($quote, $quotedetail);
             $icon = $bootstrap->createicon('material-icons md-36', '&#xE873;');
             $ajaxdata = $this->generate_ajaxdataforcontento();
             
@@ -177,6 +177,12 @@
             } else {
                 return $bootstrap->openandclose('a', "href=#|class=text-muted|title=No Documents Available", $icon);
             }
+        }
+		
+		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail, $display = false) {
+            $bootstrap = new Contento();
+            $href = $this->generate_detailviewediturl($quote, $detail);
+            return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);    
         }
 		
 	}

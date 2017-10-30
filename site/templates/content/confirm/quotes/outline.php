@@ -1,4 +1,3 @@
-<?php $quote = $quotedisplay->get_quote();  ?>
 <div class="row">
 	<div class="col-sm-6">
 		<img src="<?= $config->urls->files."images/dplus.png"; ?>" alt="">
@@ -34,7 +33,7 @@
 </div>
 <div class="row">
 	<div class="col-sm-6">
-		<h4>Bill-to</h4>
+		<div class="page-header"><h3>Bill-to</h3></div>
 		<address>
 			<?= $quote->btname; ?><br>
 			<?= $quote->btadr1; ?><br>
@@ -45,7 +44,7 @@
 		</address>
 	</div>
 	<div class="col-sm-6">
-		<h4>Ship-to</h4>
+		<div class="page-header"><h3>Ship-to</h3></div>
 		<address>
 			<?= $quote->stname; ?><br>
 			<?= $quote->stadr1; ?><br>
@@ -64,24 +63,22 @@
 		<th class="text-right" width="100">Price</th>
 		<th class="text-right">Line Total</th>
 	</tr>
-	<?php  $details = get_quote_details(session_id(), $qnbr, false); ?>
+	<?php $details = $quotedisplay->get_quotedetails($quote); ?>
 	<?php foreach ($details as $detail) : ?>
-		<?php $qtyo = $detail['ordrqty'] + 0; ?>
+		<?php $qtyo = $detail->ordrqty + 0; ?>
 		<tr class="detail">
 			<td>
-				<?= $detail['itemid']; ?>
-				<?php if (strlen($detail['vendoritemid'])) { echo ' '.$detail['vendoritemid'];} ?>
+				<?= $detail->itemid; ?>
+				<?php if (strlen($detail->vendoritemid)) { echo ' '.$detail->vendoritemid;} ?>
 				<br>
-				<small><?= $detail['desc1']. ' ' . $detail['desc2'] ; ?></small>
+				<small><?= $detail->desc1. ' ' . $detail->desc2 ; ?></small>
 			</td>
 			<td>
-                <a href="<?= $config->pages->ajax."load/edit-detail/quote/?qnbr=".$detail['quotenbr']."&line=".$detail['linenbr']; ?>" class="btn btn-xs btn-warning update-line" data-line="<?= $detail['recno']; ?>" data-itemid="<?= $detail['itemid']; ?>" data-kit="<?= $detail['kititemflag']; ?>"  data-custid="<?= $quote->custid; ?>">
-                    <i class="glyphicon glyphicon-eye-open"></i>
-                </a>
+				<?= $quotedisplay->generate_detailvieweditlink($quote, $detail, $page->bootstrap->createicon('glyphicon glyphicon-eye-open')); ?>
             </td>
-			<td class="text-right"> <?= $qtyo ; ?> </td>
-			<td class="text-right">$ <?= formatmoney($detail['ordrprice']); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail['ordrprice'] * $qtyo) ?> </td>
+			<td class="text-right"> <?= intval($detail->ordrqty); ?> </td>
+			<td class="text-right">$ <?= formatmoney($detail->ordrprice); ?></td>
+			<td class="text-right">$ <?= formatmoney($detail->ordrprice * $qtyo) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>
@@ -92,7 +89,6 @@
 	</tr>
 	<tr>
 		<td></td><td><b>Freight</b></td> <td></td> <td></td><td class="text-right">$ <?=formatmoney($quote->freight); ?></td>
-
 	</tr>
 	<tr>
 		<td></td><td><b>Misc.</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($quote->miscellaneous); ?></td>
@@ -104,13 +100,9 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<a href="<?= $config->pages->customer.urlencode($quote->custid).'/'; ?>" class="btn btn-block btn-primary">
-			Proceed to Customer Page
-		</a>
+		<?= $quotedisplay->generate_customershiptolink($quote); ?>
 	</div>
 	<div class="col-sm-6">
-		<a href="<?= $config->pages->quotes.'redir/?action=edit-quote&qnbr='.$qnbr; ?>" class="btn btn-block btn-warning">
-			<i class="fa fa-pencil" aria-hidden="true"></i> Edit Quote
-		</a>
+		<?= $quotedisplay->generate_editlink($quote); ?>
 	</div>
 </div>

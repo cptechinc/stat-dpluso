@@ -25,9 +25,9 @@
             return $url->getUrl();
         }
         
-        public function generate_loaddocumentslink(Order $order) {
+        public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
             $bootstrap = new Contento();
-            $href = $this->generate_documentsrequesturl($order);
+            $href = $this->generate_documentsrequesturl($order, $orderdetail);
             $icon = $bootstrap->createicon('material-icons', '&#xE873;');
             $ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
             
@@ -39,14 +39,17 @@
         }
         
         /**
-         * Sets up a common url function for getting tracking request url, classes that have this trait 
-         * will definve generate_documentsrequesturltrait(Order $order)
+         * Sets up a common url function for getting documents request url, classes that have this trait 
+         * will define generate_documentsrequesturltr(Order $order)
          * @param  Order  $order [description]
          * @return String        URL to the order redirect to make the get order documents request
          */
-        public function generate_documentsrequesturltrait(Order $order) {
+        public function generate_documentsrequesturltrait(Order $order, OrderDetail $orderdetail = null) {
             $url = $this->generate_ordersredirurl();
             $url->query->setData(array('action' => 'get-order-documents', 'ordn' => $order->orderno));
+            if ($orderdetail) {
+                $url->query->set('itemdoc', $orderdetail->itemid);
+            }
             return $url->getUrl();
         }
         
@@ -83,6 +86,7 @@
         }
         
         public function generate_viewlinkeduseractionslink(Order $order) {
+            $bootstrap = new Contento();
             $href = $this->generate_viewlinkeduseractionsurl($order);
             $icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-check'));
             return $bootstrap->openandclose('a', "href=$href|target=_blank", $icon." View Associated Actions");
@@ -107,6 +111,12 @@
 			return $url->getUrl();
 		}
         
+        public function generate_detailviewediturl(Order $order, OrderDetail $detail) {
+            $url = new \Purl\Url(wire('config')->pages->ajaxload.'edit-detail/order/');
+            $url->query->setData(array('ordn' => $order->orderno, 'line' => $detail->linenbr));
+            return $url->getUrl();
+        }
+        
         /* =============================================================
             SalesOrderDisplayInterface Functions
         ============================================================ */
@@ -124,8 +134,8 @@
         }    
         
         /**
-         * Sets up a common url function for getting tracking request url, classes that have this trait 
-         * will definve generate_documentsrequesturltrait(Order $order)
+         * Sets up a common url function for getting d request url, classes that have this trait 
+         * will definve generate_trackingrequesturl(Order $order)
          * @param  Order  $order [description]
          * @return String        URL to the order redirect to make the get order documents request
          */
@@ -133,6 +143,10 @@
             $url = $this->generate_ordersredirurl();
             $url->query->setData(array('action' => 'get-order-tracking', 'ordn' => $order->orderno));
             return $url->getUrl();
+        }
+        
+        public function get_orderdetails(Order $order, $debug = false) {
+            return get_orderdetails($this->sessionID, $order->orderno, true, $debug);
         }
         
         /* =============================================================

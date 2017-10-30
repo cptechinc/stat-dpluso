@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-       		<?php $quote_details = get_quote_details(session_id(), $quote->quotnbr, false); ?>
+       		<?php $quote_details = get_quotedetails(session_id(), $quote->quotnbr, false, false); ?>
             <?php foreach ($quote_details as $detail) : ?>
             	<?php
 					$detailnoteurl = $config->pages->notes.'redir/?action=get-quote-notes&qnbr='.$quote->quotnbr.'&linenbr='.$detail['linenbr'].'&modal=modal';

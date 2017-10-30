@@ -3,13 +3,14 @@
         case 'order':
             $ordn = $input->get->text('ordn');
             $orderdisplay = new SalesOrderDisplay(session_id(), $page->fullURL, '#ajax-modal', $ordn);
-            $order = get_orderhead(session_id(), $ordn, true, false); 
+            $order = $orderdisplay->get_order(); 
             $page->title = 'Summary for Order # '.$ordn;
             $page->body = $config->paths->content."confirm/orders/outline.php";
             break;
         case 'quote':
             $qnbr = $input->get->text('qnbr');
             $quotedisplay = new QuoteDisplay(session_id(), $page->fullURL, '#ajax-modal', $qnbr);
+            $quote = $quotedisplay->get_quote();
             $page->title = 'Summary for Quote # '.$qnbr;
             $page->body = $config->paths->content."confirm/quotes/outline.php";
             break;

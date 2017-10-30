@@ -2,15 +2,15 @@
     switch ($page->name) { //$page->name is what we are printing
         case 'order':
             $ordn = $input->get->text('ordn');
-            $editorder = array();
-            $editorder['ordn'] = $ordn;
+            $orderdisplay = new SalesOrderDisplay(session_id(), $page->fullURL, '#ajax-modal', $ordn);
+            $order = $orderdisplay->get_order(); 
             $page->title = 'Viewing Order #' . $ordn;
 			$includefile = $config->paths->content."print/orders/outline.php";
             break;
         case 'quote':
             $qnbr = $input->get->text('qnbr');
-            $editorder = array();
-            $editquote['qnbr'] = $qnbr;
+            $quotedisplay = new QuoteDisplay(session_id(), $page->fullURL, '#ajax-modal', $qnbr);
+            $quote = $quotedisplay->get_quote();
             $page->title = 'Viewing Quote #' . $qnbr;
             $includefile = $config->paths->content."print/quotes/outline.php";
             break;

@@ -54,10 +54,15 @@
         }
         
         public function is_kititem() {
-            return $this->kitemflag == 'Y' true : false;
+            return $this->kitemflag == 'Y' ? true : false;
         }
         
         public function has_note() {
-            return $this->notes == 'Y' true : false;
+            return $this->notes == 'Y' ? true : false;
+        }
+        
+        public function has_documents() {
+            //return $this->notes == 'Y' ? true : false;
+            return false;
         }
     }

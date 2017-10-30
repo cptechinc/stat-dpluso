@@ -10,8 +10,8 @@
 			return $url;
 		}
         
-        public function get_ordercount() {
-            $this->count = count_salesreporders($this->sessionID, false);
+        public function get_ordercount($debug = false) {
+            $this->count = count_salesreporders($this->sessionID, $debug);
         }
         
         public function get_orders($debug = false) {

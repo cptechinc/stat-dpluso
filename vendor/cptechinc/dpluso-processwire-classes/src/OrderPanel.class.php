@@ -5,7 +5,6 @@
         public $ajaxdata;
         public $paginationinsertafter;
         public $throughajax;
-        public $sessionID;
         public $collapse = 'collapse';
         public $tablesorter; // Will be instatnce of TablePageSorter
         public $pagenbr;

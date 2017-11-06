@@ -3,8 +3,8 @@
         $(function() {
             $.notify({
                 icon: "glyphicon glyphicon-shopping-cart",
-                message: "<?php echo $session->addtocart; ?> <br> (Click this Message to go to the cart.)" ,
-                url: "<?php echo $config->pages->cart; ?>",
+                message: "<?= $session->addtocart; ?> <br> (Click this Message to go to the cart.)" ,
+                url: "<?= $config->pages->cart; ?>",
                 target: '_self'
             },{
                 type: "success",

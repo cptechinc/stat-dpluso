@@ -76,6 +76,26 @@ $(function() {
 			window.location.href = href;
 		}
 	});
+	
+	$("body").on("click", '.load-order-documents', function(e) {
+		e.preventDefault();
+		var custID = $(this).find('.custID').val();
+		var modal = config.modals.ajax;
+        var loadinto =  modal+" .modal-content";
+		var ordn = $(this).data('ordn');
+		var type = $(this).data('type');
+		var href = URI($(this).attr('href')).addQuery('modal', 'modal').toString();
+		showajaxloading();
+		ci_getorderdocuments(custID, ordn, type, function() {
+			wait(500, function() {
+				$(loadinto).loadin(href, function() {
+					console.log(href); hideajaxloading();
+					$(modal).find('.modal-body').addClass('modal-results');
+					$(modal).resizemodal('lg').modal();
+				});
+			});
+		});
+	});
 });
 
 
@@ -249,6 +269,7 @@ function openinv() {
 		});
 	});
 }
+
 function loadorderdocuments(ordn) {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
@@ -265,6 +286,7 @@ function loadorderdocuments(ordn) {
 		});
 	});
 }
+
 function payment() {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;

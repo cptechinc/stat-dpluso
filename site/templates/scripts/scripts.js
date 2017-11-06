@@ -166,9 +166,15 @@ $(document).ready(function() {
 			var ajaxloader = new ajaxloadedmodal(button);
 			$(this).closest('.modal').modal('hide');
 			ajaxloader.url = URI(ajaxloader.url).addQuery('modal', 'modal').normalizeQuery().toString();
-
+			if (button.hasClass('info-screen')) {
+				showajaxloading();
+			}
 			$(ajaxloader.loadinto).loadin(ajaxloader.url, function() {
 				$(ajaxloader.modal).resizemodal(ajaxloader.modalsize).modal();
+				if (button.hasClass('info-screen')) {
+					hideajaxloading();
+					$(ajaxloader.modal).find('.modal-body').addClass('modal-results');
+				}
 			});
 		});
 

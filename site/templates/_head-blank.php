@@ -13,8 +13,6 @@
         <script src="<?= hashtemplatefile('scripts/libs/jquery.js'); ?>"></script>
 		<script src="<?= hashtemplatefile('scripts/libs/moment.js'); ?>"></script>
 		<script>moment().format();</script>
-		<script>
-			var config = <?= json_encode($config->js('pwconfig')); ?>
-		</script>
+		<?php include $config->paths->content.'common/phpjs/js-config.js.php'; ?>
 	</head>
-    <body class="fuelux">
+    <body class="fuelux no-nav">

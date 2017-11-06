@@ -2,6 +2,13 @@
 	$docfile = $config->jsonfilepath.session_id()."-docview.json";
 	//$docfile = $config->jsonfilepath."iidcv-docview.json";
 	
+	if ($input->get->returnpage) {
+		$returnurl = urldecode($input->get->text('returnpage'));
+		$icon = $page->bootstrap->createicon('fa fa-arrow-circle-left');
+		$link = $page->bootstrap->openandclose('a', "href=$returnurl|class=h3 load-into-modal info-screen|data-modal=#ajax-modal|", "$icon Go Back");
+		echo $page->bootstrap->openandclose('div', 'class=form-group', $link);
+	}
+	
 	if (file_exists($docfile)) {
 		// JSON file will be false if an error occurred during file_get_contents or json_decode
 		$docjson = json_decode(file_get_contents($docfile), true); 

@@ -21,8 +21,8 @@
 		$.get(url, function() { callback();});
 	}
 
-	function ci_getorderdocuments(custID, ordn, callback) {
-		var url = config.urls.customer.redir.ci_orderdocuments+"&ordn="+urlencode(ordn);
+	function ci_getorderdocuments(custID, ordn, type, callback) {
+		var url = config.urls.customer.redir.ci_orderdocuments+"&ordn="+urlencode(ordn)+'&type='+urlencode(type);
 		console.log(url);
 		$.get(url, function() { callback();});
 	}

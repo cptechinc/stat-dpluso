@@ -1,5 +1,8 @@
 <?php
+	$url = new \Purl\Url($config->pages->ajaxload."ci/ci-documents/order/");
+	
 	$tb = new Table('class=table table-striped table-bordered table-condensed table-excel|id='.urlencode($whse['Whse Name']));
+	
 	/* $tb->tablesection('thead');
 		for ($x = 1; $x < $table['detail']['maxrows'] + 1; $x++) {
 			$tb->tr();
@@ -67,7 +70,7 @@
 					}
 				}
 			}
-
+			
 			for ($x = 1; $x < $table['header']['maxrows'] + 1; $x++) {
 				$tb->tr();
 				for ($i = 1; $i < $table['maxcolumns'] + 1; $i++) {
@@ -77,10 +80,11 @@
 						$colspan = $column['col-length'];
 						if ($i == 1 && !empty($order['Order Number'])) {
 							$ordn = $order['Ordn'];
-							$onclick = 'loadorderdocuments("'.$ordn.'")';
+							$url->query->setData(array('custID' => $custID, 'ordn' => $ordn, 'returnpage' => urlencode($page->fullURL->getUrl())));
+							$href = $url->getUrl();
 							$celldata = '<b class="pull-left">'.$column['label'].'</b> &nbsp;';
 							$celldata .= Table::generatejsoncelldata($fieldsjson['data']['header'][$column['id']]['type'], $order, $column, $column);
-							$celldata .= "&nbsp; <a href='#' title='load order documents' data-load='#ajax-modal' onclick='$onclick'><i class='fa fa-folder-open' aria-hidden='true'></i></a>";
+							$celldata .= "&nbsp; " . $page->bootstrap->openandclose('a', "href=$href|class=load-order-documents|title=Load Order Documents|aria-label=Load Order Documents|data-ordn=$ordn|data-type=hist", $page->bootstrap->createicon('fa fa-file-text'));
 							$tb->td('colspan='.$colspan.'|class='.$class, $celldata);
 						} else {
 							$celldata = '<b class="pull-left">'.$column['label'].'</b> &nbsp;';

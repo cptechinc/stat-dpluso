@@ -1,9 +1,9 @@
-<?php if ($session->{'new-shopping-customer'} ) : ?>
+<?php if ($session->{'new-shopping-customer'}) : ?>
 	<script>
         $(function() {
             $.notify({
                 icon: "glyphicon glyphicon-shopping-cart",
-                message: "You are now shopping for <?php echo $session->{'new-shopping-customer'}; ?>" ,
+                message: "You are now shopping for <?= $session->{'new-shopping-customer'}; ?>" ,
                 target: '_self'
             },{
                 type: "success",

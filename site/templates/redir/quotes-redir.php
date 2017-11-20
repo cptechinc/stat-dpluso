@@ -72,6 +72,14 @@
 	*		ORDERNO=$ordn
 	*		ITEMID=$custID   QTY=$qty  **REPEAT
 	*		break;
+	*	case 'add-nonstock-item':
+	*		DBNAME=$config->DBNAME
+	*		QUOTNO=$qnbr
+	*		UPDATEQUOTEDETAIL
+	*		ITEMID=N
+	*		QTY=$qty
+	*		CUSTID=$custID
+	* 		break;
 	*	case 'update-line':
 	*		DBNAME=$config->DBNAME
 	*		UPDATEQUOTEDETAIL

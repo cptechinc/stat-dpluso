@@ -26,9 +26,17 @@
         }
         
         public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
+            if ($quotedetail) {
+                return $this->generate_loaddetaildocumentslink($quote, $quotedetail);
+            } else {
+                return $this->generate_loadheaderdocumentslink($quote, $quotedetail);
+            }
+        }
+        
+        public function generate_loadheaderdocumentslink(Order $quote, OrderDetail $quotedetail = null) {
             $bootstrap = new Contento();
             $href = $this->generate_documentsrequesturl($quote, $quotedetail);
-            $icon = $bootstrap->createicon('material-icons', '&#xE873;');
+            $icon = $bootstrap->createicon('fa fa-file-text');
             $ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
             
             if ($quote->has_documents()) {
@@ -37,6 +45,20 @@
                 return $bootstrap->openandclose('a', "href=#|class=btn btn-default|title=No Documents Available", $icon. ' 0 Documents Found');
             }
         }
+        
+        public function generate_loaddetaildocumentslink(Order $quote, OrderDetail $quotedetail = null) {
+            $bootstrap = new Contento();
+            $href = $this->generate_documentsrequesturl($quote, $quotedetail);
+            $icon = $bootstrap->createicon('fa fa-file-text');
+            $ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
+
+            if ($quotedetail->has_documents()) {
+                return $bootstrap->openandclose('a', "href=$href|class=h3 load-sales-docs|role=button|title=Click to view Documents|$ajaxdata", $icon);
+            } else {
+                return $bootstrap->openandclose('a', "href=#|class=h3 text-muted|title=No Documents Available", $icon);
+            }
+        }
+        
         
         /**
          * Sets up a common url function for getting documents request url, classes that have this trait 
@@ -97,6 +119,20 @@
             $url = new \Purl\Url($this->pageurl->getUrl());
             $url->path = wire('config')->pages->actions."all/load/list/quote/";
             $url->query->setData(array('qnbr' => $quote->quotnbr));
+            return $url->getUrl();
+        }
+        
+        public function generate_viewdetaillink(Order $quote, OrderDetail $detail) {
+            $bootstrap = new Contento();
+            $href = $this->generate_viewdetailurl($quote, $detail);
+            $icon = $bootstrap->createicon('glyphicon glyphicon-th-list');
+            return $bootstrap->openandclose('a', "href=$href|class=btn btn-xs btn-primary view-item-details|data-itemid=$detail->itemid|data-kit=$detail->kititemflag|data-modal=#ajax-modal", $icon);
+        }
+        
+        public function generate_viewdetailurl(Order $quote, OrderDetail $detail) {
+            $url = new \Purl\Url($this->pageurl->getUrl());
+            $url->path = wire('config')->pages->ajax."load/view-detail/quote/";
+            $url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
             return $url->getUrl();
         }
         

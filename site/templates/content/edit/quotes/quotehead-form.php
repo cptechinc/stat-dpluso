@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-    	<?php include $config->paths->content.'edit/quotes/actions/actions-panel.php'; ?>
+    	<?php //include $config->paths->content.'edit/quotes/actions/actions-panel.php'; ?>
     </div>
 </div>
 <?php include $config->paths->content.'edit/quotes/quote-attachments.php'; ?>

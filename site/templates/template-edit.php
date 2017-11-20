@@ -3,16 +3,21 @@
         case 'order':
             $ordn = $input->get->text('ordn');
             $custID = get_custid_from_order(session_id(), $ordn);
-            $ordereditdisplay = new EditSalesOrderDisplay(session_id(), $page->fullURL, '#ajax-modal', $ordn);
-        	$order = $ordereditdisplay->get_order(); 
-            $ordereditdisplay->canedit = ($input->get->readonly) ? false : $order->can_edit();
-            $prefix = ($ordereditdisplay->canedit) ? 'Editing' : 'Viewing';
-            $page->title = "$prefix Order #" . $ordn . ' for ' . get_customer_name_from_order(session_id(), $ordn);
-            $config->scripts->append(hashtemplatefile('scripts/dplusnotes/order-notes.js'));
-			$config->scripts->append(hashtemplatefile('scripts/edit/card-validate.js'));
-			$config->scripts->append(hashtemplatefile('scripts/edit/edit-orders.js'));
-			$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
-			$page->body = $config->paths->content."edit/orders/outline.php";
+            $editorderdisplay = new EditSalesOrderDisplay(session_id(), $page->fullURL, '#ajax-modal', $ordn);
+        	$order = $editorderdisplay->get_order();
+            if (!$order) {
+                $page->title = "Order #" . $ordn . ' failed to load';
+                $page->body = '';
+            } else {
+                $editorderdisplay->canedit = ($input->get->readonly) ? false : $order->can_edit();
+                $prefix = ($editorderdisplay->canedit) ? 'Editing' : 'Viewing';
+                $page->title = "$prefix Order #" . $ordn . ' for ' . get_customer_name_from_order(session_id(), $ordn);
+                $config->scripts->append(hashtemplatefile('scripts/dplusnotes/order-notes.js'));
+    			$config->scripts->append(hashtemplatefile('scripts/edit/card-validate.js'));
+    			$config->scripts->append(hashtemplatefile('scripts/edit/edit-orders.js'));
+    			$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
+    			$page->body = $config->paths->content."edit/orders/outline.php";
+            }
             break;
         case 'quote':
             $qnbr = $input->get->text('qnbr');
@@ -46,6 +51,10 @@
  		</div>
  	</div>
      <div class="container page" id="edit-page">
-        <?php include ($page->body); ?>
+         <?php 
+             if (!empty($page->body)) {
+                 include $page->body; 
+             } 
+        ?>
      </div>
  <?php include('./_foot.php'); // include footer markup ?>

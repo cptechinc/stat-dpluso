@@ -1,4 +1,4 @@
-<form action="<?= $formaction; ?>" method="post" id="add-multiple-item-form" data-checked="false">
+<form action="<?= $formaction; ?>" method="post" id="add-multiple-item-form" data-checked="false" data-invaliditems="0">
     <input type="hidden" name="action" value="add-multiple-items">
     <input type="hidden" name="custID" value="<?= $custID; ?>">
     <input type="hidden" name="ordn" value="<?= $ordn; ?>">

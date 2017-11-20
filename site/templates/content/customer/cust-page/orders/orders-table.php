@@ -57,7 +57,7 @@
 					<?= $orderpanel->generate_viewlinkeduseractionslink($order); ?>
 				</td>
                 <td>
-                	<a class="btn btn-primary btn-sm" onClick="reorder()">
+                	<a class="btn btn-primary btn-sm" onClick="reorder('<?= $order->orderno; ?>')">
                     	<span class="glyphicon glyphicon-shopping-cart" title="re-order"></span> Reorder Order
                     </a>
                 </td>

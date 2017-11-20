@@ -164,13 +164,21 @@ $(document).ready(function() {
 			e.preventDefault();
 			var button = $(this);
 			var ajaxloader = new ajaxloadedmodal(button);
-			$(this).closest('.modal').modal('hide');
+			var closestmodal = $(this).closest('.modal');
+			
+			if (closestmodal) {
+				closestmodal.find("[data-dismiss='modal']").click();
+			}
+			
 			ajaxloader.url = URI(ajaxloader.url).addQuery('modal', 'modal').normalizeQuery().toString();
 			if (button.hasClass('info-screen')) {
 				showajaxloading();
 			}
+			
 			$(ajaxloader.loadinto).loadin(ajaxloader.url, function() {
+				
 				$(ajaxloader.modal).resizemodal(ajaxloader.modalsize).modal();
+				
 				if (button.hasClass('info-screen')) {
 					hideajaxloading();
 					$(ajaxloader.modal).find('.modal-body').addClass('modal-results');
@@ -246,7 +254,7 @@ $(document).ready(function() {
 			var loadinto = $(this).data('loadinto');
 			var focuson = $(this).data('focus');
 			var modal = $(this).data('modal');
-			$(form).postform({formdata: false, jsoncallback: false}, function() { //form, overwriteformdata, returnjson, callback
+			$(form).postform({formdata: false, jsoncallback: false, action: false}, function() { //form, overwriteformdata, returnjson, callback
 				wait(500, function() {
 					generateurl(function(url) {
 						$(loadinto).loadin(url, function() {
@@ -264,7 +272,7 @@ $(document).ready(function() {
 			e.preventDefault();
 			var form = new itemform($(this));
 			var msg = "You added " + form.qty + " of " + form.desc + " to the cart";
-			$(form.formID).postformsync({formdata: false, jsoncallback: false}, function() {
+			$(form.formID).postform({formdata: false, jsoncallback: false}, function() {
 				$.notify({
 					icon: "glyphicon glyphicon-shopping-cart",
 					message: msg +"<br> (Click this Message to go to the cart.)" ,
@@ -315,7 +323,7 @@ $(document).ready(function() {
 			var pageurl = new URI().addQuery('show', 'details').hash('#edit-page').toString();+
 			showajaxloading();
 
-			$('#'+form.attr('id')).postform({formdata: false, jsoncallback: false}, function() { //{formdata: data/false, jsoncallback: true/false}
+			$('#'+form.attr('id')).postform({formdata: false, jsoncallback: false, action: false}, function() { //{formdata: data/false, jsoncallback: true/false}
 				wait(500, function() {
 					$.getJSON(jsonurl, function(json) {
 						console.log(jsonurl);
@@ -393,20 +401,27 @@ $(document).ready(function() {
 		});
 
 		$('body').on('submit', '#add-multiple-item-form', function(e) {
+			var form = $(this);
             if ($(this).attr('data-checked') == 'true') {
                 $(this).submit();
             } else {
                 e.preventDefault();
-                $(this).validateitemids();
-                var invaliditemcount = $(this).find('.form-group.has-error').length;
-                if (!invaliditemcount) {
-                    $(this).submit();
-                }
+                $(this).validateitemids(function() {
+					if (parseInt($(this).data('invaliditems')) < 1) {
+	                    $(this).submit();
+	                }
+				});
             }
         });
 
 		$('#add-item-modal').on('shown.bs.modal', function() {
 			$('#add-item-modal .searchfield').focus();
+		});
+		
+		$('#ajax-modal').on('shown.bs.modal', function() {
+			if (!$('body').hasClass('modal-open')){
+				$('body').addClass('modal-open');
+			}
 		});
 
 		$("body").on("submit", "#add-item-search-form", function(e) {
@@ -687,7 +702,7 @@ $(document).ready(function() {
 			var elementreload = form.data('refresh');
 			var isformcomplete = form.formiscomplete('tr');
 			if (isformcomplete) {
-				$(formid).postform({formdata: false, jsoncallback: true}, function(json) {
+				$(formid).postform({formdata: false, jsoncallback: true, action: false}, function(json) {
 					$.notify({
 						icon: json.response.icon,
 						message: json.response.message,
@@ -766,6 +781,13 @@ $(document).ready(function() {
 	function wait(time, callback) {
 		var timeoutID = window.setTimeout(callback, time);
 	}
+	
+	function dplusrequest(url, callback) {
+		console.log(url);
+		$.get(url, function() {
+			callback();
+		});
+	}
 
 	function dplusrequesturl(geturl, callback) {
 		$.get(geturl, function() {
@@ -836,18 +858,18 @@ $(document).ready(function() {
 			// Convert to URL-encoded string
 			return $.param(newParams);
 		}
-	}( jQuery ));
+	}(jQuery));
 
 	$.fn.extend({
-		postform: function(options, callback) { //{formdata: data/false, jsoncallback: true/false}
+		postform: function(options, callback) { //{formdata: data/false, jsoncallback: true/false, action: true/false}
 			var form = $(this);
-			var action = form.attr('action');
 			console.log('submitting ' + form.attr('id'));
-			if (!options.formdata) {options.formdata = form.serialize(); }
+			if (!options.action) {options.action = form.attr('action');}
+			if (!options.formdata) {options.formdata = form.serialize();}
 			if (options.jsoncallback) {
-				$.post(action, options.formdata, function(json) {callback(json);});
+				$.post(options.action, options.formdata, function(json) {callback(json);});
 			} else {
-				$.post(action, options.formdata).done(callback());
+				$.post(options.action, options.formdata).done(callback());
 			}
 		},
 		postformsync: function(options, callback) {
@@ -891,30 +913,29 @@ $(document).ready(function() {
 			}
 			return string;
 		},
-		validateitemids: function() {
+		validateitemids: function(callback) {
             var custID = $(this).find('input[name="custID"]').val();
             var valid = true;
-            $(this).find('input[name="itemID[]"]').each(function() {
-                var field = $(this);
-                var itemID = $(this).val();
-                var href = URI(config.urls.json.validateitemid).addQuery('itemID', itemID).addQuery('custID', custID).toString();
-                $.getJSON(href, function(json) {
-                    if (json.error) {
-                        alert();
-                    } else {
-                        if (!json.itemexists) {
-                            valid = false;
-                            field.parent().addClass('has-error');
-                        }
-                    }
-                });
-            });
-
-            $(this).attr('data-checked', 'true');
-            var invaliditemcount = $(this).find('form-group.has-error').length;
-            if (invaliditemcount) {
-                $(this).find('.response').createalertpanel('Double Check your itemIDs', '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>', 'warning');
-            }
+			var form = $(this);
+			
+			
+			form.postform({formdata: false, jsoncallback: true, action: config.urls.json.validateitems}, function(json) {
+				form.attr('data-invaliditems', json.invalid);
+				form.find('.itemid').each(function() {
+	                var field = $(this);
+	                var itemID = $(this).val();
+				    if (!json.items[itemID]) {
+						field.parent().addClass('has-error');
+					}
+	            });
+				form.attr('data-checked', 'true');
+				if (json.invalid) {
+	                form.find('.response').createalertpanel('Double Check your itemIDs', '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>', 'warning');
+	            }
+				callback();
+			});
+			
+            
         }
 	});
 
@@ -989,42 +1010,33 @@ $(document).ready(function() {
  		var url = config.urls.products.redir.ii_kitcomponents+"&itemID="+urlencode(itemID)+"&qty="+urlencode(qty);
  		$.get(url, function() { callback(); });
  	}
-
+	
 /*==============================================================
- 	SALES ORDER FUNCTIONS
+ 	REORDER FUNCTIONS
 =============================================================*/
-	function reorder() {
-		var forms = new Array();
-		$(".item-reorder").each(function( index ) {
-			if ($(this).find('input[name="qty"]').val().length > 0) {
-				forms.push($(this).attr('id'));
-			}
-		});
-
-		var ajaxcalls = forms.length;
-		var counter = 0;
-		var ajaxcomplete = function() { counter++; if (counter >= ajaxcalls) {console.log('finished with ajax calls'); } };
-
-		for (var i = 0; i < forms.length; i++) {
-			var form = new itemform($("#"+forms[i]));
-			$(form.formid).postformsync({formdata: false, jsoncallback: false},function(){
+	function reorder(ordn) {
+		//var url = URI(config.urls.cart.redir.reorder).addQuery('from', 'salesorder').addQuery('ordn', ordn);
+		var url = URI(config.urls.cart+'redir/?action=reorder').addQuery('from', 'salesorder').addQuery('ordn', ordn).toString();
+		var geturl = URI(config.urls.index+"ajax/json/cart/get-added-items/").addQuery('from', 'salesorder').addQuery('ordn', ordn).toString();
+		sendreorder(url, geturl);
+	}
+	
+	function sendreorder(requesturl, jsonurl) {
+		dplusrequest(requesturl, function() {
+			$.getJSON(jsonurl, function(json) {
 				$.notify({
-					// options
-					title: '<strong>Success</strong>',
-					message: 'You added ' + form.qty + ' of ' + form.itemID + ' to the cart'
+					icon: json.response.icon,
+					message: json.response.message + "<br> (Click this Message to go to the cart.)",
+					url: config.urls.cart,
+					target: '_self'
 				},{
-					element: "body",
-					type: "warning",
-					delay: 2500,
-					timer: 1000,
-					onClosed: function() {
-						ajaxcomplete();
-					},
+					type: json.response.notifytype,
+					url_target: '_self'
 				});
 			});
-		}
+		});
 	}
-
+	
 /*==============================================================
  	STRING FUNCTIONS
 =============================================================*/

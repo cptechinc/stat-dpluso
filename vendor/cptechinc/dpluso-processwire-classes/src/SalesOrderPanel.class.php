@@ -128,7 +128,7 @@
             $action = wire('config')->pages->cart.'redir/';
             $id = $order->orderno.'-'.$detail->itemid.'-form';
             $form = new FormMaker("method=post|action=$action|class=item-reorder|id=$id");
-            $form->input("type=hidden|name=action|value=reorder");
+            $form->input("type=hidden|name=action|value=add-to-cart");
             $form->input("type=hidden|name=ordn|value=$order->orderno");
             $form->input("type=hidden|name=custID|value=$order->custid");
             $form->input("type=hidden|name=itemID|value=$detail->itemid");
@@ -209,13 +209,14 @@
 		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
             $bootstrap = new Contento();
             $href = $this->generate_documentsrequesturl($order, $orderdetail);
-            $icon = $bootstrap->createicon('material-icons md-36', '&#xE873;');
+            $icon = $bootstrap->createicon('fa fa-file-text');
             $ajaxdata = $this->generate_ajaxdataforcontento();
-            
-            if ($order->has_documents()) {
-                return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
+            $documentsTF = ($orderdetail) ? $orderdetail->has_documents() : $order->has_documents();
+			
+            if ($documentsTF) {
+                return $bootstrap->openandclose('a', "href=$href|class=h3 generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
             } else {
-                return $bootstrap->openandclose('a', "href=#|class=text-muted|title=No Documents Available", $icon);
+                return $bootstrap->openandclose('a', "href=#|class=h3 text-muted|title=No Documents Available", $icon);
             }
         }
 		

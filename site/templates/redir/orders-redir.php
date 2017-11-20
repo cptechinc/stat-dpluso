@@ -79,11 +79,12 @@
 	*		DBNAME=$config->DBNAME
 	*		ORDERADDMULTIPLE
 	*		ORDERNO=$ordn
-	*		ITEMID=$custID   QTY=$qty  **REPEAT
+	*		ITEMID=$custID   QTY=$qty  ** REPEAT
 	*		break;
 	*	case 'add-nonstock-item':
 	*		DBNAME=$config->DBNAME
-	*		CARTDET
+	*		SALEDET
+	*		ORDERNO=$ordn
 	*		ITEMID=N
 	*		QTY=$qty
 	*		CUSTID=$custID

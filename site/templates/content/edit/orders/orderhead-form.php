@@ -12,7 +12,7 @@
         </div>
         <div class="col-sm-6">
         	<?php include $config->paths->content.'edit/orders/orderhead/order-info.php'; ?>
-			<?php if ($ordereditdisplay->canedit) : ?>
+			<?php if ($editorderdisplay->canedit) : ?>
 				<div class="text-right form-group">
 					<button type="button" class="btn btn-success text-center" onclick="$('#salesdetail-link').click()">
 						<span class="glyphicon glyphicon-triangle-right"></span> Details Page
@@ -23,21 +23,21 @@
     </div>
     <div class="row">
 		<div class="col-sm-6">
-			<?php if ($ordereditdisplay->canedit) : ?>
+			<?php if ($editorderdisplay->canedit) : ?>
         		<button type="submit" class="btn btn-success btn-block text-center"><span class="glyphicon glyphicon-floppy-disk"></span> Save Changes</button>
 			<?php endif; ?>
 		</div>
     </div>
 	<hr>
-	<?php if (!$ordereditdisplay->canedit) : ?>
-		<?= $ordereditdisplay->generate_confirmationlink($order); ?>
+	<?php if (!$editorderdisplay->canedit) : ?>
+		<?= $editorderdisplay->generate_confirmationlink($order); ?>
 	<?php else : ?>
 		<div class="row">
 			<div class="col-sm-6 form-group">
-				 <?= $ordereditdisplay->generate_discardchangeslink($order); ?>
+				 <?= $editorderdisplay->generate_discardchangeslink($order); ?>
 			</div>
 			<div class="col-sm-6 form-group">
-				<?= $ordereditdisplay->generate_saveunlocklink($order); ?>
+				<?= $editorderdisplay->generate_saveunlocklink($order); ?>
 			</div>
 		</div>
 	<?php endif; ?>

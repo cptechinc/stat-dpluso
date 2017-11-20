@@ -5,14 +5,17 @@
         'details' => array('href' => 'details', "id" => 'salesdetail-link', 'text' => 'Sales Order Details', 'tabcontent' => 'edit/orders/order-details/details-page.php'),
         'documents' => array('href' => 'documents', "id" => 'documents-link', 'text' => 'View Documents', 'tabcontent' => 'edit/orders/documents-page.php'),
         'tracking' => array('href' => 'tracking', "id" => 'tracking-tab-link', 'text' => 'View Tracking', 'tabcontent' => 'edit/orders/tracking-page.php'),
-        'actions' => array('href' => 'actions', "id" => 'actions-tab-link', 'text' => 'View Actions', 'tabcontent' => 'edit/orders/actions-page.php')
+        //'actions' => array('href' => 'actions', "id" => 'actions-tab-link', 'text' => 'View Actions', 'tabcontent' => 'edit/orders/actions-page.php')
     );
+    
+    if (!$editorderdisplay->canedit) {
+        echo $editorderdisplay->generate_readonlyalert();
+    }
+    
+    if (!empty($order->errormsg)) {
+        echo $editorderdisplay->generate_erroralert($order);
+    }
 ?>
-<?php if ((!$ordereditdisplay->canedit)) : ?>
-   <div class="row">
-       <div class="col-xs-12"><?php include $config->paths->content.'edit/orders/read-only-msg.php'; ?></div>
-    </div>
-<?php endif; ?>
 
 <ul id="order-tab" class="nav nav-tabs nav_tabs">
     <?php foreach ($tabs as $tab) : ?>

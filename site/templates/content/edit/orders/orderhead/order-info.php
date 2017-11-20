@@ -90,9 +90,9 @@
         </tr>
     <?php endif; ?>
 </table>
-<?php $creditcard = $ordereditdisplay->get_creditcard(); ?>
+<?php $creditcard = $editorderdisplay->get_creditcard(); ?>
 <?php if ($order->termtype == 'STD') : ?>
-    <div id="credit" class="<?= $ordereditdisplay->showhide_creditcard($order); ?>">
+    <div id="credit" class="<?= $editorderdisplay->showhide_creditcard($order); ?>">
         <?php include $config->paths->content.'edit/orders/orderhead/credit-card-form.php'; ?>
     </div>
 <?php else : ?>

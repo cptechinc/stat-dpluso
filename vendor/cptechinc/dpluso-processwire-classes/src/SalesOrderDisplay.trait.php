@@ -26,15 +26,37 @@
         }
         
         public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
+            if ($orderdetail) {
+                return $this->generate_loaddetaildocumentslink($order, $orderdetail);
+            } else {
+                return $this->generate_loadheaderdocumentslink($order, $orderdetail);
+            }
+        }
+        
+        public function generate_loadheaderdocumentslink(Order $order, OrderDetail $orderdetail = null) {
             $bootstrap = new Contento();
             $href = $this->generate_documentsrequesturl($order, $orderdetail);
-            $icon = $bootstrap->createicon('material-icons', '&#xE873;');
+            $icon = $bootstrap->createicon('fa fa-file-text');
             $ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
             
             if ($order->has_documents()) {
                 return $bootstrap->openandclose('a', "href=$href|class=btn btn-primary load-sales-docs|role=button|title=Click to view Documents|$ajaxdata", $icon. ' Show Documents');
             } else {
                 return $bootstrap->openandclose('a', "href=#|class=btn btn-default|title=No Documents Available", $icon. ' 0 Documents Found');
+            }
+        }
+        
+        public function generate_loaddetaildocumentslink(Order $order, OrderDetail $orderdetail = null) {
+            $bootstrap = new Contento();
+            $href = $this->generate_documentsrequesturl($order, $orderdetail);
+            $icon = $bootstrap->createicon('fa fa-file-text');
+            $ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
+            $documentsTF = ($orderdetail) ? $orderdetail->has_documents() : $order->has_documents();
+            
+            if ($documentsTF) {
+                return $bootstrap->openandclose('a', "href=$href|class=h3 load-sales-docs|role=button|title=Click to view Documents|$ajaxdata", $icon);
+            } else {
+                return $bootstrap->openandclose('a', "href=#|class=h3 text-muted|title=No Documents Available", $icon);
             }
         }
         
@@ -96,6 +118,20 @@
             $url = new \Purl\Url($this->pageurl->getUrl());
             $url->path = wire('config')->pages->actions."all/load/list/order/";
             $url->query->setData(array('ordn' => $order->orderno));
+            return $url->getUrl();
+        }
+        
+        public function generate_viewdetaillink(Order $order, OrderDetail $detail) {
+            $bootstrap = new Contento();
+            $href = $this->generate_viewdetailurl($order, $detail);
+            $icon = $bootstrap->createicon('glyphicon glyphicon-th-list');
+            return $bootstrap->openandclose('a', "href=$href|class=btn btn-xs btn-primary view-item-details|data-itemid=$detail->itemid|data-kit=$detail->kititemflag|data-modal=#ajax-modal", $icon);
+        }
+        
+        public function generate_viewdetailurl(Order $order, OrderDetail $detail) {
+            $url = new \Purl\Url($this->pageurl->getUrl());
+            $url->path = wire('config')->pages->ajax."load/view-detail/order/";
+            $url->query->setData(array('ordn' => $order->orderno, 'line' => $detail->linenbr));
             return $url->getUrl();
         }
         

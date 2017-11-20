@@ -19,9 +19,15 @@
             return $this->openandclose('i', "class=$class|aria-hidden=true", $content);
         }
         
-        public function createalert($type, $msg) {
+        public function button($class, $content =  '') {
+            return $this->openandclose('button', "class=$class", $content);
+        }
+        
+        public function createalert($type, $msg, $showclose = true) {
             $attributes = "class=alert alert-$type|role=alert";
-            return $this->openandclose('div', $attributes, $msg);
+            $closebutton = $this->openandclose('button', 'class=close|data-dismiss=alert|aria-label=Close', $this->openandclose('span', 'aria-hidden=true', '&times;'));
+            $content = ($showclose) ? $closebutton.$msg : $msg;
+            return $this->openandclose('div', $attributes, $content);
     	}
 
     	public function makeprintlink($link, $msg) {

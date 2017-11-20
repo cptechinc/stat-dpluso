@@ -15,7 +15,12 @@
         ],
         'urls' => [
     		'index' => $config->pages->index,
-    		'cart' => $config->pages->cart,
+    		'cart' => [
+                'page' => $config->pages->cart,
+                'redir' => [
+                    'reorder' => $config->pages->cart."redir/?action=reorder-items"
+                ]
+            ],
     		'orderfiles' => $config->pages->documentstorage,
     		'customer' => [
     			'page' => $config->pages->customer,
@@ -104,7 +109,8 @@
     			'ii_moveitemdoc' => $config->pages->ajaxjson."ii/ii-move-document/",
     			'ci_shiptolist' => $config->pages->ajaxjson."ci/ci-shipto-list/",
                 'vendorshipfrom' => $config->pages->ajaxjson."vendor-shipfrom/",
-                'validateitemid' => $config->pages->ajaxjson."products/validate-itemid/"
+                'validateitemid' => $config->pages->ajaxjson."products/validate-itemid/",
+                'validateitems' => $config->pages->ajaxjson."products/validate-items/"
     		],
     		'load' => [
     			'productresults' => $config->pages->ajaxload."products/item-search-results/",

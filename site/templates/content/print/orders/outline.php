@@ -7,9 +7,9 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-6"></div>
+	<div class="col-xs-6"></div>
 
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<table class="table table-bordered table-striped table-condensed">
 			<tr> <td>Order Date</td> <td><?= $order->orderdate; ?></td> </tr>
 			<tr> <td>Request Date</td> <td><?= $order->rqstdate; ?></td> </tr>
@@ -20,7 +20,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<div class="page-header"><h3>Bill-to</h3></div>
 		<address>
 			<?= $order->custname; ?><br>
@@ -31,7 +31,7 @@
 			<?= $order->btcity.", ".$order->btstate." ".$order->btzip; ?>
 		</address>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<div class="page-header"><h3>Ship-to</h3></div>
 		<address>
 			<?= $order->sname; ?><br>

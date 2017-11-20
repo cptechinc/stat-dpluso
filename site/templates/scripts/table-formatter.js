@@ -3,7 +3,7 @@ if (tabletype == 'sales-order') {
 	tablejson = {maxcolumns:0, detail: {rowcount: 0, rows: []}};
 } else if (tabletype == 'sales-history') {
 	tablejson = {maxcolumns:0, detail: {rowcount: 0, rows: []}, lotserial: {rowcount: 0, rows: []}};
-} else if (tabletype == 'purchase-order') {
+} else if (tabletype == 'purchase-order' ||tabletype == 'purchase-orders') {
 	tablejson = {maxcolumns:0, detail: {rowcount: 0, rows: []}};
 } else if (tabletype == 'purchase-history') {
 	tablejson = {maxcolumns:0, detail: {rowcount: 0, rows: []}, lotserial: {rowcount: 0, rows: []}};

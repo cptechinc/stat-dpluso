@@ -28,19 +28,8 @@
 	/**
 	* CART REDIRECT
 	*
-	*
-	*
-	*
 	* switch ($action) {
 	*	case 'add-to-cart':
-	*		DBNAME=$config->DBNAME
-	*		CARTDET
-	*		ITEMID=$itemID
-	*		CUSTID=$custID
-	*		SHIPTOID=$shipID
-	*		WHSE=$whse  **OPTIONAL
-	*		break;
-	*	case 'reorder':
 	*		DBNAME=$config->DBNAME
 	*		CARTDET
 	*		ITEMID=$itemID
@@ -59,6 +48,11 @@
 	*		DBNAME=$config->DBNAME
 	*		CARTADDMULTIPLE
 	*		CUSTID=$custID
+	*		ITEMID=$custID   QTY=$qty  **REPEAT
+	*		break;
+	*	case 'reorder':
+	*		CARTADDMULTIPLE
+	*		CUSTID=$custID || PULL FROM QUOTENBR / ORDN
 	*		ITEMID=$custID   QTY=$qty  **REPEAT
 	*		break;
 	*	case 'update-line':
@@ -90,21 +84,13 @@
     switch ($action) {
         case 'add-to-cart':
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'ITEMID' => $itemID, 'QTY' => $qty);
-			if ($custID == '') {$custID = $config->defaultweb;}
-			$data['CUSTID'] = $custID; if ($shipID != '') {$data['SHIPTOID'] = $shipID; }
-			if ($input->post->whse) { if ($input->post->whse != '') { $data['WHSE'] = $input->post->whse; } }
+			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
+			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
+			if ($input->post->whse) { if (!empty($input->post->whse)) { $data['WHSE'] = $input->post->whse; } }
 			$session->data = $data;
             $session->addtocart = 'You added ' . $qty . ' of ' . $itemID . ' to your cart';
             $session->loc = $input->post->page;
             break;
-		case 'reorder':
-			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'ITEMID' => $itemID, 'QTY' => $qty);
-			if ($custID == '') {$custID = $config->defaultweb;}
-			$data['CUSTID'] = $custID; if ($shipID != '') {$data['SHIPTOID'] = $shipID; }
-			if ($input->post->whse) { if ($input->post->whse != '') { $data['WHSE'] = $input->post->whse; } }
-            $session->addtocart = 'You added ' . $qty . ' of ' . $itemID . ' to your cart';
-            $session->loc = $input->post->page;
-			break;
 		case 'add-nonstock-item':
 			insertcartline(session_id(), '0', false);
 			$cartdetail = getcartline(session_id(), '0', false);
@@ -133,6 +119,25 @@
             $session->addtocart = sizeof($itemIDs);
             $session->loc = $config->pages->cart;
 			break;
+		case 'reorder':
+			$from = $input->get->text('from');
+			$itemids = array();
+			$qtys = array();
+			switch ($from) {
+				case 'salesorder':
+					$ordn = $input->get->text('ordn');
+					$custID = get_custid_from_order(session_id(), $ordn);
+					$details = get_orderdetails(session_id(), $ordn, true, false);
+					foreach ($details as $detail) {
+						$itemids[] = $detail->itemid;
+						$qtys[] = $detail->qtyordered;
+		 			}
+					break;
+			}
+			$data = array("DBNAME=$config->dbName", 'CARTADDMULTIPLE', "CUSTID=$custID");
+			$data = writedataformultitems($data, $itemids, $qtys);
+			$session->loc = $config->pages->cart;
+			break;
 		case 'update-line':
 			$linenbr = $input->post->text('linenbr');
 			$cartdetail = getcartline(session_id(), $linenbr, false);
@@ -157,8 +162,8 @@
 			$session->loc = $input->post->text('page');
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $input->post->linenbr);
 
-			if ($custID == '') {$custID = $config->defaultweb;}
-			$data['CUSTID'] = $custID; if ($shipID != '') {$data['SHIPTOID'] = $shipID; }
+			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
+			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
 			$session->loc = $config->pages->cart;
 			break;
 		case 'remove-line':
@@ -170,8 +175,8 @@
 			$custID = getcartcustomer(session_id(), false);
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $input->post->linenbr, 'QTY' => '0');
 
-			if ($custID == '') {$custID = $config->defaultweb;}
-			$data['CUSTID'] = $custID; if ($shipID != '') {$data['SHIPTOID'] = $shipID; }
+			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
+			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
 			break;
         case 'create-sales-order':
 			$data = array('DBNAME' => $config->dbName, 'CREATESO' => false);

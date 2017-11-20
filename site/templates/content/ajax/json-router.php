@@ -15,6 +15,9 @@
         case 'quote':
             include $config->paths->content . 'ajax/json/quote-json-router.php';
             break;
+        case 'cart':
+            include $config->paths->content . 'ajax/json/cart-json-router.php';
+            break;
         case 'test-json':
             include $config->paths->content."ajax/json/test-json.php";
             break;

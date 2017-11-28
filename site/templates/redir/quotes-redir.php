@@ -138,7 +138,8 @@
 			$custID = getquotecustomer(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'EDITQUOTE' => $qnbr, 'QUOTENO' => $qnbr);
 			if (!is_orderlocked(session_id(), $qnbr)) {
-				$session->sql = insert_orderlock(session_id(), '2', $qnbr, $user->loginid, $date, $time, false);
+				$recno = get_nextorderlock(session_id());
+				$session->sql = insert_orderlock(session_id(), $recno, $qnbr, $user->loginid, $date, $time, false);
 			}
 			$session->loc= $config->pages->editquote."?qnbr=".$qnbr;
 			break;

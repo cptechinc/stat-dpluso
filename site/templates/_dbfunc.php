@@ -536,6 +536,13 @@
 		$sql->execute($switching);
 		return $sql->fetchColumn();
 	}
+	
+	function get_nextorderlock($sessionID) {
+		$sql = wire('database')->prepare("SELECT MAX(recno) FROM ordlock WHERE sessionid = :sessionID LIMIT 1");
+		$switching = array(':sessionID' => $sessionID);
+		$sql->execute($switching);
+		return (intval($sql->fetchColumn()) + 1);
+	}
 
 	function get_order_docs($sessionID, $ordn, $debug) { // FIXME USE PARAMATERS
 		$sql = "SELECT * FROM orddocs WHERE sessionid = '$sessionID' AND orderno = '$ordn' AND itemnbr = '' ";

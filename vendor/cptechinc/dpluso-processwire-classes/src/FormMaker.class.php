@@ -52,7 +52,4 @@
     		}
     		return $indent;
     	}
-        
-        
-        
     }

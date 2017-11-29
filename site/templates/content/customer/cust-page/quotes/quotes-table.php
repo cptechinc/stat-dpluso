@@ -3,13 +3,10 @@
        <?php include $config->paths->content.'customer/cust-page/quotes/quotes-thead-rows.php'; ?>
     </thead>
 	<tbody>
-		<?php if ($input->get->qnbr) : ?>
-			<?php if ($quotepanel->count == 0 && $input->get->text('qnbr') == '') : ?>
-				<tr> <td colspan="6" class="text-center">No Quotes found! Try using a date range to find the order(s) you are looking for.</td> </tr>
-			<?php endif; ?>
+		<?php if ($quotepanel->count == 0 && $input->get->text('qnbr') == '') : ?>
+			<tr> <td colspan="8" class="text-center">No Quotes found! Try using a date range to find the order(s) you are looking for.</td> </tr>
 		<?php endif; ?>
 
-		<?php //$quotes = get_customerquotes(session_id(), $custID, $config->showonpage, $input->pageNum(), true, false); ?>
 		<?php $quotepanel->get_quotes(); ?>
 		<?php foreach ($quotepanel->quotes as $quote) : ?>
 			<tr class="<?= $quotepanel->generate_rowclass($quote); ?>" id="<?= $quote->quotnbr; ?>">

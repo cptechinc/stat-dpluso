@@ -24,7 +24,29 @@
     		'orderfiles' => $config->pages->documentstorage,
     		'customer' => [
     			'page' => $config->pages->customer,
-    			'ci' => $config->pages->custinfo,
+    			'ci' => [
+                    'page' => $config->pages->custinfo,
+                    'load' => [
+        				'ci_customer' => "",
+        				'ci_buttons' => "",
+        				'ci_shiptos' => $config->pages->ajaxload."ci/ci-shiptos/",
+        				'ci_shiptoinfo' => $config->pages->ajaxload."ci/ci-shipto-info/",
+                        'ci_pricing' => $config->pages->ajaxload."ci/ci-pricing/",
+                        'ci_pricingform' => $config->pages->ajaxload."ci/ci-pricing-search/",
+        				'ci_shiptobuttons' => "",
+        				'ci_contacts' => $config->pages->ajaxload."ci/ci-contacts/",
+        				'ci_documents' => $config->pages->ajaxload."ci/ci-documents/",
+        				'ci_standingorders' => $config->pages->ajaxload."ci/ci-standing-orders/",
+        				'ci_credit' => $config->pages->ajaxload."ci/ci-credit/",
+        				'ci_openinvoices' => $config->pages->ajaxload."ci/ci-open-invoices/",
+                        'ci_orderdocuments' => $config->pages->ajaxload."ci/ci-documents/order/",
+        				'ci_paymenthistory' => $config->pages->ajaxload."ci/ci-payment-history/",
+        				'ci_quotes' => $config->pages->ajaxload."ci/ci-quotes/",
+                        'ci_salesorders' => $config->pages->ajaxload."ci/ci-sales-orders/",
+                        'ci_saleshistory' => $config->pages->ajaxload."ci/ci-sales-history/",
+                        'ci_custpo' => $config->pages->ajaxload."ci/ci-custpo/"
+                    ]
+                ],
     			'redir' => [
     				'ci_customer' => $config->pages->customer."redir/?action=ci-customer",
     				'ci_buttons' => $config->pages->customer."redir/?action=ci-buttons",
@@ -46,24 +68,6 @@
     			],
     			'load' => [
     				'loadindex' =>  $config->pages->ajaxload."customers/cust-index/",
-    				'ci_customer' => "",
-    				'ci_buttons' => "",
-    				'ci_shiptos' => $config->pages->ajaxload."ci/ci-shiptos/",
-    				'ci_shiptoinfo' => $config->pages->ajaxload."ci/ci-shipto-info/",
-                    'ci_pricing' => $config->pages->ajaxload."ci/ci-pricing/",
-                    'ci_pricingform' => $config->pages->ajaxload."ci/ci-pricing-search/",
-    				'ci_shiptobuttons' => "",
-    				'ci_contacts' => $config->pages->ajaxload."ci/ci-contacts/",
-    				'ci_documents' => $config->pages->ajaxload."ci/ci-documents/",
-    				'ci_standingorders' => $config->pages->ajaxload."ci/ci-standing-orders/",
-    				'ci_credit' => $config->pages->ajaxload."ci/ci-credit/",
-    				'ci_openinvoices' => $config->pages->ajaxload."ci/ci-open-invoices/",
-                    'ci_orderdocuments' => $config->pages->ajaxload."ci/ci-documents/order/",
-    				'ci_paymenthistory' => $config->pages->ajaxload."ci/ci-payment-history/",
-    				'ci_quotes' => $config->pages->ajaxload."ci/ci-quotes/",
-                    'ci_salesorders' => $config->pages->ajaxload."ci/ci-sales-orders/",
-                    'ci_saleshistory' => $config->pages->ajaxload."ci/ci-sales-history/",
-                    'ci_custpo' => $config->pages->ajaxload."ci/ci-custpo/"
     			]
     		],
     		'products' => [
@@ -173,18 +177,7 @@
                     'vi_docview' => $config->pages->ajaxload."vi/vi-docview/"
                 ],
                 'json' => [
-                    'vi_shipfromlist' => $config->pages->ajaxjson."vi/vi-shipfrom-list/",
-                    'vi_purchasehist' => $config->pages->ajaxload."vi/vi-purchase-history/",
-                    'vi_purchaseorder' => $config->pages->ajaxload."vi/vi-purchase-orders/",
-                    'vi_payment' => $config->pages->ajaxload."vi/vi-payments/",
-                    'vi_openinv' => $config->pages->ajaxload."vi/vi-open-invoices/",
-                    'vi_contact' => $config->pages->ajaxload."vi/vi-contact/",
-                    'vi_notes' => $config->pages->ajaxload."vi/vi-notes/",
-                    'vi_costing' => $config->pages->ajaxload."vi/vi-costing/",
-                    'vi_unreleased' => $config->pages->ajaxload."vi/vi-unreleased-purchase-orders/",
-                    'vi_uninvoiced' => $config->pages->ajaxload."vi/vi-uninvoiced/",
-                    'vi_24monthsummary' => $config->pages->ajaxload."vi/vi-24monthsummary/",
-                    'vi_docview' => $config->pages->ajaxload."vi/vi-docview/"
+                    'vi_shipfromlist' => $config->pages->ajaxjson."vi/vi-shipfrom-list/"
                 ]
             ]
     	],

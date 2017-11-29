@@ -42,7 +42,7 @@ $(function() {
 		if (form.find('input[name=shownotes]').is(':checked')) { shownotes = 'Y'; }
 		var modal = config.modals.ajax;
 		var loadinto =  modal+" .modal-content";
-		var href = URI(config.urls.customer.load.ci_saleshistory).addQuery("custID", custID)
+		var href = URI(config.urls.customer.ci.load.ci_saleshistory).addQuery("custID", custID)
 																 .addQuery("shipID", shipID)
 																 .addQuery("startdate", startdate)
 																 .addQuery("shownotes", shownotes)
@@ -104,7 +104,7 @@ function shipto() { //CAN BE USED IF SHIPTO IS DEFINED
 	var shipID = $(custlookupform + " .shipID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_shiptos).addQuery("custID", custID)
+	var href = URI(config.urls.customer.ci.load.ci_shiptos).addQuery("custID", custID)
 														.addQuery("shipID", shipID)
 														.addQuery('modal', 'modal')
 														.query(cleanparams)
@@ -129,7 +129,7 @@ function contact() {
 	var shipID = $(custlookupform + " .shipID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_contacts).addQuery("custID", custID).addQuery('shipID', shipID).addQuery('modal', 'modal').query(cleanparams).toString();
+	var href = URI(config.urls.customer.ci.load.ci_contacts).addQuery("custID", custID).addQuery('shipID', shipID).addQuery('modal', 'modal').query(cleanparams).toString();
 	showajaxloading();
 	ci_contacts(custID, shipID, function() {
 		loadin(href, loadinto, function() {
@@ -142,7 +142,7 @@ function contact() {
 
 function pricing() {
 	var custID = $(custlookupform + " .custID").val();
-	var href = URI(config.urls.customer.load.ci_pricingform).addQuery("custID", custID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_pricingform).addQuery("custID", custID).addQuery('modal', 'modal').toString();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
 	showajaxloading();
@@ -157,7 +157,7 @@ function choosecipricingitem(itemID) {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_pricing).addQuery("custID", custID).addQuery("itemID", itemID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_pricing).addQuery("custID", custID).addQuery("itemID", itemID).addQuery('modal', 'modal').toString();
 	ci_pricing(custID, itemID, function() {
 		$(loadinto).loadin(href, function() {
 			hideajaxloading(); console.log(href);
@@ -172,7 +172,7 @@ function salesorder() { //CAN BE USED IF SHIPTO IS DEFINED
 	var shipID = $(custlookupform + " .shipID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_salesorders).addQuery("custID", custID).addQuery("shipID", shipID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_salesorders).addQuery("custID", custID).addQuery("shipID", shipID).addQuery('modal', 'modal').toString();
 	showajaxloading();
 	ci_salesorder(custID, shipID, function() {
 		$(loadinto).loadin(href, function() {
@@ -188,7 +188,7 @@ function saleshist() { //CAN BE USED IF SHIPTO IS DEFINED
 	var shipID = $(custlookupform + " .shipID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_saleshistory+"form/").addQuery("custID", custID)
+	var href = URI(config.urls.customer.ci.load.ci_saleshistory+"form/").addQuery("custID", custID)
 																	 .addQuery("shipID", shipID)
 																	 .addQuery('modal', 'modal')
 																	 .toString();
@@ -205,7 +205,7 @@ function custpo() { //CAN BE USED IF SHIPTO IS DEFINED
 	var shipID = $(custlookupform + " .shipID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_custpo).addQuery("custID", custID).addQuery("shipID", shipID).toString();
+	var href = URI(config.urls.customer.ci.load.ci_custpo).addQuery("custID", custID).addQuery("shipID", shipID).toString();
 	swal({
 		title: "Customer PO Inquiry",
 	 	text: "Enter a PO:",
@@ -244,7 +244,7 @@ function quotes() {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_quotes).addQuery("custID", custID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_quotes).addQuery("custID", custID).addQuery('modal', 'modal').toString();
 	showajaxloading();
 	ci_quotes(custID, function() {
 		$(loadinto).loadin(href, function() {
@@ -259,7 +259,7 @@ function openinv() {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_openinvoices).addQuery("custID", custID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_openinvoices).addQuery("custID", custID).addQuery('modal', 'modal').toString();
 	showajaxloading();
 	ci_openinvoices(custID, function() {
 		$(loadinto).loadin(href, function() {
@@ -274,7 +274,7 @@ function loadorderdocuments(ordn) {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_orderdocuments).addQuery("custID", custID).addQuery('ordn', ordn).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_orderdocuments).addQuery("custID", custID).addQuery('ordn', ordn).addQuery('modal', 'modal').toString();
 	showajaxloading();
 	ci_getorderdocuments(custID, ordn, function() {
 		wait(500, function() {
@@ -291,7 +291,7 @@ function payment() {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_paymenthistory).addQuery("custID", custID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_paymenthistory).addQuery("custID", custID).addQuery('modal', 'modal').toString();
 	showajaxloading();
 	ci_paymenthistory(custID, function() {
 		$(loadinto).loadin(href, function() {
@@ -305,7 +305,7 @@ function custcredit() {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_credit).addQuery("custID", custID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_credit).addQuery("custID", custID).addQuery('modal', 'modal').toString();
 	showajaxloading();
 	ci_credit(custID, function() {
 		$(loadinto).loadin(href, function() {
@@ -320,7 +320,7 @@ function standorders() { //CAN BE USED IF SHIPTO IS DEFINED
 	var shipID = $(custlookupform + " .shipID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_standingorders).addQuery("custID", custID)
+	var href = URI(config.urls.customer.ci.load.ci_standingorders).addQuery("custID", custID)
 															   .addQuery("shipID", shipID)
 															   .addQuery('modal', 'modal')
 															   .toString();
@@ -343,7 +343,7 @@ function docview() {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.load.ci_documents).addQuery("custID", custID).addQuery('modal', 'modal').toString();
+	var href = URI(config.urls.customer.ci.load.ci_documents).addQuery("custID", custID).addQuery('modal', 'modal').toString();
 	showajaxloading();
 	ci_documents(custID, function() {
 		$(loadinto).loadin(href, function() {
@@ -365,7 +365,7 @@ function toggleshipto() {
 	var nextshipID = '';
 	if (!$(custlookupform + " .shipID").val() != '') { nextshipID = $(custlookupform + " .nextshipID").val(); }
 	ci_shiptoinfo(custID, nextshipID, function() {
-		var href = config.urls.customer.ci + "/"+urlencode(custID)+"/";
+		var href = config.urls.customer.ci.page + "/"+urlencode(custID)+"/";
 		if (nextshipID != '') {
 			href += 'shipto-'+nextshipID+'/';
 		}
@@ -376,7 +376,7 @@ function toggleshipto() {
 
 
 function loadshiptoinfo(custID, shipID) {
-	var href = URI(config.urls.customer.load.ci_shiptoinfo).addQuery("custID", custID)
+	var href = URI(config.urls.customer.ci.load.ci_shiptoinfo).addQuery("custID", custID)
 														   .addQuery('shipID', shipID)
 														   .toString();
 	var modal = config.modals.ajax;

@@ -506,6 +506,23 @@ $(document).ready(function() {
 				$(loadinto).loadin(href+' '+loadinto, function() { });
 		});
 		
+		$("body").on("submit", "#vi-search-item", function(e) {
+			e.preventDefault();
+		});
+
+		$("body").on("keyup", ".vi-item-search", function() {
+			var input = $(this);
+			var thisform = input.parent('form');
+			var vendorID = thisform.find('input[name=vendorID]').val();
+			var action = thisform.find('input[name=action]').val();
+			var href  = URI(thisform.attr('action')).addQuery('q', urlencode(input.val()))
+												   .addQuery('vendorID', urlencode(vendorID))
+												   .addQuery('action', urlencode(action))
+												   .toString();
+			var loadinto = '#item-results';
+			$(loadinto).loadin(href, function() { });
+		});
+		
 		$("body").on("submit", "#vend-index-search-form", function(e) {
 			e.preventDefault();
 		});

@@ -1,5 +1,5 @@
 {  
-    "cols": 5,
+    "cols": 6,
     "header": {
        "rows": 1,
        "columns": {
@@ -244,7 +244,7 @@
             },
             "Quantity Ordered": {
                 "line": 1,
-                "column": 3,
+                "column": 4,
     			"col-length": 1,
     			"label": "QtyOrd",
                 "before-decimal": 7,
@@ -271,7 +271,7 @@
             },
 			"Unit Cost": {
                 "line": 1,
-                "column": 4,
+                "column": 5,
     			"col-length": 1,
     			"label": "UnitCost",
                 "before-decimal": 5,
@@ -280,7 +280,7 @@
             },
 			"Total Amount": {
                 "line": 1,
-                "column": 5,
+                "column": 6,
     			"col-length": 1,
     			"label": "Total",
                 "before-decimal": 5,

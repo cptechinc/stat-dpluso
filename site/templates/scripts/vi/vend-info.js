@@ -59,7 +59,6 @@ $(function() {
 
 function payment() { 
 	var vendorID = $(vendlookupform + " .vendorID").val();
-    console.log(vendorID);
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
 	var href = URI(config.urls.vendor.load.vi_payment).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
@@ -68,14 +67,13 @@ function payment() {
 		$(loadinto).loadin(href, function() {
 			hideajaxloading(); console.log(href);
 			$(modal).find('.modal-body').addClass('modal-results');
-			$(modal).resizemodal('lg').modal();
+			$(modal).resizemodal('xl').modal();
 		});
 	});
 }
 
 function openinv() { 
 	var vendorID = $(vendlookupform + " .vendorID").val();
-    console.log(vendorID);
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
 	var href = URI(config.urls.vendor.load.vi_openinv).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
@@ -138,4 +136,136 @@ function shipfrom() {
             }
         }
     });
+}
+
+function purchaseorder() { 
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	var href = URI(config.urls.vendor.load.vi_purchaseorder).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
+	showajaxloading();
+	vi_purchaseorder(vendorID, function() {
+		$(loadinto).loadin(href, function() {
+			hideajaxloading(); console.log(href);
+			$(modal).find('.modal-body').addClass('modal-results');
+			$(modal).resizemodal('lg').modal();
+		});
+	});
+}
+
+function contact() { 
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	var href = URI(config.urls.vendor.load.vi_contact).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
+	showajaxloading();
+	vi_contact(vendorID, function() {
+		$(loadinto).loadin(href, function() {
+			hideajaxloading(); console.log(href);
+			$(modal).find('.modal-body').addClass('modal-results');
+			$(modal).resizemodal('lg').modal();
+		});
+	});
+}
+
+function notes() { 
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	var href = URI(config.urls.vendor.load.vi_notes).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
+	showajaxloading();
+	vi_notes(vendorID, function() {
+		$(loadinto).loadin(href, function() {
+			hideajaxloading(); console.log(href);
+			$(modal).find('.modal-body').addClass('modal-results');
+			$(modal).resizemodal('lg').modal();
+		});
+	});
+}
+
+function costing() {
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var href = URI(config.urls.vendor.load.vi_costingform).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	showajaxloading();
+	$(loadinto).loadin(href, function() {
+		hideajaxloading(); console.log(href);
+		$(modal).find('.modal-body').addClass('modal-results');
+		$(modal).resizemodal('lg').modal();
+	});
+}
+
+function choosevicostingitem(itemID) {
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	var href = URI(config.urls.vendor.load.vi_costing).addQuery("vendorID", vendorID).addQuery("itemID", itemID).addQuery('modal', 'modal').toString();
+	vi_costing(vendorID, itemID, function() {
+		$(loadinto).loadin(href, function() {
+			hideajaxloading(); console.log(href);
+			$(modal).find('.modal-body').addClass('modal-results');
+			$(modal).resizemodal('lg').modal();
+		});
+	});
+}
+
+function unreleased() { 
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	var href = URI(config.urls.vendor.load.vi_unreleased).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
+	showajaxloading();
+	vi_unreleased(vendorID, function() {
+		$(loadinto).loadin(href, function() {
+			hideajaxloading(); console.log(href);
+			$(modal).find('.modal-body').addClass('modal-results');
+			$(modal).resizemodal('lg').modal();
+		});
+	});
+}
+
+function uninvoiced() { 
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	var href = URI(config.urls.vendor.load.vi_uninvoiced).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
+	showajaxloading();
+	vi_uninvoiced(vendorID, function() {
+		$(loadinto).loadin(href, function() {
+			hideajaxloading(); console.log(href);
+			$(modal).find('.modal-body').addClass('modal-results');
+			$(modal).resizemodal('xl').modal();
+		});
+	});
+}
+
+function monthsummary() { 
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	var href = URI(config.urls.vendor.load.vi_24monthsummary).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
+	showajaxloading();
+	vi_24monthsummary(vendorID, function() {
+		$(loadinto).loadin(href, function() {
+			hideajaxloading(); console.log(href);
+			$(modal).find('.modal-body').addClass('modal-results');
+			$(modal).resizemodal('xl').modal();
+		});
+	});
+}
+
+function docview() { 
+	var vendorID = $(vendlookupform + " .vendorID").val();
+	var modal = config.modals.ajax;
+	var loadinto =  modal+" .modal-content";
+	var href = URI(config.urls.vendor.load.vi_docview).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
+	showajaxloading();
+	vi_docview(vendorID, function() {
+		$(loadinto).loadin(href, function() {
+			hideajaxloading(); console.log(href);
+			$(modal).find('.modal-body').addClass('modal-results');
+			$(modal).resizemodal('lg').modal();
+		});
+	});
 }

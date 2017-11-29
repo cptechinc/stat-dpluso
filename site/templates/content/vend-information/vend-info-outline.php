@@ -11,7 +11,7 @@ $vendjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-v
             <?php if ($vendjson['columns']['top'][$column]['heading'] == '' && $vendjson['data']['top'][$column] == '') : ?>
             <?php else : ?>
                 <tr>
-                    <td class="<?= $config->textjustify[$vendjson['columns']['left'][$column]['headingjustify']]; ?>">
+                    <td class="<?= $config->textjustify[$vendjson['columns']['top'][$column]['headingjustify']]; ?>">
                         <?php echo $vendjson['columns']['top'][$column]['heading']; ?>
                     </td>
                     <td>

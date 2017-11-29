@@ -144,23 +144,47 @@
             'vendor' => [
                 'redir' => [
                     'vi_shipfrom' => $config->pages->vendor."redir/?action=vi-shipfrom",
-                    'vi_payment' => $config->pages->vendor."redir/?action=vi-payment",
-                    'vi_openinv' => $config->pages->vendor."redir/?action=vi-openinv",
-                    'vi_purchasehist' => $config->pages->vendor."redir/?action=vi-purchasehist"
+                    'vi_payment' => $config->pages->vendor."redir/?action=vi-payments",
+                    'vi_openinv' => $config->pages->vendor."redir/?action=vi-open-invoices",
+                    'vi_purchasehist' => $config->pages->vendor."redir/?action=vi-purchase-history",
+                    'vi_purchaseorder' => $config->pages->vendor."redir/?action=vi-purchase-orders",
+                    'vi_contact' => $config->pages->vendor."redir/?action=vi-contact",
+                    'vi_notes' => $config->pages->vendor."redir/?action=vi-notes",
+                    'vi_costing' => $config->pages->vendor."redir/?action=vi-costing",
+                    'vi_unreleased' => $config->pages->vendor."redir/?action=vi-unreleased-purchase-orders",
+                    'vi_uninvoiced' => $config->pages->vendor."redir/?action=vi-uninvoiced",
+                    'vi_24monthsummary' => $config->pages->vendor."redir/?action=vi-24monthsummary",
+                    'vi_docview' => $config->pages->vendor."redir/?action=vi-docview"
                 ],
                 'load' => [
                     'vi_shipfrom' => $config->pages->ajaxload."vi/vi-shipfrom/",
-                    'vi_payment' => $config->pages->ajaxload."vi/vi-payment/",
-                    'vi_openinv' => $config->pages->vajaxload."vi/vi-openinv/",
-                    'vi_purchasehist' => $config->pages->ajaxload."vi/vi-purchasehist/",
-                    'vi_purchasehist_form' => $config->pages->ajaxload."vi/vi-purchasehist/form/"
+                    'vi_payment' => $config->pages->ajaxload."vi/vi-payments/",
+                    'vi_openinv' => $config->pages->ajaxload."vi/vi-open-invoices/",
+                    'vi_purchasehist' => $config->pages->ajaxload."vi/vi-purchase-history/",
+                    'vi_purchasehist_form' => $config->pages->ajaxload."vi/vi-purchase-history/form/",
+                    'vi_purchaseorder' => $config->pages->ajaxload."vi/vi-purchase-orders/",
+                    'vi_contact' => $config->pages->ajaxload."vi/vi-contact/",
+                    'vi_notes' => $config->pages->ajaxload."vi/vi-notes/",
+                    'vi_costing' => $config->pages->ajaxload."vi/vi-costing/",
+                    'vi_costingform' => $config->pages->ajaxload."vi/vi-costing-search/",
+                    'vi_unreleased' => $config->pages->ajaxload."vi/vi-unreleased-purchase-orders/",
+                    'vi_uninvoiced' => $config->pages->ajaxload."vi/vi-uninvoiced/",
+                    'vi_24monthsummary' => $config->pages->ajaxload."vi/vi-24monthsummary/",
+                    'vi_docview' => $config->pages->ajaxload."vi/vi-docview/"
                 ],
                 'json' => [
                     'vi_shipfromlist' => $config->pages->ajaxjson."vi/vi-shipfrom-list/",
-                    'vi_purchasehist' => $config->pages->ajaxload."vi/vi-purchasehist/"
-                ],
-                'json' => [
-                    'vi_shipfromlist' => $config->pages->ajaxjson."vi/vi-shipfrom-list"
+                    'vi_purchasehist' => $config->pages->ajaxload."vi/vi-purchase-history/",
+                    'vi_purchaseorder' => $config->pages->ajaxload."vi/vi-purchase-orders/",
+                    'vi_payment' => $config->pages->ajaxload."vi/vi-payments/",
+                    'vi_openinv' => $config->pages->ajaxload."vi/vi-open-invoices/",
+                    'vi_contact' => $config->pages->ajaxload."vi/vi-contact/",
+                    'vi_notes' => $config->pages->ajaxload."vi/vi-notes/",
+                    'vi_costing' => $config->pages->ajaxload."vi/vi-costing/",
+                    'vi_unreleased' => $config->pages->ajaxload."vi/vi-unreleased-purchase-orders/",
+                    'vi_uninvoiced' => $config->pages->ajaxload."vi/vi-uninvoiced/",
+                    'vi_24monthsummary' => $config->pages->ajaxload."vi/vi-24monthsummary/",
+                    'vi_docview' => $config->pages->ajaxload."vi/vi-docview/"
                 ]
             ]
     	],

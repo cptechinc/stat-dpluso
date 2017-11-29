@@ -1,6 +1,6 @@
 <?php 
-    if (checkformatterifexists($user->loginid, 'vi-open-invoice', false)) {
-        $formatterjson = json_decode(getformatter($user->loginid, 'vi-open-invoice', false), true);
+    if (checkformatterifexists($user->loginid, 'vi-open-invoices', false)) {
+        $formatterjson = json_decode(getformatter($user->loginid, 'vi-open-invoices', false), true);
     } else {
         $default = $config->paths->content."vend-information/screen-formatters/default/vi-open-invoices.json";
         $formatterjson = json_decode(file_get_contents($default), true);

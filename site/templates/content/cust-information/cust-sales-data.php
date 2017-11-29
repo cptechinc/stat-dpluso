@@ -33,8 +33,7 @@
 						return moment(ds).format('MM/DD/YYYY');
 					},
 					hoverCallback: function (index, options, content, row) {
-						var ds = new Date(row.weekstartdate);
-						var date = moment(ds).format('MM/DD/YYYY');
+						var date = moment(row.weekstartdate).format('MM/DD/YYYY');
 						var hover = '<b>'+date+'</b><br>';
 						hover += '<b>Amt Sold: </b> $' + row.saleamount.formatMoney()+'<br>';
 						hover += '<b>Cost Amt: </b> $' + row.costamount.formatMoney()+'<br>';

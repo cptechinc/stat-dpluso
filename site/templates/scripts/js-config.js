@@ -136,14 +136,14 @@ var config = {
             redir: {
                 vi_shipfrom: sitepath + "vendors/redir/?action=vi-shipfrom",
                 vi_payment: sitepath + "vendors/redir/?action=vi-payment",
-                vi_openinv: sitepath + "vendors/redir/?action=vi-openinv",
-                vi_purchasehist: sitepath + "vendors/redir/?action=vi-purchasehist"
+                vi_openinv: sitepath + "vendors/redir/?action=vi-open-invoices",
+                vi_purchasehist: sitepath + "vendors/redir/?action=vi-purchase-history"
             },
             load: {
                 vi_shipfrom: sitepath + "ajax/load/vi/vi-shipfrom/",
                 vi_payment: sitepath + "ajax/load/vi/vi-payment/",
-                vi_openinv: sitepath + "ajax/load/vi/vi-openinv/",
-                vi_purchasehist: sitepath + "ajax/load/vi/vi-purchasehist/"
+                vi_openinv: sitepath + "ajax/load/vi/vi-open-invoices/",
+                vi_purchasehist: sitepath + "ajax/load/vi/vi-purchase-history/"
             }, 
             json: {
                 vi_shipfromlist: sitepath + "ajax/json/vi/vi-shipfrom-list"

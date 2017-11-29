@@ -12,7 +12,7 @@
 		$invoicejson = $invoicejson ? $invoicejson : array('error' => true, 'errormsg' => 'The open invoice JSON contains errors. JSON ERROR: '.json_last_error());
 		
 		if ($invoicejson['error']) {
-			$page->bootstrap->createalert('warning', $invoicejson['errormsg']);
+			echo $page->bootstrap->createalert('warning', $invoicejson['errormsg']);
 		} else {
 			$table = include $config->paths->content."vend-information/screen-formatters/logic/open-invoices.php"; 
 			include $config->paths->content."vend-information/tables/open-invoices-formatted.php"; 

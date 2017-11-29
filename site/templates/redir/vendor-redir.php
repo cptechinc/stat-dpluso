@@ -14,7 +14,7 @@
 	$filename = session_id();
 
 	/**
-	* CUSTOMER REDIRECT
+	* VENDOR REDIRECT
 	* @param string $action
 	*
 	*
@@ -34,7 +34,7 @@
 	*		VISHIPFROMLIST
 	*		VENDID=$custID
 	* 		break;
-	*	case 'vi-payment'
+	*	case 'vi-payments'
 	* 		DBNAME=$config->DBNAME
 	*		VIPAYMENT
 	*		VENDID=$custID
@@ -45,12 +45,41 @@
 	*		VENDID=$custID
 	*		SHIPID=
 	* 		break;
-	*	case 'vi-purchasehist'
+	*	case 'vi-purchase-history'
 	* 		DBNAME=$config->DBNAME
 	*		VIPURCHHIST
 	*		VENDID=$custID
 	*		SHIPID=
 	*		DATE=
+	* 		break;
+	*	case 'vi-purchaseorder'
+	* 		DBNAME=$config->DBNAME
+	*		VIPURCHORDR
+	*		VENDID=$custID
+	*		SHIPID=
+	* 		break;
+	*	case 'vi-contact'
+	* 		DBNAME=$config->DBNAME
+	*		VICONTACT
+	*		VENDID=$custID
+	*		SHIPID=
+	* 		break;
+	*	case 'vi-costing'
+	* 		DBNAME=$config->DBNAME
+	*		VICOST
+	*		VENDID=$custID
+	*		ITEMID=
+	* 		break;
+	*	case 'vi-unreleased'
+	* 		DBNAME=$config->DBNAME
+	*		VIUNRELEASED
+	*		VENDID=$custID
+	*		SHIPID=
+	* 		break;
+	*	case 'vi-uninvoiced'
+	* 		DBNAME=$config->DBNAME
+	*		VIUNINVOICED
+	*		VENDID=$custID
 	* 		break;
 	* }
 	*
@@ -79,15 +108,15 @@
 			// }
 			$session->loc = $config->pages->vendorinfo. "$vendorID/shipfrom-$shipfromID";
 			break;
-		case 'vi-openinv':
+		case 'vi-open-invoices':
 			$data = array('DBNAME' => $config->dbName, 'VIOPENINV' => false, 'VENDID' => $vendorID);
 			$session->loc = $config->pages->vendorinfo. "$vendorID/";
 			break;
-		case 'vi-payment':
+		case 'vi-payments':
 			$data = array('DBNAME' => $config->dbName, 'VIPAYMENT' => false, 'VENDID' => $vendorID);
 			$session->loc = $config->pages->vendorinfo. "$vendorID/";
 			break;
-		case 'vi-purchasehist':
+		case 'vi-purchase-history':
 			$date = $input->post->text('date');
 			$session->date = $date;
 			$startdate = date('Ymd', strtotime($date));
@@ -95,6 +124,54 @@
 			if (!empty($input->post->shipfromID)) {
 				$data['SHIPID'] = $input->post->text('shipfromID');
 			}
+			$session->loc = $config->pages->vendorinfo. "$vendorID/";
+			break;
+		case 'vi-purchase-orders':
+			$data = array('DBNAME' => $config->dbName, 'VIPURCHORDR' => false, 'VENDID' => $vendorID);
+			if (!empty($input->post->shipfromID)) {
+				$data['SHIPID'] = $input->post->text('shipfromID');
+			}
+			$session->loc = $config->pages->vendorinfo. "$vendorID/";
+			break;
+		case 'vi-contact':
+			$data = array('DBNAME' => $config->dbName, 'VICONTACT' => false, 'VENDID' => $vendorID);
+			if (!empty($input->post->shipfromID)) {
+				$data['SHIPID'] = $input->post->text('shipfromID');
+			}
+			$session->loc = $config->pages->vendorinfo. "$vendorID/";
+			break;
+		case 'vi-notes':
+			$data = array('DBNAME' => $config->dbName, 'VINOTES' => false, 'VENDID' => $vendorID);
+			if (!empty($input->post->shipfromID)) {
+				$data['SHIPID'] = $input->post->text('shipfromID');
+			}
+			$session->loc = $config->pages->vendorinfo. "$vendorID/";
+			break;
+		case 'vi-costing':
+			$itemID = $input->get->text('itemID');
+			$data = array('DBNAME' => $config->dbName, 'VICOST' => false, 'VENDID' => $vendorID, 'ITEMID' => $itemID);
+			$session->loc = $config->pages->index;
+			break;
+		case 'vi-unreleased-purchase-orders':
+			$data = array('DBNAME' => $config->dbName, 'VIUNRELEASED' => false, 'VENDID' => $vendorID);
+			if (!empty($input->post->shipfromID)) {
+				$data['SHIPID'] = $input->post->text('shipfromID');
+			}
+			$session->loc = $config->pages->vendorinfo. "$vendorID/";
+			break;
+		case 'vi-uninvoiced':
+			$data = array('DBNAME' => $config->dbName, 'VIUNINVOICED' => false, 'VENDID' => $vendorID);
+			$session->loc = $config->pages->vendorinfo. "$vendorID/";
+			break;
+		case 'vi-24monthsummary':
+			$data = array('DBNAME' => $config->dbName, 'VIMONTHSUM' => false, 'VENDID' => $vendorID);
+			if (!empty($input->post->shipfromID)) {
+				$data['SHIPID'] = $input->post->text('shipfromID');
+			}
+			$session->loc = $config->pages->vendorinfo. "$vendorID/";
+			break;
+		case 'vi-docview':
+			$data = array('DBNAME' => $config->dbName, 'VIDOCVIEW' => false, 'VENDID' => $vendorID);
 			$session->loc = $config->pages->vendorinfo. "$vendorID/";
 			break;
 	}

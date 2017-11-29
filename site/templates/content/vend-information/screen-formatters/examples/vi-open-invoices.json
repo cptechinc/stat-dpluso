@@ -1,0 +1,16 @@
+{
+    "detail": {
+        "Purchase Order Number": "ABFG567",
+        "Invoice Number": "123456",
+        "Status": "Active",
+        "Invoice Date": "10/30/2017",
+        "Discount Date": "10/30/2017",
+        "Due Date": "11/01/2017",
+        "Amount - Total": "1000.00",
+        "Amount - Discount": "100.00",
+        "Amount - Current": "900.00",
+        "Amount - Aging 1": "10.00",
+        "Amount - Aging 2": "15.00",
+        "Amount - Aging 3": "20.00"
+    }
+}

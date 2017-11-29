@@ -541,7 +541,7 @@ $(document).ready(function() {
 			e.preventDefault();
 			var button = $(this);
 			var doc = button.data('doc');
-			var href = config.urls.json.ii_moveitemdoc + "?docnumber="+doc;
+			var href = config.urls.products.ii.json.ii_moveitemdoc + "?docnumber="+doc;
 
 			$.getJSON(href, function(json) {
 				if (!json.response.error) {

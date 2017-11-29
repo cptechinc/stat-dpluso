@@ -45,6 +45,9 @@
                         'ci_salesorders' => $config->pages->ajaxload."ci/ci-sales-orders/",
                         'ci_saleshistory' => $config->pages->ajaxload."ci/ci-sales-history/",
                         'ci_custpo' => $config->pages->ajaxload."ci/ci-custpo/"
+                    ],
+                    'json' => [
+                        'ci_shiptolist' => $config->pages->ajaxjson."ci/ci-shipto-list/"
                     ]
                 ],
     			'redir' => [
@@ -73,6 +76,39 @@
     		'products' => [
     			'page' => $config->pages->products,
     			'iteminfo' => $config->pages->iteminfo,
+                'ii' => [
+                    'page' => $config->pages->iteminfo,
+                    'load' => [
+                        'ii_productresults' => $config->pages->ajaxload."ii/search-results/",
+            			'ii_select' => "", // NOT USED
+            			'ii_pricing' => $config->pages->ajaxload."ii/ii-pricing/",
+                        'ii_costing' => $config->pages->ajaxload."ii/ii-costing/",
+                        'ii_purchaseorder' => $config->pages->ajaxload."ii/ii-purchase-order/",
+            			'ii_quotes' => $config->pages->ajaxload."ii/ii-quotes/",
+            			'ii_purchasehistory' => $config->pages->ajaxload."ii/ii-purchase-history/",
+            			'ii_whereused' => $config->pages->ajaxload."ii/ii-where-used/",
+                        'ii_kitcomponents' => $config->pages->ajaxload."ii/ii-kit-components/",
+            			'ii_bom' => $config->pages->ajaxload."ii/ii-bom/",
+            			'ii_general' => $config->pages->ajaxload."ii/ii-general/",
+            			'ii_usage' => $config->pages->ajaxload."ii-usage/", //NOT USED part of ii_general
+            			'ii_notes' => $config->pages->ajaxload."ii-notes/", //NOT USED part of ii_general
+            			'ii_misc' => $config->pages->ajaxload."ii-misc/", //NOT USED part of ii_general
+            			'ii_activity' => $config->pages->ajaxload."ii/ii-activity/",
+            			'ii_activityform' => $config->pages->ajaxload."ii/ii-activity/form/",
+            			'ii_requirements' => $config->pages->ajaxload."ii/ii-requirements/",
+            			'ii_lotserial' => $config->pages->ajaxload."ii/ii-lot-serial/",
+            			'ii_salesorder' => $config->pages->ajaxload."ii/ii-sales-orders/",
+            			'ii_saleshistory' => $config->pages->ajaxload."ii/ii-sales-history/",
+            			'ii_saleshistoryform' => $config->pages->ajaxload."ii/ii-sales-history/form/", // NOT USED
+            			'ii_stock' => $config->pages->ajaxload."ii/ii-stock/",
+            			'ii_substitutes' => $config->pages->ajaxload."ii/ii-substitutes/",
+            			'ii_documents' => $config->pages->ajaxload."ii/ii-documents/",
+                        'ii_order_documents' => $config->pages->ajaxload."ii/ii-documents/order/"
+                    ],
+                    'json' => [
+                        'ii_moveitemdoc' => $config->pages->ajaxjson."ii/ii-move-document/",
+                    ]
+                ],
     			'redir' => [
     				'getitempricing' => $config->pages->products."redir/?action=get-item-price",
     				'ii_select' => $config->pages->products."redir/?action=ii-select",
@@ -110,8 +146,6 @@
     			'getorderdetails' => $config->pages->ajaxjson."order/details/",
     			'getquotehead' => $config->pages->ajaxjson."quote/quotehead/",
                 'getquotedetails' => $config->pages->ajaxjson."quote/details/",
-    			'ii_moveitemdoc' => $config->pages->ajaxjson."ii/ii-move-document/",
-    			'ci_shiptolist' => $config->pages->ajaxjson."ci/ci-shipto-list/",
                 'vendorshipfrom' => $config->pages->ajaxjson."vendor-shipfrom/",
                 'validateitemid' => $config->pages->ajaxjson."products/validate-itemid/",
                 'validateitems' => $config->pages->ajaxjson."products/validate-items/"
@@ -119,31 +153,6 @@
     		'load' => [
     			'productresults' => $config->pages->ajaxload."products/item-search-results/",
     			'editdetail' => $config->pages->ajaxload."edit-detail/", //DEPRECATED
-                'ii_productresults' => $config->pages->ajaxload."ii/search-results/",
-    			'ii_select' => "", // NOT USED
-    			'ii_pricing' => $config->pages->ajaxload."ii/ii-pricing/",
-                'ii_costing' => $config->pages->ajaxload."ii/ii-costing/",
-                'ii_purchaseorder' => $config->pages->ajaxload."ii/ii-purchase-order/",
-    			'ii_quotes' => $config->pages->ajaxload."ii/ii-quotes/",
-    			'ii_purchasehistory' => $config->pages->ajaxload."ii/ii-purchase-history/",
-    			'ii_whereused' => $config->pages->ajaxload."ii/ii-where-used/",
-                'ii_kitcomponents' => $config->pages->ajaxload."ii/ii-kit-components/",
-    			'ii_bom' => $config->pages->ajaxload."ii/ii-bom/",
-    			'ii_general' => $config->pages->ajaxload."ii/ii-general/",
-    			'ii_usage' => $config->pages->ajaxload."ii-usage/", //NOT USED part of ii_general
-    			'ii_notes' => $config->pages->ajaxload."ii-notes/", //NOT USED part of ii_general
-    			'ii_misc' => $config->pages->ajaxload."ii-misc/", //NOT USED part of ii_general
-    			'ii_activity' => $config->pages->ajaxload."ii/ii-activity/",
-    			'ii_activityform' => $config->pages->ajaxload."ii/ii-activity/form/",
-    			'ii_requirements' => $config->pages->ajaxload."ii/ii-requirements/",
-    			'ii_lotserial' => $config->pages->ajaxload."ii/ii-lot-serial/",
-    			'ii_salesorder' => $config->pages->ajaxload."ii/ii-sales-orders/",
-    			'ii_saleshistory' => $config->pages->ajaxload."ii/ii-sales-history/",
-    			'ii_saleshistoryform' => $config->pages->ajaxload."ii/ii-sales-history/form/", // NOT USED
-    			'ii_stock' => $config->pages->ajaxload."ii/ii-stock/",
-    			'ii_substitutes' => $config->pages->ajaxload."ii/ii-substitutes/",
-    			'ii_documents' => $config->pages->ajaxload."ii/ii-documents/",
-                'ii_order_documents' => $config->pages->ajaxload."ii/ii-documents/order/",
     		],
             'vendor' => [
                 'redir' => [

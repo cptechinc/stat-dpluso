@@ -2,11 +2,8 @@
     if ($input->get->q) {
         $custresults = search_custindexpaged($user->loginid, $config->showonpage, $input->pageNum, $user->hascontactrestrictions, $input->get->text('q'),  false);
         $resultscount = count_searchcustindex($user->loginid, $user->hascontactrestrictions, $input->get->text('q'), false);
-
     }
-
 ?>
-
 
 <div id="cust-results">
     <?php if ($input->get->q) : ?>

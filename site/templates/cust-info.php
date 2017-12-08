@@ -37,11 +37,12 @@
 				$nextshipid = false;
 			}
 		}
-
-		$config->scripts->append(hashtemplatefile('scripts/ci/cust-functions.js'));
-		$config->scripts->append(hashtemplatefile('scripts/ci/cust-info.js'));
         $config->scripts->append(hashtemplatefile('scripts/libs/raphael.js'));
         $config->scripts->append(hashtemplatefile('scripts/libs/morris.js'));
+        
+		$config->scripts->append(hashtemplatefile('scripts/ci/cust-functions.js'));
+		$config->scripts->append(hashtemplatefile('scripts/ci/cust-info.js'));
+        $config->scripts->append(hashtemplatefile('scripts/pages/customer-page.js'));
     } else {
 		$toolbar = false;
 	}
@@ -56,7 +57,7 @@
         <?php
 			if ($input->urlSegment(1)) {
 				if ($input->urlSegment(2)) {
-					include $config->paths->content."cust-information/shipto-info-outline.php";
+					include $config->paths->content."cust-information/cust-info-outline.php";
 				} else {
 					include $config->paths->content."cust-information/cust-info-outline.php";
 				}

@@ -14,7 +14,7 @@
                         break;
                 }
             } else {
-                echo '<div id="vend-results"></div>';
+                include $config->paths->content."vendor/ajax/load/vend-index/vend-search-table.php";
             }
         ?>
     </div>

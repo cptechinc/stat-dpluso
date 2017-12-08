@@ -36,7 +36,9 @@
 			<td><input type="text" class="form-control input-sm qty-sm column" name="<?= $name."-column";?>" value="<?= $formatter[$table][$columnindex][$column]['column']; ?>"></td>
 			<td><input type="text" class="form-control input-sm qty-sm column-length" name="<?= $name."-length";?>" value="<?= $formatter[$table][$columnindex][$column]['col-length']; ?>"></td>
 			<td><input type="text" class="form-control input-sm col-label" name="<?= $name."-label";?>" value="<?= $formatter[$table][$columnindex][$column]['label']; ?>"></td>
-			<td class="hidden"><input type="hidden" class="example-data" value="<?= $examplejson[$table][$column]; ?>"></td>
+			<!-- <td class="hidden"><input type="hidden" class="example-data" value="<?= $examplejson[$table][$column]; ?>"></td> -->
+			<!-- since the original json code was written before a formatter was in mind, the $table is getting an undefined index for header and will not output teh II outline examplejson -->
+			<td class="hidden"><input type="hidden" class="example-data" value="<?= $examplejson['detail'][$column]; ?>"></td>
 		</tr>
 	<?php endforeach; ?>
 </table>

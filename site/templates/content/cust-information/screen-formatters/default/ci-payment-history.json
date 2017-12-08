@@ -51,19 +51,19 @@
             "Payment Amount": {
                "line": 0,
                 "column": 0,
-    			"col-length": 0,
+    			"col-length": 1,
     			"label": "Payment Amount",
-                "before-decimal": false,
-                "after-decimal": false,
+                "before-decimal": 7,
+                "after-decimal": 4,
                 "date-format": false
             },
             "Discount Amount": {
                "line": 0,
                 "column": 0,
-    			"col-length": 0,
+    			"col-length": 1,
     			"label": "Discount Amount",
-                "before-decimal": false,
-                "after-decimal": false,
+                "before-decimal": 7,
+                "after-decimal": 4,
                 "date-format": false
             },
             "Total Amount": {
@@ -102,11 +102,29 @@
                 "after-decimal": false,
                 "date-format": false
             },
-            "Terms Code": {
+			"Terms Code": {
                 "line": 1,
                 "column": 9,
     			"col-length": 1,
     			"label": "Trms",
+                "before-decimal": false,
+                "after-decimal": false,
+                "date-format": false
+            },
+			"Write-Off Amount": {
+                "line": 0,
+                "column": 0,
+    			"col-length": 1,
+    			"label": "WrtOffAmt",
+                "before-decimal": 7,
+                "after-decimal": 4,
+                "date-format": false
+            },
+			"Write-Off Reason Code": {
+                "line": 0,
+                "column": 0,
+    			"col-length": 1,
+    			"label": "WrtOffRsnCode",
                 "before-decimal": false,
                 "after-decimal": false,
                 "date-format": false

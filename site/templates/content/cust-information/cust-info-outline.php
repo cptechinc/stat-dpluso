@@ -1,3 +1,7 @@
+<?php 
+	$shiptofile = $config->jsonfilepath.session_id()."-cishiptoinfo.json";
+?>
+
 <div class="row">
 	<div class="col-xs-12">
 		<div class="row">
@@ -23,7 +27,79 @@
 					<?php endforeach; ?>
 				</table>
 			</div>
-			<div class="col-sm-6"></div>
+			<div class="col-sm-6">
+				<?php if ($input->urlSegment(2)) : ?>
+					<?php if (file_exists($shiptofile)) : ?>
+						<?php $shiptojson = json_decode(file_get_contents($shiptofile), true);  ?>
+						<?php if (!$shiptojson) { $shiptojson = array('error' => true, 'errormsg' => 'The Customer Shipto Single JSON contains errors');} ?>
+						<?php if ($shiptojson['error']) : ?>
+							<div class="alert alert-warning" role="alert"><?php echo $shiptojson['errormsg']; ?></div>
+						<?php else : ?>
+							<table class="table table-striped table-bordered table-condensed table-excel">
+								<?php $topcolumns = array_keys($shiptojson['columns']['top']); ?>
+								<tbody>
+									<?php foreach ($topcolumns as $column) : ?>
+										<?php if ($shiptojson['columns']['top'][$column]['heading'] == '' && $shiptojson['data']['top'][$column] == '') : ?>
+										<?php else : ?>
+											<?php if ($column == 'shiptoid') : ?>
+												<tr>
+													<td> <?= $shiptojson['columns']['top'][$column]['heading']; ?></td>
+													<td>
+														<select name="shipTo" class="form-control input-sm" onChange="refreshshipto(this.value,'<?php echo $custID; ?>')">
+											            	<option value=" " <?php if ($shipID == '') { echo 'selected'; } ?>>Company Totals</option>
+											               	<?php $shiptos = get_customershiptos($custID, $user->loginid, $user->hascontactrestrictions, false); ?>
+											                <?php foreach ($shiptos as $shipto) : ?>
+																<?php $address = $shipto['addr1'] . ' ' .$shipto['addr2']; $whole_address = $address.', '.$shipto['ccity'].', '.$shipto['cst']; ?>
+																<?php $show = $shipto['name'].' - '.$shipto['ccity'].', '.$shipto['cst']; ?>
+												            		<option value="<?= $shipto['shiptoid']; ?>" <?php if ($shipto['shiptoid'] == $shipID) { echo 'selected'; } ?>><?= $show; ?> </option>
+											            	<?php endforeach; ?>
+											            </select>
+													</td>
+												</tr>
+											<?php else : ?>
+												<tr>
+													<td> <?= $shiptojson['columns']['top'][$column]['heading']; ?></td> <td> <?= $shiptojson['data']['top'][$column]; ?></td>
+												</tr>
+											<?php endif; ?>
+										<?php endif; ?>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						<?php endif; ?>
+					<?php else : ?>
+						<div class="alert alert-warning" role="alert">Information Not Available</div>
+					<?php endif; ?>
+					<a href="<?= $config->pages->custinfo.$custID.'/'; ?>" class="btn btn-primary">Clear Shipto</a>
+					<div class="form-group"></div>
+				<?php else : ?>
+					<table class="table table-striped table-bordered table-condensed table-excel">
+						<?php $topcolumns = array_keys($custjson['columns']['top']); ?>
+						<?php foreach ($topcolumns as $column) : ?>
+							<?php if ($custjson['columns']['top'][$column]['heading'] == '' && $custjson['data']['top'][$column] == '') : ?>
+							<?php else : ?>
+								<tr>
+									<td> <?= $custjson['columns']['top'][$column]['heading']; ?></td>
+									<td>
+										<?php if ($column == 'customerid') : ?>
+											<select name="shipTo" class="form-control input-sm" onChange="refreshshipto(this.value,'<?php echo $custID; ?>')">
+												<option value=" " <?php if ($shipID == '') { echo 'selected'; } ?>>Company Totals</option>
+												<?php $shiptos = get_customershiptos($custID, $user->loginid, $user->hascontactrestrictions, false); ?>
+												<?php foreach ($shiptos as $shipto) : ?>
+												<?php $address = $shipto['addr1'] . ' ' .$shipto['addr2']; $whole_address = $address.', '.$shipto['ccity'].', '.$shipto['cst']; ?>
+												<?php $show = $shipto['name'].' - '.$shipto['ccity'].', '.$shipto['cst']; ?>
+													<option value="<?= $shipto['shiptoid']; ?>" <?php if ($shipto['shiptoid'] == $shipID) { echo 'selected'; } ?>><?= $show; ?> </option>
+												<?php endforeach; ?>
+											</select>
+										<?php else : ?>
+											<?php echo $custjson['data']['top'][$column]; ?>
+										<?php endif; ?>
+									</td>
+								</tr>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</table>
+				<?php endif; ?>
+			</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-6">

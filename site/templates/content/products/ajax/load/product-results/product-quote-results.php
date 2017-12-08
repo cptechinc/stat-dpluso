@@ -61,7 +61,7 @@
 					<tr>
 						<td colspan="2" class="text-center">
 							<button type="submit" class="btn btn-primary btn-sm">
-								<i class="material-icons">&#xE854;</i>Add to <?= ucfirst($addtype); ?>
+								<span class="glyphicon glyphicon-plus"></span> Add Item
 							</button>
 						</td>
 					</tr>

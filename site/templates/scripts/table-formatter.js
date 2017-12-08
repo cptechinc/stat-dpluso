@@ -3,7 +3,7 @@ if (tabletype == 'sales-order') {
 	tablejson = {maxcolumns:0, detail: {rowcount: 0, rows: []}};
 } else if (tabletype == 'sales-history') {
 	tablejson = {maxcolumns:0, detail: {rowcount: 0, rows: []}, lotserial: {rowcount: 0, rows: []}};
-} else if (tabletype == 'purchase-order' ||tabletype == 'purchase-orders') {
+} else if (tabletype == 'purchase-order') {
 	tablejson = {maxcolumns:0, detail: {rowcount: 0, rows: []}};
 } else if (tabletype == 'purchase-history') {
 	tablejson = {maxcolumns:0, detail: {rowcount: 0, rows: []}, lotserial: {rowcount: 0, rows: []}};
@@ -17,6 +17,8 @@ if (tabletype == 'sales-order') {
 	tablejson = {maxcolumns:0, header: {rowcount: 0, rows: []}, detail: {rowcount: 0, rows: []}, itemstatus: {rowcount: 0, rows: []}, purchaseorder: {rowcount: 0, rows: []}, total: {rowcount: 0, rows: []}, shipments: {rowcount: 0, rows: []} };
 } else if (tabletype == 'sales-history') {
 	tablejson = {maxcolumns:0, header: {rowcount: 0, rows: []}, detail: {rowcount: 0, rows: []}, lotserial: {rowcount: 0, rows: []}, total: {rowcount: 0, rows: []}, shipments: {rowcount: 0, rows: []} };
+} else if (tabletype == 'outline') {
+	tablejson = {maxcolumns:0, header: {rowcount: 0, rows: []}, detail: {rowcount: 0, rows: []}};
 }
 
 
@@ -116,6 +118,11 @@ function drawformattable(json) {
 	tabledata += drawrowheadings(json.detail);
 	tabledata += drawtbody(json.detail);
 
+	if (tablejson.header) {
+		tabledata += drawrowheadings(json.header);
+		tabledata += drawtbody(json.header);
+	}
+	
 	if (tablejson.lotserial) {
 		tabledata += drawrowheadings(json.lotserial);
 		tabledata += drawtbody(json.lotserial);
@@ -159,7 +166,7 @@ function countrows(form) {
 		form.find('.header-line').each(function(index) {
 			if ($(this).val() !== '' && $(this).val() !== '0') {
 				var row = $(this).closest('tr');
-				row.addClass('lotserial-line-'+$(this).val()).addClass('not-empty');
+				row.addClass('header-line-'+$(this).val()).addClass('not-empty');
 				if (parseInt($(this).val()) > tablejson.header.rowcount) { tablejson.header.rowcount = parseInt($(this).val()); }
 			}
 		});

@@ -35,9 +35,18 @@ $(function() {
 
 
 function refreshshipto(shipID, custID) {
+	var href = new URI();
+	href.segment(-1, ""); // GETS RID OF LAST SLASH
+	var lastsegment = href.segment(-1);
+	
+	if (lastsegment.indexOf('shipto') !== -1) {
+		href.segment(-1, "");
+	} 
+	
 	if (shipID.trim() != '') {
-		location.href = config.urls.customer.page+custID+'/shipto-'+shipID+'/';
-	} else {
-		location.href = config.urls.customer.page+custID+'/';
-	}
+		href.segment('shipto-'+shipID);
+	} 
+	href.segment('');
+	var location = href.toString();
+	window.location.href = location;
 }

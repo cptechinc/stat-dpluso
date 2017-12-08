@@ -18,7 +18,7 @@
 				<li> <a href="<?php echo $config->pages->dashboard; ?>"><i class="glyphicon glyphicon-blackboard"></i> Dashboard</a> </li>
 				<li> <a href="<?php echo $config->pages->account; ?>"><i class="material-icons">&#xE851;</i> Account</a> </li>
 				<li> <a href="<?php echo $config->pages->iteminfo; ?>"><i class="material-icons">&#xE051;</i> Item Info</a> </li>
-				<li> <a href="<?php echo $config->pages->cart; ?>"> <i class="glyphicon glyphicon-shopping-cart"></i> Cart (<?php //echo get_cart_count(session_id()); ?>)</a> </li>
+				<li> <a href="<?php echo $config->pages->cart; ?>"> <i class="glyphicon glyphicon-list-alt"></i> Quote (<?php //echo get_cart_count(session_id()); ?>)</a> </li>
 				<li class="divider"></li>
 				<li class="dropdown-header">Categories</li>
 				<?php if ($user->loggedin) : ?>

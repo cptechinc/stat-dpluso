@@ -17,7 +17,7 @@
                         break;
                 }
             } else {
-                echo '<div id="cust-results"></div>';
+                include $config->paths->content."customer/ajax/load/cust-index/cust-search-table.php";
             }
         ?>
     </div>

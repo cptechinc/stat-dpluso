@@ -18,6 +18,9 @@
 		case 'ii-quotes-formatter':
 			include $config->paths->content . 'ajax/json/ii/ii-qt-formatter.php';
 			break;
+		case 'ii-outline-formatter':
+			include $config->paths->content . 'ajax/json/ii/ii-ol-formatter.php';
+			break;
 
 	}
 

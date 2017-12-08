@@ -16,7 +16,7 @@
 				<li> <a href="<?= $config->pages->index; ?>"><i class="glyphicon glyphicon-home"></i> Home</a> </li>
 				<li> <a href="<?= $config->pages->customer; ?>"><i class="fa fa-address-book" aria-hidden="true"></i> Customers</a> </li>
 				<li> <a href="<?= $config->pages->dashboard; ?>"><i class="glyphicon glyphicon-blackboard"></i> Dashboard</a>
-				<li> <a href="<?= $config->pages->cart; ?>"> <i class="glyphicon glyphicon-shopping-cart"></i> Cart (<?php //echo get_cart_count(session_id()); ?>)</a> </li> </li>
+				<li> <a href="<?= $config->pages->cart; ?>"> <i class="glyphicon glyphicon-list-alt"></i> Quote (<?php //echo get_cart_count(session_id()); ?>)</a> </li> </li>
 				<li> <a href="<?= $config->pages->user; ?>"><i class="fa fa-user-circle" aria-hidden="true"></i> User</a> </li>
 				<li class="divider"></li>
 				<li class="dropdown-header">Info Screens</li>

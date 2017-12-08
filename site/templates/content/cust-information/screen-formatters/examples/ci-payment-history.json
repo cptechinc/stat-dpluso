@@ -9,8 +9,10 @@
 		"Discount Amount": "",
 		"Total Amount": "0.00",
 		"Check Number": "0801243",
-		"Payment Days": "",
-		"Overdue Days": "",
+		"Payment Days": "30",
+		"Overdue Days": "15",
+		"Terms Code": "10",
+		"Terms Code": "10",
 		"Terms Code": "10"
     }
 }

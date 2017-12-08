@@ -21,6 +21,10 @@
 				$page->title = "Item Info - Quote Format";
 				$include = $config->paths->content."item-information/screen-formatters/ii-quotes-formatter.php";
 				break;
+			case 'ii-outline-formatter':
+				$page->title = "Item Info Format";
+				$include = $config->paths->content."item-information/screen-formatters/ii-outline-formatter.php";
+				break;
 			case 'ci-open-invoices-formatter':
 				$page->title = "Cust Info - Open Invoices Format";
 				$include = $config->paths->content."cust-information/screen-formatters/ci-open-invoices-formatter.php";
@@ -66,6 +70,7 @@
 			'II Purchase Order' => 'ii-purchase-order-formatter',
 			'II Purchase History' => 'ii-purchase-history-formatter',
 			'II Quotes' => 'ii-quotes-formatter',
+			'II Outline' => 'ii-outline-formatter',
 			'CI Open Invoices' => 'ci-open-invoices-formatter',
 			'CI Payment History' => 'ci-payment-history-formatter',
 			'CI Quotes' => 'ci-quotes-formatter',

@@ -9,8 +9,7 @@
  * You can initialize anything you want to here. In the case of this beginner profile,
  * we are using it just to include another file with shared functions.
  *
- */	$appconfig = $pages->get('/config/');
-
+ */	
 	include_once("./_func.php"); // include our shared functions
 	include_once("./_dbfunc.php");
 	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/src/utfport.php"); // UTF8 conversion library functions

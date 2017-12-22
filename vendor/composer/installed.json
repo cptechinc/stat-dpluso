@@ -1,54 +1,5 @@
 [
     {
-        "name": "eoghanobrien/php-simple-mail",
-        "version": "1.7.0",
-        "version_normalized": "1.7.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/eoghanobrien/php-simple-mail.git",
-            "reference": "0fd0eb6f4766aee69cf991484e61b2b832fa6614"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/eoghanobrien/php-simple-mail/zipball/0fd0eb6f4766aee69cf991484e61b2b832fa6614",
-            "reference": "0fd0eb6f4766aee69cf991484e61b2b832fa6614",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8",
-            "squizlabs/php_codesniffer": "~2.8"
-        },
-        "time": "2017-02-17T07:32:04+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "class.simple_mail.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Eoghan O'Brien",
-                "email": "eoghan@eoghanobrien.com",
-                "homepage": "http://www.eoghanobrien.com",
-                "role": "Developer"
-            }
-        ],
-        "description": "Provides a simple, chainable wrapper for creating and sending emails using the PHP mail() function.",
-        "homepage": "https://github.com/eoghanobrien/php-simple-mail",
-        "keywords": [
-            "email",
-            "php5"
-        ]
-    },
-    {
         "name": "jeremykendall/php-domain-parser",
         "version": "1.3.1",
         "version_normalized": "1.3.1.0",
@@ -139,42 +90,111 @@
         ]
     },
     {
-        "name": "cptechinc/dpluso-processwire-classes",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "name": "atk4/core",
+        "version": "1.3.4",
+        "version_normalized": "1.3.4.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/cptechinc/dpluso-processwire-classes.git",
-            "reference": "0560aa0132000bad4590b92d1386e857e59dee22"
+            "url": "https://github.com/atk4/core.git",
+            "reference": "db5e20747cd0df9c71d0cf5969941f2dc21f7d6f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cptechinc/dpluso-processwire-classes/zipball/0560aa0132000bad4590b92d1386e857e59dee22",
-            "reference": "0560aa0132000bad4590b92d1386e857e59dee22",
+            "url": "https://api.github.com/repos/atk4/core/zipball/db5e20747cd0df9c71d0cf5969941f2dc21f7d6f",
+            "reference": "db5e20747cd0df9c71d0cf5969941f2dc21f7d6f",
             "shasum": ""
         },
-        "time": "2017-10-09T18:46:05+00:00",
+        "require": {
+            "php": ">=5.5.0"
+        },
+        "require-dev": {
+            "codeclimate/php-test-reporter": "*",
+            "phpunit/phpunit": "~4.0",
+            "psr/log": "~1.0",
+            "satooshi/php-coveralls": "^1.0"
+        },
+        "time": "2017-12-03T12:41:35+00:00",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
-            "classmap": [
-                "src/Contact.class.php",
-                "src/DplusDateTime.class.php",
-                "src/Table.class.php",
-                "src/UserAction.class.php",
-                "src/UserActionPanel.class.php",
-                "src/Contento.class.php",
-                "src/SalesOrder.class.php",
-                "src/SalesOrderPanel.class.php",
-                "src/TablePageSorter.class.php",
-                "src/Paginator.class.php"
-            ]
+            "psr-4": {
+                "atk4\\core\\": "src/"
+            }
         },
         "notification-url": "https://packagist.org/downloads/",
-        "description": "URL Manipulation for PHP 5.3",
-        "homepage": "http://github.com/cptechinc/dpluso-processwire-classes",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Romans Malinovskis",
+                "email": "romans@agiletoolkit.org",
+                "homepage": "https://nearly.guru/"
+            }
+        ],
+        "description": "Agile Core - collection of PHP Traits for designing object-oriented frameworks",
+        "homepage": "https://github.com/atk4/core",
         "keywords": [
-            "crm"
+            "Agile Toolkit",
+            "framework",
+            "php",
+            "trains"
+        ]
+    },
+    {
+        "name": "atk4/dsql",
+        "version": "1.1.5",
+        "version_normalized": "1.1.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/atk4/dsql.git",
+            "reference": "20e1c4ab4e94a0bdf5bc72cbb281a5b1d3443716"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/atk4/dsql/zipball/20e1c4ab4e94a0bdf5bc72cbb281a5b1d3443716",
+            "reference": "20e1c4ab4e94a0bdf5bc72cbb281a5b1d3443716",
+            "shasum": ""
+        },
+        "require": {
+            "atk4/core": "^1.3",
+            "php": ">=5.6.0"
+        },
+        "require-dev": {
+            "codeclimate/php-test-reporter": "*",
+            "phpunit/dbunit": ">=1.2",
+            "phpunit/phpcov": "*",
+            "phpunit/phpunit": "<6"
+        },
+        "suggest": {
+            "jdorn/sql-formatter": "*"
+        },
+        "time": "2017-09-12T11:29:31+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "atk4\\dsql\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Romans Malinovskis",
+                "email": "romans@agiletoolkit.org",
+                "homepage": "https://nearly.guru/"
+            }
+        ],
+        "description": "Dynamic SQL Builder in PHP",
+        "homepage": "http://agiletoolkit.org/",
+        "keywords": [
+            "builder",
+            "framework",
+            "orm",
+            "sql"
         ]
     }
 ]

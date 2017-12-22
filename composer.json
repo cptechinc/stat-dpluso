@@ -18,9 +18,8 @@
     "require": {
         "php": ">=5.3.8",
         "ext-gd": "*",
-        "eoghanobrien/php-simple-mail": "^1.7",
-        "jwage/purl": "dev-cptechinc",
-        "cptechinc/dpluso-processwire-classes": ">=1.0"
+        "atk4/dsql": "^1.1",
+        "jwage/purl": "dev-cptechinc"
     },
     "autoload": {
         "files": ["wire/core/ProcessWire.php"]

@@ -2,6 +2,7 @@
     $config->scripts->append(hashtemplatefile('scripts/libs/datatables.js'));
     $config->scripts->append(hashtemplatefile('scripts/pages/dashboard.js'));
     $config->scripts->append(hashtemplatefile('scripts/dplusnotes/order-notes.js'));
+    $page->useractionpanelfactory = new UserActionPanelFactory($user->loginid, $page->fullURL);
 ?>
 <?php include('./_head.php'); // include header markup ?>
     <div class="jumbotron pagetitle">

@@ -17,4 +17,28 @@ $(function() {
             $('.select-item').prop('checked', false).change();
         }
     });
+    
+    $("body").on("submit", "#select-items-form", function(e) {
+        e.preventDefault();
+        var form = $(this);
+        if ($('.quote-details').find('.item-not-selected').length == $('.quote-details').find('.detail').length) {
+            swal({
+                title: 'Error!',
+                text: 'No items are selected to send to order',
+                type: 'error',
+                animation: false,
+                customClass: 'animated tada'
+            });
+        } else {
+            form.postform({}, function() { 
+                generateurl(function(url) { 
+                    window.location.href = url;
+                });
+            })
+        }
+    });
 });
+
+function validate_selection() {
+    var form = $("#select-items-form");
+}

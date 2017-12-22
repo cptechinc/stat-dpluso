@@ -11,6 +11,13 @@
 		} else {
 			echo "<div class='row'>";
 				echo "<div class='col-md-6'>";
+					if (!empty($custID)) {
+						$href = new \Purl\Url($page->fullURL->getUrl());
+						$href->query->remove('custID');
+						$href = $href->getUrl();
+						$link = $page->bootstrap->openandclose('a', "href=$href|class=btn btn-warning", "Remove Customer");
+						echo $page->bootstrap->h3('', "Pricing for $custID $link");
+					}
 					$tb = new Table("class=table table-striped table-bordered table-condensed table-excel");
 					foreach($pricingjson['columns'] as $column => $name)  {
 						$tb->tr();

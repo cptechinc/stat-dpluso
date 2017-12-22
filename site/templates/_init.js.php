@@ -55,7 +55,7 @@
     				'ci_buttons' => $config->pages->customer."redir/?action=ci-buttons",
     				'ci_shiptos' => $config->pages->customer."redir/?action=ci-shiptos",
     				'ci_shiptoinfo' => $config->pages->customer."redir/?action=ci-shipto-info",
-                    'ci_pricing '=> $config->pages->customer."redir/?action=ci-pricing",
+                    'ci_pricing' => $config->pages->customer."redir/?action=ci-pricing",
     				'ci_shiptobuttons' => $config->pages->customer."redir/?action=ci-shipto-buttons",
     				'ci_contacts' => $config->pages->customer."redir/?action=ci-contacts",
     				'ci_documents' => $config->pages->customer."redir/?action=ci-documents",
@@ -83,11 +83,11 @@
             			'ii_select' => "", // NOT USED
             			'ii_pricing' => $config->pages->ajaxload."ii/ii-pricing/",
                         'ii_costing' => $config->pages->ajaxload."ii/ii-costing/",
-                        'ii_purchaseorder' => $config->pages->ajaxload."ii/ii-purchase-order/",
+                        'ii_purchaseorders' => $config->pages->ajaxload."ii/ii-purchase-orders/",
             			'ii_quotes' => $config->pages->ajaxload."ii/ii-quotes/",
             			'ii_purchasehistory' => $config->pages->ajaxload."ii/ii-purchase-history/",
             			'ii_whereused' => $config->pages->ajaxload."ii/ii-where-used/",
-                        'ii_kitcomponents' => $config->pages->ajaxload."ii/ii-kit-components/",
+                        'ii_kit' => $config->pages->ajaxload."ii/ii-kit/",
             			'ii_bom' => $config->pages->ajaxload."ii/ii-bom/",
             			'ii_general' => $config->pages->ajaxload."ii/ii-general/",
             			'ii_usage' => $config->pages->ajaxload."ii-usage/", //NOT USED part of ii_general
@@ -114,11 +114,11 @@
     				'ii_select' => $config->pages->products."redir/?action=ii-select",
     				'ii_pricing' => $config->pages->products."redir/?action=ii-pricing",
                     'ii_costing' => $config->pages->products."redir/?action=ii-costing",
-                    'ii_purchaseorder' => $config->pages->products."redir/?action=ii-purchase-order",
+                    'ii_purchaseorders' => $config->pages->products."redir/?action=ii-purchase-order",
     				'ii_quotes' => $config->pages->products."redir/?action=ii-quotes",
     				'ii_purchasehistory' => $config->pages->products."redir/?action=ii-purchase-history",
     				'ii_whereused' => $config->pages->products."redir/?action=ii-where-used",
-                    'ii_kitcomponents' => $config->pages->products."redir/?action=ii-kit-components",
+                    'ii_kit' => $config->pages->products."redir/?action=ii-kit",
     				'ii_bom' => $config->pages->products."redir/?action=ii-bom",
     				'ii_general' => "", //NOT USED THE MISC, NOTES, AND, USAGE
     				'ii_usage' => $config->pages->products."redir/?action=ii-usage",
@@ -128,7 +128,7 @@
     				'ii_activityform' => "", //NOT USED, ACTIVITY FORM USES POSTFORM
     				'ii_requirements' => $config->pages->products."redir/?action=ii-requirements",
     				'ii_lotserial' => $config->pages->products."redir/?action=ii-lot-serial",
-    				'ii_salesorder' => $config->pages->products."redir/?action=ii-sales-order",
+    				'ii_salesorder' => $config->pages->products."redir/?action=ii-sales-orders",
     				'ii_saleshistoryform' => "", // NOT USED
     				'ii_stock' => $config->pages->products."redir/?action=ii-stock",
     				'ii_substitutes' => $config->pages->products."redir/?action=ii-substitutes",

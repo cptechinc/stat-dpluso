@@ -1,4 +1,5 @@
 <?php
+	use atk4\dsql\Query;
 /* =============================================================
 	LOGIN FUNCTIONS
 ============================================================ */
@@ -21,6 +22,23 @@
 		$switching = array(':sessionID' => $sessionID);
 		$sql->execute($switching);
 		return $sql->fetch(PDO::FETCH_ASSOC);
+	}
+/* =============================================================
+	PERMISSION FUNCTIONS
+============================================================ */
+	function has_dpluspermission($loginID, $dplusfunction, $debug = false) {
+		$q = (new QueryBuilder())->table('funcperm');
+		$q->field($q->expr("IF(permission = 'Y',1,0)"));
+		$q->where('loginid', $loginID);
+		$q->where('function', $dplusfunction);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetch();
+		}
 	}
 /* =============================================================
 	CUSTOMER FUNCTIONS
@@ -98,7 +116,7 @@
 		}
 	}
 
-	function count_shiptos($loginID, $restrictions, $custID, $debug) {
+	function count_shiptos($custID, $loginID, $restrictions, $debug = false) { // TODO use QueryBuilder
 		$SHARED_ACCOUNTS = wire('config')->sharedaccounts;
 		if ($restrictions) {
 			$sql = wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custperm WHERE custid = :custID AND shiptoid != '') t WHERE loginid = :loginID OR loginid = :shared ");
@@ -127,7 +145,7 @@
 		}
 	}
 
-	function get_customershiptos($custID, $loginID, $restrictions, $debug) {
+	function get_customershiptos($custID, $loginID, $restrictions, $debug = false) { // TODO use QueryBuilder
 		$SHARED_ACCOUNTS = wire('config')->sharedaccounts;
 		if ($restrictions) {
 			$sql = wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM (SELECT * FROM custperm WHERE custid = :custID AND shiptoid != '') t WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid, shiptoid");
@@ -142,11 +160,12 @@
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
 			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
+			return $sql->fetchAll();
 		}
 	}
 
-	function get_customercontacts($loginID, $restrictions, $custID, $debug) {
+	function get_customercontacts($loginID, $restrictions, $custID, $debug = false) {
 		$SHARED_ACCOUNTS = wire('config')->sharedaccounts;
 		if ($restrictions) {
 			$sql = wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM (SELECT * FROM custperm WHERE custid = :custID) t WHERE loginid = :loginID OR loginid = :shared)");
@@ -181,38 +200,41 @@
 		if ($debug) { return returnsqlquery($sql->queryString, $switching, $withquotes); } else { if ($sql->fetchColumn() > 0){return true;} else {return false; } }
 	}
 
-	function get_customercontact($custID, $shipID, $contactID, $debug) {
+	function get_customercontact($custID, $shipID = '', $contactID = '', $debug = false) {
+		$q = (new QueryBuilder())->table('custindex');
+		$q->limit(1);
+		$q->where('custid', $custID);
+		$q->where('shiptoid', $shipID);
 		if (!empty($contactID)) {
-			$sql = wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID AND shiptoid = :shipID AND contact = :contactid LIMIT 1");
-			$switching = array(':custID' => $custID, ':shipID' => $shipID, ':contactid' => $contactID);
-			$withquotes = array(true, true, true);
-		} else {
-			$sql = wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
-			$switching = array(':custID' => $custID, ':shipID' => $shipID);
-			$withquotes = array(true, true);
+			$q->where('contact', $contactID);
 		}
-
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
+			return $sql->fetch();
 		}
 	}
 
 	function edit_customercontact($custID, $shipID, $contactID, $contact, $debug) {
 		$originalcontact = get_customercontact($custID, $shipID, $contactID, false);
 		$query = returnpreppedquery($originalcontact, $contact);
-		$sql = wire('database')->prepare("UPDATE custindex SET ".$query['setstatement']." WHERE custid = :custID AND shiptoid = :shipID AND contact = :contactID");
-		$query['switching'][':custID'] = $custID; $query['switching'][':shipID'] = $shipID; $query['switching'][':contactID'] = $contactID;
+		$sql = wire('database')->prepare("UPDATE custindex SET ".$query['setstatement']." WHERE custid = :custID AND shiptoid = :shipID AND contact = :originalcontactID");
+		$query['switching'][':custID'] = $custID; $query['switching'][':shipID'] = $shipID; $query['switching'][':originalcontactID'] = $contactID;
 		$query['withquotes'][] = true; $query['withquotes'][]= true; $query['withquotes'][] = true;
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
 		} else {
+			$returnquery = returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
 			if ($query['changecount'] > 0) {
 				$sql->execute($query['switching']);
+				$success = $sql->rowCount();
+				return $success ? array('error' => false, 'changes' => $query['changecount'], 'sql' => $returnquery) : array('error' => true, 'changes' => 0, 'sql' => $returnquery);
 			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
+			return array('error' => false, 'changes' => 0, 'sql' => $returnquery);
 		}
 	}
 
@@ -462,19 +484,21 @@
 		}
 	}
 
-	function get_customerordersorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = wire('database')->prepare("SELECT ordrhed.*, CAST(odrsubtot AS DECIMAL(8,2)) AS subtotal FROM ordrhed WHERE sessionid = :sessionID AND custid = :custID AND type = 'O' ORDER BY $orderby $sortrule $limiting");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+	function get_customerordersorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $debug) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->where('type', 'O');
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order($q->generate_orderby($orderby));
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
+			return $sql->fetchAll();
 		}
 	}
 
@@ -493,12 +517,35 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
-
-	function get_custid_from_order($sessionID, $ordn) {
-		$sql = wire('database')->prepare("SELECT custid FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn LIMIT 1");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
+	
+	function get_custidfromorder($sessionID, $ordn, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field('custid');
+		$q->where('sessionid', $sessionID);
+		$q->where('orderno', $ordn);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_shiptoidfromorder($sessionID, $ordn, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field('shiptoid');
+		$q->where('sessionid', $sessionID);
+		$q->where('orderno', $ordn);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
 	}
 
 	function get_orderdetails($sessionID, $ordn, $useclass = false, $debug) {
@@ -603,25 +650,33 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
-
-	function getquotecustomer($sessionID, $qnbr, $debug) {
-		$sql = wire('database')->prepare("SELECT custid FROM quothed WHERE sessionid = :sessionID AND quotnbr = :qnbr");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr); $withquotes = array(true, true);
+	
+	function get_custidfromquote($sessionID, $qnbr, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('custid');
+		$q->where('sessionid', $sessionID);
+		$q->where('quotnbr', $qnbr);
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
-
-	function getquoteshipto($sessionID, $qnbr, $debug) {
-		$sql = wire('database')->prepare("SELECT shiptoid FROM quothed WHERE sessionid = :sessionID AND quotnbr = :qnbr");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr); $withquotes = array(true, true);
+	
+	function get_shiptoidfromquote($sessionID, $qnbr, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('shiptoid');
+		$q->where('sessionid', $sessionID);
+		$q->where('quotnbr', $qnbr);
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
@@ -896,101 +951,111 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 	/* =============================================================
 		USER ACTION FUNCTIONS
 	============================================================ */
-
-	function getuseractions($user, $querylinks, $limit, $page, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$query = returnwherelinks($querylinks);
-		$andlinks = $query['wherestatement'];
+	function get_useractions($user, $querylinks, $limit, $page, $debug) {
+		$q = (new QueryBuilder())->table('useractions');
+		
 		if (wire('config')->cptechcustomer == 'stempf') {
-			$sql = wire('database')->prepare("SELECT * FROM useractions WHERE $andlinks ORDER BY duedate ASC $limiting");
+			$q->generate_query($querylinks, "duedate-ASC", $limit, $page);
 		} else {
-			$sql = wire('database')->prepare("SELECT * FROM useractions WHERE $andlinks $limiting");
+			$q->generate_query($querylinks, false, $limit, $page);
 		}
-		$switching = $query['switching'];
-		$withquotes = $query['withquotes'];
+		
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			$sql->setFetchMode(PDO::FETCH_CLASS, 'UserAction');
 			return $sql->fetchAll();
 		}
 	}
 
-	function getuseractionscount($user, $querylinks, $debug) {
-		$query = returnwherelinks($querylinks);
-		$andlinks = $query['wherestatement'];
-		$sql = wire('database')->prepare("SELECT COUNT(*) FROM useractions WHERE $andlinks");
-		$switching = $query['switching'];
-		$withquotes = $query['withquotes'];
+	function count_useractions($user, $querylinks, $debug) {
+		$q = (new QueryBuilder())->table('useractions');
+		$q->field($q->expr('COUNT(*)'));
+		$q->generate_query($querylinks, false, false, false);
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
-	function loaduseraction($id, $fetchclass, $debug) {
-		$sql = wire('database')->prepare("SELECT * FROM useractions WHERE id = :id");
-		$switching = array(':id' => $id); $withquotes = array(true);
+	function get_useraction($id, $debug = false) {
+		$q = (new QueryBuilder())->table('useractions');
+		$q->where('id', $id);
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			if ($fetchclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'UserAction');
-			}
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'UserAction');
 			return $sql->fetch();
 		}
 	}
-
-	function updateaction($actionID, $action, $debug) {
-		$originalaction = loaduseraction($actionID, false, false); // (id, bool fetchclass, bool debug)
-		$query = returnpreppedquery($originalaction, $action);
-		$sql = wire('database')->prepare("UPDATE useractions SET ".$query['setstatement']." WHERE id = :actionid");
-		$query['switching'][':actionid'] = $actionID;$query['withquotes'][] = true;
+	
+	function edit_useraction(UserAction $updatedaction, $debug = false) { //FIX
+		$originalaction = get_useraction($updatedaction->id); // (id, bool fetchclass, bool debug)
+		$q = (new QueryBuilder())->table('useractions');
+		$q->mode('update');
+		$q->generate_setdifferencesquery($originalaction->toArray(), $updatedaction->toArray());
+		$q->where('id', $updatedaction->id);
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
+			return $q->generate_sqlquery();
 		} else {
-			$sql->execute($query['switching']);
+			$sql->execute($q->params);
 			$success = $sql->rowCount();
 			if ($success) {
-				return array("error" => false,  "sql" => returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']));
+				return array("error" => false,  "sql" => $q->generate_sqlquery($q->params));
 			} else {
-				return array("error" => true,  "sql" => returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']));
-			}
-		}
-
-	}
-
-	function updateactionlinks($oldlinks, $newlinks, $wherelinks, $debug) {
-		$query = returnupdatequery($newlinks, $oldlinks, $wherelinks);
-		$query['setstatement'] .= ', dateupdated = :date'; $query['switching'][':date'] = date("Y-m-d H:i:s"); $query['withquotes'][] = true;
-		$sql = wire('database')->prepare("UPDATE useractions SET ".$query['setstatement']." WHERE " . $query['wherestatement']);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			$sql->execute($query['switching']);
-			$success = $sql->rowCount();
-			if ($success) {
-				return array("error" => false,  "sql" => returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']));
-			} else {
-				return array("error" => true,  "sql" => returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']));
+				return array("error" => true,  "sql" => $q->generate_sqlquery($q->params));
 			}
 		}
 	}
+	
+	function update_useraction(UserAction $updatedaction, $debug = false) {
+		return edit_useraction($updatedaction, $debug);
+	}
 
-	function insertaction($action, $debug) {
-		$query = returninsertlinks($action);
-		$sql = wire('database')->prepare("INSERT INTO useractions (".$query['columnlist'].") VALUES (".$query['valuelist'].")");
-		$switching = $query['switching'];
-		$withquotes = $query['withquotes'];
+	function update_useractionlinks($oldlinks, $newlinks, $wherelinks, $debug) {
+		$q = (new QueryBuilder())->table('useractions');
+		$q->mode('update');
+		$q->generate_setdifferencesquery($oldlinks, $newlinks);
+		$q->generate_query($wherelinks);
+		$q->set('dateupdated', date("Y-m-d H:i:s"));
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery();
 		} else {
-			$sql->execute($switching);
-			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => wire('database')->lastInsertId());
+			$sql->execute($q->params);
+			$success = $sql->rowCount();
+			if ($success) {
+				return array("error" => false,  "sql" => $q->generate_sqlquery($q->params));
+			} else {
+				return array("error" => true,  "sql" => $q->generate_sqlquery($q->params));
+			}
+		}
+	}
+	
+	function create_useraction(UserAction $action, $debug = false) {
+		$q = (new QueryBuilder())->table('useractions');
+		$q->mode('insert');
+		$q->generate_setvaluesquery($action->toArray());
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return array('sql' => $q->generate_sqlquery($q->params), 'insertedid' => wire('database')->lastInsertId());
 		}
 	}
 
@@ -1000,17 +1065,6 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 		$withquotes = array(true, true);
 		$sql->execute($switching);
 		return $sql->fetchColumn();
-	}
-
-	function getparentaction($actionID, $debug) {
-		$sql = wire('database')->prepare("SELECT actionlink FROM useractions WHERE id = :id");
-		$switching = array(':id' => $actionID); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
 	}
 /* =============================================================
 	VENDOR FUNCTIONS
@@ -1023,6 +1077,21 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 		} else {
 			$sql->execute();
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_vendor($vendorID, $shipfromID = '', $debug = false) {
+		$q = (new QueryBuilder())->table('vendors');
+		$q->where('vendid', $vendorID);
+		$q->where('shipfrom', $shipfromID);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Vendor');
+			return $sql->fetch();
 		}
 	}
 
@@ -1053,7 +1122,6 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 	
 	function count_searchvendors($keyword, $debug) {
 		$SHARED_ACCOUNTS = wire('config')->sharedaccounts;
-		// $limiting = returnlimitstatement($limit, $page);
 		$search = '%'.str_replace(' ', '%',$keyword).'%';
 		$sql = wire('database')->prepare("SELECT COUNT(*) FROM vendors WHERE UCASE(CONCAT(vendid, ' ', shipfrom, ' ', name, ' ', address1, ' ', address2, ' ', address3, ' ', city, ' ', state, ' ', zip, ' ', country, ' ', phone, ' ', fax, ' ', email)) LIKE UCASE(:search)");
 		$switching = array(':search' => $search); $withquotes = array(true);
@@ -1105,14 +1173,17 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 			return $sql->fetchColumn();
 		}
 	}
-
-	function getcartcustomer($sessionID, $debug) {
-		$sql = wire('database')->prepare("SELECT custid FROM carthed WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
+	
+	function get_custidfromcart($sessionID, $debug = false) {
+		$q = (new QueryBuilder())->table('carthed');
+		$q->field($q->expr('custid'));
+		$q->where('sessionid', $sessionID);
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
@@ -1242,20 +1313,6 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 			$column = $sql->fetchColumn();
 			if ($column != 'Y') { return false; } else { return true; }
 		}
-	}
-
-	function get_customer_name_from_order($sessionID, $ordn) {
-		$sql = wire('database')->prepare("SELECT custname FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn LIMIT 1");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-
-	function get_shiptoid_from_order($sessionID, $ordn) {
-		$sql = wire('database')->prepare("SELECT shiptoid FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn LIMIT 1");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
 	}
 
 	function get_orderhead($sessionID, $ordn, $useclass = false, $debug) {
@@ -1449,7 +1506,7 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 				$sql = wire('database')->prepare("SELECT * FROM itemsearch WHERE (originid = (:custID) AND UCASE(refitemid) LIKE UCASE(:search)) OR (UCASE(itemid) like UCASE(:search)) GROUP BY itemid $limiting ");
 				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
 			} else {
-				$sql = wire('database')->prepare("SELECT * FROM itemsearch WHERE (UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V')) OR (UCASE(CONCAT(itemid, ' ', refitemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND originid = :custID) GROUP BY itemid $limiting");
+				$sql = wire('database')->prepare("SELECT * FROM itemsearch WHERE (UCASE(CONCAT(itemid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V')) OR (UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND originid = :custID) GROUP BY itemid $limiting");
 				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
 			}
 		}
@@ -1567,6 +1624,21 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => wire('database')->lastInsertId());
 		}
 	}
+	
+	function does_tableformatterexist($userID, $formatter, $debug = false) {
+		$q = (new QueryBuilder())->table('tableformatter');
+		$q->field($q->expr('COUNT(*)'));
+		$q->where('user', $userID);
+		$q->where('formattertype', $formatter);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
 
 	function checkformatterifexists($user, $formatter, $debug) {
 		$sql = wire('database')->prepare("SELECT COUNT(*) FROM tableformatter WHERE user = :user AND formattertype = :formatter");
@@ -1578,7 +1650,22 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 			return $sql->fetchColumn();
 		}
 	}
-
+	
+	function get_maxtableformatterid($userID, $formatter, $debug = false) {
+		$q = (new QueryBuilder())->table('tableformatter');
+		$q->field($q->expr('MAX(id)'));
+		$q->where('user', $userID);
+		$q->where('formattertype', $formatter);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
 	function getmaxtableformatterid($user, $formatter, $debug) {
 		$sql = wire('database')->prepare("SELECT MAX(id) FROM tableformatter WHERE user = :user AND formattertype = :formatter");
 		$switching = array(':user' => $user, ':formatter' => $formatter); $withquotes = array(true, true);
@@ -1597,11 +1684,42 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
 			$sql->execute($switching);
-
 			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'affectedrows' => $sql->rowCount() ? true : false);
 		}
 	}
-
+	
+	function update_formatter($userID, $formatter, $data, $debug = false) {
+		$q = (new QueryBuilder())->table('tableformatter');
+		$q->mode('update');
+		$q->set('data', $data);
+		$q->where('user', $userID);
+		$q->where('formattertype', $formatter);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return array('sql' => $q->generate_sqlquery($q->params), 'success' => $sql->rowCount() ? true : false, 'updated' => $sql->rowCount() ? true : false, 'querytype' => 'update');
+		}
+	}
+	
+	function create_formatter($userID, $formatter, $data, $debug = false) {
+		$q = (new QueryBuilder())->table('tableformatter');
+		$q->mode('insert');
+		$q->set('data', $data);
+		$q->set('user', $userID);
+		$q->set('formattertype', $formatter);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return array('sql' => $q->generate_sqlquery($q->params), 'success' => wire('database')->lastInsertId() > 0 ? true : false, 'id' => wire('database')->lastInsertId(), 'querytype' => 'create');
+		}
+	}
+	
 	/* =============================================================
 		USER CONFIGS FUNCTIONS
 	============================================================ */

@@ -127,7 +127,7 @@
 			break;
 		case 'get-order-details':
 			$ordn = $input->get->text('ordn');
-			$custID = get_custid_from_order(session_id(), $ordn);
+			$custID = get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'ORDRDET' => $ordn, 'CUSTID' => $custID);
 			if ($input->get->lock) {
 				$data['LOCK'] = false;
@@ -143,7 +143,7 @@
 			break;
 		case 'get-order-tracking':
 			$ordn = $input->get->text('ordn');
-			$custID = get_custid_from_order(session_id(), $ordn);
+			$custID = get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'ORDRTRK' => $ordn, 'CUSTID' => $custID);
 			if ($input->get->ajax) {
 				$session->loc = $config->pages->ajax."load/order/tracking/?ordn=".$ordn;
@@ -157,7 +157,7 @@
 			break;
 		case 'get-order-documents':
 			$ordn = $input->get->text('ordn');
-			$custID = get_custid_from_order(session_id(), $ordn);
+			$custID = get_custidfromorder(session_id(), $ordn);
 
 			if ($input->get->itemdoc) {
 				if ($input->get->custID) {
@@ -302,7 +302,7 @@
 				$xpd = $input->post->text("xpd");
 				$ccv = $input->post->text("ccv");
 			}
-			$custID = get_custid_from_order(session_id(), $ordn);
+			$custID = get_custidfromorder(session_id(), $ordn);
 			$session->sql = edit_orderhead(session_id(), $ordn, $order, false);
 			$session->sql .= '<br>'. edit_orderhead_credit(session_id(), $ordn, $paytype, $ccno, $xpd, $ccv);
 			$data = array('DBNAME' => $config->dbName, 'SALESHEAD' => false, 'ORDERNO' => $ordn, 'CUSTID' => $custID);
@@ -318,7 +318,7 @@
 			$itemID = $input->post->text('itemID');
 			$qty = $input->post->text('qty'); if ($qty == '') {$qty = 1; }
 			$ordn = $input->post->text('ordn');
-			$custID = get_custid_from_order(session_id(), $ordn);
+			$custID = get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'ITEMID' => $itemID, 'QTY' => $qty, 'CUSTID' => $custID);
 			$session->loc = $input->post->page;
 			break;
@@ -383,7 +383,7 @@
 				$orderdetail['desc1'] = $input->post->text('desc1');
 				$orderdetail['desc2'] = $input->post->text('desc2');
 			}
-			$custID = get_custid_from_order(session_id(), $ordn);
+			$custID = get_custidfromorder(session_id(), $ordn);
 			$session->sql = edit_orderline(session_id(), $ordn, $orderdetail, false);
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => $linenbr, 'CUSTID' => $custID);
 			
@@ -402,7 +402,7 @@
 			$orderdetail['linenbr'] = $input->post->text('linenbr');
 			$session->sql = edit_orderline(session_id(), $ordn, $orderdetail, false);
 			$session->editdetail = true;
-			$custID = get_custid_from_order(session_id(), $ordn);
+			$custID = get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');

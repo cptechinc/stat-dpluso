@@ -3,13 +3,13 @@
        <?php include $config->paths->content.'customer/cust-page/orders/orders-thead-rows.php'; ?>
     </thead>
     <tbody>
-    	<?php if (isset($input->get->ordn)) : ?>
+    	<?php if ($input->get->ordn) : ?>
 			<?php if ($orderpanel->count == 0 && $input->get->text('ordn') == '') : ?>
                 <tr> <td colspan="12" class="text-center">No Orders found! Try using a date range to find the order(s) you are looking for.</td> </tr>
             <?php endif; ?>
         <?php endif; ?>
         <?php $orderpanel->get_orders(); ?>
-        <?php foreach($orderpanel->orders as $order) : ?>
+        <?php foreach ($orderpanel->orders as $order) : ?>
             <tr class="<?= $orderpanel->generate_rowclass($order); ?>" id="<?= $order->orderno; ?>">
             	<td class="text-center"><?= $orderpanel->generate_expandorcollapselink($order);?></td>
                 <td> <?= $order->orderno; ?></td>

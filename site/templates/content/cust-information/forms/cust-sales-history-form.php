@@ -13,13 +13,6 @@
             </div>
         </div>
 
-        <div class="checkbox" id="shownotes">
-            <label class="checkbox-custom" data-initialize="checkbox">
-                <input class="sr-only" type="checkbox" name="shownotes" value="Y">
-                <span class="checkbox-label">Show Notes</span>
-            </label>
-        </div>
-
         <div class="form-group">
             <label for="">Search Item</label>
             <input type="text" class="form-control input-sm ci-history-item-search" name="itemID" data-results="<?= $config->pages->ajax.'load/ci/item-search-results/'; ?>">

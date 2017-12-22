@@ -1,4 +1,4 @@
-<form action="<?php echo $config->pages->ajax."load/vendor/vend-index/"; ?>" method="POST" id="vend-index-search-form">
+<form action="<?php echo $config->pages->ajax."load/vendors/vend-index/"; ?>" method="POST" id="vend-index-search-form">
     <div class="form-group">
         <?php if ($input->get->function) : ?>
         	<input type="hidden" name="function" class="function" value="<?= $input->get->function; ?>">

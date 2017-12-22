@@ -81,6 +81,12 @@
 	*		VIUNINVOICED
 	*		VENDID=$custID
 	* 		break;
+	* 	case 'vi-docview'
+	* 		DBNAME=$config->DBNAME
+	*		DOCVIEW
+	*		FLD1CO=VI
+	*		FLD1DATA=$vendorID
+	* 		break;
 	* }
 	*
 	**/
@@ -171,7 +177,7 @@
 			$session->loc = $config->pages->vendorinfo. "$vendorID/";
 			break;
 		case 'vi-docview':
-			$data = array('DBNAME' => $config->dbName, 'VIDOCVIEW' => false, 'VENDID' => $vendorID);
+			$data = array('DBNAME' => $config->dbName, 'VIDOCVIEW' => false, 'FLD1CD' => 'VI', 'FLD1DATA' => $vendorID);
 			$session->loc = $config->pages->vendorinfo. "$vendorID/";
 			break;
 	}

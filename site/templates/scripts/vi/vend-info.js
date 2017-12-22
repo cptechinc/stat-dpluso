@@ -34,8 +34,8 @@ $(function() {
 	$("body").on("submit", '#vi-purchase-history-form', function(e) {
 		e.preventDefault();
 		var formid = '#'+$(this).attr('id');
-		var vendorID = $(this).find('.vendorID').val();
-		var shipfromID = $(this).find('.shipfromID').val();
+		var vendorID = $(this).find('[name=vendorID]').val();
+		var shipfromID = $(this).find('[name=shipfromID]').val();
 		var modal = config.modals.ajax;
         var loadinto =  modal+" .modal-content";
 		var href = URI(config.urls.vendor.load.vi_purchasehist).addQuery("vendorID", vendorID).addQuery("shipfromID", shipfromID).addQuery('modal', 'modal').toString();
@@ -51,6 +51,17 @@ $(function() {
 				});
 			});
 		});
+	});
+	
+	$("body").on("change", "select#shownotes", function(event) {
+		event.preventDefault();
+		var select = $(this);
+		var shownotesvalue = select.val();
+		if (shownotesvalue == 'Y') {
+			$('.show-notes').removeClass('hidden');
+		} else {
+			$('.show-notes').addClass('hidden');
+		}
 	});
 });
 
@@ -76,6 +87,7 @@ function openinv() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
+	console.log(config.urls.vendor.load.vi_openinv);
 	var href = URI(config.urls.vendor.load.vi_openinv).addQuery("vendorID", vendorID).addQuery('modal', 'modal').toString();
 	showajaxloading();
 	vi_openinv(vendorID, function() {

@@ -1,9 +1,11 @@
 <?php 
 	$shiptofile = $config->jsonfilepath.session_id()."-cishiptoinfo.json";
 ?>
-
 <div class="row">
-	<div class="col-xs-12">
+	<div class="col-sm-2">
+		<?php include $config->paths->content.'cust-information/ci-buttons.php'; ?>
+	</div>
+	<div class="col-sm-10">
 		<div class="row">
 			<div class="col-sm-6">
 				<table class="table table-striped table-bordered table-condensed table-excel">
@@ -25,10 +27,21 @@
 							</tr>
 						<?php endif; ?>
 					<?php endforeach; ?>
+					<?php if (has_dpluspermission($user->loginid, 'eso') || has_dpluspermission($user->loginid, 'eqo')) : ?>
+						<tr>
+							<td colspan="2">
+								<p class="text-center">
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#item-lookup-modal">
+									    <span class="glyphicon glyphicon-plus"></span> Add Item
+									</button>
+								</p>
+							</td>
+						</tr>
+					<?php endif; ?>
 				</table>
 			</div>
 			<div class="col-sm-6">
-				<?php if ($input->urlSegment(2)) : ?>
+				<?php if ($customer->has_shipto()) : ?>
 					<?php if (file_exists($shiptofile)) : ?>
 						<?php $shiptojson = json_decode(file_get_contents($shiptofile), true);  ?>
 						<?php if (!$shiptojson) { $shiptojson = array('error' => true, 'errormsg' => 'The Customer Shipto Single JSON contains errors');} ?>
@@ -46,19 +59,18 @@
 													<td> <?= $shiptojson['columns']['top'][$column]['heading']; ?></td>
 													<td>
 														<select name="shipTo" class="form-control input-sm" onChange="refreshshipto(this.value,'<?php echo $custID; ?>')">
-											            	<option value=" " <?php if ($shipID == '') { echo 'selected'; } ?>>Company Totals</option>
+											            	<option value=" " <?php if ($shipID == '') { echo 'selected'; } ?>>No Shipto Selected</option>
 											               	<?php $shiptos = get_customershiptos($custID, $user->loginid, $user->hascontactrestrictions, false); ?>
 											                <?php foreach ($shiptos as $shipto) : ?>
-																<?php $address = $shipto['addr1'] . ' ' .$shipto['addr2']; $whole_address = $address.', '.$shipto['ccity'].', '.$shipto['cst']; ?>
-																<?php $show = $shipto['name'].' - '.$shipto['ccity'].', '.$shipto['cst']; ?>
-												            		<option value="<?= $shipto['shiptoid']; ?>" <?php if ($shipto['shiptoid'] == $shipID) { echo 'selected'; } ?>><?= $show; ?> </option>
+																<?php $show = $shipto->name.' - '.$shipto->ccity.', '.$shipto->cst; ?>
+												            	<option value="<?= $shipto->shiptoid; ?>" <?php if ($shipto->shiptoid == $shipID) { echo 'selected'; } ?>><?= $show; ?> </option>
 											            	<?php endforeach; ?>
 											            </select>
 													</td>
 												</tr>
 											<?php else : ?>
 												<tr>
-													<td> <?= $shiptojson['columns']['top'][$column]['heading']; ?></td> <td> <?= $shiptojson['data']['top'][$column]; ?></td>
+													<td><?= $shiptojson['columns']['top'][$column]['heading']; ?></td> <td> <?= $shiptojson['data']['top'][$column]; ?></td>
 												</tr>
 											<?php endif; ?>
 										<?php endif; ?>
@@ -85,9 +97,8 @@
 												<option value=" " <?php if ($shipID == '') { echo 'selected'; } ?>>Company Totals</option>
 												<?php $shiptos = get_customershiptos($custID, $user->loginid, $user->hascontactrestrictions, false); ?>
 												<?php foreach ($shiptos as $shipto) : ?>
-												<?php $address = $shipto['addr1'] . ' ' .$shipto['addr2']; $whole_address = $address.', '.$shipto['ccity'].', '.$shipto['cst']; ?>
-												<?php $show = $shipto['name'].' - '.$shipto['ccity'].', '.$shipto['cst']; ?>
-													<option value="<?= $shipto['shiptoid']; ?>" <?php if ($shipto['shiptoid'] == $shipID) { echo 'selected'; } ?>><?= $show; ?> </option>
+												<?php $show = $shipto->name.' - '.$shipto->ccity.', '.$shipto->cst; ?>
+													<option value="<?= $shipto->shiptoid; ?>" <?php if ($shipto->shiptoid == $shipID) { echo 'selected'; } ?>><?= $show; ?> </option>
 												<?php endforeach; ?>
 											</select>
 										<?php else : ?>
@@ -111,10 +122,10 @@
 							<?php else : ?>
 								<tr>
 									<td class="<?= $config->textjustify[$custjson['columns']['left'][$column]['headingjustify']]; ?>">
-										<?php echo $custjson['columns']['left'][$column]['heading']; ?>
+										<?= $custjson['columns']['left'][$column]['heading']; ?>
 									</td>
 									<td>
-										<?php echo $custjson['data']['left'][$column]; ?>
+										<?= $custjson['data']['left'][$column]; ?>
 									</td>
 								</tr>
 							<?php endif; ?>
@@ -167,6 +178,33 @@
 				</table>
 			</div>
 		</div>
-		<?php include $config->paths->content."cust-information/cust-sales-data.php"; ?>
 	</div>
 </div>
+
+<?php include $config->paths->content."cust-information/cust-sales-data.php"; ?>
+<?php if ($appconfig->has_crm) : ?>
+	<div class="row">
+		<div class="col-xs-12">
+			<?php include $config->paths->content.'customer/cust-page/actions/actions-panel.php'; ?>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<?php include $config->paths->content.'customer/cust-page/customer-contacts.php'; ?>
+		</div>
+	</div>
+<?php endif; ?>
+<?php if (has_dpluspermission($user->loginid, 'eso')) : ?>
+	<div class="row">
+		<div class="col-sm-12">
+			<?php include $config->paths->content.'customer/cust-page/orders/orders-panel.php'; ?>
+		</div>
+	</div>
+<?php endif; ?>
+<?php if (has_dpluspermission($user->loginid, 'eqo')) : ?>
+	<div class="row">
+		<div class="col-sm-12">
+			<?php include $config->paths->content.'customer/cust-page/quotes/quotes-panel.php'; ?>
+		</div>
+	</div>
+<?php endif; ?>

@@ -13,6 +13,7 @@ $(document).ready(function() {
 		$('body').popover({selector: '[data-toggle="popover"]', placement: 'top'});
 
 		init_datepicker();
+		init_timepicker();
 		init_bootstraptoggle();
 
 		$('.phone-input').keyup(function() {
@@ -40,16 +41,19 @@ $(document).ready(function() {
 
 		$(config.modals.ajax).on('shown.bs.modal', function (event) {
 			init_datepicker();
+			init_timepicker();
 		});
 
 		$(config.modals.pricing).on('shown.bs.modal', function (event) { // DEPRECATED 8/22/2017 DELETE ON 9/1
 			init_datepicker();
+			init_timepicker();
 			init_bootstraptoggle();
 		});
 
 		$(config.modals.lightbox).on('shown.bs.modal', function (event) {
 			makeshadow();
 		});
+		
 		$(config.modals.lightbox).on('hide.bs.modal', function (event) {
 			removeshadow();
 		});
@@ -149,10 +153,17 @@ $(document).ready(function() {
 	=============================================================*/
 		$("body").on("click", ".load-link", function(e) {
 			e.preventDefault();
+			var button = $(this);
 			var loadinto = $(this).data('loadinto');
 			var focuson = $(this).data('focus');
 			var href = $(this).attr('href');
+			if (button.hasClass('actions-refresh')) {
+				showajaxloading();
+			}
 			$(loadinto).loadin(href, function() {
+				if (button.hasClass('actions-refresh')) {
+					hideajaxloading();
+				}
 				if (focuson.length > 0) {
 					$('html, body').animate({scrollTop: $(focuson).offset().top - 60}, 1000);
 				}
@@ -177,12 +188,28 @@ $(document).ready(function() {
 			
 			$(ajaxloader.loadinto).loadin(ajaxloader.url, function() {
 				
-				$(ajaxloader.modal).resizemodal(ajaxloader.modalsize).modal();
+				
 				
 				if (button.hasClass('info-screen')) {
 					hideajaxloading();
 					$(ajaxloader.modal).find('.modal-body').addClass('modal-results');
 				}
+				$(ajaxloader.modal).resizemodal(ajaxloader.modalsize).modal();
+			});
+		});
+		
+		$("body").on("click", ".modal-load", function(e) {
+			e.preventDefault();
+			var button = $(this);
+			var ajaxloader = new ajaxloadedmodal(button);
+			
+			
+			ajaxloader.url = URI(ajaxloader.url).addQuery('modal', 'modal').normalizeQuery().toString();
+			
+			$(ajaxloader.loadinto).loadin(ajaxloader.url, function() {
+				hideajaxloading();
+				$(ajaxloader.modal).find('.modal-body').addClass('modal-results');
+				$(ajaxloader.modal).resizemodal(ajaxloader.modalsize).modal();
 			});
 		});
 
@@ -466,11 +493,11 @@ $(document).ready(function() {
 			var input = $(this);
 			var thisform = input.parent('form');
 			var custID = thisform.find('input[name=custID]').val();
-			var shipID = thisform.find('input[name=shipID]').val();
+			//var shipID = thisform.find('input[name=shipID]').val();
 			var action = thisform.find('input[name=action]').val();
 			var href  = URI(thisform.attr('action')).addQuery('q', urlencode(input.val()))
 												   .addQuery('custID', urlencode(custID))
-												   .addQuery('shipID', urlencode(shipID))
+												   //.addQuery('shipID', urlencode(shipID))
 												   .addQuery('action', urlencode(action))
 												   .toString();
 			var loadinto = '#item-results';
@@ -647,7 +674,6 @@ $(document).ready(function() {
 			e.preventDefault();
 			var button = $(this);
 			var url = button.attr('href');
-			var taskid = button.data('id');
 			$.getJSON(url, function(json) {
 				if (json.response.error) {
 					swal({
@@ -661,10 +687,10 @@ $(document).ready(function() {
 						title: 'Confirm task as complete?',
 						html:
 							'<b>ID:</b> ' + json.response.action.id + '<br>' +
-							'<b>description:</b> ' + json.response.action.textbody,
+							'<b>Description:</b> ' + json.response.action.textbody,
 						type: 'question',
 						showCancelButton: true,
-						confirmButtonText: 'Confirm as complete'
+						confirmButtonText: 'Confirm as Complete'
 					}).then(function() {
 						swal({
 						  title: "Leave Reflection Note?",
@@ -675,11 +701,35 @@ $(document).ready(function() {
 						  if (text) {
 						    $.post(json.response.action.urls.completion, {reflectnote: text})
 								.done(function(json) {
-									console.log(json.sql);
-									$('.actions-refresh').click(); $(config.modals.ajax).modal('hide');
+									$('.actions-refresh').click(); 
+									$(config.modals.ajax).modal('hide');
+									$.notify({
+										// options
+										title: ucfirst(json.response.notifytype)+"!",
+										icon: json.response.icon,
+										message: json.response.message
+									},{
+										element: "body",
+										type: json.response.notifytype,
+										timer: 1000,
+									});
 								});
 						} else {
-							$.get(json.response.action.urls.completion, function() { $('.actions-refresh').click(); $(config.modals.ajax).modal('hide'); });
+							$.get(json.response.action.urls.completion, function(json) { 
+								$('.actions-refresh').click(); 
+								$(config.modals.ajax).modal('hide');
+								console.log(json);
+								$.notify({
+									// options
+									title: ucfirst(json.response.notifytype)+"!",
+									icon: json.response.icon,
+									message: json.response.message
+								},{
+									element: "body",
+									type: json.response.notifytype,
+									timer: 1000,
+								});
+							});
 						}
 						swal.close();
 						}).catch(swal.noop);
@@ -696,6 +746,7 @@ $(document).ready(function() {
 	        var loadinto = config.modals.ajax+" .modal-content";
 	        $(loadinto).loadin(url, function() {
 	            $(modal).resizemodal('lg').modal();
+				init_datepicker();
 	        });
 	    });
 
@@ -731,7 +782,7 @@ $(document).ready(function() {
 							align: "center"
 						},
 						onClose: function() {
-							wait(500, function() {
+							wait(200, function() {
 								$(elementreload + " .actions-refresh").click();
 								$(modal).modal('hide');
 								if (config.appconfig.cptechcustomer != 'stempf') {
@@ -795,6 +846,12 @@ $(document).ready(function() {
 /*==============================================================
  	AJAX FUNCTIONS
 =============================================================*/
+ 	function infofunctionnotavailable() {
+		var modal = $(config.modals.ajax);
+		modal.find('.modal-body').html("<h4>Function not available</h4>");
+		modal.resizemodal('lg').modal();
+	}
+	
 	function wait(time, callback) {
 		var timeoutID = window.setTimeout(callback, time);
 	}
@@ -824,6 +881,7 @@ $(document).ready(function() {
  	function showajaxloading() {
 		var close = makeajaxclose("hideajaxloading()");
 		var loadingdiv = "<div class='loading'>"+loadingwheel+"</div>";
+		$('.modal').modal('hide');
 		$("<div class='modal-backdrop tribute loading-bkgd fade in'></div>").html(close+loadingdiv).appendTo('body');
 		listener.simple_combo("esc", function() { hideajaxloading(); });
 	}
@@ -885,6 +943,8 @@ $(document).ready(function() {
 			if (!options.formdata) {options.formdata = form.serialize();}
 			if (options.jsoncallback) {
 				$.post(options.action, options.formdata, function(json) {callback(json);});
+			} else if (options.html) {
+				$.post(options.action, options.formdata, function(html) {callback(html);});
 			} else {
 				$.post(options.action, options.formdata).done(callback());
 			}
@@ -904,7 +964,7 @@ $(document).ready(function() {
 			var element = $(this);
 			var parent = element.parent();
 			console.log('loading ' + element.returnelementdescription() + " from " + href);
-			parent.load(href, function() { callback(); });
+			parent.load(href, function() { init_datepicker(); init_timepicker(); callback(); });
 		},
 		returnelementdescription: function() {
 			var element = $(this);
@@ -1024,7 +1084,7 @@ $(document).ready(function() {
 	}
 
 	 function ii_kitcomponents(itemID, qty, callback) {
- 		var url = config.urls.products.redir.ii_kitcomponents+"&itemID="+urlencode(itemID)+"&qty="+urlencode(qty);
+ 		var url = config.urls.products.redir.ii_kit+"&itemID="+urlencode(itemID)+"&qty="+urlencode(qty);
  		$.get(url, function() { callback(); });
  	}
 	
@@ -1057,6 +1117,14 @@ $(document).ready(function() {
 /*==============================================================
  	STRING FUNCTIONS
 =============================================================*/
+function ucfirst(str) {
+    var pieces = str.split(" ");
+    for ( var i = 0; i < pieces.length; i++ ) {
+        var j = pieces[i].charAt(0).toUpperCase();
+        pieces[i] = j + pieces[i].substr(1);
+    }
+    return pieces.join(" ");
+}
 	function getordinalsuffix(i) {
 		var j = i % 10, k = i % 100;
 		if (j == 1 && k != 11) { return i + "st"; }
@@ -1178,6 +1246,16 @@ $(document).ready(function() {
 	function makeajaxclose(onclick) {
 		return '<div class="close"><a href="#" onclick="'+onclick+'"><i class="material-icons md-48 md-light"></i></a></div>';
 	}
+	
+	function disableEnterKey(e) {
+		var key;      
+		if(window.event) {
+			key = window.event.keyCode; //IE
+		} else {
+			key = e.which; //firefox      
+		}
+		return (key != 13);
+	}
 
 	function init_datepicker() {
 		$('.datepicker').each(function(index) {
@@ -1185,6 +1263,13 @@ $(document).ready(function() {
 				date: $(this).find('.date-input').val(),
 				allowPastDates: true,
 			});
+		});
+	}
+	
+	function init_timepicker() {
+		$('.timepicker').timepicker({
+			'scrollDefault': 'now' ,
+			'timeFormat': 'h:i A'
 		});
 	}
 

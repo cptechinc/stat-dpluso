@@ -7,7 +7,7 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-8">
-			<?php include $config->paths->content."customer/contact/actions-panel.php"; ?>
+			<?php include $config->paths->content."customer/contact/actions/actions-panel.php"; ?>
 		</div>
 	</div>
 <?php endif; ?>

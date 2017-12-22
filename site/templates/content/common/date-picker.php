@@ -1,4 +1,4 @@
-<div class="input-group datepicker" data-initialize=datepicker>
+<div class="input-group datepicker">
 	<input class="form-control input-sm date-input" name="<?php echo $name; ?>" type="text" value="<?php echo $value; ?>" />
 	<div class="input-group-btn">
 		<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">

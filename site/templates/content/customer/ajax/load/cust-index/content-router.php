@@ -6,10 +6,11 @@
     } else {
 		$page->title = 'Search for a customer';
     }
+    
+    if ($input->get->function) {
+        $function = $input->get->text('function');
+        $dplusfunction = substr($input->get->text('function'), 0, 2);
+    }
 
     $page->body = $config->paths->content."customer/ajax/load/cust-index/search-form.php";
-
-
-
-
 ?>

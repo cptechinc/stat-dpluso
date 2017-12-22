@@ -27,7 +27,7 @@
         <?php if ($toolbar) {include $toolbar; } ?>
 		<?php include $config->paths->content."common/modals/ajax-modal.php"; ?>
 		<?php include $config->paths->content."common/modals/lightbox-modal.php"; ?>
-		<?php include $config->paths->content."common/modals/add-item-modal.php"; ?>
+		<?php include $config->paths->content."common/modals/item-lookup-modal.php"; ?>
         <?php foreach($config->scripts->unique() as $script) : ?>
         	<script src="<?php echo $script; ?>"></script>
         <?php endforeach; ?>

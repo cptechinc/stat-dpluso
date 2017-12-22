@@ -25,7 +25,7 @@
 						<td><?= $page->stringerbell->highlight($cust->name, $input->get->q); ?></td>
 						<td><?= $page->stringerbell->highlight($cust->shiptoid, $input->get->q); ?></td>
 						<td><?= $page->stringerbell->highlight($cust->generateaddress(), $input->get->q); ?></td>
-						<td><a href="<?= $cust->generatecontacturl(); ?>"><?= $page->stringerbell->highlight($cust->contact, $input->get->q); ?></a></td>
+						<td><a href="<?= $cust->generate_contacturl(); ?>"><?= $page->stringerbell->highlight($cust->contact, $input->get->q); ?></a></td>
 						<td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->cphone, $input->get->q); ?></a></td>
 						<td class="text-right">$ <?= formatmoney($cust->amountsold); ?></td>
 						<td class="text-right"> <?= $cust->timesold; ?></td>

@@ -1,9 +1,8 @@
 <div id="sales-order-details">
 	<div class="form-group"><?php include $config->paths->content.'edit/quotes/quote-details/quote-details.php'; ?></div>
 	<div class="text-center">
-		<?php $resultsurl = $config->pages->ajax.'load/products/item-search-results/quote/?qnbr='.$quote->quotnbr.'&custID='.urlencode($quote->custid).'&shipID='.urlencode($quote->shiptoid);; ?>
-		<button class="btn btn-primary" data-toggle="modal" data-target="#add-item-modal" data-addtype="quote" data-resultsurl="<?= $resultsurl; ?>">
-			<span class="glyphicon glyphicon-plus"></span> Add Item
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#item-lookup-modal">
+		    <span class="glyphicon glyphicon-plus"></span> Add Item
 		</button>
 	</div>
 	<div class="row">

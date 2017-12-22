@@ -38,14 +38,11 @@ $(function() {
 		var custID = form.find('input[name=custID]').val();
 		var shipID = form.find('input[name=shipID]').val();
 		var startdate = form.find('input[name=date]').val();
-		var shownotes = 'N';
-		if (form.find('input[name=shownotes]').is(':checked')) { shownotes = 'Y'; }
 		var modal = config.modals.ajax;
 		var loadinto =  modal+" .modal-content";
 		var href = URI(config.urls.customer.ci.load.ci_saleshistory).addQuery("custID", custID)
 																 .addQuery("shipID", shipID)
 																 .addQuery("startdate", startdate)
-																 .addQuery("shownotes", shownotes)
 																 .addQuery('modal', 'modal')
 																 .toString();
 		showajaxloading();
@@ -53,7 +50,7 @@ $(function() {
 			$(loadinto).loadin(href, function() {
 				hideajaxloading();
 				$(modal).find('.modal-body').addClass('modal-results');
-				$(modal).resizemodal('lg').modal();
+				$(modal).resizemodal('xl').modal();
 			});
 		});
 	});
@@ -62,24 +59,16 @@ $(function() {
 		event.preventDefault();
 		var select = $(this);
 		var shownotesvalue = select.val();
-		var href = URI(select.data('link')).addQuery('shownotes', shownotesvalue).addQuery('modal', 'modal').toString();
-		var ajax = select.data('ajax');
-		if (ajax == 'Y') {
-			var modal = config.modals.ajax;
-	        var loadinto =  modal+" .modal-content";
-			showajaxloading();
-			$(loadinto).loadin(href, function() {
-				hideajaxloading();
-				$(modal).resizemodal('lg').modal();
-			});
+		if (shownotesvalue == 'Y') {
+			$('.show-notes').removeClass('hidden');
 		} else {
-			window.location.href = href;
+			$('.show-notes').addClass('hidden');
 		}
 	});
 	
 	$("body").on("click", '.load-order-documents', function(e) {
 		e.preventDefault();
-		var custID = $(this).find('.custID').val();
+		var custID = $(this).data('custid');
 		var modal = config.modals.ajax;
         var loadinto =  modal+" .modal-content";
 		var ordn = $(this).data('ordn');
@@ -94,6 +83,39 @@ $(function() {
 					$(modal).resizemodal('lg').modal();
 				});
 			});
+		});
+	});
+	
+	$(function() {
+		$('#contacts-div').on('shown.bs.collapse', function () {
+			if ($(this).data('tableloaded') === "no") {
+				$(this).data('tableloaded', "yes");
+				var table = $('#contacts-table').DataTable({
+					"columnDefs": [
+						{ "targets": [ 5 ], "visible": false, "bRegex": true, "bSmart": false },
+					]
+				});
+
+				$('#limit-shiptos').change(function() {
+					if ($(this).is(':checked')) {
+						if ($(this).val().length > 0) {
+							table.columns( 1 ).search("^" + this.value + "$", true, false, true).draw();
+						}
+					} else {
+						table.columns( 1 ).search('').draw();
+					}
+				});
+				$('#limit-cc').change(function() {
+					if ($(this).is(':checked')) {
+						table.columns( 5 ).search("^" + 'CC' + "$", true, false, true).draw();
+					} else {
+						table.columns( 5 ).search('').draw();
+					}
+				});
+				if ($(this).data('shipid') !== '') {
+					$('#limit-shiptos').bootstrapToggle('on');
+				}
+			}
 		});
 	});
 });
@@ -157,10 +179,11 @@ function choosecipricingitem(itemID) {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
+	console.log(config.urls.customer.redir.ci_pricing+"&custID="+urlencode(custID)+"&itemID="+urlencode(itemID));
 	var href = URI(config.urls.customer.ci.load.ci_pricing).addQuery("custID", custID).addQuery("itemID", itemID).addQuery('modal', 'modal').toString();
 	ci_pricing(custID, itemID, function() {
 		$(loadinto).loadin(href, function() {
-			hideajaxloading(); console.log(href);
+			hideajaxloading();
 			$(modal).find('.modal-body').addClass('modal-results');
 			$(modal).resizemodal('lg').modal();
 		});
@@ -194,7 +217,7 @@ function saleshist() { //CAN BE USED IF SHIPTO IS DEFINED
 																	 .toString();
 	showajaxloading();
 	$(loadinto).loadin(href, function() {
-		hideajaxloading(); console.log(href);
+		hideajaxloading();
 		$(modal).find('.modal-body').addClass('modal-results');
 		$(modal).resizemodal('sm').modal();
 	});
@@ -270,13 +293,14 @@ function openinv() {
 	});
 }
 
-function loadorderdocuments(ordn) {
+function request_orderdocuments(ordn, type) {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
-	var href = URI(config.urls.customer.ci.load.ci_orderdocuments).addQuery("custID", custID).addQuery('ordn', ordn).addQuery('modal', 'modal').toString();
+	var returnpage = new URI().toString();
+	var href = URI(config.urls.customer.ci.load.ci_orderdocuments).addQuery("custID", custID).addQuery('ordn', ordn).addQuery('returnpage', returnpage).addQuery('modal', 'modal').toString();
 	showajaxloading();
-	ci_getorderdocuments(custID, ordn, function() {
+	ci_getorderdocuments(custID, ordn, type, function() {
 		wait(500, function() {
 			$(loadinto).loadin(href, function() {
 				console.log(href); hideajaxloading();
@@ -301,6 +325,7 @@ function payment() {
 		});
 	});
 }
+
 function custcredit() {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
@@ -315,6 +340,7 @@ function custcredit() {
 		});
 	});
 }
+
 function standorders() { //CAN BE USED IF SHIPTO IS DEFINED
 	var custID = $(custlookupform + " .custID").val();
 	var shipID = $(custlookupform + " .shipID").val();
@@ -335,10 +361,14 @@ function standorders() { //CAN BE USED IF SHIPTO IS DEFINED
 }
 function customerstock() { //CAN BE USED IF SHIPTO IS DEFINED
 	//TODO
+	infofunctionnotavailable()
 }
+
 function notes() { //CAN BE USED IF SHIPTO IS DEFINED
 	//TODO
+	infofunctionnotavailable()
 }
+
 function docview() {
 	var custID = $(custlookupform + " .custID").val();
 	var modal = config.modals.ajax;
@@ -394,4 +424,24 @@ function choosecisaleshistoryitem(itemID) {
 	var row = $('[href=#'+itemID+']');
 	row.siblings().remove();
 	$('.ci-history-item-search').val(itemID);
+	$('#cust-sales-history-form').submit();
+}
+
+function refreshshipto(shipID, custID) {
+	var href = new URI();
+	href.segment(-1, ""); // GETS RID OF LAST SLASH
+	var lastsegment = href.segment(-1);
+	
+	if (lastsegment.indexOf('shipto') !== -1) {
+		href.segment(-1, "");
+	} 
+	
+	if (shipID.trim() != '') {
+		href = URI(config.urls.customer.redir.ci_shiptoinfo).addQuery("custID", custID).addQuery('shipID', shipID).toString();
+	} else {
+		href.segment('');
+	}
+	
+	var location = href.toString();
+	window.location.href = location;
 }

@@ -21,16 +21,15 @@
 		}
         
         public function get_orders($debug = false) {
-            $useclass = true;
             if ($this->tablesorter->orderby) {
                 if ($this->tablesorter->orderby == 'orderdate') {
                     $this->orders = get_customerordersorderdate($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
                 } else {
-                    $this->orders = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
+                    $this->orders = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
                 }
             } else {
                 $this->tablesorter->sortrule = 'DESC'; $this->tablesorter->orderby = 'orderno';
-                $this->orders = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
+                $this->orders = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
             }
         }
         

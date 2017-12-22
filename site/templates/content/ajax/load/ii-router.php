@@ -11,9 +11,11 @@
 
     switch ($input->urlSegment(2)) { //Parts of order to load
         case 'search-results':
-            if ($input->get->q) {$q = $input->get->text('q'); $page->title = "Searching for '$q'";}
+            $q = $input->get->text('q'); 
+            $page->title = "Searching for '$q'";
 			switch ($input->urlSegment(3)) {
 				case 'modal':
+                    $custID = $input->get->text('custID');
 					$page->body = $config->paths->content."item-information/forms/item-search-form.php";
 					break;
 				default:
@@ -30,25 +32,29 @@
             $page->title = $itemID .' Cost Inquiry';
             $page->body = $config->paths->content."item-information/item-costing.php";
             break;
-        case 'ii-purchase-order': // $itemID provided by $input->get
+        case 'ii-purchase-orders': // $itemID provided by $input->get
             $page->title = $itemID. ' Purchase Order Inquiry';
-            $page->body = $config->paths->content."item-information/item-purchase-orders.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-purchase-orders');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		case 'ii-quotes': // $itemID provided by $input->get
             $page->title = 'Viewing ' .$itemID . ' Quotes';
-            $page->body = $config->paths->content."item-information/item-quotes.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-quotes');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		 case 'ii-purchase-history': // $itemID provided by $input->get
-            $page->title = $itemID.'Purchase History Inquiry';
-            $page->body = $config->paths->content."item-information/item-purchase-history.php";
+            $page->title = $itemID.' Purchase History Inquiry';
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-purchase-history');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		case 'ii-where-used': // $itemID provided by $input->get
             $page->title = $itemID.' Where Used Inquiry';
             $page->body = $config->paths->content."item-information/item-where-used.php";
             break;
-		case 'ii-kit-components': // $itemID provided by $input->get
+		case 'ii-kit': // $itemID provided by $input->get
             $page->title = $itemID.' Kit Component Inquiry ';
-            $page->body = $config->paths->content."item-information/item-kit-components.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-kit');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		case 'ii-bom': // $itemID provided by $input->get
 			$bom = $input->get->text('bom');
@@ -64,36 +70,41 @@
 				$page->title = 'Enter the Starting Report Date ';
 				$page->body = $config->paths->content."item-information/forms/item-activity-form.php";
 			} else {
-				$page->title = $itemID.' Activity Inquiry';
-				$page->body = $config->paths->content."item-information/item-activity.php";
+                $startdate = $input->get->text('startdate');
+				$page->title = $itemID.' Activity Inquiry Start Date: ' . $startdate;
+                $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-activity');
+				$page->body = $config->paths->content."item-information/ii-formatted-screen.php";
 			}
             break;
 		case 'ii-requirements': // $itemID provided by $input->get
             $page->title = $itemID. ' Requirements Inquiry';
-            $page->body = $config->paths->content."item-information/item-requirements.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-requirements');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		case 'ii-lot-serial': // $itemID provided by $input->get
             $page->title = 'Viewing ' .$itemID. ' Lot/Serial Inquiry';
             $page->body = $config->paths->content."item-information/item-lot-serial.php";
             break;
-		case 'ii-sales-orders': // $itemID provided by $input->get
+		case 'ii-sales-orders': 
             $page->title = $itemID . ' Sales Order Inquiry';
-            $page->body = $config->paths->content."item-information/item-sales-orders.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-sales-orders');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		case 'ii-sales-history': // $itemID provided by $input->get
+            $custID = ($input->get->custID) ? $input->get->text('custID') : '';
 			if ($input->urlSegment(3) == 'form') {
-				if ($input->get->custID) { $custID = $input->get->text('custID'); } else { $custID = ''; }
 				$page->title = 'Search Item History';
 				$page->body = $config->paths->content."item-information/forms/item-history-form.php";
 			} else {
-				if ($input->get->custID) { $custID = $input->get->text('custID'); } else { $custID = ''; }
+                $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-sales-history');
 				$page->title = $itemID. ' Sales History Inquiry';
-				$page->body = $config->paths->content."item-information/item-history.php";
+				$page->body = $config->paths->content."item-information/ii-formatted-screen.php";
 			}
 			break;
 		case 'ii-stock': // $itemID provided by $input->get
             $page->title = $itemID. ' Stock by Warehouse Inquiry';
-            $page->body = $config->paths->content."item-information/item-stock-by-whse.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-stock');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		case 'ii-substitutes': // $itemID provided by $input->get
             $page->title = 'Viewing Item Substitutes for ' .$itemID;
@@ -133,6 +144,3 @@
 		$config->scripts->append(hashtemplatefile('scripts/ii/item-info.js'));
 		include $config->paths->content."common/include-blank-page.php";
 	}
-
-
- ?>

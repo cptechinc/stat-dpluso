@@ -8,7 +8,7 @@
         case 'cart':
             $linedetail = getcartline(session_id(), $linenbr, false);
             $page->title = 'Edit Pricing for '. $linedetail['itemid'];
-            $custID = getcartcustomer(session_id(), false);
+            $custID = get_custidfromcart(session_id());
             $formaction = $config->pages->cart."redir/";
             $linedetail['can-edit'] = true;
             $ordn = '';
@@ -16,7 +16,7 @@
             break;
         case 'order':
             $ordn = $input->get->text('ordn');
-            $custID = get_custid_from_order(session_id(), $ordn);
+            $custID = get_custidfromorder(session_id(), $ordn);
             $linedetail = getorderlinedetail(session_id(), $ordn, $linenbr, false);
             if (can_editorder(session_id(), $ordn, false) && $ordn == getlockedordn(session_id())) {
                 $linedetail['can-edit'] = true;
@@ -31,7 +31,7 @@
             break;
 		case 'quote':
 			$qnbr = $input->get->text('qnbr');
-			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr);
 			$linedetail = get_quoteline(session_id(), $qnbr, $linenbr, false);
             $linedetail['can-edit'] = false;
 			$formaction = $config->pages->quotes."redir/";

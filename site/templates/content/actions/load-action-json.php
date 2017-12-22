@@ -1,13 +1,15 @@
 <?php
     header('Content-Type: application/json');
+    
     $actionID = $input->get->id;
-    $action = loaduseraction($actionID, true, false); // (id, bool fetchclass, bool debug)
+    $actiondisplay = new UserActionDisplay($page->fullURL);
+    $action = UserAction::get($actionID);
 
     if ($action) {
         $urls = array(
-            'completion' => $action->generatecompletionurl('true'),
-            'view' => $action->generateviewactionurl(),
-            'reschedule' => $action->generaterescheduleurl()
+            'completion' => $actiondisplay->generate_completionurl($action, 'true'),
+            'view' => $actiondisplay->generate_viewactionurl($action),
+            'reschedule' => $actiondisplay->generate_rescheduleurl($action)
         );
         $action->urls = $urls;
         echo json_encode(array(

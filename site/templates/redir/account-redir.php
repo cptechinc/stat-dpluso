@@ -38,6 +38,10 @@
 				$session->loc = "login";
 			}
 			break;
+		case 'permissions':
+			$data = array('DBNAME' => $config->dbName, 'FUNCPERM' => false);
+			$session->loc = $config->pages->index;
+			break;
 		case 'logout':
 			$data = array('DBNAME' => $config->dbName, 'LOGOUT' => false);
 			$session->loc = $config->pages->login;

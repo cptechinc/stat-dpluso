@@ -17,7 +17,7 @@
 					<p class="text-center"><?= $user->loginid; ?></p>
 				</div>
 				<ul class="list-group">
-					<a href="<?= $config->pages->userscreens; ?>" class="list-group-item">Screen Configurations</a>
+					<a href="<?= $config->pages->tableformatters; ?>" class="list-group-item">Screen Configurations</a>
 					<a href="<?= $config->pages->userconfigs; ?>" class="list-group-item">User Configurations</a>
 					<a href="<?= $config->pages->account.'redir/?action=logout'; ?>" class="list-group-item logout">
 						<span class="glyphicon glyphicon-log-out"></span> Log Out

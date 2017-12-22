@@ -13,7 +13,6 @@
         
         public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
             parent::__construct($sessionID, $pageurl);
-            $this->pageurl = $pageurl;
             $this->modal = $modal;
             $this->loadinto = $this->focus = $loadinto;
             $this->ajaxdata = 'data-loadinto="'.$this->loadinto.'" data-focus="'.$this->focus.'"';

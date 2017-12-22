@@ -1,39 +1,29 @@
 <?php 
-	if (checkformatterifexists($user->loginid, 'ci-open-invoices', false)) {
-		$columnindex = 'columns';
-		$formatter = json_decode(getformatter($user->loginid, 'ci-open-invoices', false), true); 
-		$action = 'edit-formatter';
+	$tableformatter = $page->screenformatterfactory->generate_screenformatter('ci-open-invoices');
+	
+	if ($input->requestMethod() == "POST") {
+		$tableformatter->generate_formatterfrominput($input);
+		
+		$action = $input->post->text('action');
+		
+		switch ($action) {
+			case 'preview':
+				$page->body = $config->paths->content."cust-information/ci-sales-history.php";
+				
+				if ($config->ajax) {
+					include $page->body;
+				} else {
+					include $config->paths->content.'common/include-blank-page.php';
+				}
+				break;
+			case 'save-formatter':
+				$maxid = get_maxtableformatterid($user->loginid, 'ci-sales-history');
+				$page->body = $tableformatter->save_andrespond();
+				include $config->paths->content.'common/include-json-page.php';
+				break;
+		}
 	} else {
-		$columnindex = 'columns';
-		$formatter = json_decode(file_get_contents($config->paths->content."cust-information/screen-formatters/default/ci-open-invoices.json"), true); 
-		$action = 'add-formatter';
+		$page->body = $config->paths->content."cust-information/screen-formatters/forms/ci-default.php";
+		$config->scripts->append(hashtemplatefile('scripts/table-formatter.js'));
+		include $config->paths->content.'common/include-page.php';
 	}
-	
-	$fieldsjson = json_decode(file_get_contents($config->companyfiles."json/cioifmattbl.json"), true);
-	$columns = array_keys($fieldsjson['data']['detail']);
-	
-	$examplejson = json_decode(file_get_contents($config->paths->content."cust-information/screen-formatters/examples/ci-open-invoices.json"), true);
-
-	$datetypes = array('m/d/y' => 'MM/DD/YY', 'm/d/Y' => 'MM/DD/YYYY', 'm/d' => 'MM/DD', 'm/Y' => 'MM/YYYY')
-?>
-
-<div class="formatter-response">
-	<div class="message"></div>
-</div>
-
-<form action="<?php echo $config->pages->ajax."json/ci/ci-open-invoices-formatter/"; ?>" method="POST" class="screen-formatter-form" id="ci-oi-form">
-	<input type="hidden" name="action" value="<?php echo $action; ?>">
-	<input type="hidden" name="detail-rows" class="detail-rows">
-	<input type="hidden" name="cols" class="cols">
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title"><?php echo $page->title; ?></h3> </div>
-		<div class="formatter-container">
-			<?php $table = 'detail'; include $config->paths->content."cust-information/screen-formatters/table.php"; ?>
-		</div>
-	</div>
-	<button type="button" class="btn btn-info" onClick="previewtable('#ci-oi-form')"><i class="fa fa-table" aria-hidden="true"></i> Preview Table</button>
-	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Save Configuration</button>
-</form>
-<script>
-	var tabletype = 'open-invoices';
-</script>

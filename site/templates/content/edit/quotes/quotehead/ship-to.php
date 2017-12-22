@@ -13,8 +13,8 @@
         	<select class="form-control input-sm ordrhed shipto-select" name="shiptoid" data-custid="<?= $quote->custid; ?>">
 				<?php $shiptos = get_customershiptos($quote->custid, $user->loginid, $user->hasrestrictions, false); ?>
                 <?php foreach ($shiptos as $shipto) : ?>
-					<?php $selected =  ($shipto['shiptoid'] == $quote->shiptoid) ? 'selected' : ''; ?>
-                    <option value="<?= $shipto['shiptoid'];?>" <?= $selected; ?>><?= $shipto['shiptoid'].' - '.$shipto['name']; ?></option>
+					<?php $selected =  ($shipto->shiptoid == $quote->shiptoid) ? 'selected' : ''; ?>
+                    <option value="<?= $shipto->shiptoid;?>" <?= $selected; ?>><?= $shipto->shiptoid.' - '.$shipto->name; ?></option>
                 <?php endforeach; ?>
                 <option value="">Drop Ship To </option>
             </select>

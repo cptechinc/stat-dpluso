@@ -52,7 +52,7 @@
 			$bootstrap = new Contento();
 			
 			$form = $bootstrap->open('div', 'class=form-group');
-			$form .= $bootstrap->openandclose('label','','Results Per Page');
+			$form .= $bootstrap->openandclose('label','','Results Per Page') . '&nbsp; &nbsp;';
 			$form .= $bootstrap->open('select', 'class=form-control input-sm results-per-page|name=results-per-page');
 			
 			foreach (wire('config')->showonpageoptions as $val) {
@@ -110,5 +110,13 @@
 			$ul = $bootstrap->openandclose('ul', 'class=pagination', $list);
 			return $bootstrap->openandclose('nav', 'class=text-center', $ul);
 		}
+		
+		public static function generate_pagenbr(\Purl\Url $url) {
+	        if (preg_match("((page)\d{1,3})", $url->path, $matches)) {
+	            return str_replace('page', '', $matches[0]);
+	        } else {
+	            return 1;
+	        }
+	    }
 	}
 ?>

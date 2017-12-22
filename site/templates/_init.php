@@ -9,7 +9,8 @@
  * You can initialize anything you want to here. In the case of this beginner profile,
  * we are using it just to include another file with shared functions.
  *
- */
+ */	$appconfig = $pages->get('/config/');
+
 	include_once("./_func.php"); // include our shared functions
 	include_once("./_dbfunc.php");
 	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/src/utfport.php"); // UTF8 conversion library functions
@@ -26,6 +27,7 @@
 	
 	$page->bootstrap = new Contento();
 	$page->stringerbell = new StringerBell();
+	$page->screenformatterfactory = new ScreenFormatterFactory(session_id());
 
 	$page->querystring = $querystring = $page->fullURL->query;
 	$page->PageURL = $page->httpUrl.'?'.$page->querystring;
@@ -35,8 +37,8 @@
 	$config->styles->append(hashtemplatefile('styles/libraries.css'));
 	$config->styles->append(hashtemplatefile('styles/styles.css'));
 
-	//$config->scripts->append(hashtemplatefile('scripts/js-config.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libraries.js'));
+	$config->scripts->append(hashtemplatefile('scripts/libs/timepicker.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/key-listener.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/datatables.js'));
 	$config->scripts->append(hashtemplatefile('scripts/classes.js'));
@@ -61,3 +63,7 @@
 	if ($input->get->modal) {
 		$config->modal = true;
 	}
+	
+	$itemlookup = new ItemLookupModal();
+	
+	

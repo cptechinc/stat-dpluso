@@ -1,7 +1,7 @@
 <?php 
-    $items = search_itm('', false, $custID, $config->showonpage, $input->pageNum, false);
+    $items = search_itm($q, false, $custID, $config->showonpage, $input->pageNum, false); 
+    $itemlink = $config->pages->products."redir/?action=ii-select";
 ?>
-
 <div class="table-responsive" id="item-results">
 	<table id="item-search-table" class="table table-striped table-bordered">
 		<thead>

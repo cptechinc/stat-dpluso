@@ -116,7 +116,7 @@
         
         public function generate_viewlinkeduseractionsurl(Order $order) {
             $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->actions."all/load/list/order/";
+            $url->path = wire('config')->pages->actions."all/load/list/salesorder/";
             $url->query->setData(array('ordn' => $order->orderno));
             return $url->getUrl();
         }

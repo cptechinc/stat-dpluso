@@ -3,46 +3,40 @@
         <td>Note ID:</td> <td><?= $note->id; ?></td>
     </tr>
     <tr>
-        <td>Note Type</td> <td><?= $note->getactionsubtypedescription(); ?></td>
+        <td>Note Type</td> <td><?= $note->generate_actionsubtypedescription(); ?></td>
     </tr>
     <tr>
-        <td>Written on:</td> <td><?php echo date('m/d/Y g:i A', strtotime($note->datecreated)); ?></td>
+        <td>Written on:</td> <td><?= date('m/d/Y g:i A', strtotime($note->datecreated)); ?></td>
     </tr>
     <tr>
-        <td>Written by:</td> <td><?php echo $note->createdby; ?></td>
+        <td>Written by:</td> <td><?= $note->createdby; ?></td>
     </tr>
     <tr>
         <td>Customer:</td>
-        <td><?= get_customername($note->customerlink); ?> &nbsp;<a href="<?php echo $note->generatecustomerurl(); ?>"><i class="glyphicon glyphicon-share"></i> Go to Customer Page</a></td>
+        <td><?= get_customername($note->customerlink); ?> &nbsp;<a href="<?= $notedisplay->generate_customerurl($note); ?>"><i class="glyphicon glyphicon-share"></i> Go to Customer Page</a></td>
     </tr>
-    <?php if ($note->hasshiptolink) : ?>
+    <?php if ($note->has_shiptolink()) : ?>
         <tr>
             <td>Ship-to:</td>
-            <td><?= get_shiptoname($note->customerlink, $note->shiptolink, false); ?> &nbsp;<a href="<?php echo $note->generateshiptourl(); ?>"><i class="glyphicon glyphicon-share"></i> Go to Ship-to Page</a></td>
+            <td><?= get_shiptoname($note->customerlink, $note->shiptolink, false); ?> &nbsp;<a href="<?= $notedisplay->generate_shiptourl($note); ?>"><i class="glyphicon glyphicon-share"></i> Go to Ship-to Page</a></td>
         </tr>
     <?php endif; ?>
-    <?php if ($note->hascontactlink) : ?>
+    <?php if ($note->has_contactlink()) : ?>
         <tr>
             <td>Contact:</td>
-            <td><?php echo $note->contactlink; ?> &nbsp;<a href="<?php echo $note->generatecontacturl(); ?>"><i class="glyphicon glyphicon-share"></i> Go to Contact Page</a></td>
+            <td><?= $note->contactlink; ?> &nbsp;<a href="<?= $notedisplay->generate_contacturl($note); ?>"><i class="glyphicon glyphicon-share"></i> Go to Contact Page</a></td>
         </tr>
     <?php endif; ?>
-    <?php if ($note->hasorderlink) : ?>
+    <?php if ($note->has_salesorderlink()) : ?>
         <tr>
             <td>Sales Order #:</td>
-            <td><?php echo $note->salesorderlink; ?></td>
+            <td><?= $note->salesorderlink; ?></td>
         </tr>
     <?php endif; ?>
-    <?php if ($note->hasquotelink) : ?>
+    <?php if ($note->has_quotelink()) : ?>
         <tr>
             <td>Quote #:</td>
-            <td><?php echo $note->quotelink; ?></td>
-        </tr>
-    <?php endif; ?>
-    <?php if ($note->hastasklink) : ?>
-        <tr>
-            <td>Task #:</td>
-            <td><?php echo $note->salestasklink; ?></td>
+            <td><?= $note->quotelink; ?></td>
         </tr>
     <?php endif; ?>
     <tr>
@@ -52,8 +46,9 @@
         <td colspan="2">
             <b>Notes</b><br>
             <div class="display-notes">
-                <?php echo $note->textbody; ?>
+                <?= $note->textbody; ?>
             </div>
         </td>
     </tr>
 </table>
+<?= $notedisplay->generate_editactionlink($note); ?>

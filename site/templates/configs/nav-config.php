@@ -4,6 +4,7 @@
     $config->pages->account = $config->urls->root . 'user/account/';
     $config->pages->login = $config->urls->root . 'user/account/login/';
     $config->pages->userscreens = $config->urls->root . 'user/user-screens/';
+    $config->pages->tableformatters = $config->urls->root . 'user/table-formatters/';
     $config->pages->ajax = $config->urls->root . 'ajax/';
     $config->pages->ajaxjson = $config->urls->root . 'ajax/json/';
     $config->pages->ajaxload = $config->urls->root . 'ajax/load/';
@@ -35,3 +36,4 @@
     $config->pages->documentstorage = $config->documentstorage;
     $config->pages->vendor = $config->urls->root . "vendors/";
     $config->pages->vendorinfo = $config->urls->root . "vendors/vend-info/";
+    

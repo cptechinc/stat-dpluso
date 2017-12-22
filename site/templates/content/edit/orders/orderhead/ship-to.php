@@ -18,10 +18,10 @@
         	<select class="form-control input-sm ordrhed shipto-select" name="shiptoid" data-custid="<?= $order->custid; ?>">
 				<?php $shiptos = get_customershiptos($order->custid, $user->loginid, $user->hasrestrictions, false); ?>
                 <?php foreach ($shiptos as $shipto) : ?>
-                    <?php if ($order->shiptoid == $shipto['shiptoid']) : ?>
+                    <?php if ($order->shiptoid == $shipto->shiptoid) : ?>
                         <option value="<?= $order->shiptoid; ?>" selected><?= $order->shiptoid.' - '.$order->sname; ?></option>
                     <?php else : ?>
-                        <option value="<?= $shipto['shiptoid'];?>"><?= $shipto['shiptoid'].' - '.$shipto['name']; ?></option>
+                        <option value="<?= $shipto->shiptoid;?>"><?= $shipto->shiptoid.' - '.$shipto->name; ?></option>
                     <?php endif; ?>
                 <?php endforeach; ?>
                 <option value="">Drop Ship To </option>

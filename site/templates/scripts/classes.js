@@ -17,13 +17,6 @@ function itemform(thisform) {
 	this.desc = thisform.find('input[name="desc"]').val();
 }
 
-function Car(make, model, year, owner) {
-  this.make = make;
-  this.model = model;
-  this.year = year;
-  this.owner = owner;
-}
-
 function dplusquotenotevalues(form, quotetf) {
     this.form1 = 'N';
     this.form2 = 'N';
@@ -33,7 +26,6 @@ function dplusquotenotevalues(form, quotetf) {
         this.form5 = 'N';
     }
 
-
     if ($(form.form1).prop('checked')) { this.form1 = 'Y'; }
     if ($(form.form2).prop('checked')) { this.form2 = 'Y'; }
     if ($(form.form3).prop('checked')) { this.form3 = 'Y'; }
@@ -41,5 +33,35 @@ function dplusquotenotevalues(form, quotetf) {
     if (quotetf) {
         if ($(form.form5).prop('checked')) { this.form5 = 'Y'; }
     }
+}
 
+function PreviewColumn(colnumber, length, label, data, example) {
+	this.colnumber = colnumber;
+	this.length = length;
+	this.label = label;
+	this.data = data;
+	this.example = example;
+}
+
+function JsContento() {
+    this.open = function(element, attr) {
+        var attributes = this.parseattributes(attr);
+        return '<'+element+' '+attributes+'>';
+    },
+    this.close = function (element) {
+        return '</'+element+'>';
+    },
+    this.openandclose = function(element, attr, content) {
+        return this.open(element, attr) + content + this.close(element);
+    },
+    this.parseattributes = function(attr) {
+        var array = attr.split('|');
+        var attributes = '';
+        
+        for (var i = 0; i < array.length; i++) {
+            var attribute = array[i].split('=');
+            attributes += attribute[0] + '="' + attribute[1] + '" ';
+        }
+        return attributes.trim();
+    }
 }

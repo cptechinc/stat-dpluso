@@ -1,5 +1,5 @@
 <div id="sales-order-details">
-	<form action="<?= $config->pages->quotes.'redir/'; ?>" method="post" id="select-items-form">
+	<form action="<?= $config->pages->quotes.'redir/'; ?>" method="post" id="select-items-form" onsubmit="validate_selection()">
 		<input type="hidden" name="action" value="send-quote-to-order">
 		<input type="hidden" name="qnbr" value="<?= $qnbr; ?>">
 		<div class="form-group"><?php include $config->paths->content.'edit/quote-to-order/quote-details/quote-details.php'; ?></div>

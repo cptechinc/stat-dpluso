@@ -21,7 +21,6 @@ if (trim($iiconfig['activity']['date-options']['start-date']) != '') {
                 </div>
             </div>
             <button type="submit" class="btn btn-success">Search</button>
-
         </div>
     </div>
 </form>

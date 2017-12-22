@@ -10,13 +10,13 @@
         case 'order':
             $ordn = $input->get->text('ordn');
             $page->title = 'Add multiple items for Order #'. $ordn;
-            $custID = get_custid_from_order(session_id(), $ordn);
+            $custID = get_custidfromorder(session_id(), $ordn);
             $formaction = $config->pages->orders."redir/";
             break;
 		case 'quote':
 			$qnbr = $input->get->text('qnbr');
             $page->title = 'Add multiple items for Quote #'. $qnbr;
-			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr);
 			$formaction = $config->pages->quotes."redir/";
             break;
     }

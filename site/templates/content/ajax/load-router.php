@@ -36,7 +36,7 @@
         case 'vi':
             include $config->paths->content . 'ajax/load/vi-router.php';
             break;
-        case 'vendor':
+        case 'vendors':
             include $config->paths->content . 'ajax/load/vendor-router.php';
             break;
         default:

@@ -17,9 +17,9 @@
 <div class="panel panel-primary not-round">
     <div class="panel-heading not-round">
     	<?php if (isset($input->get->q)) : ?>
-            <h3 class="panel-title">Customer Contacts (<?php echo number_format($searchcount); ?> matches out of <?php echo $contactscount; ?> contacts)</h3>
+            <h3 class="panel-title">Customer Contacts (<?= number_format($searchcount); ?> matches out of <?= $contactscount; ?> contacts)</h3>
         <?php else : ?>
-            <h3 class="panel-title">Customers (<?php echo number_format($contactscount); ?>)</h3>
+            <h3 class="panel-title">Customers (<?= number_format($contactscount); ?>)</h3>
         <?php endif; ?>
     </div>
     <div class="panel-body">
@@ -32,7 +32,7 @@
             </div>
             <div class="col-xs-2">
             	<?php if (isset($input->get->q)) : ?>
-            		<a href="<?php echo $config->pages->customer; ?>" class="btn btn-warning">Clear Search</a>
+            		<a href="<?= $config->pages->customer; ?>" class="btn btn-warning">Clear Search</a>
                 <?php endif; ?>
             </div>
     	</div>

@@ -8,7 +8,6 @@
 			$page->contact = false; //WHETHER OR NOT TO LOAD CONTACT PAGE
 			$page->editcontact = false;
 			$custID = $sanitizer->text($input->urlSegment(1));
-			$shipID = '';
 			$customer = get_customername($input->urlSegment(1));
 			$page->title = $input->urlSegment(1) . ' - ' . $customer;
 			$user->hascustomeraccess = can_accesscustomer($user->loginid, $user->hascontactrestrictions, $custID, false);
@@ -20,6 +19,7 @@
 			$config->scripts->append(hashtemplatefile('scripts/pages/customer-page.js'));
 			$config->scripts->append(hashtemplatefile('scripts/dplusnotes/order-notes.js'));
 		    $config->scripts->append(hashtemplatefile('scripts/dplusnotes/quote-notes.js'));
+			$page->useractionpanelfactory = new UserActionPanelFactory($user->loginid, $page->fullURL);
 
 			if ($input->urlSegment(2)) {
 				if (strpos($input->urlSegment(2), 'contacts') !== FALSE) {

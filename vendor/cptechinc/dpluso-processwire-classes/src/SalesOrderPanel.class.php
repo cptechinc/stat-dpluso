@@ -70,7 +70,7 @@
 		}
 		
 		public function generate_rowclass(Order $order) {
-			return  ($this->activeID == $order->orderno) ? 'selected' : '';
+			return ($this->activeID == $order->orderno) ? 'selected' : '';
 		}
 		
 		function generate_shiptopopover(Order $order) {
@@ -134,7 +134,7 @@
             $form->input("type=hidden|name=itemID|value=$detail->itemid");
             $form->input("type=hidden|name=qty|value=".intval($detail->qtyordered));
             $form->input("type=hidden|name=desc|value=$detail->desc1");
-            $form->button("type=submit|class=btn btn-primary btn-xs", $form->createicon('glyphicon glyphicon-shopping-cart'). $form->openandclose('span', 'class=sr-only', 'Submit Reorder'));
+            $form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->createicon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->openandclose('span', 'class=sr-only', 'Submit Reorder'));
             return $form->finish();
         }
 		

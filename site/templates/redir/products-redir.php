@@ -73,7 +73,7 @@
 	*		IIWHEREUSED
 	*		ITEMID=$itemID
 	*		break;
-	*	case 'ii-kit-components':
+	*	case 'ii-kit':
 	*		DBNAME=$config->DBNAME
 	*		IIKIT
 	*		ITEMID=$itemID
@@ -121,7 +121,7 @@
 	*		IILOTSER
 	*		ITEMID=$itemID
 	*		break;
-	*	case 'ii-sales-order':
+	*	case 'ii-sales-orders':
 	*		DBNAME=$config->DBNAME
 	*		IISALESORDR
 	*		ITEMID=$itemID
@@ -221,7 +221,7 @@
 			$data = array('DBNAME' => $config->dbName, 'IIWHEREUSED' => false, 'ITEMID' => $itemID);
             $session->loc = $config->page->index;
             break;
-		case 'ii-kit-components':
+		case 'ii-kit':
 			$qty = ($input->post->qty ? $input->post->text('qty') : $input->get->text('qty'));
 			$data = array('DBNAME' => $config->dbName, 'IIKIT' => false, 'ITEMID' => $itemID, 'QTYNEEDED' => $qty);
             $session->loc = $config->page->index;
@@ -269,7 +269,7 @@
 			$data = array('DBNAME' => $config->dbName, 'IILOTSER' => false, 'ITEMID' => $itemID);
             $session->loc = $config->page->index;
             break;
-		case 'ii-sales-order':
+		case 'ii-sales-orders':
 			$data = array('DBNAME' => $config->dbName, 'IISALESORDR' => false, 'ITEMID' => $itemID);
 			$session->loc = $config->page->index;
             break;
@@ -299,7 +299,9 @@
             break;
 		case 'ii-order-documents':
 			$ordn = $input->get->text('ordn');
-			$data = array('DBNAME' => $config->dbName, 'DOCVIEW' => false, 'FLD1CD' => 'SO', 'FLD1DATA' => $ordn, 'FLD2CD' => 'IT', 'FLD2DATA' => $itemID);
+			$type = $input->get->text('type');
+			$desc = getitemdescription($itemID, false);
+			$data = array('DBNAME' => $config->dbName, 'DOCVIEW' => false, 'FLD1CD' => $config->documentstoragetypes[$type], 'FLD1DATA' => $ordn, 'FLD2CD' => 'IT', 'FLD2DATA' => $itemID);
             $session->loc = $config->page->index;
             break;
     }

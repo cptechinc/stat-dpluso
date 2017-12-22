@@ -19,21 +19,24 @@
                             </a>
                         </div>
                         <div class="col-xs-8">
-                            <form action="<?php echo $config->pages->products."redir/"; ?>" id="add-item-search-form">
-                                <input type="hidden" name="action" value="item-search">
-                                <input type="hidden" class="custID" name="custID">
-                                <input type="hidden" class="resultsurl" name="resultsurl">
-                                <div class="row form-group">
-                                    <div class="col-xs-12">
-                                        <div class="input-group add-item-search-form">
-                                            <input type="text" class="form-control not-round searchfield" name="q" placeholder="Search itemID, X-ref, UPC">
-                                            <span class="input-group-btn">
-                                            	<button type="submit" class="btn btn-default not-round"> <span class="glyphicon glyphicon-search"></span> </button>
-                                            </span>
+                            <div>
+                                <form action=""></form>
+                                <form action="<?= $config->pages->products."redir/"; ?>" id="add-item-search-form">
+                                    <input type="hidden" name="action" value="item-search">
+                                    <input type="hidden" class="custID" name="custID">
+                                    <input type="hidden" class="resultsurl" name="resultsurl">
+                                    <div class="row form-group">
+                                        <div class="col-xs-12">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control not-round searchfield" name="q" placeholder="Search itemID, X-ref, UPC">
+                                                <span class="input-group-btn">
+                                                	<button type="submit" class="btn btn-default not-round"> <span class="glyphicon glyphicon-search"></span> </button>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

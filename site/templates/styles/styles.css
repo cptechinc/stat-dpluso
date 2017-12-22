@@ -78,6 +78,11 @@
 	.fa-1-5x {font-size: 1.5em;}
 	.fa-15x {font-size: 15em;}
 	body.no-nav {margin-top: 0px;}
+	
+	.list-group-item-primary {
+		background-color: #2c3e50;
+		color: #ecf0f1;
+	}
 /*==============================================================
    PRINT STYLES
  =============================================================*/
@@ -241,7 +246,7 @@
    RECENT ORDERS TABLE
  =============================================================*/
  	#orders-table tr.selected, #quotes-table tr.selected { background: #FCF894; font-weight: bold; border-top: 3px solid black; }
-	#orders-table tr.detail, #quotes-table tr.detail {font-size: 90%; }
+	#orders-table tr.detail, #quotes-table tr.detail, .quote-details tr.detail {font-size: 90%; }
 	#orders-table tr.document-header, #quotes-table tr.document-header { background-color: #3498db; color: #FFF; }
 	#orders-table tr.last-detail, #quotes-table tr.last-detail {border-bottom: 3px solid black;}
 	#orders-table tr.tracking { background: #5FEACF; }
@@ -334,6 +339,7 @@
  =============================================================*/
 	.table-condensed.table-excel > thead > tr > th,
 	.table-condensed.table-excel > tbody > tr > td { padding: 2px; }
+	.table-excel .totals {font-weight: bold; background-color: rgba(44,62,80, 0.2) !important;}
  	.table.item-pricing { width: auto; }
 	.table.item-pricing th { width: 100px; }
 	#ii-stock-results { max-height: 600px; overflow-y: scroll; }
@@ -377,7 +383,7 @@
 /*==============================================================
    DOCUMENTATION MENU
  =============================================================*/
- 	.item-not-selected {background: #f7f7f9;}
+ 	.item-not-selected {background: #ececec;}
 
 /*==============================================================
    CUSTOM DATE MENU

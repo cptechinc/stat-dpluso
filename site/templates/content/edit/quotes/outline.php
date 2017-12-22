@@ -3,8 +3,9 @@
     if ($input->get->show) { $activetab = $input->get->text('show'); }
     $tabs = array(
         'quotehead' => array('href' => 'quotehead', "id" => 'quotehead-link', 'text' => 'Quote Header', 'tabcontent' => 'edit/quotes/quotehead-form.php'),
-        'details' => array('href' => 'details', "id" => 'quotedetail-link', 'text' => 'Quote Details', 'tabcontent' => 'edit/quotes/quote-details/details-page.php')
+        'details' => array('href' => 'details', "id" => 'quotedetail-link', 'text' => 'Quote Details', 'tabcontent' => 'edit/quotes/quote-details/details-page.php'),
         //'documents' => array('href' => 'documents', "id" => 'documents-link', 'text' => 'View Documents', 'tabcontent' => 'edit/quotes/documents-page.php'),
+        'actions' => array('href' => 'actions', "id" => 'actions-link', 'text' => 'Actions', 'tabcontent' => 'edit/quotes/actions-page.php')
     );
 ?>
 <?php if (!$editquotedisplay->canedit) : ?>
@@ -21,7 +22,6 @@
             <li><a href="<?= '#'.$tab['href']; ?>" id="<?=$tab['id']; ?>" data-toggle="tab"><?=$tab['text']; ?></a></li>
         <?php endif; ?>
     <?php endforeach; ?>
-
 </ul>
 <div id="quote-tabs" class="tab-content">
     <?php foreach ($tabs as $tab) : ?>

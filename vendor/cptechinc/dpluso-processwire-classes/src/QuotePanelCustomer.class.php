@@ -24,9 +24,9 @@
             $useclass = true;
             if ($this->tablesorter->orderby) {
                 if ($this->tablesorter->orderby == 'orderdate') {
-                    $this->quotes = get_customerordersorderdate($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
+                //    $this->quotes = get_customerordersorderdate($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $debug);
                 } else {
-                    $this->quotes = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
+                //    $this->quotes = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
                 }
             } else {
                 $this->quotes = get_customerquotes($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $useclass, $debug);

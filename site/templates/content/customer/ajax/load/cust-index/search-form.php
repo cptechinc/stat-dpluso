@@ -7,7 +7,7 @@
     </div>
     <div>
         <?php
-            if ($input->get->q) {
+            if (!empty($input->get->q) || !empty($input->get->function)) {
                 switch ($dplusfunction) {
                     case 'ci':
                         include $config->paths->content."customer/ajax/load/cust-index/ci-cust-list.php";

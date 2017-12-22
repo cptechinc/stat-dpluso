@@ -1,101 +1,84 @@
 <?php
-    $actiontype = "note";
-	if ($input->get->modal) {
-		$partialid = 'actions-modal';
-	} else {
-		$partialid = 'actions';
-	}
+    $actiontype = "notes";
+	$page->useractionpanelfactory = new UserActionPanelFactory($assigneduserID, $page->fullURL, $actiontype);
+    
     switch ($input->urlSegment1) {
         case 'add':
-            switch($input->urlSegment2) {
-                case 'new':
-                    if (file_exists($config->paths->content."actions/notes/$config->cptechcustomer-new-note.php")) {
-                        include $config->paths->content."actions/notes/$config->cptechcustomer-new-note.php";
-                    } else {
-                        include $config->paths->content."actions/notes/new-note.php";
-                    }
-                    break;
-                default:
-                    include $config->paths->content."actions/notes/crud/add-note.php";
-                    break;
+            if ($input->requestMethod() == 'POST') { // CREATE IN CRUD
+                include $config->paths->content."actions/notes/crud/create-note.php";
+            } else { // SHOW FORM
+                include $config->paths->content."actions/notes/new-note.php";
+            }
+            break;
+        case 'edit':
+            if ($input->requestMethod() == 'POST') {
+                include $config->paths->content."actions/notes/crud/update-note.php";
+            } else {
+                include $config->paths->content."actions/notes/edit-note.php";
             }
             break;
         case 'load':
             switch ($input->urlSegment2) {
                 case 'list':
-                    if (!$config->ajax) {
-    					$actionpanel = new UserActionPanel($input->urlSegment3, 'note', $partialid, '#ajax-modal', $config->ajax, $config->modal);
-                        $actionpanel->querylinks = UserAction::getlinkarray();
-                        $actionpanel->querylinks['assignedto'] = $user->loginid;
-                        $actionpanel->querylinks['actiontype'] = 'note';
-                    }
-
                     switch($input->urlSegment3) {
                         case 'user':
                             if ($config->ajax) {
-        						include $config->paths->content.'dashboard/actions/actions-panel.php';
-        					} else {
-        						$page->title = 'Viewing User Note List';
-        						$page->body = $config->paths->content.'actions/notes/lists/user-list.php';
-        						include $config->paths->content."common/include-blank-page.php";
-        					}
+                                include $config->paths->content.'dashboard/actions/actions-panel.php';
+                            } else {
+                                $page->title = '';
+                                $page->body = $config->paths->content.'dashboard/actions/actions-list.php';
+                                include $config->paths->content.'common/include-blank-page.php';
+                            }
                             break;
                         case 'cust':
                             if ($config->ajax) {
-        						include $config->paths->content.'customer/cust-page/actions/actions-panel.php';
-        					} else {
-                                $actionpanel->setupcustomerpanel($custID, $shipID);
-                                $actionpanel->querylinks['customerlink'] = $custID;
-                                $actionpanel->querylinks['shiptolink'] = $shipID;
-        						$page->title = 'Viewing Customer Note List';
-        						$page->body = $config->paths->content.'actions/notes/lists/cust-list.php';
-        						include $config->paths->content."common/include-blank-page.php";
-        					}
+                                include $config->paths->content.'customer/cust-page/actions/actions-panel.php';
+                            } else {
+                                $page->title = '';
+                                $page->body = $config->paths->content.'customer/cust-page/actions/actions-list.php';
+                                include $config->paths->content.'common/include-blank-page.php';
+                            }
                             break;
 						case 'contact':
                             if ($config->ajax) {
-        						include $config->paths->content.'customer/contact/actions-panel.php';
-        					} else {
-                                $actionpanel->setupcontactpanel($custID, $shipID, $contactID);
-                                $actionpanel->querylinks['customerlink'] = $custID;
-                                $actionpanel->querylinks['shiptolink'] = $shipID;
-								$actionpanel->querylinks['contactlink'] = $contactID;
-        						$page->title = 'Viewing User Actions List';
-        						$page->body = $config->paths->content.'actions/notes/lists/contact-list.php';
-        						include $config->paths->content."common/include-blank-page.php";
-        					}
+                                include $config->paths->content.'customer/contact/actions/actions-panel.php';
+                            } else {
+                                $page->title = '';
+                                $page->body = $config->paths->content.'customer/contact/actions/actions-list.php';
+                                include $config->paths->content.'common/include-blank-page.php';
+                            }
                             break;
-                        case 'order':
+                        case 'salesorder':
                             if ($config->ajax) {
-        						include $config->paths->content.'edit/orders/actions/actions-panel.php';
-        					} else {
-                                $actionpanel->setuporderpanel($ordn);
-                                $actionpanel->querylinks['salesorderlink'] = $ordn;
-        						$page->title = 'Viewing Order #'.$ordn.' Notes List';
-        						$page->body = $config->paths->content.'actions/notes/lists/order-list.php';
-        						include $config->paths->content."common/include-blank-page.php";
-        					}
+                                if ($config->modal) {
+                                    $page->title = 'Viewing actions for Order #'.$ordn;
+                                    $page->body = $config->paths->content.'edit/orders/actions/actions-panel.php';
+                                    include $config->paths->content."common/modals/include-ajax-modal.php";
+                                } else {
+                                    include $config->paths->content.'edit/orders/actions/actions-panel.php';
+                                }
+                            } else {
+                                $page->title = '';
+                                $page->body = $config->paths->content.'edit/orders/actions/actions-list.php';
+                                include $config->paths->content.'common/include-blank-page.php';
+                            }
                             break;
                         case 'quote':
                             if ($config->ajax) {
-        						include $config->paths->content.'edit/orders/actions/actions-panel.php';
-        					} else {
-                                $actionpanel->setupquotepanel($qnbr);
-                                $actionpanel->querylinks['quotelink'] = $qnbr;
-        						$page->title = 'Viewing Quote #'.$qnbr.' Notes List';
-        						$page->body = $config->paths->content.'actions/notes/lists/order-list.php';
-        						include $config->paths->content."common/include-blank-page.php";
-        					}
+                                include $config->paths->content.'edit/quotes/actions/actions-panel.php';
+                            } else {
+                                $page->title = '';
+                                $page->body = $config->paths->content.'edit/quotes/actions/actions-list.php';
+                                include $config->paths->content.'common/include-blank-page.php';
+                            }
                             break;
-
                     }
                     break;
                 default:
-					$noteID = $input->get->id;
-					$fetchclass = true;
-					$note = loaduseraction($noteID, $fetchclass, false);
+					$noteID = $input->get->text('id');
+					$note = UserAction::get($noteID);
 					$messagetemplate = "Viewing Note for {replace}";
-					$page->title = $note->createmessage($messagetemplate);
+					$page->title = $note->generate_message($messagetemplate);
 
                     if ($config->ajax) {
                         $page->body = $config->paths->content.'actions/notes/view-note.php';

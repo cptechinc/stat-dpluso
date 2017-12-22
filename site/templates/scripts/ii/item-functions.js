@@ -16,8 +16,8 @@
 		$.get(url, function() { callback();});
 	}
 
-	function ii_purchaseorder(itemID, callback) {
-		var url = config.urls.products.redir.ii_purchaseorder+"&itemID="+urlencode(itemID);
+	function ii_purchaseorders(itemID, callback) {
+		var url = config.urls.products.redir.ii_purchaseorders+"&itemID="+urlencode(itemID);
 		$.get(url, function() { callback(); });
 	}
 
@@ -91,7 +91,8 @@
 		$.get(url, function() {	callback(); });
 	}
 
-	function ii_order_documents(itemID, ordn, callback) {
-		var url = config.urls.products.redir.ii_order_documents+"&itemID="+urlencode(itemID)+"&ordn="+ordn;
+	function ii_getorderdocuments(itemID, ordn, type, callback) {
+		var url = config.urls.products.redir.ii_order_documents+"&itemID="+urlencode(itemID)+"&ordn="+ordn+"&type="+urlencode(type);
+		console.log(url);
 		$.get(url, function() {	callback(); });
 	}

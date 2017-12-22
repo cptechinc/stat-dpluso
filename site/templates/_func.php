@@ -1,18 +1,47 @@
 <?php
+    function renderNavTree($items, $maxDepth = 3) {
+    	// if we've been given just one item, convert it to an array of items
+    	if($items instanceof Page) $items = array($items);
+    	// if there aren't any items to output, exit now
+    	if(!count($items)) return;
+    	// $out is where we store the markup we are creating in this function
+    	// start our <ul> markup
+    	echo "<div class='list-group'>";
+    	// cycle through all the items
+    	foreach($items as $item) {
+    		// markup for the list item...
+    		// if current item is the same as the page being viewed, add a "current" class to it
+    		// markup for the link
+    		if($item->id == wire('page')->id) {
+    			echo "<a href='$item->url' class='list-group-item bg-primary'>$item->title</a>";
+    		} else {
+    			echo "<a href='$item->url' class='list-group-item'>$item->title</a>";
+    		}
+    		// if the item has children and we're allowed to output tree navigation (maxDepth)
+    		// then call this same function again for the item's children
+    		if($item->hasChildren() && $maxDepth) {
+    			renderNavTree($item->children, $maxDepth-1);
+    		}
+    		// close the list item
+    		//echo "</li>";
+    	}
+    	// end our <ul> markup
+    	echo "</div>";
+    }
 /* =============================================================
    STRING FUNCTIONS
  ============================================================ */
- function latin_to_utf($string) {
-	$encode = array("â€¢" => '&bull;', "â„¢" => '&trade;', "â€" => '&prime;');
-	foreach ($encode as $key => $value) {
-		if (strpos($string, $key) !== false) {
-			$string = str_replace($key, $value, $string);
-		}
-	}
-	return $string;
- }
+     function latin_to_utf($string) {
+    	$encode = array("â€¢" => '&bull;', "â„¢" => '&trade;', "â€" => '&prime;');
+    	foreach ($encode as $key => $value) {
+    		if (strpos($string, $key) !== false) {
+    			$string = str_replace($key, $value, $string);
+    		}
+    	}
+    	return $string;
+     }
  
- function ordinal($number) {
+     function ordinal($number) {
 		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
 		if ((($number % 100) >= 11) && (($number%100) <= 13))
 			return $number. 'th';
@@ -20,22 +49,22 @@
 			return $number. $ends[$number % 10];
 	}
 
-	function ordinalword($number) {
-		switch ($number) {
-			case '1':
-				return 'first';
-				break;
-			case '2':
-				return 'second';
-				break;
-			case '3':
-				return 'third';
-				break;
-			case '4':
-				return 'fourth';
-				break;
-		}
-	}
+    function ordinalword($number) {
+        switch ($number) {
+            case '1':
+                return 'first';
+                break;
+            case '2':
+                return 'second';
+                break;
+            case '3':
+                return 'third';
+                break;
+            case '4':
+                return 'fourth';
+                break;
+        }
+    }
 	
 	function strToHex($string){
 		$hex = '';
@@ -323,41 +352,6 @@
 		} else {
 			return date('m/d/Y', strtotime($date));
 		}
-	}
-
-
-/* =============================================================
-  TASK FUNCTIONS
-============================================================ */
-	function createmessage($message, $custID, $shipID, $contactID, $taskID, $noteID, $ordn, $qnbr) {
-		$regex = '/({replace})/i';
-		$replace = "";
-
-		if ($custID != '') {
-			$replace = get_customername($custID)." ($custID)";
-		}
-
-		if ($shipID != '') {
-			$replace .= " Shipto: " . get_shiptoname($custID, $shipID, false)." ($shipID)";
-		}
-
-		if ($contactID != '') {
-			$replace .= " Contact: " . $contactID;
-		}
-
-		if ($ordn != '') {
-			$replace .= " Sales Order #" . $ordn;
-		} elseif ($qnbr != '') {
-			$replace .= " Quote #" . $qnbr;
-		}
-
-		if ($taskID != '') {
-			$replace .= " Task #" . $taskID;
-		} elseif ($noteID != '') {
-			$replace .= " CRM Note #" . $noteID;
-		}
-
-		return preg_replace($regex, $replace, $message);
 	}
 	
 /* =============================================================

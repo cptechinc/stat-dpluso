@@ -1,16 +1,26 @@
 {
 	"name": "cptechinc/dpluso-processwire-classes",
     "type": "library",
-    "description": "URL Manipulation for PHP 5.3",
+    "description": "Classes for Dplus Online",
     "keywords": ["crm"],
     "homepage": "http://github.com/cptechinc/dpluso-processwire-classes",
 	"autoload": {
 		"files": [
-			"src/Contact.class.php",
-			"src/DplusDateTime.class.php",
-			"src/UserAction.class.php",
-			"src/UserActionPanel.class.php",
+			"src/CreateFromObjectArray.trait.php",
 			"src/AttributeParser.trait.php",
+			"src/Model/Vendor.class.php",
+			"src/Model/Contact.class.php",
+			"src/Model/Customer.class.php",
+			"src/DplusDateTime.class.php",
+			"src/Model/UserAction.class.php",
+			"src/UserActionDisplay.class.php",
+			"src/UserActionDisplayEdit.class.php",
+			"src/UserActionsPanel.class.php",
+			"src/UserActionsPanelCustomer.class.php",
+			"src/UserActionsPanelContact.class.php",
+			"src/UserActionsPanelSalesOrder.class.php",
+			"src/UserActionsPanelQuote.class.php",
+			"src/UserActionsPanelFactory.class.php",
 			"src/Contento.class.php",
 			"src/FormMaker.class.php",
 			"src/Table.class.php",
@@ -46,7 +56,11 @@
 			"src/TablePageSorter.class.php",
 			"src/Paginator.class.php",
 			"src/Stringer.class.php",
-			"src/OrderCreditCard.class.php"
+			"src/OrderCreditCard.class.php",
+			"src/QueryBuilder.php",
+			"src/Report.class.php",
+			"src/UserActionsReport.class.php",
+			"src/ItemLookupModal.class.php"
 		]
 	}
 }

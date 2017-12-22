@@ -94,9 +94,7 @@
 	</div>
 	<div class="container page">
 		<?php if ($input->urlSegment1) : ?>
-
 			<?php include $include; ?>
-
 		<?php else : ?>
 			<div class="row">
 				<div class="col-sm-3">

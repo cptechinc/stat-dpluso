@@ -13,6 +13,7 @@
 
 	function ci_pricing(custID, itemID, callback) {
 		var url = config.urls.customer.redir.ci_pricing+"&custID="+urlencode(custID)+"&itemID="+urlencode(itemID);
+		console.log(url);
 		$.get(url, function() { callback();});
 	}
 

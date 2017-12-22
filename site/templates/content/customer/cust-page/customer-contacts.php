@@ -3,13 +3,13 @@
     <div class="panel-heading not-round">
         <a href="#contacts-div" class="panel-link" data-parent="#contacts-panel" data-toggle="collapse" ><i class="fa fa-address-book" aria-hidden="true"></i> &nbsp; Customer Contacts <span class="caret"></span></a>
     </div>
-    <div id="contacts-div" class="collapse" data-tableloaded="no" data-shipid="<?php echo $shipID; ?>">
+    <div id="contacts-div" class="collapse" data-tableloaded="no" data-shipid="<?= $shipID; ?>">
         <div class="panel-body">
         	<div class="row">
         		<div class="col-sm-4">
                 	<div class="form-group">
                     	<label class="control-label">Show only this ShipTo's contacts?</label><br>
-                     <input type="checkbox" id="limit-shiptos" class="check-toggle" data-size="small" data-width="73px" value="<?php echo $shipID; ?>">
+                     <input type="checkbox" id="limit-shiptos" class="check-toggle" data-size="small" data-width="73px" value="<?= $shipID; ?>">
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -26,13 +26,12 @@
                 <tbody>
                     <?php foreach ($contacts as $contact) : ?>
                         <tr>
-
-                            <td><a href="<?php echo $contact->generatecontacturl(); ?>"><?php echo $contact->contact; ?></a></td>
-                            <td><a href="<?php $contact->generateshiptourl();?>"><?php echo $contact->shiptoid; ?></a></td>
-                            <td><?php echo $contact->generatephonedisplay(); ?></td>
-                            <td><a href="<?php echo $contact->generatecontactmethodurl('email'); ?>"><?php echo $contact->email; ?></td>
-                            <td><?php echo $contact->generateaddress(); ?></td>
-                            <td><?php echo $contact->source; ?></td>
+                            <td><a href="<?= $contact->generate_contacturl(); ?>"><?= $contact->contact; ?></a></td>
+                            <td><a href="<?php $contact->generate_shiptourl();?>"><?= $contact->shiptoid; ?></a></td>
+                            <td><?= $contact->generatephonedisplay(); ?></td>
+                            <td><a href="<?= $contact->generatecontactmethodurl('email'); ?>"><?= $contact->email; ?></td>
+                            <td><?= $contact->generateaddress(); ?></td>
+                            <td><?= $contact->source; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

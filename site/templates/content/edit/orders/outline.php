@@ -5,7 +5,7 @@
         'details' => array('href' => 'details', "id" => 'salesdetail-link', 'text' => 'Sales Order Details', 'tabcontent' => 'edit/orders/order-details/details-page.php'),
         'documents' => array('href' => 'documents', "id" => 'documents-link', 'text' => 'View Documents', 'tabcontent' => 'edit/orders/documents-page.php'),
         'tracking' => array('href' => 'tracking', "id" => 'tracking-tab-link', 'text' => 'View Tracking', 'tabcontent' => 'edit/orders/tracking-page.php'),
-        //'actions' => array('href' => 'actions', "id" => 'actions-tab-link', 'text' => 'View Actions', 'tabcontent' => 'edit/orders/actions-page.php')
+        'actions' => array('href' => 'actions', "id" => 'actions-tab-link', 'text' => 'View Actions', 'tabcontent' => 'edit/orders/actions-page.php')
     );
     
     if (!$editorderdisplay->canedit) {

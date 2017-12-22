@@ -1,6 +1,6 @@
 <?php 
-
 	class SalesOrder extends Order implements OrderInterface {
+		
 		public $sessionid;
 		public $recno;
 		public $date;
@@ -92,10 +92,6 @@
 		public $dummy;       
 		
 		public function __construct() {
-			$this->update_properties();
-		}
-		
-		public function update_properties() {
 			
 		}
 		
@@ -132,9 +128,8 @@
 			$object  = new $myClass(); 
 
 			foreach ($array as $key => $val) {
-			$object->$key = $val;
+				$object->$key = $val;
 			}
-			$object->update_properties();
 			return $object;
 	   }
 	   

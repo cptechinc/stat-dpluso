@@ -115,7 +115,7 @@
 			break;
 		case 'load-quote-details':
 			$qnbr = $input->get->text('qnbr');
-			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
 			if ($input->get->lock) {
 				$session->loc = $config->pages->editquote."?qnbr=".$qnbr;
@@ -127,7 +127,7 @@
 			break;
 		case 'get-quote-details-print': // DEPRECATED 10/30/2017
 			$qnbr = $input->get->text('qnbr');
-			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
 			$session->loc = $config->pages->print."quote/?qnbr=".$qnbr;
 			break;
@@ -135,7 +135,7 @@
 			$qnbr = $input->get->text('qnbr');
 			$date = date('Ymd');
 			$time = date('Hi');
-			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'EDITQUOTE' => $qnbr, 'QUOTENO' => $qnbr);
 			if (!is_orderlocked(session_id(), $qnbr)) {
 				$recno = get_nextorderlock(session_id());
@@ -273,7 +273,7 @@
 
 			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
 			$session->detail = $quotedetail;
-			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'CUSTID' => $custID);
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
@@ -290,7 +290,7 @@
 			$quotedetail['linenbr'] = $input->post->text('linenbr');
 			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
 			$session->detail = $quotedetail;
-			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
@@ -307,7 +307,7 @@
 			$quotedetail['linenbr'] = $input->post->text('linenbr');
 			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
 			$session->detail = $quotedetail;
-			$custID = getquotecustomer(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
 			if ($input->get->page) {
 				$session->loc = $input->get->text('page');
@@ -333,11 +333,9 @@
 				} else {
 					$quotedetail['ordrqty'] = '0';
 				}
-
 				$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
 			}
-
-			$session->custID = $custID = getquotecustomer(session_id(), $qnbr, false);
+			$session->custID = $custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'QUOTETOORDER' => false, 'QUOTENO' => $qnbr, 'LINENO' => 'ALL');
 			$session->loc = $config->pages->orders."redir/?action=edit-new-order";
 			break;

@@ -5,7 +5,7 @@
 			columnDefs: [
 				<?php foreach($array as $colnumber) : ?>
 					{
-						targets: [<?php echo $colnumber; ?>],
+						targets: [<?= $colnumber; ?>],
 						orderable: false
 					},
 				<?php endforeach; ?>

@@ -354,7 +354,7 @@
 		}
 	}
 
-	function get_topxsellingcustomers($loginID, $numberofcustomers, $restrictions, $debug) {
+	function get_topxsellingcustomers($loginID, $numberofcustomers, $restrictions, $debug = false) {
 		$SHARED_ACCOUNTS = wire('config')->sharedaccounts;
 		if ($restrictions) {
 			$sql = wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid, shiptoid ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
@@ -368,7 +368,8 @@
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
 			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
+			return $sql->fetchAll();
 		}
 	}
 

@@ -93,7 +93,7 @@
             }
         }
 
-		function generateciloadurl() {
+		function generate_ciloadurl() {
 			 if ($this->has_shipto()) {
                 return wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($this->custid)."&shipID=".urlencode($this->shiptoid);
             } else {

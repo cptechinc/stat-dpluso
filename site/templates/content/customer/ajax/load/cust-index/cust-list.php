@@ -26,7 +26,7 @@
                        <tr>
                            <td>
 
-   							<a href="<?= $cust->generateciloadurl(); ?>">
+   							<a href="<?= $cust->generate_ciloadurl(); ?>">
    								<?= $page->stringerbell->highlight($cust->custid, $input->get->text('q'));?>
    							</a> &nbsp; <span class="glyphicon glyphicon-share"></span>
    						</td>

@@ -9,14 +9,14 @@
             <table class="table table-bordered table-condensed table-striped small" id="cust-sales">
                 <thead> <tr> <th>CustID</th> <th>Name</th> <th>Amount Sold</th> <th>Times Sold</th> <th>Last Sale Date</th> </tr> </thead>
                 <tbody>
-                    <?php $customers = get_topxsellingcustomers($user->loginid, 25, $user->hascontactrestrictions, false); ?>
+                    <?php $customers = get_topxsellingcustomers($user->loginid, 25, $user->hascontactrestrictions); ?>
                     <?php foreach ($customers as $customer) : ?>
                         <tr>
                             <td>
-                                <a href="<?php echo $config->pages->customer.'redir/?action=load-customer&custID='.$customer['custid']; ?>" class="btn btn-primary btn-sm"><?php echo $customer['custid']; ?></a>
+                                <a href="<?= $customer->generate_ciloadurl(); ?>" class="btn btn-primary btn-sm"><?= $customer->custid; ?></a>
                             </td>
-                            <td><?php echo $customer['name']; ?></td> <td class="text-right">$ <?= $customer['amountsold']; ?></td>
-                            <td class="text-right"><?php echo $customer['timesold']; ?></td> <td><?= DplusDateTime::formatdate($customer['lastsaledate']); ?></td>
+                            <td><?= $customer->name; ?></td> <td class="text-right">$ <?= $customer->amountsold; ?></td>
+                            <td class="text-right"><?= $customer->timesold; ?></td> <td><?= DplusDateTime::formatdate($customer->lastsaledate); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

@@ -14,7 +14,7 @@
             <?php foreach ($custresults as $cust) : ?>
                 <tr>
                     <td>
-                        <a href="<?= $cust->generateciloadurl(); ?>">
+                        <a href="<?= $cust->generate_ciloadurl(); ?>">
                             <?= $cust->custid;?>
                         </a> &nbsp; <span class="glyphicon glyphicon-share"></span>
                     </td>

@@ -51,7 +51,7 @@
 				<input type="hidden" name="ordn" value="<?= $ordn; ?>">
 				<table class="table table-condensed no-bottom ">
 					<tr> <td>UoM</td> <td><?= $item['unit']; ?></td> </tr>
-					<?php if ($soconfig['config']['show_listprice'] == 'Y') : ?>
+					<?php if ($appconfig->child('name=sales-orders')->show_listprice) : ?>
 						<tr> <td>List Price</td> <td class="text-right">$ <?= $item['listprice']; ?></td> </tr>
 					<?php endif; ?>
 					<tr> <td>Price</td> <td class="text-right">$ <?= $item['price'];?></td> </tr>

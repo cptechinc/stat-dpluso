@@ -23,10 +23,10 @@
     <input type="hidden" class="cost" value="<?= formatmoney($linedetail['quotcost']); ?>">
 	<input type="hidden" class="minprice" value="<?= formatmoney($linedetail['minprice']); ?> ">
     <input type="hidden" class="calculate-from" value="percent">
-    <?php if (!$soconfig['config']['use_discount']): ?>
+    <?php if (!$appconfig->child('name=sales-orders')->use_discount): ?>
         <input type="hidden" class="discpct" name="discount" value="<?= formatmoney($linedetail['discpct']); ?>">
     <?php endif; ?>
-    <?php if (!$soconfig['config']['change_price']) : ?>
+    <?php if (!$appconfig->child('name=sales-orders')->change_price) : ?>
         <input type="hidden" name="price" value="<?= formatmoney($linedetail['price']); ?>">
     <?php endif; ?>
     <div class="row">
@@ -52,7 +52,7 @@
     	<div class="col-sm-4 item-form">
     		<h4>Current Price</h4>
             <?php
-                if ($soconfig['config']['change_price']) {
+                if ($appconfig->child('name=sales-orders')->change_price) {
                     include $config->paths->content.'edit/pricing/quotes/tables/price-edit-table.php';
                 } else {
                     include $config->paths->content.'edit/pricing/quotes/tables/price-static-table.php';
@@ -87,7 +87,7 @@
 					</td>
 				</tr>
 			</table>
-			<div class="<?php if (!in_array($linedetail['spcord'], $soconfig['config']['special_orders'])) {echo 'hidden';} ?>">
+			<div class="<?php if (!in_array($linedetail['spcord'], $config->specialordercodes)) {echo 'hidden';} ?>">
 				<h4>Special Order Details</h4>
 				<table class="table table-bordered table-striped table-condensed">
 					<tr>

@@ -150,7 +150,7 @@
         }
     },
     "detail": {
-        "rows": 2,
+        "rows": 1,
         "columns": {
             "Item ID": {
                 "line": 1,
@@ -162,9 +162,9 @@
 				"date-format": false
             },
             "Item Description 1": {
-                "line": 2,
-				"column": 2,
-				"col-length": 2,
+                "line": 1,
+				"column": 3,
+				"col-length": 1,
 				"label": "Description",
 				"before-decimal": false,
 				"after-decimal": false,
@@ -244,7 +244,7 @@
             },
             "Quantity Ordered": {
                 "line": 1,
-				"column": 3,
+				"column": 4,
 				"col-length": 1,
 				"label": "Qty Order",
 				"before-decimal": false,
@@ -280,7 +280,7 @@
             },
             "Unit Price": {
                 "line": 1,
-				"column": 4,
+				"column": 5,
 				"col-length": 1,
 				"label": "Price",
 				"before-decimal": 7,
@@ -289,7 +289,7 @@
             },
             "Total Amount": {
                 "line": 1,
-				"column": 5,
+				"column": 6,
 				"col-length": 1,
 				"label": "Amount",
 				"before-decimal": 7,
@@ -348,7 +348,7 @@
         "columns": {
             "Current On-Hand": {
                 "line": 1,
-				"column": 1,
+				"column": 2,
 				"col-length": 1,
 				"label": "Current On-Hand",
 				"before-decimal": 7,
@@ -357,7 +357,7 @@
             },
             "Available": {
                 "line": 1,
-				"column": 2,
+				"column": 3,
 				"col-length": 1,
 				"label": "Available",
 				"before-decimal": 7,
@@ -371,7 +371,7 @@
         "columns": {
             "Purchase Order Number": {
                 "line": 1,
-				"column": 1,
+				"column": 2,
 				"col-length": 1,
 				"label": "PO Nbr:",
 				"before-decimal": false,
@@ -380,7 +380,7 @@
             },
             "Expected Date": {
                 "line": 1,
-				"column": 2,
+				"column": 3,
 				"col-length": 1,
 				"label": "Expt Date",
 				"before-decimal": false,
@@ -389,7 +389,7 @@
             },
             "Quantity On-Order": {
                 "line": 1,
-				"column": 3,
+				"column": 4,
 				"col-length": 1,
 				"label": "Order Qty",
 				"before-decimal": 7,

@@ -3,6 +3,7 @@
 		protected $formatterfieldsfile = ''; 
 		protected $formatter = false; // WILL BE JSON DECODED ARRAY
 		protected $tableblueprint = false; // WILL BE ARRAY
+		protected $source;
 		
 		/* =============================================================
            CONSTRUCTOR AND SETTER FUNCTIONS
@@ -101,6 +102,7 @@
 					}
 				}
 				$this->formatter = $postarray;
+				$this->source = 'input';
 				$this->generate_tableblueprint();
 			}
 			
@@ -155,8 +157,10 @@
 		protected function load_formatter() {
 			if ($this->does_userhaveformatter()) {
 				$this->formatter = getformatter(wire('user')->loginid, $this->type, false);
+				$this->source = 'database';
 			} else {
 				$this->formatter = file_get_contents(wire('config')->paths->vendor."cptechinc/dpluso-screen-formatters/src/default/$this->type.json");
+				$this->source = 'default';
 			}
 			$this->formatter = json_decode($this->formatter, true);
 		}

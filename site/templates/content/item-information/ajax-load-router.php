@@ -2,7 +2,7 @@
     if (checkconfigifexists($user, 'iio', false)) {
         $iiconfig = json_decode(getconfiguration($user->loginid, $configtype, false), true);
     } else {
-        $iiconfig = json_decode(file_get_contents($config->paths->content."salesrep/configs/defaults/item-info-options.json"), true);
+        $iiconfig = json_decode(file_get_contents($config->paths->content."salesrep/configs/item-info-options.json"), true);
     }
 
     if ($input->get->itemID) {
@@ -126,7 +126,6 @@
             if ($input->get->q) {$q = $input->get->text('q');}
             $page->body = $config->paths->content."item-information/forms/item-search-form.php";
             break;
-
     }
 
 	if ($config->ajax) {

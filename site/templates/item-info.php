@@ -3,6 +3,7 @@
     if ($input->get->itemID) {
         $itemID = $input->get->text('itemID');
 		$page->title = 'II: ' . $itemID;
+        $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-item-page');
         $itemjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-iiitem.json"), true);
         $buttonsjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-iibuttons.json"), true);
 		$toolbar = $config->paths->content."item-information/toolbar.php";
@@ -17,7 +18,7 @@
 			$shipID = $input->get->text('shipID');
         }
     }
-    $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-item-page');
+    
     
     $config->scripts->append(hashtemplatefile('scripts/libs/raphael.js'));
     $config->scripts->append(hashtemplatefile('scripts/libs/morris.js'));

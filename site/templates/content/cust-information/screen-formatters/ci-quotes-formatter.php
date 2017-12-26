@@ -7,7 +7,7 @@
 		
 		switch ($action) {
 			case 'preview':
-				$page->body = $config->paths->content."cust-information/ci-quotes.php";
+				$page->body = $config->paths->content."cust-information/ci-formatted-screen.php";
 				
 				if ($config->ajax) {
 					include $page->body;

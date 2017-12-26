@@ -28,16 +28,16 @@
             include $config->paths->content . 'ajax/load/order-router.php';
             break;
         case 'ii':
-            include $config->paths->content . 'ajax/load/ii-router.php';
+            include $config->paths->content . 'item-information/ajax-load-router.php';
             break;
         case 'ci':
-            include $config->paths->content . 'ajax/load/ci-router.php';
+            include $config->paths->content . 'cust-information/ajax-load-router.php';
             break;
         case 'vi':
             include $config->paths->content . 'ajax/load/vi-router.php';
             break;
         case 'vendors':
-            include $config->paths->content . 'ajax/load/vendor-router.php';
+            include $config->paths->content . 'vend-information/ajax-load-router.php';
             break;
         default:
             throw new Wire404Exception();

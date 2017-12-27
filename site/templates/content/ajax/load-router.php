@@ -34,10 +34,10 @@
             include $config->paths->content . 'cust-information/ajax-load-router.php';
             break;
         case 'vi':
-            include $config->paths->content . 'ajax/load/vi-router.php';
+            include $config->paths->content . 'vend-information/ajax-load-router.php';
             break;
         case 'vendors':
-            include $config->paths->content . 'vend-information/ajax-load-router.php';
+            include $config->paths->content . 'ajax/load/vendor-router.php';
             break;
         default:
             throw new Wire404Exception();

@@ -29,6 +29,10 @@ $(document).ready(function() {
 				}
 			});
 		});
+		
+		if ($(window).width() < 768) {
+			$('#show-toolbar').removeClass('hidden');
+		}
 
 		$(config.modals.lightbox).on('show.bs.modal', function (event) {
 			var image = $(event.relatedTarget).find('img');

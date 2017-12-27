@@ -132,7 +132,19 @@ $(function() {
 		});
 	});
 	
+	$(window).resize(function() {
+		if ($(window).width() < 768) {
+			$('#show-toolbar').addClass('hidden');
+		} else {
+			$('#show-toolbar').removeClass('hidden');
+		}
+	});
 	
+	$("body").on("focus", '.ii-item-search', function() {
+		listener.stop_listening();
+	});
+	
+	$('.ii-item-search').focus();  
 });
 
 /*==============================================================

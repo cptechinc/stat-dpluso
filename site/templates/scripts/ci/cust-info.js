@@ -84,6 +84,14 @@ $(function() {
 				});
 			});
 		});
+		
+		$(window).resize(function() {
+			if ($(window).width() < 768) {
+				$('#show-toolbar').addClass('hidden');
+			} else {
+				$('#show-toolbar').removeClass('hidden');
+			}
+		});
 	});
 	
 	$(function() {

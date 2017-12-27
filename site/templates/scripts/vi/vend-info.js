@@ -63,6 +63,14 @@ $(function() {
 			$('.show-notes').addClass('hidden');
 		}
 	});
+	
+	$(window).resize(function() {
+		if ($(window).width() < 768) {
+			$('#show-toolbar').addClass('hidden');
+		} else {
+			$('#show-toolbar').removeClass('hidden');
+		}
+	});
 });
 
     // ADD LINE BELOW under vendorID to buttons that pull from both... also addQuery to href in function

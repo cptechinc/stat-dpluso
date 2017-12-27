@@ -23,6 +23,12 @@
             return $content;
         }
 		
+		protected function generate_itemimagesource() {
+			$item = getitemfromim($this->json['itemid'], false); 
+			$file = file_exists(wire('config')->imagefiledirectory.$item['image']) ? $item['image'] : wire('config')->imagenotfound;
+			return wire('config')->imagedirectory.$file;
+		}
+		
 		protected function generate_itemformsection() {
 			$bootstrap = new Contento();
 			$itemID = $this->json['itemid'];

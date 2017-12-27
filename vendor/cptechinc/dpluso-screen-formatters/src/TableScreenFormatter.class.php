@@ -158,6 +158,9 @@
 			if ($this->does_userhaveformatter()) {
 				$this->formatter = getformatter(wire('user')->loginid, $this->type, false);
 				$this->source = 'database';
+			} elseif ($this->does_userhaveformatter('default')) {
+				$this->formatter = getformatter('default', $this->type, false);
+				$this->source = 'database';
 			} else {
 				$this->formatter = file_get_contents(wire('config')->paths->vendor."cptechinc/dpluso-screen-formatters/src/default/$this->type.json");
 				$this->source = 'default';
@@ -165,11 +168,13 @@
 			$this->formatter = json_decode($this->formatter, true);
 		}
 		
-		protected function does_userhaveformatter() {
-			return checkformatterifexists(wire('user')->loginid, $this->type, false);
+		protected function does_userhaveformatter($userID = false) {
+			$userID = !empty($userID) ? $userID : wire('user')->loginid;
+			return checkformatterifexists($userID, $this->type, false);
 		}
 		
         protected function generate_tableblueprint() {
+
             $tablesections = array_keys($this->fields['data']);
             $table = array('cols' => $this->formatter['cols']);
 			

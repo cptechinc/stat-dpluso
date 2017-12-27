@@ -83,28 +83,44 @@
         </div>
         <script>
             $(function() {
-
                 <?php foreach ($warehouses as $whse) : ?>
-
                     $('a[href="#<?=$whse."-graph"; ?>"]').on('shown.bs.tab', function (e) {
                         new Morris.Line({
                             element: '<?php echo $whse."-chart"; ?>',
                             data: [
                                 <?php foreach($usagejson['data']['24month'][$whse]['months'] as $month) : ?>
-                                    <?php if ($month['month'] == 'Current') {$month['month'] = date('Y-m'); } else {$month['month'] = str_replace(' ', ' 20', $month['month']);} ?>
-                                    { month: '<?php echo date('Y-m', strtotime($month['month'])); ?>', saleamount: <?php echo $month['sale amount']; ?>, lostamount: <?php echo $month['lost amount']; ?>, usageamount: <?php echo $month['usage amount']; ?> },
+                                    <?php $month['month'] = ($month['month'] == 'Current') ? date('Y-m') : str_replace(' ', ' 20', $month['month']); ?>
+                                    { 
+                                        month: '<?= date('Y-m', strtotime($month['month'])); ?>', 
+                                        saleamount: <?= $month['sale amount']; ?>,
+                                        <?php if (isset($month['lost amount'])) : ?>
+                                            lostamount: <?= $month['lost amount']; ?>, 
+                                        <?php endif; ?>
+                                        usageamount: <?= $month['usage amount']; ?> 
+                                    },
                                 <?php endforeach; ?>
                             ],
                             xLabelFormat: function (x) { return  moment(x).format('MMM YYYY'); },
                             yLabelFormat: function (y) { return "$ "+y.formatMoney() + ' dollars'; },
                             hoverCallback: function(index, options, content) {
                                 var data = options.data[index];
-                                return content;
 
                             },
                             xkey: 'month',
-                            ykeys: ['saleamount', 'lostamount', 'usageamount'],
-                            labels: ['Amount Sold', 'Amount Lost', 'Amount Used'],
+                            ykeys: [
+                                'saleamount', 
+                                <?php if (isset($month['lost amount'])) : ?>
+                                    'lostamount',
+                                <?php endif; ?>
+                                'usageamount'
+                            ],
+                            labels: [
+                                'Amount Sold',
+                                <?php if (isset($month['lost amount'])) : ?>
+                                    'Amount Lost',
+                                <?php endif; ?>
+                                'Amount Used'
+                            ],
                             dateFormat: function (d) {
                                 var ds = new Date(d);
                                 return moment(ds).format('MMM YYYY');
@@ -114,11 +130,8 @@
                     $('a[href="#<?=$whse."-graph"; ?>"]').on('hidden.bs.tab', function (e) {
                         $('#<?=$whse."-chart"; ?>').empty();
                     });
-
-
                 <?php endforeach; ?>
-            })
-
+            });
         </script>
     <?php endif; ?>
 <?php else : ?>

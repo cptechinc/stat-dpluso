@@ -71,19 +71,20 @@
             					}
             				}
             			}
-						
-						for ($x = 1; $x < $this->tableblueprint['totals']['maxrows'] + 1; $x++) {
-							$tb->tr();
-							for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
-								if (isset($this->tableblueprint['totals']['rows'][$x]['columns'][$i])) {
-									$column = $this->tableblueprint['totals']['rows'][$x]['columns'][$i];
-									$class = wire('config')->textjustify[$this->fields['data']['totals'][$column['id']]['datajustify']];
-									$colspan = $column['col-length'];
-									$celldata = '<b>'.$column['label'].'</b>: '.Table::generatejsoncelldata($this->fields['data']['totals'][$column['id']]['type'], $quote['totals'], $column);
-									$tb->td("colspan=$colspan|class=$class", $celldata);
-									$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
-								} else {
-									$tb->td();
+						if (isset($this->table->tableblueprint['totals'])) {
+							for ($x = 1; $x < $this->tableblueprint['totals']['maxrows'] + 1; $x++) {
+								$tb->tr();
+								for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
+									if (isset($this->tableblueprint['totals']['rows'][$x]['columns'][$i])) {
+										$column = $this->tableblueprint['totals']['rows'][$x]['columns'][$i];
+										$class = wire('config')->textjustify[$this->fields['data']['totals'][$column['id']]['datajustify']];
+										$colspan = $column['col-length'];
+										$celldata = '<b>'.$column['label'].'</b>: '.Table::generatejsoncelldata($this->fields['data']['totals'][$column['id']]['type'], $quote['totals'], $column);
+										$tb->td("colspan=$colspan|class=$class", $celldata);
+										$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
+									} else {
+										$tb->td();
+									}
 								}
 							}
 						}

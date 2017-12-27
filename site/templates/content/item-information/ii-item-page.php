@@ -19,7 +19,9 @@
 			echo $tableformatter->generate_screen();
 			echo $tableformatter->generate_javascript();
 			if (!$input->post->action) {
+				echo $page->bootstrap->h3('', 'Pricing');
 				include $config->paths->content."item-information/item-price-breaks.php";
+				echo $page->bootstrap->h3('', 'Stock');
 				include $config->paths->content."item-information/item-stock.php";
 			}
 		}

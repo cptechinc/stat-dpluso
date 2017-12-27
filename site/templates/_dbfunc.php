@@ -1000,7 +1000,8 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 		}
 	}
 	
-	function edit_useraction(UserAction $updatedaction, $debug = false) { //FIX
+	function edit_useraction(UserAction $updatedaction, $debug = false) {
+		global $db; //FIX
 		$originalaction = get_useraction($updatedaction->id); // (id, bool fetchclass, bool debug)
 		$q = (new QueryBuilder())->table('useractions');
 		$q->mode('update');
@@ -1745,7 +1746,4 @@ JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pric
 			return $sql->fetchColumn();
 		}
 	}
-
-
-
 ?>

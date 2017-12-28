@@ -89,6 +89,7 @@ function save_tableformatterfor(user) {
 	var form = $(formatterform);
 	var userID = form.find('[name=user]').val();
 	form.find('[name=user]').val(user);
+	form.find('[name=action]').val('save-formatter');
 	form.postform({formdata: false, jsoncallback: true, html: true}, function(json) {
 		$.notify({
 			icon: json.response.icon,

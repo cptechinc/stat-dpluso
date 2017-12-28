@@ -71,6 +71,7 @@
             					}
             				}
             			}
+						
 						if (isset($this->table->tableblueprint['totals'])) {
 							for ($x = 1; $x < $this->tableblueprint['totals']['maxrows'] + 1; $x++) {
 								$tb->tr();

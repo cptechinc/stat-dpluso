@@ -45,6 +45,8 @@
 				if ($input->post->user) {
 					$userID = $input->post->text('user');
 					$this->set_userid($userID);
+				} else {
+					$this->set_userid(wire('user')->loginid);
 				}
 				
 				foreach ($tablesections as $tablesection) {

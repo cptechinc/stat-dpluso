@@ -7,7 +7,7 @@
 		
 		switch ($action) {
 			case 'preview':
-				$page->body = $config->paths->content."vend-information/vi-open-invoices.php";
+				$page->body = $config->paths->content."vend-information/vi-formatted-screen.php";
 				
 				if ($config->ajax) {
 					include $page->body;

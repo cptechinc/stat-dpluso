@@ -31,7 +31,6 @@ $(function() {
 		});
 	});
 
-
 	$("body").on("submit", "#cust-sales-history-form", function(event) {
 		event.preventDefault();
 		var form = $(this);
@@ -127,7 +126,6 @@ $(function() {
 		});
 	});
 });
-
 
 function shipto() { //CAN BE USED IF SHIPTO IS DEFINED
 	var custID = $(custlookupform + " .custID").val();

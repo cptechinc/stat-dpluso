@@ -1,5 +1,4 @@
 <?php 
-    $config->pages = new Paths($rootURL);
     $config->pages->index = $config->urls->root;
     $config->pages->account = $config->urls->root . 'user/account/';
     $config->pages->login = $config->urls->root . 'user/account/login/';

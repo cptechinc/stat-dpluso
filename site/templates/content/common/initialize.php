@@ -9,3 +9,6 @@
 	TableScreenFormatter::set_filedirectory($config->jsonfilepath);
 	TableScreenFormatter::set_testfiledirectory($config->paths->vendor."cptechinc/dpluso-screen-formatters/src/examples/");
 	TableScreenFormatter::set_fieldfiledirectory($config->companyfiles."json/");
+	
+	$config->pages = new Paths($config->rootURL);
+	include $config->paths->templates."configs/nav-config.php"; 

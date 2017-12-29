@@ -13,15 +13,18 @@
                 $page->title = 'CI: ' . $customer->generate_title();
                 
                 if (file_exists($config->jsonfilepath.session_id()."-cicustomer.json")) {
-                    $custjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-cicustomer.json"), true);
                     $custshiptos = json_decode(file_get_contents($config->jsonfilepath.session_id()."-cishiptolist.json"), true);
                     
                     if ($customer->has_shipto()) {
-                        $shiptojson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-cishiptoinfo.json"), true);
+                        $tableformatter = $page->screenformatterfactory->generate_screenformatter('ci-customer-shipto-page');
                         $buttonsjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-cistbuttons.json"), true);
                     } else {
+                        $tableformatter = $page->screenformatterfactory->generate_screenformatter('ci-customer-page');
                 		$buttonsjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-cibuttons.json"), true);
                     }
+                    
+                    $tableformatter->process_json();
+                    
                     $toolbar = $config->paths->content."cust-information/toolbar.php";
                     $config->scripts->append(hashtemplatefile('scripts/libs/raphael.js'));
                     $config->scripts->append(hashtemplatefile('scripts/libs/morris.js'));
@@ -38,7 +41,7 @@
                 $input->get->function = 'ci';
                 
                 if ($input->urlSegment(2)) { 
-                    $page->title = "Vendor $custID Ship-to: $shipttoID Not Found";  
+                    $page->title = "Customer $custID Ship-to: $shiptoID Not Found";  
                 }
                 $page->body = $config->paths->content."customer/ajax/load/cust-index/search-form.php";
             }

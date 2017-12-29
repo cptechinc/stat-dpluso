@@ -33,6 +33,7 @@
 						
 						for ($x = 1; $x < $this->tableblueprint['header']['maxrows'] + 1; $x++) {
 							$tb->tr('');
+							$columncount = 0;
 							for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 								if (isset($this->tableblueprint['header']['rows'][$x]['columns'][$i])) {
 									$column = $this->tableblueprint['header']['rows'][$x]['columns'][$i];
@@ -40,7 +41,7 @@
 									$colspan = $column['col-length'];
 									
 									$celldata = $bootstrap->openandclose('b', '', $column['label']). ': ';
-									$celldata .= Table::generatejsoncelldata($this->fields['data']['header'][$column['id']]['type'], $order, $column);
+									$celldata .= TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $order, $column);
 
 									if ($i == 1 && !empty($order['Order Number'])) {
 										$ordn = $order['Ordn'];
@@ -51,25 +52,32 @@
 									}
 									
 									$tb->td("colspan=$colspan|class=$class", $celldata);
-									$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
 								} else {
-									$tb->td();
+									if ($columncount < $this->tableblueprint['cols']) {
+										$colspan = 1;
+										$tb->td();
+									}
 								}
+								$columncount += $colspan;
 							}
 						}
 						if (sizeof($order['details'])) {
 							for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
 								$tb->tr();
+								$columncount = 0;
 								for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 									if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
 										$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
 										$class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
 										$colspan = $column['col-length'];
 										$tb->td("colspan=$colspan|class=$class", $bootstrap->b('', $column['label']));
-										$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
 									} else {
-										$tb->td();
+										if ($columncount < $this->tableblueprint['cols']) {
+											$colspan = 1;
+											$tb->td();
+										}
 									}
+									$columncount += $colspan;
 								}
 							}
 						}
@@ -77,99 +85,131 @@
 						foreach ($order['details'] as $detail) {
 							for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
 								$tb->tr();
+								$columncount = 0;
 								for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 									if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
 										$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
 										$class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
 										$colspan = $column['col-length'];
-										$celldata = Table::generatejsoncelldata($this->fields['data']['detail'][$column['id']]['type'], $detail, $column);
+										$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $detail, $column);
 										$tb->td("colspan=$colspan|class=$class", $celldata);
-										$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
 									} else {
-										$tb->td();
+										if ($columncount < $this->tableblueprint['cols']) {
+											$colspan = 1;
+											$tb->td();
+										}
 									}
+									$columncount += $colspan;
 								}
 							}
+							
 							$tb->tr();
 							for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
+								$columncount = 0;
 								if (isset($this->tableblueprint['itemstatus']['rows'][1]['columns'][$i])) {
 									$column = $this->tableblueprint['itemstatus']['rows'][1]['columns'][$i];
 									$class = wire('config')->textjustify[$this->fields['data']['itemstatus'][$column['id']]['datajustify']];
 									$colspan = $column['col-length'];
 									$celldata = '<b>'.$column['label'] . ':</b> ';
-									$celldata .= Table::generatejsoncelldata($this->fields['data']['itemstatus'][$column['id']]['type'], $detail['itemstatus'], $column);
+									$celldata .= TableScreenMaker::generate_formattedcelldata($this->fields['data']['itemstatus'][$column['id']]['type'], $detail['itemstatus'], $column);
 									$tb->td("colspan=$colspan|class=$class", $celldata);
-									$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
 								} else {
-									$tb->td();
-								}
-							}
-
-							foreach ($detail['purchordrs'] as $purchaseorder) {
-								$tb->tr();
-								for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
-									if (isset($this->tableblueprint['purchaseorder']['rows'][1]['columns'][$i])) {
-										$column = $this->tableblueprint['purchaseorder']['rows'][1]['columns'][$i];
-										$class = wire('config')->textjustify[$this->fields['data']['purchaseorder'][$column['id']]['datajustify']];
-										$colspan = $column['col-length'];
-										$celldata = '<b>'.$column['label'] . ':</b> ';
-										$celldata .= Table::generatejsoncelldata($this->fields['data']['purchaseorder'][$column['id']]['type'], $purchaseorder, $column);
-										$tb->td("colspan=$colspan|class=$class", $celldata);
-										$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
-									} else {
+									if ($columncount < $this->tableblueprint['cols']) {
+										$colspan = 1;
 										$tb->td();
 									}
 								}
+								$columncount += $colspan;
 							}
+							
+							if (sizeof($this->tableblueprint['purchaseorder']['rows'])) {
+								foreach ($detail['purchordrs'] as $purchaseorder) {
+									$tb->tr();
+									$columncount = 0;
+									for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
+										if (isset($this->tableblueprint['purchaseorder']['rows'][1]['columns'][$i])) {
+											$column = $this->tableblueprint['purchaseorder']['rows'][1]['columns'][$i];
+											$class = wire('config')->textjustify[$this->fields['data']['purchaseorder'][$column['id']]['datajustify']];
+											$colspan = $column['col-length'];
+											$celldata = '<b>'.$column['label'] . ':</b> ';
+											$celldata .= TableScreenMaker::generate_formattedcelldata($this->fields['data']['purchaseorder'][$column['id']]['type'], $purchaseorder, $column);
+											$tb->td("colspan=$colspan|class=$class", $celldata);
+											$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
+										} else {
+											if ($columncount < $this->tableblueprint['cols']) {
+												$colspan = 1;
+												$tb->td();
+											}
+										}
+										$columncount += $colspan;
+									}
+								}
+							}
+							
 						} // END foreach ($order['details'] as $detail)
 						
 						// ORDER TOTALS
 						for ($x = 1; $x < $this->tableblueprint['total']['maxrows'] + 1; $x++) {
 							$tb->tr();
+							$columncount = 0;
 							for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 								if (isset($this->tableblueprint['total']['rows'][$x]['columns'][$i])) {
 									$column = $this->tableblueprint['total']['rows'][$x]['columns'][$i];
 									$class = wire('config')->textjustify[$this->fields['data']['total'][$column['id']]['datajustify']];
 									$colspan = $column['col-length'];
 									$tb->td('', '<b>'.$column['label'] . '</b>');
-									$celldata = Table::generatejsoncelldata($this->fields['data']['total'][$column['id']]['type'], $order['totals'], $column);
+									$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['total'][$column['id']]['type'], $order['totals'], $column);
 									$tb->td("colspan=$colspan|class=$class", $celldata);
-									$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
+									$colspan++;
 								} else {
-									$tb->td();
+									if ($columncount < $this->tableblueprint['cols']) {
+										$colspan = 1;
+										$tb->td();
+									}
 								}
+								$columncount += $colspan;
+							}
+						}
+						
+						for ($x = 1; $x < $this->tableblueprint['shipments']['maxrows'] + 1; $x++) {
+							$tb->tr();
+							$columncount = 0;
+							for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
+								if (isset($this->tableblueprint['shipments']['rows'][$x]['columns'][$i])) {
+									$column = $this->tableblueprint['shipments']['rows'][$x]['columns'][$i];
+									$class = wire('config')->textjustify[$this->fields['data']['shipments'][$column['id']]['headingjustify']];
+									$colspan = $column['col-length'];
+									$tb->th("colspan=$colspan|class=$class", $column['label']);
+								} else {
+									if ($columncount < $this->tableblueprint['cols']) {
+										$colspan = 1;
+										$tb->th();
+									}
+								}
+								$columncount += $colspan;
 							}
 						}
 						
 						foreach ($order['shipments'] as $shipment) {
-							for ($x = 1; $x < $this->tableblueprint['shipments']['maxrows'] + 1; $x++) {
-								$tb->tr();
-								for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
-									if (isset($this->tableblueprint['shipments']['rows'][$x]['columns'][$i])) {
-										$column = $this->tableblueprint['shipments']['rows'][$x]['columns'][$i];
-										$class = wire('config')->textjustify[$this->fields['data']['shipments'][$column['id']]['headingjustify']];
-										$colspan = $column['col-length'];
-										$tb->th("colspan=$colspan|class=$class", $column['label']);
-										$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
-									} else {
-										$tb->th();
-									}
-								}
-							}
+							
 					
 							for ($x = 1; $x < $this->tableblueprint['shipments']['maxrows'] + 1; $x++) {
 								$tb->tr();
+								$columncount = 0;
 								for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 									if (isset($this->tableblueprint['shipments']['rows'][$x]['columns'][$i])) {
 										$column = $this->tableblueprint['shipments']['rows'][$x]['columns'][$i];
 										$class = wire('config')->textjustify[$this->fields['data']['shipments'][$column['id']]['datajustify']];
 										$colspan = $column['col-length'];
-										$celldata = Table::generatejsoncelldata($this->fields['data']['shipments'][$column['id']]['type'], $shipment, $column);
+										$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['shipments'][$column['id']]['type'], $shipment, $column);
 										$tb->td("colspan=$colspan|class=$class", $celldata);
-										$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
 									} else {
-										$tb->td();
+										if ($columncount < $this->tableblueprint['cols']) {
+											$colspan = 1;
+											$tb->td();
+										}
 									}
+									$columncount += $colspan;
 								}
 							}
 						}

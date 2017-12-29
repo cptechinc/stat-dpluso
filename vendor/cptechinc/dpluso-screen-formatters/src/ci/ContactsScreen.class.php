@@ -44,7 +44,6 @@
                     $content .= $this->generate_contactsection();
                 }
 				
-				
 				if (isset($this->json['columns']['forms'])) { 
 					$content .= $this->generate_formsection();
 				}

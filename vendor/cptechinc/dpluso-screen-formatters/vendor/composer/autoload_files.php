@@ -23,6 +23,8 @@ return array(
     '3e450730fcb21bc90edcfd524e2e003e' => $baseDir . '/src/ci/SalesHistoryFormatter.class.php',
     '01f20971f6b9b2759737be36ed1456c8' => $baseDir . '/src/ci/OpenInvoicesFormatter.class.php',
     'be2b9445ed14c4abc5f5f0d6adb80d4e' => $baseDir . '/src/ci/PaymentHistoryFormatter.class.php',
+    '9b579ec5b4e78b006d63eaffee2c98e2' => $baseDir . '/src/ci/CustomerScreen.class.php',
+    'b014858c1ffa1002adf88e383ce09940' => $baseDir . '/src/ci/CustomerShiptoScreen.class.php',
     'e47e1af2fc4de4c03c35ec4c2cd414a1' => $baseDir . '/src/ci/ContactsScreen.class.php',
     'b8e264ed3d784f0a9fed0b988c07308a' => $baseDir . '/src/ci/QuotesFormatter.class.php',
     '413ac064572a3edf1a97ffff05ab2c9e' => $baseDir . '/src/vi/PurchaseOrdersFormatter.class.php',

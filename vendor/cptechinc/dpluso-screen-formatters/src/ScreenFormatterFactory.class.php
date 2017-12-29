@@ -29,6 +29,8 @@
             'ii-requirements' => 'II_ItemRequirementsScreen',
             'ii-kit' => 'II_ItemKitScreen',
             
+            'ci-customer-page' => 'CI_CustomerScreen',
+            'ci-customer-shipto-page' => 'CI_CustomerShiptoScreen',
             'ci-contacts' => 'CI_ContactsScreen'
         );
         

@@ -17,6 +17,8 @@
 		public static $testfiledir = false;
 		public static $fieldfiledir = false;
         
+        protected static $trackingcolumns = array('Tracking Number');
+        protected static $phonecolumns = array('phone', 'fax');
         /* =============================================================
            CONSTRUCTOR AND SETTER FUNCTIONS
        ============================================================ */
@@ -89,6 +91,71 @@
                 $array[$value] = $key;
             }
             return $bootstrap->select('class=form-control input-sm|id=shownotes', $array);
+        }
+        
+        /* =============================================================
+			STATIC FUNCTIONS
+		============================================================ */
+        
+        /**
+		 * Generates the celldata based of the column, column type and the json array it's in, looks at if the data is numeric
+		 * @param string $type the type of data D = Date, N = Numeric, string
+		 * @param string $parent the array in which the data is contained
+		 * @param string $column the key in which we use to look up the value 
+		 */
+		static public function generate_formattedcelldata($type, $parent, $column) {
+            $bootstrap = new Contento();
+			$celldata = '';
+			if ($type == 'D') {
+                $celldata = (strlen($parent[$column['id']]) > 0) ? date($column['date-format'], strtotime($parent[$column['id']])) : $parent[$column['id']];
+			} elseif ($type == 'N') {
+				if (is_string($parent[$column['id']])) {
+					$celldata = number_format(floatval($parent[$column['id']]), $column['after-decimal']);
+				} else {
+					$celldata = number_format($parent[$column['id']], $column['after-decimal']);
+				}
+			} else {
+				$celldata = $parent[$column['id']];
+			}
+            
+            if (in_array($column['id'], self::$trackingcolumns)) {
+                $href = self::generate_trackingurl($parent['Service Type'], $parent[$column['id']]);
+                return $href ? $bootstrap->a("href=$href|target=_blank", $celldata) : $celldata;
+            } elseif(in_array($column['id'], self::$phonecolumns)) {
+                $href = self::generate_phoneurl($parent[$column['id']]);
+                return $bootstrap->a("href=tel:$href", $celldata);
+            } else {
+                return $celldata;
+            }
+		}
+        
+        static public function generate_celldata($parent, $column) {
+            $bootstrap = new Contento();
+            if (in_array($column, self::$trackingcolumns)) {
+                $href = self::generate_trackingurl($parent['Service Type'], $parent[$column]);
+                return $href ? $bootstrap->a("href=$href|target=_blank", $celldata) : $celldata;
+            } elseif(in_array($column, self::$phonecolumns)) {
+                $href = self::generate_phoneurl($parent[$column]);
+                return $bootstrap->a("href=tel:$href", $parent[$column]);
+            } else {
+                return $parent[$column];
+            }
+        }
+        
+        static public function generate_trackingurl($servicetype, $tracknbr) {
+            $href = false;
+            if (strpos(strtolower($servicetype), 'fed') !== false) {
+                $href = "https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=$tracknbr&cntry_code=us";
+            } else if (strpos(strtolower($servicetype), 'ups') !== false) {
+                $href = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=$tracknbr&loc=en_us";
+            } else if (strpos(strtolower($servicetype), 'gro') !== false) {
+                $href = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=$tracknbr&loc=en_us";
+            }
+            return $href;
+        }
+        
+        static public function generate_phoneurl($phone) {
+            return str_replace('-', '', $phone);
         }
         
         /* =============================================================

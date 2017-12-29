@@ -4,7 +4,7 @@
 		protected $formatter = false; // WILL BE JSON DECODED ARRAY
 		protected $tableblueprint = false; // WILL BE ARRAY
 		protected $source;
-		
+	
 		/* =============================================================
            CONSTRUCTOR AND SETTER FUNCTIONS
        ============================================================ */

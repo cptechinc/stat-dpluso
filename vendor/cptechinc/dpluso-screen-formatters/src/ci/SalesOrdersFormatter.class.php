@@ -61,6 +61,7 @@
 								$columncount += $colspan;
 							}
 						}
+						
 						if (sizeof($order['details'])) {
 							for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
 								$tb->tr();
@@ -171,28 +172,28 @@
 							}
 						}
 						
-						for ($x = 1; $x < $this->tableblueprint['shipments']['maxrows'] + 1; $x++) {
-							$tb->tr();
-							$columncount = 0;
-							for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
-								if (isset($this->tableblueprint['shipments']['rows'][$x]['columns'][$i])) {
-									$column = $this->tableblueprint['shipments']['rows'][$x]['columns'][$i];
-									$class = wire('config')->textjustify[$this->fields['data']['shipments'][$column['id']]['headingjustify']];
-									$colspan = $column['col-length'];
-									$tb->th("colspan=$colspan|class=$class", $column['label']);
-								} else {
-									if ($columncount < $this->tableblueprint['cols']) {
-										$colspan = 1;
-										$tb->th();
+						if (sizeof($order['shipments'])) {
+							for ($x = 1; $x < $this->tableblueprint['shipments']['maxrows'] + 1; $x++) {
+								$tb->tr();
+								$columncount = 0;
+								for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
+									if (isset($this->tableblueprint['shipments']['rows'][$x]['columns'][$i])) {
+										$column = $this->tableblueprint['shipments']['rows'][$x]['columns'][$i];
+										$class = wire('config')->textjustify[$this->fields['data']['shipments'][$column['id']]['headingjustify']];
+										$colspan = $column['col-length'];
+										$tb->th("colspan=$colspan|class=$class", $column['label']);
+									} else {
+										if ($columncount < $this->tableblueprint['cols']) {
+											$colspan = 1;
+											$tb->th();
+										}
 									}
+									$columncount += $colspan;
 								}
-								$columncount += $colspan;
-							}
+							}	
 						}
 						
 						foreach ($order['shipments'] as $shipment) {
-							
-					
 							for ($x = 1; $x < $this->tableblueprint['shipments']['maxrows'] + 1; $x++) {
 								$tb->tr();
 								$columncount = 0;

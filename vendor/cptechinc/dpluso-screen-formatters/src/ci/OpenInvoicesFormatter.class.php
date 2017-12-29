@@ -42,7 +42,7 @@
         							$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
         							$class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
         							$colspan = $column['col-length'];
-        							$celldata = Table::generatejsoncelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
+        							$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
                                     
         							if ($i == 1 && !empty($invoice['Invoice Number'])) {
                                         $ordn = $invoice['Ordn'];
@@ -70,7 +70,7 @@
     					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
     					$class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
     					$colspan = $column['col-length'];
-    					$celldata = Table::generatejsoncelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
+    					$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
     					$tb->td("colspan=$colspan|class=$class", $celldata);
     					$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
     				} else {

@@ -57,7 +57,7 @@
         						$column = $this->tableblueprint['header']['rows'][$x]['columns'][$i];
         						$class = wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
         						$colspan = $column['col-length'];
-        						$celldata = Table::generatejsoncelldata($this->fields['data']['header'][$column['id']]['type'], $order, $column);
+        						$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $order, $column);
         						$tb->td("colspan=$colspan|class=$class", $celldata);
         						$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
         					} else {
@@ -72,7 +72,7 @@
         		                        $column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
         		                        $class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
         		                        $colspan = $column['col-length'];
-        		                        $celldata = Table::generatejsoncelldata($this->fields['data']['detail'][$column['id']]['type'], $detail, $column);
+        		                        $celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $detail, $column);
         		                        $tb->td("colspan=$colspan|class=$class", $celldata);
         		                        $i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
         		                    } else {
@@ -116,7 +116,7 @@
         	                        $column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
         	                        $class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
         	                        $colspan = $column['id'] == "Purchase Order Number" ? 2 : $column['col-length'];
-        	                        $celldata = Table::generatejsoncelldata($this->fields['data']['detail'][$column['id']]['type'], $pototals, $column);
+        	                        $celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $pototals, $column);
         	                        $tb->td("colspan=$colspan|class=$class", $celldata);
         	                        $i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
         	                    } else {
@@ -140,7 +140,7 @@
     						$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
     						$class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
     						$colspan = $column['id'] == "Line Number" ? 2 : $column['col-length'];
-    						$celldata = Table::generatejsoncelldata($this->fields['data']['detail'][$column['id']]['type'], $vendortotal, $column);
+    						$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $vendortotal, $column);
     						$tb->td("colspan=$colspan|class=$class", $celldata);
     						$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
     					} else {

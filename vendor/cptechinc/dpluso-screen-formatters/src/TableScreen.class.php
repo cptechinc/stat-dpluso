@@ -106,6 +106,7 @@
 		static public function generate_formattedcelldata($type, $parent, $column) {
             $bootstrap = new Contento();
 			$celldata = '';
+            
 			if ($type == 'D') {
                 $celldata = (strlen($parent[$column['id']]) > 0) ? date($column['date-format'], strtotime($parent[$column['id']])) : $parent[$column['id']];
 			} elseif ($type == 'N') {
@@ -133,7 +134,7 @@
             $bootstrap = new Contento();
             if (in_array($column, self::$trackingcolumns)) {
                 $href = self::generate_trackingurl($parent['Service Type'], $parent[$column]);
-                return $href ? $bootstrap->a("href=$href|target=_blank", $celldata) : $celldata;
+                return $href ? $bootstrap->a("href=$href|target=_blank", $parent[$column]) : $parent[$column];
             } elseif(in_array($column, self::$phonecolumns)) {
                 $href = self::generate_phoneurl($parent[$column]);
                 return $bootstrap->a("href=tel:$href", $parent[$column]);

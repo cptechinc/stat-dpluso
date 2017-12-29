@@ -45,7 +45,7 @@
             						$column = $this->tableblueprint['header']['rows'][$x]['columns'][$i];
             						$class = wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
             						$colspan = $column['col-length'];
-            						$celldata = '<b>'.$column['label'].'</b>: '.Table::generatejsoncelldata($this->fields['data']['header'][$column['id']]['type'], $quote, $column);
+            						$celldata = '<b>'.$column['label'].'</b>: '.TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $quote, $column);
             						$tb->td("colspan=$colspan|class=$class", $celldata);
             						$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
             					} else {
@@ -62,7 +62,7 @@
             							$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
             							$class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
             							$colspan = $column['col-length'];
-            							$celldata = Table::generatejsoncelldata($this->fields['data']['detail'][$column['id']]['type'], $item, $column);
+            							$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $item, $column);
             							$tb->td("colspan=$colspan|class=$class", $celldata);
             							$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
             						} else {
@@ -80,7 +80,7 @@
 										$column = $this->tableblueprint['totals']['rows'][$x]['columns'][$i];
 										$class = wire('config')->textjustify[$this->fields['data']['totals'][$column['id']]['datajustify']];
 										$colspan = $column['col-length'];
-										$celldata = '<b>'.$column['label'].'</b>: '.Table::generatejsoncelldata($this->fields['data']['totals'][$column['id']]['type'], $quote['totals'], $column);
+										$celldata = '<b>'.$column['label'].'</b>: '.TableScreenMaker::generate_formattedcelldata($this->fields['data']['totals'][$column['id']]['type'], $quote['totals'], $column);
 										$tb->td("colspan=$colspan|class=$class", $celldata);
 										$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
 									} else {

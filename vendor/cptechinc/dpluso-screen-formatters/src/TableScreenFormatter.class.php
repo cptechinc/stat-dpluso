@@ -97,9 +97,12 @@
 					
 					foreach ($table[$tablesection]['rows'] as $row) {
 						$columncount = 0;
+						$maxcolumn = 0;
 						foreach ($row['columns'] as $column) {
 							$columncount += $column['col-length'];
+							$maxcolumn = $column['column'] > $maxcolumn ? $column['column'] : $maxcolumn;
 						}
+						$columncount = ($maxcolumn > $columncount) ? $maxcolumn : $columncount;
 						$postarray['cols'] = ($columncount > $postarray['cols']) ? $columncount : $postarray['cols'];
 					}
 				}
@@ -176,7 +179,6 @@
 		}
 		
         protected function generate_tableblueprint() {
-
             $tablesections = array_keys($this->fields['data']);
             $table = array('cols' => $this->formatter['cols']);
 			

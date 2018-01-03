@@ -39,13 +39,15 @@
             	$tb->tablesection('tbody');
             		foreach($whse['quotes'] as $quote) {
             			for ($x = 1; $x < $this->tableblueprint['header']['maxrows'] + 1; $x++) {
-            				$tb->tr();
+							$attr = $x == 1 ? 'class=first-txn-row' : '';
+            				$tb->tr($attr);
             				for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
             					if (isset($this->tableblueprint['header']['rows'][$x]['columns'][$i])) {
             						$column = $this->tableblueprint['header']['rows'][$x]['columns'][$i];
             						$class = wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
             						$colspan = $column['col-length'];
-            						$celldata = '<b>'.$column['label'].'</b>: '.TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $quote, $column);
+									$label = strlen(trim($column['label'])) ? '<b>'.$column['label'].'</b>: ' : '';
+            						$celldata = $label.TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $quote, $column);
             						$tb->td("colspan=$colspan|class=$class", $celldata);
             						$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
             					} else {
@@ -72,7 +74,7 @@
             				}
             			}
 						
-						if (isset($this->table->tableblueprint['totals'])) {
+						if (isset($this->tableblueprint['totals'])) {
 							for ($x = 1; $x < $this->tableblueprint['totals']['maxrows'] + 1; $x++) {
 								$tb->tr();
 								for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
@@ -89,8 +91,8 @@
 								}
 							}
 						}
-            			$tb->tr('class=last-row-bottom');
-            			$tb->td('colspan='.$this->tableblueprint['cols'],'&nbsp;');
+            			//$tb->tr('class=last-row-bottom');
+            			//$tb->td('colspan='.$this->tableblueprint['cols'],'&nbsp;');
             		}
             	$tb->closetablesection('tbody');
             	echo $tb->close();

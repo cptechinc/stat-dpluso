@@ -24,13 +24,12 @@
                     }
                     
                     $tableformatter->process_json();
-                    
                     $toolbar = $config->paths->content."cust-information/toolbar.php";
                     $config->scripts->append(hashtemplatefile('scripts/libs/raphael.js'));
                     $config->scripts->append(hashtemplatefile('scripts/libs/morris.js'));
             		$config->scripts->append(hashtemplatefile('scripts/ci/cust-functions.js'));
             		$config->scripts->append(hashtemplatefile('scripts/ci/cust-info.js'));
-                    $page->body = $config->paths->content."cust-information/cust-info-outline.php";
+                    $page->body = $config->paths->content."cust-information/ci-customer-page.php";
                     $itemlookup->set_customer($customer->custid, $customer->shiptoid);
                 } else {
                     $page->body = $page->body = $config->paths->content."cust-information/ci-click-to-load.php";

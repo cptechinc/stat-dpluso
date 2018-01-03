@@ -348,6 +348,7 @@
 	.table .no-bottom { margin-bottom: 0px; }
 	.last-section-row {border-top: 2px solid black;}
 	.last-row-bottom {border-bottom: 2px solid black;}
+	.first-txn-row {border-top: 2px solid black;}
 
 	hr.dark {border-top: 1px solid #242F40;}
 	a.h1, a.h2, a.h3, a.h4, a.h5, a.h6 {color: #18bc9c;}

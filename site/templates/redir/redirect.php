@@ -1,9 +1,5 @@
 <?php
-
-
 	$vl = is_validlogin(session_id());
-
-
 	$L = $session->loc;
 
 	if ($L == "") {
@@ -16,9 +12,5 @@
 			setcookie("session", strToHex(session_id()), time()+86400, "/", "",  0);
 		}
 	}
-
-
 	header("location: ". $L);
 	exit;
-
-?>

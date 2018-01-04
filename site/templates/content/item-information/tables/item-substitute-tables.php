@@ -38,7 +38,7 @@
 			$class = $config->textjustify[$substitutejson['columns']["sub item"]['datajustify']];
 			$tb->td("colspan=2|class=$class", $item["sub item"]);
 			$tb->td('', $item['same/like']);
-			$colspan = sizeof($columns) - 3;
+			$colspan = sizeof($substitutejson['columns']) - 3;
 			$tb->td("colpan=$colspan", $item['sub desc']);
 			
 			if (isset($item['alt items'])) {
@@ -49,7 +49,7 @@
 			
 			foreach ($item['whse'] as $whse) {
 				$tb->tr();
-				foreach($columns as $column) {
+				foreach(array_keys($substitutejson['columns']) as $column) {
 					if ($column == 'sub item') {
 						$tb->td();
 					} else {

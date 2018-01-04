@@ -1,5 +1,5 @@
-<?php if ($pricing['priceqty2'] != "" && $pricing['priceqty2'] != "0") : ?>
-    <table class="table-condensed table-bordered table">
+<table class="table-condensed table-bordered table">
+    <?php if ($pricing['priceqty2'] != "" && $pricing['priceqty2'] != "0") : ?>
         <tr> <th>Qty</th> <th class="text-right">Break</th> </tr>
         <tr> <td><?php echo $pricing['priceqty1']; ?></td> <td class="text-right">$ <?php echo $pricing['priceprice1']; ?></td> </tr>
         <tr> <td><?php echo $pricing['priceqty2']; ?></td> <td class="text-right">$ <?php echo $pricing['priceprice2']; ?></td> </tr>
@@ -15,5 +15,5 @@
         <?php if ($pricing['priceqty6'] != "" && $pricing['priceqty6'] != "0") : ?>
             <tr> <td><?php echo $pricing['priceqty6']; ?></td> <td class="text-right">$ <?php echo $pricing['priceprice6']; ?></td> </tr>
         <?php endif; ?>
-    </table>
-<?php endif; ?>
+    <?php endif; ?>
+</table>

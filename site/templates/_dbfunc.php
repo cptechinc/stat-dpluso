@@ -914,37 +914,75 @@
 /* =============================================================
 	PRODUCT FUNCTIONS
 ============================================================ */
-	function get_item_search_results($sessionID, $limit = 10, $page = 1, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = wire('database')->prepare("SELECT pricing.*, lastqty, lastsold, lastprice, ordn FROM pricing
-JOIN custpricehistory ON custpricehistory.sessionid = pricing.sessionid AND pricing.itemid = custpricehistory.itemid WHERE pricing.sessionid = :sessionID " .$limiting);
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
+	function get_itemsearchresults($sessionID, $limit = 10, $page = 1, $debug = false) {
+		$q = (new QueryBuilder())->table('pricing');
+		$q->where('sessionid', $sessionID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'PricingItem');
+			return $sql->fetchAll();
 		}
 	}
-
-	function get_item_search_results_count($sessionID, $debug) {
-		$sql = wire('database')->prepare("SELECT COUNT(*) FROM pricing WHERE sessionid = :sessionID ");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
+	
+	function count_itemsearchresults($sessionID, $debug = false) {
+		$q = (new QueryBuilder())->table('pricing');
+		$q->field($q->expr('COUNT(*)'));
+		$q->where('sessionid', $sessionID);
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
-
-	function getitemavailability($sessionID, $itemID, $debug) {
-		$sql = wire('database')->prepare("SELECT * FROM whseavail WHERE sessionid = :sessionID AND itemid = :itemid");
-		$switching = array(':sessionID' => $sessionID, ':itemid' => $itemID); $withquotes = array(true, true);
-		$sql->execute($switching);
+	
+	function count_itemhistory($sessionID, $itemID, $debug = false) {
+		$q = (new QueryBuilder())->table('custpricehistory');
+		$q->field($q->expr('COUNT(*)'));
+		$q->where('sessionid', $sessionID);
+		$q->where('itemid', $itemID);
+		$sql = wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_itemhistoryfield($sessionID, $itemID, $field, $debug = false) {
+		$q = (new QueryBuilder())->table('custpricehistory');
+		$q->field($field);
+		$q->where('sessionid', $sessionID);
+		$q->where('itemid', $itemID);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_itemavailability($sessionID, $itemID, $debug = false) {
+		$q = (new QueryBuilder())->table('whseavail');
+		$q->where('sessionid', $sessionID);
+		$q->where('itemid', $itemID);
+		$sql = wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}

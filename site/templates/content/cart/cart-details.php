@@ -23,7 +23,7 @@
     					$detnoteicon = '<a class="load-notes" href="'.$detailnoteurl.'" data-modal="#ajax-modal"> <i class="material-icons md-36" title="View order notes">&#xE0B9;</i></a>';
     				}
 				?>
-            <tr>
+            <tr class="cart-item">
                 <td data-title="ItemID/Desc">
                     <?php if ($detail['errormsg'] != '') : ?>
                         <div class="btn-sm btn-danger">

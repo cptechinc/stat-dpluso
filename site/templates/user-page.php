@@ -8,7 +8,6 @@
 		<?php if ($user->logged_in) : ?>
 			<h2>Welcome, <?php echo $user->username; ?>!</h2>
 		<?php endif; ?>
-
 		<div class="row">
 			<div class="col-sm-3 col-md-3 col-lg-3 account">
 				<div class="profile bg-info">
@@ -17,10 +16,15 @@
 					<p class="text-center"><?= $user->loginid; ?></p>
 				</div>
 				<ul class="list-group">
-					<?php if (wire('users')->get("name=$user->loginid")->hasPermission('setup-screen-formatter')) : ?>
-						<a href="<?= $config->pages->tableformatters; ?>" class="list-group-item">Screen Configurations</a>
+					<?php if (wire('users')->get("name=$user->loginid")->count) : ?>
+						<?php if (wire('users')->get("name=$user->loginid")->hasPermission('setup-screen-formatter')) : ?>
+							<a href="<?= $config->pages->tableformatters; ?>" class="list-group-item">Screen Configurations</a>
+						<?php endif; ?>
+					<?php else : ?>
+						<?php if ($appconfig->allow_userscreenformatter) : ?>
+							<a href="<?= $config->pages->tableformatters; ?>" class="list-group-item">Screen Configurations</a>
+						<?php endif; ?>
 					<?php endif; ?>
-					<a href="<?= $config->pages->userconfigs; ?>" class="list-group-item">User Configurations</a>
 					<a href="<?= $config->pages->account.'redir/?action=logout'; ?>" class="list-group-item logout">
 						<span class="glyphicon glyphicon-log-out"></span> Log Out
 					</a>

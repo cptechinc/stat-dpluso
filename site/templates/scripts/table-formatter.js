@@ -33,11 +33,11 @@ function validate_tableformatter() {
 			var row = $(this);
 			var line = row.find('.'+tab.attr('id')+'-line').val();
 			var column = row.find('.column').val();
+			var length = row.find('.')
 			var label = row.find('.col-label').val();
 			var key = line + '-' + column;
+			
 			if (key !== ignore) {
-				console.log(key);
-				console.log(label);
 				if (structure[tab.attr('id')].includes(key)) {
 					row.addClass('has-error');
 					errors[tab.attr('id')].push(label)
@@ -46,7 +46,6 @@ function validate_tableformatter() {
 				}
 			}
 		});
-		console.log(errors);
 	});
 	
 	var message = "The following columns have errors : Check Duplicate Columns  <br>";

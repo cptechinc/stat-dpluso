@@ -43,23 +43,27 @@ $(document).ready(function() {
 			modal.find('.description').text(desc);
 		});
 
-		$(config.modals.ajax).on('shown.bs.modal', function (event) {
+		$(config.modals.ajax).on('shown.bs.modal', function(event) {
 			init_datepicker();
 			init_timepicker();
 		});
 
-		$(config.modals.pricing).on('shown.bs.modal', function (event) { // DEPRECATED 8/22/2017 DELETE ON 9/1
+		$(config.modals.pricing).on('shown.bs.modal', function(event) { // DEPRECATED 8/22/2017 DELETE ON 9/1
 			init_datepicker();
 			init_timepicker();
 			init_bootstraptoggle();
 		});
 
-		$(config.modals.lightbox).on('shown.bs.modal', function (event) {
+		$(config.modals.lightbox).on('shown.bs.modal', function(event) {
 			makeshadow();
 		});
 		
-		$(config.modals.lightbox).on('hide.bs.modal', function (event) {
+		$(config.modals.lightbox).on('hide.bs.modal', function(event) {
 			removeshadow();
+		});
+		
+		$(config.modals.itemlookup).on('shown.bs.modal', function(event) {
+			$(this).find('.searchfield').focus();
 		});
 
 	/*==============================================================

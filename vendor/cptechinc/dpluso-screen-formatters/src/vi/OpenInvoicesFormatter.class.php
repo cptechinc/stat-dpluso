@@ -18,16 +18,21 @@
         	$tb->tablesection('thead');
         		for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
         			$tb->tr();
+					$columncount = 0;
+					
         			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
         				if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
         					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
         					$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
         					$colspan = $column['col-length'];
         					$tb->th("colspan=$colspan|class=$class", $column['label']);
-        					$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
         				} else {
-        					$tb->th();
+							if ($columncount < $this->tableblueprint['cols']) {
+								$colspan = 1;
+								$tb->th();
+							}
         				}
+						$columncount += $colspan;
         			}
         		}
         	$tb->closetablesection('thead');
@@ -36,6 +41,8 @@
         			if ($invoice != $this->json['data']['invoices']['TOTAL']) {
         				for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
         					$tb->tr();
+							$columncount = 0;
+							
         					for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
         						if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
         							$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
@@ -50,10 +57,13 @@
         							}
 									
 									$tb->td("colspan=$colspan|class=$class", $celldata);
-        							$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
         						} else {
-        							$tb->td();
+									if ($columncount < $this->tableblueprint['cols']) {
+										$colspan = 1;
+										$tb->td();
+									}
         						}
+								$columncount += $colspan;
         					}
         				}
         			}
@@ -61,20 +71,25 @@
         	$tb->closetablesection('tbody');
         	$tb->tablesection('tfoot');
         		$invoice = $this->json['data']['invoices']['TOTAL'];
-        		$x = 1;
-    			$tb->tr('class=has-warning');
-    			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
-    				if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
-    					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-    					$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
-    					$colspan = $column['col-length'];
-    					$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
-    					$tb->td("colspan=$colspan|class=$class", $celldata);
-    					$i = ($colspan > 1) ? $i + ($colspan - 1) : $i;
-    				} else {
-    					$tb->td();
-    				}
-    			}
+        		for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
+	    			$tb->tr('class=totals');
+					$columncount = 0;
+	    			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
+	    				if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
+	    					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
+	    					$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+	    					$colspan = $column['col-length'];
+	    					$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
+	    					$tb->td("colspan=$colspan|class=$class", $celldata);
+	    				} else {
+							if ($columncount < $this->tableblueprint['cols']) {
+								$colspan = 1;
+								$tb->td();
+							}
+	    				}
+						$columncount += $colspan;
+	    			}
+				}
         	$tb->closetablesection('tfoot');
 			return $tb->close();
         }

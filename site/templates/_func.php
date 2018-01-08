@@ -12,7 +12,7 @@
     		// markup for the list item...
     		// if current item is the same as the page being viewed, add a "current" class to it
     		// markup for the link
-    		if($item->id == wire('page')->id) {
+    		if($item->id == Processwire\wire('page')->id) {
     			echo "<a href='$item->url' class='list-group-item bg-primary'>$item->title</a>";
     		} else {
     			echo "<a href='$item->url' class='list-group-item'>$item->title</a>";
@@ -185,9 +185,9 @@
 	}
 	
 	function createshopasform($custID, $shipID) {
-		$form = '<form action="'.wire(config)->pages->customer.'redir/" method="post">';
+		$form = '<form action="'.Processwire\wire(config)->pages->customer.'redir/" method="post">';
 		$form .= '<input type="hidden" name="action" value="shop-as-customer">';
-		$form .= '<input type="hidden" name="page" value="'.wire(config)->filename.'">';
+		$form .= '<input type="hidden" name="page" value="'.Processwire\wire(config)->filename.'">';
 		$form .= '<input type="hidden" name="custID" value="'.$custID.'">';
 		if ($shipID) {
 			$form .= '<input type="hidden" name="shipID" value="'.$shipID.'">';
@@ -379,8 +379,8 @@
 	
 	function writedataformultitems($data, $items, $qtys) {
 		for ($i = 0; $i < sizeof($items); $i++) {
-			$itemID = str_pad(wire('sanitizer')->text($items[$i]), 30, ' ');
-			$qty = wire('sanitizer')->text($qtys[$i]);
+			$itemID = str_pad(Processwire\wire('sanitizer')->text($items[$i]), 30, ' ');
+			$qty = Processwire\wire('sanitizer')->text($qtys[$i]);
 			if (empty($qty)) {$qty = "1"; }
 			$data[] = "ITEMID=".$itemID."QTY=".$qty;
 		}
@@ -400,8 +400,8 @@
 	}
 	
 	function hashtemplatefile($filename) {
-		$hash = hash_file(wire('config')->userAuthHashType, wire('config')->paths->templates.$filename);
-		return wire('config')->urls->templates.$filename.'?v='.$hash;
+		$hash = hash_file(Processwire\wire('config')->userAuthHashType, Processwire\wire('config')->paths->templates.$filename);
+		return Processwire\wire('config')->urls->templates.$filename.'?v='.$hash;
 	}
 	
 	function curl_redir($url) {
@@ -420,16 +420,16 @@
  ============================================================ */
 	function setupuser($sessionID) {
 		$loginrecord = get_loginrecord($sessionID);
-		wire('user')->fullname = $loginrecord['loginname'];
-		wire('user')->loginid = $loginrecord['loginid'];
-		wire('user')->hascontactrestrictions = $loginrecord['restrictcustomer'];
-		wire('user')->hasrestrictions = $loginrecord['restrictuseraccess'];
-		wire('user')->hasorderlocked = hasanorderlocked(session_id());
-		if (wire('user')->hasorderlocked) {
-			wire('user')->lockedordn = getlockedordn(session_id());
+		Processwire\wire('user')->fullname = $loginrecord['loginname'];
+		Processwire\wire('user')->loginid = $loginrecord['loginid'];
+		Processwire\wire('user')->hascontactrestrictions = $loginrecord['restrictcustomer'];
+		Processwire\wire('user')->hasrestrictions = $loginrecord['restrictuseraccess'];
+		Processwire\wire('user')->hasorderlocked = hasanorderlocked(session_id());
+		if (Processwire\wire('user')->hasorderlocked) {
+			Processwire\wire('user')->lockedordn = getlockedordn(session_id());
 		}
-		wire('user')->hasquotelocked = hasaquotelocked(session_id());
-		if (wire('user')->hasquotelocked) {
+		Processwire\wire('user')->hasquotelocked = hasaquotelocked(session_id());
+		if (Processwire\wire('user')->hasquotelocked) {
 			$user->lockedqnbr = getlockedquotenbr(session_id());
 		}
 	}

@@ -3,6 +3,9 @@
         public static $type = 'quote';
         public $qnbr;
         
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
         public function setup_quotepanel($qnbr) {
 			$this->qnbr = $qnbr;
 		}

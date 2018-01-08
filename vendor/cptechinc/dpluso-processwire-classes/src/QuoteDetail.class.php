@@ -1,5 +1,4 @@
 <?php 
-
     class QuoteDetail extends OrderDetail implements OrderDetailInterface {
         public $sessionid;
         public $recno;

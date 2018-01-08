@@ -1,14 +1,23 @@
 <?php 
     class ItemLookupModal {
+        use ThrowErrorTrait;
+        
         protected $type = 'cart';
         protected $custID;
         protected $shipID;
         
-        
-        public function get_type() {
-            return $this->type;
-        }
-        
+        /* =============================================================
+ 		   GETTER FUNCTIONS 
+ 	   ============================================================ */
+       /**
+        * If a property is not accessible then try to give them the property through
+        * a already defined method or to give them the property value
+        * @param  string $property property name
+        * @return 
+        *     1. Value returned in value call
+        *     2. Returns the value of the property_exists
+        *     3. Throw Error
+        */
         public function __get($property) {
             $method = "get_{$property}";
             if (method_exists($this, $method)) {
@@ -21,6 +30,13 @@
             }
         }
         
+        public function get_type() {
+            return $this->type;
+        }
+        
+        /* =============================================================
+ 		   SETTER FUNCTIONS 
+ 	   ============================================================ */
         public function set_customer($custID, $shipID) {
             $this->custID = $custID;
             $this->shipID = $shipID;
@@ -38,6 +54,9 @@
             return $lookup;
         }
         
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
         public function generate_resultsurl() {
             $url = new \Purl\Url(wire('config')->pages->ajax.'load/products/item-search-results/cart/');
             $url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
@@ -56,21 +75,22 @@
             return $url->getUrl();
         }
         
-        protected function error($error, $level = E_USER_ERROR) {
-			$error = (strpos($error, 'DPLUSO [ITEMLOOKUPMODAL]: ') !== 0 ? 'DPLUSO [ITEMLOOKUPMODAL]: ' . $error : $error);
-			trigger_error($error, $level);
-			return;
-		}
     }
     
     class ItemLookupModalOrder extends ItemLookupModal  {
         protected $type = 'order';
         protected $ordn;
         
+        /* =============================================================
+ 		   CONSTRUCTOR FUNCTIONS 
+ 	   ============================================================ */
         public function __construct($ordn) {
             $this->ordn = $ordn;
         }
         
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
         public function generate_resultsurl() {
             $url = new \Purl\Url(wire('config')->pages->ajax.'load/products/item-search-results/order/');
             $url->query->setData(array('ordn' => $this->ordn,'custID' => $this->custID, 'shipID' => $this->shipID));
@@ -95,10 +115,16 @@
         protected $type = 'quote';
         protected $qnbr;
         
+        /* =============================================================
+ 		   CONSTRUCTOR FUNCTIONS 
+ 	   ============================================================ */
         public function __construct($qnbr) {
             $this->qnbr = $qnbr;
         }
         
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
         public function generate_resultsurl() {
             $url = new \Purl\Url(wire('config')->pages->ajax.'load/products/item-search-results/quote/');
             $url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);

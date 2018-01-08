@@ -5,6 +5,9 @@
 		public $shipID;
         public $contactID;
         
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
         public function setup_contactpanel($custID, $shipID, $contactID) {
 			$this->setup_customerpanel($custID, $shipID);
             $this->contactID = $contactID;

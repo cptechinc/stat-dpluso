@@ -1,6 +1,8 @@
 <?php 
     class Contact {
         use CreateFromObjectArrayTraits;
+		use CreateClassArrayTraits;
+		use ThrowErrorTrait;
         
         public $recno;
 		public $date;
@@ -29,11 +31,10 @@
             'custID' => 'custid',
             'shipID' => 'shiptoid',
         );
-
-        public function __construct() {
-            
-        }
         
+        /* =============================================================
+			GETTER FUNCTIONS 
+		============================================================ */
         public function __get($property) {
             $method = "get_{$property}";
             if (method_exists($this, $method)) {
@@ -68,7 +69,10 @@
         protected function has_extension() {
             return ($this->cphext != '') ? true : false;
         }
-
+        
+        /* =============================================================
+			CLASS FUNCTIONS 
+		============================================================ */
         public function generate_customerurl() {
             return wire('config')->pages->customer."redir/?action=load-customer&custID=".urlencode($this->custid);
         }
@@ -100,21 +104,13 @@
                 return wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($this->custid);
             }
 		}
-
-		function generateciurl() {
-			 if ($this->has_shipto()) {
-                return wire('config')->pages->custinfo.urlencode($this->custid) . "/shipto-".urlencode($this->shiptoid)."/";
-            } else {
-                return wire('config')->pages->custinfo.urlencode($this->custid)."/";
-            }
-		}
         
         /**
          * Outputs the javascript function name with parameter
          * @param String $function which II function
          * @return String          Function name with parameter for the call
          */
-        function generateiifunction($function) {
+        function generate_iifunction($function) {
             switch ($function) {
                 case 'ii':
                     return "ii_customer('".$this->custid."')";
@@ -128,7 +124,7 @@
             }
         }
 
-		public function generatephonedisplay() {
+		public function generate_phonedisplay() {
 			if ($this->has_extension()) {
 				return $this->cphone . ' &nbsp; ' . $this->cphext;
 			} else {
@@ -136,7 +132,7 @@
 			}
 		}
 
-		public function generatecontactmethodurl($method) {
+		public function generate_contactmethodurl($method) {
 			switch ($method) {
 				case 'cell':
 					return "tel:".$this->ccellphone;
@@ -153,7 +149,7 @@
 			}
 		}
 
-		public function generateaddress() {
+		public function generate_address() {
 			return $this->addr1 . ' ' . $this->addr2. ' ' . $this->ccity . ', ' . $this->cst . ' ' . $this->czip;
 		}
         
@@ -161,17 +157,18 @@
 			OTHER CONSTRUCTOR FUNCTIONS 
             Inherits some from CreateFromObjectArrayTraits
 		============================================================ */
-        
         public static function load($custID, $shiptoID = '', $contactID = '') {
             return get_customercontact($custID, $shiptoID, $contactID);
-        } 
+        }
         
-        protected function error($error, $level = E_USER_ERROR) {
-			$error = (strpos($error, 'DPLUSO [CONTACTS]: ') !== 0 ? 'DPLUSO [CONTACTS]: ' . $error : $error);
-			trigger_error($error, $level);
-			return;
-		}
+        /* =============================================================
+			GENERATE ARRAY FUNCTIONS 
+			The following are defined CreateClassArrayTraits
+			public static function generate_classarray()
+			public function _toArray()
+		============================================================ */
+ 		public static function remove_nondbkeys($array) {
+			unset($array['actionlineage']);
+ 			return $array;
+ 		}
     }
-
-
- ?>

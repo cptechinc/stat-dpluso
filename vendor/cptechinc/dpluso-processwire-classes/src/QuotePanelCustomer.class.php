@@ -77,5 +77,4 @@
             $url->query->set('custID', $this->custID);
             return $url->getUrl();
         }
-        
     }

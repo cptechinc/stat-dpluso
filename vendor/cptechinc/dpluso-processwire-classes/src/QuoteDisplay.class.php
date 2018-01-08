@@ -1,9 +1,10 @@
 <?php 
     class QuoteDisplay extends OrderDisplay implements OrderDisplayInterface, QuoteDisplayInterface {
+        use QuoteDisplayTraits;
+        
         protected $qnbr;
         protected $quote;
         protected $modal;
-        use QuoteDisplayTraits;
         
         public function __construct($sessionID, \Purl\Url $pageurl, $modal, $qnbr) {
             parent::__construct($sessionID, $pageurl);
@@ -52,5 +53,4 @@
 			$url = new \Purl\Url($this->generate_loaddetailsurltrait());
             return $url->getUrl();    
         }
-        
     }

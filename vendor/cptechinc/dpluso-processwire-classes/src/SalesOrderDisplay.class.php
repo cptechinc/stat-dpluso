@@ -1,9 +1,10 @@
 <?php 
     class SalesOrderDisplay extends OrderDisplay implements OrderDisplayInterface, SalesOrderDisplayInterface {
+        use SalesOrderDisplayTraits;
+        
         protected $ordn;
         protected $order;
         protected $modal;
-        use SalesOrderDisplayTraits;
         
         public function __construct($sessionID, \Purl\Url $pageurl, $modal, $ordn) {
             parent::__construct($sessionID, $pageurl);
@@ -76,5 +77,4 @@
             $url = new \Purl\Url($this->generate_loaddetailsurltrait($order));
             return $url->getUrl();    
         }
-        
     }

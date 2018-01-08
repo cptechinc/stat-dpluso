@@ -26,7 +26,7 @@
 	
 	$page->bootstrap = new Contento();
 	$page->stringerbell = new StringerBell();
-	$page->screenformatterfactory = new ScreenFormatterFactory(session_id());
+	$page->screenformatterfactory = new \ScreenFormatterFactory(session_id());
 
 	$page->querystring = $querystring = $page->fullURL->query;
 	$page->PageURL = $page->httpUrl.'?'.$page->querystring;
@@ -35,7 +35,7 @@
 	$config->styles->append('https://fonts.googleapis.com/icon?family=Material+Icons');
 	$config->styles->append(hashtemplatefile('styles/libraries.css'));
 	$config->styles->append(hashtemplatefile('styles/styles.css'));
-
+    
 	$config->scripts->append(hashtemplatefile('scripts/libraries.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/timepicker.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/key-listener.js'));

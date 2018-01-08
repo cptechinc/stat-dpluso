@@ -4,6 +4,10 @@
         public $custID;
 		public $shipID;
         
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
+        
         public function setup_customerpanel($custID, $shipID) {
 			$this->custID = $custID;
 			$this->shipID = $shipID;

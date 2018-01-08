@@ -16,11 +16,11 @@
                 <?php foreach ($custresults as $cust) : ?>
                     <tr>
                         <td>
-                            <button class="btn btn-sm btn-primary" type="button" onclick="<?= $cust->generateiifunction($function); ?>"> <?= $cust->custid; ?> </button>
+                            <button class="btn btn-sm btn-primary" type="button" onclick="<?= $cust->generate_iifunction($function); ?>"> <?= $cust->custid; ?> </button>
                         </td>
                         <td><?= $page->stringerbell->highlight($cust->name, $input->get->q); ?></td>
                         <td><?= $page->stringerbell->highlight($cust->shiptoid, $input->get->q); ?></td>
-                        <td><?= $page->stringerbell->highlight($cust->generateaddress(), $input->get->q); ?></td>
+                        <td><?= $page->stringerbell->highlight($cust->generate_address(), $input->get->q); ?></td>
                         <td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->cphone, $input->get->q); ?></a></td>
                     </tr>
                 <?php endforeach; ?>

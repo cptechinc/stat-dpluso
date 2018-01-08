@@ -1,5 +1,8 @@
 <?php
     class EditUserActionsDisplay extends UserActionDisplay {
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
         public function generate_selectsubtype(UserAction $action) {
             $bootstrap = new Contento();
             $subtypes = wire('pages')->get("/activity/$action->actiontype/")->children();

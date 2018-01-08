@@ -20,7 +20,7 @@
                     </td>
                     <td><?= $cust->name; ?></td>
                     <td><?= $cust->shiptoid; ?></td>
-                    <td><?= $cust->generateaddress(); ?></td>
+                    <td><?= $cust->generate_address(); ?></td>
                     <td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= $cust->cphone; ?></a></td>
                 </tr>
             <?php endforeach; ?>

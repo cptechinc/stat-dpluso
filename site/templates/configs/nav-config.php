@@ -35,4 +35,3 @@
     $config->pages->documentstorage = $config->documentstorage;
     $config->pages->vendor = $config->urls->root . "vendors/";
     $config->pages->vendorinfo = $config->urls->root . "vendors/vend-info/";
-    

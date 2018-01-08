@@ -1,5 +1,9 @@
 <?php 
     class PricingItem {
+        use CreateFromObjectArrayTraits;
+        use CreateClassArrayTraits;
+        use ThrowErrorTrait;
+        
 		protected $sessionid;
 		protected $recno;
 		protected $date;
@@ -81,6 +85,12 @@
         /* =============================================================
  		   GETTER FUNCTIONS 
  	   ============================================================ */
+       /**
+        * Returns properties that may not be publically accessible by calling a function that could exist or by
+        * directly returning the property
+        * @param  string $property The property trying to be accessed
+        * @return string           returns the property or the value returned by the method call
+        */
         public function __get($property) {
             $method = "get_{$property}";
             if (method_exists($this, $method)) {
@@ -96,10 +106,33 @@
             }
         }
         
+        /**
+         * Checks if there's sales history for the Pricing Item from the database
+         * @param  boolean $debug if true it will return the SQL statement used, 
+         * if not it will return the result from the query execution
+         */
         public function has_saleshistory($debug = false) {
             return count_itemhistory($this->sessionid, $this->itemid, $debug);
         }
         
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
+       /**
+        * Returns an array of item availability records
+        * @param  boolean $debug if true it will return the SQL statement used, 
+        * if not it will return the result from the query execution
+        */
+        public function get_availability($debug = false) {
+            return get_itemavailability($this->sessionid, $this->itemid, $debug);
+        }
+        
+        /**
+         * Returns the customer history $field value
+         * @param  string  $field [description]
+         * @param  boolean $debug if true it will return the SQL statement used, 
+         * if not it will return the field value from the query execution
+         */
         public function history($field, $debug = false) {
             if (in_array($field, $this->historyfields)) {
                 return get_itemhistoryfield($this->sessionid, $this->itemid, $field, $debug);
@@ -107,26 +140,14 @@
         }
         
         /* =============================================================
- 		   CLASS FUNCTIONS 
- 	   ============================================================ */
-        public function get_availability($debug = false) {
-            return get_itemavailability($this->sessionid, $this->itemid, $debug);
-        }
-        
-        /* =============================================================
  		   GENERATE ARRAY FUNCTIONS 
+           The following are defined CreateClassArrayTraits
+           public static function generate_classarray()
+           public function _toArray()
  	   ============================================================ */
- 		public static function generate_classarray() {
- 			return UserAction::remove_nondbkeys(get_class_vars('PricingItem'));
- 		}
- 		
  		public static function remove_nondbkeys($array) {
 			unset($array['fieldaliases']);
 			unset($array['historyfields']);
  			return $array;
- 		}
- 		
- 		public function _toArray() {
-			return $this::remove_nondbkeys(get_object_vars($this));
  		}
     }

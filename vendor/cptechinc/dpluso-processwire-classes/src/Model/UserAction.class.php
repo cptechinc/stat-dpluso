@@ -1,5 +1,9 @@
 <?php
 	class UserAction {
+		use CreateFromObjectArrayTraits;
+		use CreateClassArrayTraits;
+		use ThrowErrorTrait;
+		
 		public $id;
 		public $datecreated;
 		public $actiontype;
@@ -27,37 +31,9 @@
 		
 		public $actionlineage = array();
 		
-		public $structure = array(
-			'id' => array(),
-			'datecreated' => array(),
-			'actiontype' => array(),
-			'actionsubtype'  => array(),
-			'duedate' => array(),
-			'createdby' => array(),
-			'assignedto' => array(),
-			'assignedby' => array(),
-			'title' => array(),
-			'textbody' => array(),
-			'reflectnote' => array(),
-			'completed' => array(),
-			'datecompleted' => array(),
-			'dateupdated' => array(),
-			'customerlink' => array(),
-			'shiptolink' => array(),
-			'contactlink' => array(),
-			'salesorderlink' => array(),
-			'quotelink' => array(),
-			'vendorlink' => array(),
-			'vendorshipfromlink' => array(),
-			'purchaseorderlink' => array(),
-			'actionlink' => array(),
-			'rescheduledlink' => array(),
-		);
-	
-		public function __construct() {
-			
-		}
-		
+		/* =============================================================
+			SETTER FUNCTIONS 
+		============================================================ */
 		public function set($property, $value) {
 			if (property_exists($this, $property) !== true) {
                 $this->error("This property ($property) does not exist");
@@ -65,6 +41,26 @@
             }
 			$this->$property = $value;
 		}
+		
+		/* =============================================================
+			GETTER FUNCTIONS 
+		============================================================ */
+		public function __get($property) {
+            if (property_exists($this, $property) !== true) {
+                $this->error("This property ($property) does not exist");
+                return false;
+            }
+            
+            $method = "get_{$property}";
+            if (method_exists($this, $method)) {
+                return $this->$method();
+            } elseif (property_exists($this, $property)) {
+                return $this->$property;
+            } else {
+                $this->error("This property ($property) is not accessible");
+                return false;
+            }
+        }
 		
 		public function has_id() {
 			return (!empty($this->id)) ? true : false;	
@@ -110,23 +106,9 @@
 			}
 		}
 		
-		public function __get($property) {
-            if (property_exists($this, $property) !== true) {
-                $this->error("This property ($property) does not exist");
-                return false;
-            }
-            
-            $method = "get_{$property}";
-            if (method_exists($this, $method)) {
-                return $this->$method();
-            } elseif (property_exists($this, $property)) {
-                return $this->$property;
-            } else {
-                $this->error("This property ($property) is not accessible");
-                return false;
-            }
-        }
-		
+		/* =============================================================
+			CLASS FUNCTIONS 
+		============================================================ */
 		public function generate_regardingdescription() {
 			$desc = '';
 			if (!empty($this->title)) {
@@ -143,15 +125,12 @@
 		
 		public function generate_message($message) {
 			$regex = '/({replace})/i';
-			$replace = "";
-
 			$replace = $this->has_customerlink() ? get_customername($this->customerlink)." ($this->customerlink)" : '';
 			$replace .= $this->has_shiptolink() ? " Shipto: " . get_shiptoname($this->customerlink, $this->shiptolink, false)." ($this->shiptolink)" : '';
 			$replace .= $this->has_contactlink() ? " Contact: " . $this->contactlink : '';
 			$replace .= $this->has_salesorderlink() ? " Sales Order #" . $this->salesorderlink : '';
 			$replace .= $this->has_quotelink() ? " Quote #" . $this->quotelink : '';
 			$replace .= $this->has_actionlink() ? " Action #" . $this->actionlink : '';
-			
 			$replace = trim($replace);
 
 			if (empty($replace)) {
@@ -241,32 +220,13 @@
 		}
 		
 		/* =============================================================
-			OTHER CONSTRUCTOR FUNCTIONS 
-            Inherits some from CreateFromObjectArrayTraits
+			GENERATE ARRAY FUNCTIONS 
+			The following are defined CreateClassArrayTraits
+			public static function generate_classarray()
+			public function _toArray()
 		============================================================ */
-		
-		
-		/* =============================================================
- 		   GENERATE ARRAY FUNCTIONS 
- 	   ============================================================ */
- 		public static function generate_classarray() {
- 			return UserAction::remove_nondbkeys(get_class_vars('UserAction'));
- 		}
- 		
  		public static function remove_nondbkeys($array) {
 			unset($array['actionlineage']);
-			unset($array['structure']);
  			return $array;
  		}
- 		
- 		public function toArray() {
-			return $this::remove_nondbkeys((array) $this);
- 		}
-		
-		protected function error($error, $level = E_USER_ERROR) {
-			$error = (strpos($error, 'DPLUSO [USERACTIONS]: ') !== 0 ? 'DPLUSO [USERACTIONS]: ' . $error : $error);
-			trigger_error($error, $level);
-			return;
-		}
-
 	}

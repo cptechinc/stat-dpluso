@@ -199,6 +199,7 @@
     		'pricing' => '#pricing-modal',
         	'ajax' => '#ajax-modal',
     		'lightbox' => '#lightbox-modal',
+            'itemlookup' => '#item-lookup-modal',
     		'gradients' => [
     			'default' => 'icarus',
     			'tribute' => 'tribute'

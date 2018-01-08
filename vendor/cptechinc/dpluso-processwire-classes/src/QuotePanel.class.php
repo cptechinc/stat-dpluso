@@ -184,5 +184,4 @@
             $href = $this->generate_detailviewediturl($quote, $detail);
             return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);    
         }
-		
 	}

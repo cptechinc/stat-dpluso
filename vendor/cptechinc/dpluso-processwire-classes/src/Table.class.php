@@ -6,6 +6,7 @@
  */
 	class Table {
 		use AttributeParser;
+		
 		private $tropen = false; // after the first row in a table this $var stays true
 		private $tdopen = false; // after the first cell in a row this $var stays true
 		private $thopen = false; // after the first cell in a row this $var stays true

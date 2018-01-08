@@ -1,5 +1,7 @@
 <?php 
 	class SalesOrder extends Order implements OrderInterface {
+		use CreateFromObjectArrayTraits;
+		use CreateClassArrayTraits;
 		
 		public $sessionid;
 		public $recno;
@@ -91,10 +93,9 @@
 		public $prntfmtdisp;
 		public $dummy;       
 		
-		public function __construct() {
-			
-		}
-		
+		/* =============================================================
+ 		   GETTER FUNCTIONS 
+ 	   	============================================================ */
 		public function has_documents() {
 			return $this->havedoc == 'Y' ? true : false;
 		}
@@ -119,33 +120,14 @@
 			return $this->error == 'Y' ? true : false;
 		}
 		
-		
 		/* =============================================================
-			OTHER CONSTRUCTOR FUNCTIONS 
+			GENERATE ARRAY FUNCTIONS 
+			The following are defined CreateClassArrayTraits
+			public static function generate_classarray()
+			public function _toArray()
 		============================================================ */
-		public static function create_fromarray(array $array) {
-			$myClass = get_class();
-			$object  = new $myClass(); 
-
-			foreach ($array as $key => $val) {
-				$object->$key = $val;
-			}
-			return $object;
-	   }
-	   
-	   /* =============================================================
-		   GENERATE ARRAY FUNCTIONS 
-	   ============================================================ */
-		public static function generate_classarray() {
-			return SalesOrder::remove_nondbkeys(get_class_vars('SalesOrder'));
-		}
-		
 		public static function remove_nondbkeys($array) {
 			return $array;
-		}
-		
-		public function toArray() {
-			return (array) $this;
 		}
 	}
 	

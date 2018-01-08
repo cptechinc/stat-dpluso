@@ -4,11 +4,17 @@
         public $pageurl = false;
         public $userID;
         
+        /* =============================================================
+ 		   CONSTRUCTOR FUNCTIONS 
+ 	   ============================================================ */
         public function __construct(\Purl\Url $pageurl) {
             $this->pageurl = new \Purl\Url($pageurl->getUrl());
             $this->userID = wire('user')->loginid;
         }
         
+        /* =============================================================
+ 		   CLASS FUNCTIONS 
+ 	   ============================================================ */
         public function generate_viewactionurl($action) {
 			return wire('config')->pages->actions."$action->actiontype/load/?id=".$action->id;
 		}

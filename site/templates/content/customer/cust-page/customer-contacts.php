@@ -28,9 +28,9 @@
                         <tr>
                             <td><a href="<?= $contact->generate_contacturl(); ?>"><?= $contact->contact; ?></a></td>
                             <td><a href="<?php $contact->generate_shiptourl();?>"><?= $contact->shiptoid; ?></a></td>
-                            <td><?= $contact->generatephonedisplay(); ?></td>
-                            <td><a href="<?= $contact->generatecontactmethodurl('email'); ?>"><?= $contact->email; ?></td>
-                            <td><?= $contact->generateaddress(); ?></td>
+                            <td><?= $contact->generate_phonedisplay(); ?></td>
+                            <td><a href="<?= $contact->generate_contactmethodurl('email'); ?>"><?= $contact->email; ?></td>
+                            <td><?= $contact->generate_address(); ?></td>
                             <td><?= $contact->source; ?></td>
                         </tr>
                     <?php endforeach; ?>

@@ -1,10 +1,14 @@
 <?php 
     class FormMaker {
+        use ThrowErrorTrait;
+        
         private $formstring = '';
         private static $count = 0;
         private $openform;
         public $bootstrap = false;
-        
+        /* =============================================================
+			CONSTRUCTOR FUNCTIONS 
+		============================================================ */
         public function __construct($attr = '', $openform = true) {
             self::$count++;
             $this->bootstrap = new Contento();
@@ -12,6 +16,9 @@
             $this->openform = $openform;
         }
         
+        /* =============================================================
+			GETTER FUNCTIONS 
+		============================================================ */
         public function __call($name, $args){
             if (in_array($name, $this->bootstrap->closeable)) {
                 if (!$args[1]) {
@@ -27,6 +34,9 @@
             }
         }
         
+        /* =============================================================
+			CLASS FUNCTIONS 
+		============================================================ */
         public function input($attr = '') {
             $this->formstring .= $this->indent() . $this->bootstrap->input($attr);
         }
@@ -61,7 +71,6 @@
             return $this->finish();
         }
         
-        
         /** 
     	 * Makes a new line and adds four spaces to format a string in html
     	 * @return string new line and four spaces
@@ -73,10 +82,4 @@
     		}
     		return $indent;
     	}
-        
-        protected function error($error, $level = E_USER_ERROR) {
-			$error = (strpos($error, 'DPLUSO [CONTENTO]: ') !== 0 ? 'DPLUSO [CONTENTO]: ' . $error : $error);
-			trigger_error($error, $level);
-			return;
-		}
     }

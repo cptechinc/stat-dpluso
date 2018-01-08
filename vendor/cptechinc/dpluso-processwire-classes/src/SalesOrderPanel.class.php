@@ -1,7 +1,8 @@
 <?php 	
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
-		public $orders = array();
 		use SalesOrderDisplayTraits;
+		
+		public $orders = array();
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);

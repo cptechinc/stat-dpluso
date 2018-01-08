@@ -7,10 +7,13 @@
 	"autoload": {
 		"files": [
 			"src/CreateFromObjectArray.trait.php",
+			"src/CreateClassArray.trait.php",
 			"src/AttributeParser.trait.php",
+			"src/ThrowError.trait.php",
 			"src/Model/Vendor.class.php",
 			"src/Model/Contact.class.php",
 			"src/Model/Customer.class.php",
+			"src/Model/PricingItem.class.php",
 			"src/DplusDateTime.class.php",
 			"src/Model/UserAction.class.php",
 			"src/UserActionDisplay.class.php",

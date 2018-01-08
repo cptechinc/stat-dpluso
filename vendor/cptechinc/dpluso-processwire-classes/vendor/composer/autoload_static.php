@@ -8,10 +8,13 @@ class ComposerStaticInitf9c34235226de117fa23ba132ae64d6f
 {
     public static $files = array (
         '0db1bf76fb4af1e86d7c48ac93a7e789' => __DIR__ . '/../..' . '/src/CreateFromObjectArray.trait.php',
+        '2b2419678dcad2ec3305a65b69d493c2' => __DIR__ . '/../..' . '/src/CreateClassArray.trait.php',
         '69ed03ba55021f05bdee38ec8cd64ccb' => __DIR__ . '/../..' . '/src/AttributeParser.trait.php',
+        'e558580c04f727bbe6f5b647b5c16c3e' => __DIR__ . '/../..' . '/src/ThrowError.trait.php',
         '7b7bc955fba3a7e831daa452678417b2' => __DIR__ . '/../..' . '/src/Model/Vendor.class.php',
         '16549aec784a66a31e2f46525b4e1d36' => __DIR__ . '/../..' . '/src/Model/Contact.class.php',
         '34090432ba33ef4a6717b80199aa69f2' => __DIR__ . '/../..' . '/src/Model/Customer.class.php',
+        'd5a3f2858c56e1d35401cc2f3a1510ed' => __DIR__ . '/../..' . '/src/Model/PricingItem.class.php',
         'bd8bf74d70613675ab92685140191001' => __DIR__ . '/../..' . '/src/DplusDateTime.class.php',
         'fcb8bf629f10208cb0cd7ed34611b338' => __DIR__ . '/../..' . '/src/Model/UserAction.class.php',
         '99cdb7b00d1b32397a34259baa6470e4' => __DIR__ . '/../..' . '/src/UserActionDisplay.class.php',

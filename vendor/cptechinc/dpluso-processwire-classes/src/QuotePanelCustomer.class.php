@@ -3,9 +3,9 @@
         use OrderPanelCustomerTraits;
         
         public function generate_lastloadeddescription() {
-            if (wire('session')->{'quotes-loaded-for'}) {
-                if (wire('session')->{'quotes-loaded-for'} == $this->custID) {
-                    return 'Last Updated : ' . wire('session')->{'quotes-updated'};
+            if (Processwire\wire('session')->{'quotes-loaded-for'}) {
+                if (Processwire\wire('session')->{'quotes-loaded-for'} == $this->custID) {
+                    return 'Last Updated : ' . Processwire\wire('session')->{'quotes-updated'};
                 }
                 return '';
             }
@@ -24,12 +24,12 @@
             $useclass = true;
             if ($this->tablesorter->orderby) {
                 if ($this->tablesorter->orderby == 'orderdate') {
-                //    $this->quotes = get_customerordersorderdate($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $debug);
+                //    $this->quotes = get_customerordersorderdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $debug);
                 } else {
-                //    $this->quotes = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
+                //    $this->quotes = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
                 }
             } else {
-                $this->quotes = get_customerquotes($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $useclass, $debug);
+                $this->quotes = get_customerquotes($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $useclass, $debug);
             }
         }
         
@@ -60,7 +60,7 @@
         
         public function generate_searchurl() {
             $url = new \Purl\Url(parent::generate_searchurl());
-            $url->path = wire('config')->pages->ajax.'load/quotes/search/cust/';
+            $url->path = Processwire\wire('config')->pages->ajax.'load/quotes/search/cust/';
             $url->query->set('custID', $this->custID);
             if ($this->shipID) {
                 $url->query->set('shipID', $this->shipID);

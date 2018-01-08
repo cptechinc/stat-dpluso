@@ -24,7 +24,7 @@
        ============================================================ */
 		public function __construct($sessionID) {
             $this->sessionID = $sessionID;
-			$this->userID = wire('user')->loginid;
+			$this->userID = Processwire\wire('user')->loginid;
 			$this->load_filepath();
 		}
 		
@@ -87,7 +87,7 @@
         public function generate_shownotesselect() {
             $bootstrap = new Contento();
             $array = array();
-            foreach (wire('config')->yesnoarray as $key => $value) {
+            foreach (Processwire\wire('config')->yesnoarray as $key => $value) {
                 $array[$value] = $key;
             }
             return $bootstrap->select('class=form-control input-sm|id=shownotes', $array);

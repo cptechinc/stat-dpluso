@@ -74,7 +74,7 @@
 			CLASS FUNCTIONS 
 		============================================================ */
         public function generate_customerurl() {
-            return wire('config')->pages->customer."redir/?action=load-customer&custID=".urlencode($this->custid);
+            return Processwire\wire('config')->pages->customer."redir/?action=load-customer&custID=".urlencode($this->custid);
         }
 
         public function generate_shiptourl() {
@@ -91,17 +91,17 @@
 
         public function generate_contacturl() {
             if ($this->has_shipto()) {
-                return wire('config')->pages->customer.urlencode($this->custid) . "/shipto-".urlencode($this->shiptoid)."/contacts/?id=".urlencode($this->contact);
+                return Processwire\wire('config')->pages->customer.urlencode($this->custid) . "/shipto-".urlencode($this->shiptoid)."/contacts/?id=".urlencode($this->contact);
             } else {
-                return wire('config')->pages->customer.urlencode($this->custid)."/contacts/?id=".urlencode($this->contact);
+                return Processwire\wire('config')->pages->customer.urlencode($this->custid)."/contacts/?id=".urlencode($this->contact);
             }
         }
 
 		function generate_ciloadurl() {
-			 if ($this->has_shipto()) {
-                return wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($this->custid)."&shipID=".urlencode($this->shiptoid);
+			if ($this->has_shipto()) {
+                return Processwire\wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($this->custid)."&shipID=".urlencode($this->shiptoid);
             } else {
-                return wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($this->custid);
+                return Processwire\wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($this->custid);
             }
 		}
         

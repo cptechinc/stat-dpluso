@@ -23,14 +23,14 @@
 				$tb->tablesection('thead');
 					$tb->tr();
 					foreach($this->json['columns']['warehouse'] as $column) {
-						$class = wire('config')->textjustify[$column['headingjustify']];
+						$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
 						$tb->th("class=$class", $column['heading']);
 					}
 				$tb->closetablesection('thead');
 				$tb->tablesection('tbody');
 					$tb->tr();
 					foreach(array_keys($this->json['columns']['warehouse']) as $column) {
-						$class = wire('config')->textjustify[$this->json['columns']['warehouse'][$column]['datajustify']];
+						$class = Processwire\wire('config')->textjustify[$this->json['columns']['warehouse'][$column]['datajustify']];
 						$tb->td("class=$class", $whse[$column]);
 					}
 				$tb->closetablesection('tbody');
@@ -41,27 +41,27 @@
                     $tb = new Table('class=table table-striped table-bordered table-condensed table-excel|id='.key($this->json['data']));
 					$tb->tr();
 					foreach ($this->json['columns']['lots'] as $column) {
-						$class = wire('config')->textjustify[$column['headingjustify']];
+						$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
 						$tb->th("class=$class", $column['heading']);
 					}
 					
 					$tb->tr();
 					foreach ($this->json['columns']['orders'] as $column) {
-						$class = wire('config')->textjustify[$column['headingjustify']];
+						$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
 						$tb->td("class=$class", $bootstrap->b('', $column['heading']));
 					}
 					
 					foreach ($whse['lots'] as $lot) {
 						$tb->tr();
 						foreach(array_keys($this->json['columns']['lots']) as $column) {
-							$class = wire('config')->textjustify[$this->json['columns']['lots'][$column]['datajustify']];
+							$class = Processwire\wire('config')->textjustify[$this->json['columns']['lots'][$column]['datajustify']];
 							$tb->td("class=$class", $lot[$column]."123");
 						}
                         
 						foreach($lot['orders'] as $order) {
 							$tb->tr();
 							foreach(array_keys($this->json['columns']['orders']) as $column) {
-								$class = wire('config')->textjustify[$this->json['columns']['orders'][$column]['datajustify']];
+								$class = Processwire\wire('config')->textjustify[$this->json['columns']['orders'][$column]['datajustify']];
 								$tb->td("class=$class", $order[$column]);
 							}
 						}

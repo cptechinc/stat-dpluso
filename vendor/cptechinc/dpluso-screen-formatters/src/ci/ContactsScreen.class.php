@@ -17,8 +17,8 @@
                         $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
                         foreach (array_keys($this->json['columns']['customer']['customerleft']) as $column) {
                             $tb->tr();
-                            $tb->td('class='.wire('config')->textjustify[$this->json['columns']['customer']['customerleft'][$column]['headingjustify']], $this->json['columns']['customer']['customerleft'][$column]['heading']);
-                            $tb->td('class='.wire('config')->textjustify[$this->json['columns']['customer']['customerleft'][$column]['datajustify']], $this->json['data']['customer']['customerleft'][$column]);
+                            $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['customer']['customerleft'][$column]['headingjustify']], $this->json['columns']['customer']['customerleft'][$column]['heading']);
+                            $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['customer']['customerleft'][$column]['datajustify']], $this->json['data']['customer']['customerleft'][$column]);
                         }
                         $content .= $tb->close();
                     $content .= $bootstrap->close('div');
@@ -26,8 +26,8 @@
                         $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
                         foreach (array_keys($this->json['columns']['customer']['customerright']) as $column) {
 							$tb->tr();
-							$tb->td('class='.wire('config')->textjustify[$this->json['columns']['customer']['customerright'][$column]['headingjustify']], $this->json['columns']['customer']['customerright'][$column]['heading']);
-							$tb->td('class='.wire('config')->textjustify[$this->json['columns']['customer']['customerright'][$column]['headingjustify']], $this->json['data']['customer']['customerright'][$column]);
+							$tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['customer']['customerright'][$column]['headingjustify']], $this->json['columns']['customer']['customerright'][$column]['heading']);
+							$tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['customer']['customerright'][$column]['headingjustify']], $this->json['data']['customer']['customerright'][$column]);
 						}
                         $content .= $tb->close();
                     $content .= $bootstrap->close('div');
@@ -64,8 +64,8 @@
 	                        $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
 	                        foreach (array_keys($this->json['columns']['shipto']['shiptoleft']) as $column) {
 	                            $tb->tr();
-	                            $tb->td('class='.wire('config')->textjustify[$this->json['columns']['shipto']['shiptoleft'][$column]['headingjustify']], $this->json['columns']['shipto']['shiptoleft'][$column]['heading']);
-	                            $tb->td('class='.wire('config')->textjustify[$this->json['columns']['shipto']['shiptoleft'][$column]['datajustify']], $contact['shiptoleft'][$column]);
+	                            $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['shipto']['shiptoleft'][$column]['headingjustify']], $this->json['columns']['shipto']['shiptoleft'][$column]['heading']);
+	                            $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['shipto']['shiptoleft'][$column]['datajustify']], $contact['shiptoleft'][$column]);
 	                        }
 	                        $content .= $tb->close();
 	                    $content .= $bootstrap->close('div');
@@ -73,8 +73,8 @@
 	                        $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
 	                        foreach (array_keys($this->json['columns']['shipto']['shiptoright']) as $column) {
 	                            $tb->tr();
-	                            $tb->td('class='.wire('config')->textjustify[$this->json['columns']['shipto']['shiptoright'][$column]['headingjustify']], $this->json['columns']['shipto']['shiptoright'][$column]['heading']);
-	                            $tb->td('class='.wire('config')->textjustify[$this->json['columns']['shipto']['shiptoright'][$column]['datajustify']], $contact['shiptoright'][$column]);
+	                            $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['shipto']['shiptoright'][$column]['headingjustify']], $this->json['columns']['shipto']['shiptoright'][$column]['heading']);
+	                            $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['shipto']['shiptoright'][$column]['datajustify']], $contact['shiptoright'][$column]);
 	                        }
 	                        $content .= $tb->close();
 	                    $content .= $bootstrap->close('div');
@@ -93,16 +93,16 @@
                 $tb->tablesection('thead');
                 $tb->tr();
                     foreach (array_keys($this->json['columns']['contact']) as $column) {
-                        $tb->th('class='.wire('config')->textjustify[$this->json['columns']['contact'][$column]['headingjustify']], $this->json['columns']['contact'][$column]['heading']);
+                        $tb->th('class='.Processwire\wire('config')->textjustify[$this->json['columns']['contact'][$column]['headingjustify']], $this->json['columns']['contact'][$column]['heading']);
                     }
                 $tb->closetablesection('thead');
                 $tb->tablesection('tbody');
                     foreach ($this->json['data']['contact'] as $contact) {
                         $tb->tr();
-                        $tb->td('class='.wire('config')->textjustify[$this->json['columns']['contact']['contactname']['datajustify']], $contact['contactname']);
-                        $tb->td('class='.wire('config')->textjustify[$this->json['columns']['contact']['contactemail']['datajustify']], $contact['contactemail']);
+                        $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['contact']['contactname']['datajustify']], $contact['contactname']);
+                        $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['contact']['contactemail']['datajustify']], $contact['contactemail']);
                         if (isset($contact['contactnumbers']["1"]['contactnbr'])) {
-                            $tb->td('class='.wire('config')->textjustify[$this->json['columns']['contact']['contactnbr']['datajustify']], $contact['contactnumbers']["1"]['contactnbr']);
+                            $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['contact']['contactnbr']['datajustify']], $contact['contactnumbers']["1"]['contactnbr']);
                         } else {
                             $tb->td();
                         }
@@ -110,7 +110,7 @@
                             if ($i != 1) {
                                 $tb->tr();
                                 $tb->td()->td();
-                                $tb->td('class='.wire('config')->textjustify[$this->json['columns']['contact']['contactnbr']['datajustify']], $contact['contactnumbers']["$i"]['contactnbr']);
+                                $tb->td('class='.Processwire\wire('config')->textjustify[$this->json['columns']['contact']['contactnbr']['datajustify']], $contact['contactnumbers']["$i"]['contactnbr']);
                             }
                         }
                     }
@@ -127,14 +127,14 @@
                 $tb->tablesection('thead');
                     $tb->tr();
                     foreach (array_keys($this->json['columns']['forms']) as $column) {
-                        $tb->th('class='.wire('config')->textjustify[$this->json['columns']['forms'][$column]['headingjustify']], $this->json['columns']['forms'][$column]['heading']);
+                        $tb->th('class='.Processwire\wire('config')->textjustify[$this->json['columns']['forms'][$column]['headingjustify']], $this->json['columns']['forms'][$column]['heading']);
                     }
                 $tb->closetablesection('thead');
                 $tb->tablesection('tbody');
                     foreach ($this->json['data']['forms'] as $form) {
                         $tb->tr();
                         foreach (array_keys($this->json['columns']['forms']) as $column) {
-                            $tb->th('class='.wire('config')->textjustify[$this->json['columns']['forms'][$column]['datajustify']], $form[$column]);
+                            $tb->th('class='.Processwire\wire('config')->textjustify[$this->json['columns']['forms'][$column]['datajustify']], $form[$column]);
                         }
                     }
                 $tb->closetablesection('tbody');

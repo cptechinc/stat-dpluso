@@ -10,7 +10,7 @@
 		
 		public function setup_pageurl(\Purl\Url $pageurl) {
 			$url = $pageurl;
-			$url->path = wire('config')->pages->ajax."load/quotes/";
+			$url->path = Processwire\wire('config')->pages->ajax."load/quotes/";
 			$url->query->remove('display');
 			$url->query->remove('ajax');
 			$this->paginationinsertafter = 'quotes';
@@ -87,7 +87,7 @@
 
 		public function generate_loadurl() { 
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = wire('config')->pages->quotes.'redir/';
+			$url->path = Processwire\wire('config')->pages->quotes.'redir/';
 			$url->query->setData(array('action' => 'load-quotes'));
 			return $url->getUrl();
 		}
@@ -100,7 +100,7 @@
 		
 		public function generate_searchurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = wire('config')->pages->ajax.'load/quotes/search/';
+			$url->path = Processwire\wire('config')->pages->ajax.'load/quotes/search/';
 			$url->query = '';
 			return $url->getUrl();
 		}
@@ -149,8 +149,8 @@
 		public function generate_editlink(Order $quote) {
 			$bootstrap = new Contento();
 			
-			if (wire('user')->hasquotelocked) {
-				if ($quote->quotnbr == wire('user')->lockedqnbr) {
+			if (Processwire\wire('user')->hasquotelocked) {
+				if ($quote->quotnbr == Processwire\wire('user')->lockedqnbr) {
 					$icon = $bootstrap->createicon('glyphicon glyphicon-wrench');
 					$title = "Continue editing this Quote";
 				} else {

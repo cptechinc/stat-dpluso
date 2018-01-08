@@ -13,7 +13,7 @@
          */
         public function generate_actionsbytypearray() {
             $array = array();
-            $actiontypes = wire('pages')->get('/activity/')->children('children.count>0');
+            $actiontypes = Processwire\wire('pages')->get('/activity/')->children('children.count>0');
             
             foreach ($actiontypes as $actiontype) {
                 $overridelinks['actiontype'] = $actiontype->name;

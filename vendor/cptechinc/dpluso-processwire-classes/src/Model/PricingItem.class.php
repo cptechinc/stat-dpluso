@@ -79,7 +79,7 @@
  		   CONSTRUCTOR FUNCTIONS 
  	   ============================================================ */
         public function __construct() {
-            $this->image = (file_exists(wire('config')->imagefiledirectory.$this->image)) ? $this->image : 'notavailable.png';
+            $this->image = (file_exists(Processwire\wire('config')->imagefiledirectory.$this->image)) ? $this->image : 'notavailable.png';
         }
         
         /* =============================================================

@@ -16,7 +16,7 @@
 			$this->generate_tableblueprint();
 			$item = getitemfromim($this->json['itemid'], false); 
 			$specs = $pricing = $item;
-			$imagediv = $bootstrap->div('class=col-sm-4 form-group', $bootstrap->img("src=".wire('config')->imagedirectory.$item['image']."|class=img-responsive|data-desc=".$item['itemid'].' image'));
+			$imagediv = $bootstrap->div('class=col-sm-4 form-group', $bootstrap->img("src=".Processwire\wire('config')->imagedirectory.$item['image']."|class=img-responsive|data-desc=".$item['itemid'].' image'));
 			$itemform = $bootstrap->div('class=col-sm-8', $this->generate_itemformsection());
 			$content .= $bootstrap->div('class=row', $imagediv . $itemform);
 			$content .= $bootstrap->div('class=row', $this->generate_othersections());
@@ -25,8 +25,8 @@
 		
 		protected function generate_itemimagesource() {
 			$item = getitemfromim($this->json['itemid'], false); 
-			$file = file_exists(wire('config')->imagefiledirectory.$item['image']) ? $item['image'] : wire('config')->imagenotfound;
-			return wire('config')->imagedirectory.$file;
+			$file = file_exists(Processwire\wire('config')->imagefiledirectory.$item['image']) ? $item['image'] : Processwire\wire('config')->imagenotfound;
+			return Processwire\wire('config')->imagedirectory.$file;
 		}
 		
 		protected function generate_itemformsection() {
@@ -38,13 +38,13 @@
 			
 			foreach ($this->tableblueprint['header']['sections']['1'] as $column) {
 				$tb->tr();
-				$class = wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['headingjustify']];
+				$class = Processwire\wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['headingjustify']];
 				$colspan = $column['col-length'];
 				$tb->td("colspan=$colspan|class=$class", $bootstrap->b('', $column['label']));
-				$class = wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
+				$class = Processwire\wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
 				$colspan = $column['col-length'];
 				if ($column['id'] == 'Item ID') {
-					$action = wire('config')->pages->ajax."load/ii/search-results/modal/";
+					$action = Processwire\wire('config')->pages->ajax."load/ii/search-results/modal/";
 					$form = new FormMaker("action=$action|method=POST|id=ii-item-lookup");
 					$form->input('type=hidden|name=action|value=ii-item-lookup');
 					$form->input("type=hidden|name=custID|class=custID|value=$custID");
@@ -76,11 +76,11 @@
 				
 				foreach ($this->tableblueprint['header']['sections']["$i"] as $column) {
 					$tb->tr();
-					$class = wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['headingjustify']];
+					$class = Processwire\wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['headingjustify']];
 					$colspan = $column['col-length'];
 					$tb->td("colspan=$colspan|class=$class", $bootstrap->b('', $column['label']));
 					
-					$class = wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
+					$class = Processwire\wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
 					$colspan = $column['col-length'];
 					$celldata = Table::generatejsoncelldata($this->fields['data']['header'][$column['id']]['type'], $this->json['data'], $column);
 					$tb->td("colspan=$colspan|class=$class", $celldata);

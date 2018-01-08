@@ -20,7 +20,7 @@
         
         public function generate_dplusnotesrequesturl(Order $order, $linenbr) {
             $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->notes."redir/";
+            $url->path = Processwire\wire('config')->pages->notes."redir/";
             $url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->orderno, 'linenbr' => $linenbr));
             return $url->getUrl();
         }
@@ -82,8 +82,8 @@
             if ($order->can_edit()) {
                 $url->query->set('lock', 'lock');
             } elseif ($order->editord == 'L') {
-                if (wire('user')->hasorderlocked) {
-                    $queryset = ($order->orderno == wire('user')->lockedordn) ?  'lock' : 'readonly';
+                if (Processwire\wire('user')->hasorderlocked) {
+                    $queryset = ($order->orderno == Processwire\wire('user')->lockedordn) ?  'lock' : 'readonly';
                     $url->query->set($queryset, $queryset);
                 } else {
                     $url->query->set('readonly', 'readonly');
@@ -116,7 +116,7 @@
         
         public function generate_viewlinkeduseractionsurl(Order $order) {
             $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->actions."all/load/list/salesorder/";
+            $url->path = Processwire\wire('config')->pages->actions."all/load/list/salesorder/";
             $url->query->setData(array('ordn' => $order->orderno));
             return $url->getUrl();
         }
@@ -130,7 +130,7 @@
         
         public function generate_viewdetailurl(Order $order, OrderDetail $detail) {
             $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->ajax."load/view-detail/order/";
+            $url->path = Processwire\wire('config')->pages->ajax."load/view-detail/order/";
             $url->query->setData(array('ordn' => $order->orderno, 'line' => $detail->linenbr));
             return $url->getUrl();
         }
@@ -148,7 +148,7 @@
 		}
         
         public function generate_detailviewediturl(Order $order, OrderDetail $detail) {
-            $url = new \Purl\Url(wire('config')->pages->ajaxload.'edit-detail/order/');
+            $url = new \Purl\Url(Processwire\wire('config')->pages->ajaxload.'edit-detail/order/');
             $url->query->setData(array('ordn' => $order->orderno, 'line' => $detail->linenbr));
             return $url->getUrl();
         }
@@ -205,14 +205,14 @@
          * @return \Purl\Url URL to REDIRECT page
          */
         public function generate_ordersredirurl() {
-            $url = new \Purl\Url(wire('config')->pages->orders);
-            $url->path = wire('config')->pages->orders."redir/";
+            $url = new \Purl\Url(Processwire\wire('config')->pages->orders);
+            $url->path = Processwire\wire('config')->pages->orders."redir/";
             return $url;
         }
         
         public function generate_customerredirurl() {
-            $url = new \Purl\Url(wire('config')->pages->orders);
-            $url->path = wire('config')->pages->customer."redir/";
+            $url = new \Purl\Url(Processwire\wire('config')->pages->orders);
+            $url->path = Processwire\wire('config')->pages->customer."redir/";
             return $url;
         }
     }

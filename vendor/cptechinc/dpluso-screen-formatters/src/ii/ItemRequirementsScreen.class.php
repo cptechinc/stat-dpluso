@@ -23,7 +23,7 @@
 			$tb->tablesection('thead');
 				$tb->tr();
 				foreach($this->json['columns'] as $column) {
-					$class = wire('config')->textjustify[$column['headingjustify']];
+					$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
                     if (!empty($column['heading'])){
                         $tb->th("class=$class", $column['heading']);
                     }
@@ -33,7 +33,7 @@
 				foreach($this->json['data']['orders'] as $order) {
 					$tb->tr();
 					foreach(array_keys($this->json['columns']) as $column) {
-						$class = wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+						$class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
                         if (!empty($this->json['columns'][$column]['heading'])){
                             $tb->td("class=$class", $order[$column]);
                         }
@@ -46,9 +46,9 @@
         
         function generate_warehouseform() {
             $bootstrap = new Contento();
-	        $whsejson = json_decode(file_get_contents(wire('config')->companyfiles."json/whsetbl.json"), true);
+	        $whsejson = json_decode(file_get_contents(Processwire\wire('config')->companyfiles."json/whsetbl.json"), true);
             $warehouses = array_keys($whsejson['data']);
-            $reloadpage = wire('config')->ajax ? 'true' : 'false';
+            $reloadpage = Processwire\wire('config')->ajax ? 'true' : 'false';
             $itemID = $this->json['itemid'];
             $warehouseID = $this->json['whse'];
             $screen = $this->json['reqavl'];

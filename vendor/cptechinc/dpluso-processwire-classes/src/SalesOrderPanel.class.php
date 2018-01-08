@@ -11,7 +11,7 @@
 		
 		public function setup_pageurl(\Purl\Url $pageurl) {
 			$url = $pageurl;
-			$url->path = wire('config')->pages->ajax."load/orders/";
+			$url->path = Processwire\wire('config')->pages->ajax."load/orders/";
 			$url->query->remove('display');
 			$url->query->remove('ajax');
 			$this->paginationinsertafter = 'orders';
@@ -19,9 +19,9 @@
 		}
 		
 		public function generate_lastloadeddescription() {
-            if (wire('session')->{'orders-loaded-for'}) {
-                if (wire('session')->{'orders-loaded-for'} == wire('user')->loginid) {
-                    return 'Last Updated : ' . wire('session')->{'orders-updated'};
+            if (Processwire\wire('session')->{'orders-loaded-for'}) {
+                if (Processwire\wire('session')->{'orders-loaded-for'} == Processwire\wire('user')->loginid) {
+                    return 'Last Updated : ' . Processwire\wire('session')->{'orders-updated'};
                 }
                 return '';
             }
@@ -99,7 +99,7 @@
 
 		public function generate_loadurl() { 
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = wire('config')->pages->orders.'redir/';
+			$url->path = Processwire\wire('config')->pages->orders.'redir/';
 			$url->query->setData(array('action' => 'load-orders'));
 			return $url->getUrl();
 		}
@@ -112,7 +112,7 @@
 		
 		public function generate_searchurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = wire('config')->pages->ajax.'load/orders/search/';
+			$url->path = Processwire\wire('config')->pages->ajax.'load/orders/search/';
 			$url->query = '';
 			return $url->getUrl();
 		}
@@ -126,7 +126,7 @@
 		
 		public function generate_detailreorderform(Order $order, OrderDetail $detail) {
             if (empty($detail->itemid)) return '';
-            $action = wire('config')->pages->cart.'redir/';
+            $action = Processwire\wire('config')->pages->cart.'redir/';
             $id = $order->orderno.'-'.$detail->itemid.'-form';
             $form = new FormMaker("method=post|action=$action|class=item-reorder|id=$id");
             $form->input("type=hidden|name=action|value=add-to-cart");
@@ -187,8 +187,8 @@
 				$icon = $bootstrap->createicon('glyphicon glyphicon-pencil');
 				$title = "Edit this Order";
 			} elseif ($order->editord == 'L') {
-				if (wire('user')->hasorderlocked) {
-					if ($order->orderno == wire('user')->lockedordn) {
+				if (Processwire\wire('user')->hasorderlocked) {
+					if ($order->orderno == Processwire\wire('user')->lockedordn) {
 						$icon = $bootstrap->createicon('glyphicon glyphicon-wrench');
 						$title = "Edit this Order";
 					} else {

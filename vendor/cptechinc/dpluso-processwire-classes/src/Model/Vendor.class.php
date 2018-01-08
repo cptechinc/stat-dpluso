@@ -50,7 +50,7 @@
         }
         
         public function generate_viurl($withshipfrom = true) {
-            $url = new \Purl\Url(wire('config')->pages->vendorinfo);
+            $url = new \Purl\Url(Processwire\wire('config')->pages->vendorinfo);
             $url->path->add($this->vendid);
             
             if ($withshipfrom) {

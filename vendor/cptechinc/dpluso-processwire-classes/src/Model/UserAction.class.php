@@ -137,8 +137,8 @@
 				if (empty($this->assignedto)) {
 					$replace = 'Yourself ';
 				} else {
-					if ($this->assignedto != wire('user')->loginid) {
-						$replace = 'User: ' . wire('user')->loginid;
+					if ($this->assignedto != Processwire\wire('user')->loginid) {
+						$replace = 'User: ' . Processwire\wire('user')->loginid;
 					} else {
 						$replace = 'Yourself ';
 					}
@@ -172,15 +172,15 @@
 		public function generate_actionsubtypedescription() {
 			switch ($this->actiontype) {
 				case 'tasks':
-					$subpage = wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
+					$subpage = Processwire\wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
 					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
 					break;
 				case 'notes':
-					$subpage = wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
+					$subpage = Processwire\wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
 					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
 					break;
 				case 'actions':
-					$subpage = wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
+					$subpage = Processwire\wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
 					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
 					break;
 				default:

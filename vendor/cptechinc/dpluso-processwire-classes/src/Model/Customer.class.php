@@ -1,6 +1,6 @@
 <?php 
     class Customer extends Contact {
-        
+        use CreateFromObjectArrayTraits;
         /* =============================================================
 			GETTER FUNCTIONS 
 		============================================================ */
@@ -9,11 +9,11 @@
         }
         
         public function get_shiptocount() {
-            return count_shiptos($this->custid, wire('user')->loginid, wire('user')->hascontactrestrictions);
+            return count_shiptos($this->custid, Processwire\wire('user')->loginid, Processwire\wire('user')->hascontactrestrictions);
         }
         
         public function get_nextshiptoid() {
-            $shiptos = get_customershiptos($this->custid, wire('user')->loginid, wire('user')->hascontactrestrictions);
+            $shiptos = get_customershiptos($this->custid, Processwire\wire('user')->loginid, Processwire\wire('user')->hascontactrestrictions);
             if (sizeof($shiptos) < 1) {
                 return false;
             } else {

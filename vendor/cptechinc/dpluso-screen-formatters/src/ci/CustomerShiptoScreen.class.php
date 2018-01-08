@@ -18,7 +18,7 @@
                     $tb->td('', $this->json['columns']['top'][$column]['heading']);
                     if ($column == 'shiptoid') {
                         $options = $bootstrap->option('value= ', 'No Shipto Selected');
-                        $shiptos = get_customershiptos($customer->custID, wire('user')->loginid, wire('user')->hascontactrestrictions);
+                        $shiptos = get_customershiptos($customer->custID, Processwire\wire('user')->loginid, Processwire\wire('user')->hascontactrestrictions);
                         foreach ($shiptos as $shipto) {
                             $show = $shipto->shiptoid.' '.$shipto->name.' - '.$shipto->ccity.', '.$shipto->cst;
                             $attr = ($shipto->shiptoid == $customer->shipID) ? "value=$shipto->shiptoid|selected" : "value=$shipto->shiptoid";
@@ -31,7 +31,7 @@
                     }
                 }
             }
-            $href = wire('config')->pages->custinfo.$customer->custID.'/';
+            $href = Processwire\wire('config')->pages->custinfo.$customer->custID.'/';
             $tb->tr()->td('colspan=2|class=text-center', $bootstrap->a("href=$href|class=btn btn-primary", 'Clear Shipto'));
             return $tb->close();
         }
@@ -43,14 +43,14 @@
                 $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($this->json['columns']['right'][$section] as $column) {
-                    $class = wire('config')->textjustify[$column['headingjustify']];
+                    $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
                     $tb->th("class=$class", $column['heading']);
                 }
                 $tb->closetablesection('thead');
                 foreach (array_keys($this->json['data']['right'][$section]) as $row) {
                     $tb->tr();
                     foreach (array_keys($this->json['data']['right'][$section][$row]) as $column) {
-                        $class = wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
+                        $class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
                         $tb->td("class=$class", $this->json['data']['right'][$section][$row][$column]);
                     }
                 }
@@ -59,9 +59,9 @@
             
             foreach(array('rfml', 'dateentered', 'lastsaledate') as $misc) {
                 $tb->tr();
-                $class = wire('config')->textjustify[$this->json['columns']['right'][$misc]['headingjustify']];
+                $class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$misc]['headingjustify']];
                 $tb->td("class=$class", $this->json['columns']['right'][$misc]['heading']);
-                $class = wire('config')->textjustify[$this->json['columns']['right'][$misc]['datajustify']];
+                $class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$misc]['datajustify']];
                 $tb->td("class=$class", $this->json['data']['right'][$misc])->td();
             }
             return $tb->close();

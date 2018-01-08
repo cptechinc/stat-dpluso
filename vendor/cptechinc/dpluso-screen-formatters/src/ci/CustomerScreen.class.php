@@ -34,7 +34,7 @@
                     }
                 }
             }
-            if (has_dpluspermission(wire('user')->loginid, 'eso') || has_dpluspermission(wire('user')->loginid, 'eqo')) {
+            if (has_dpluspermission(Processwire\wire('user')->loginid, 'eso') || has_dpluspermission(Processwire\wire('user')->loginid, 'eqo')) {
                 $button = $bootstrap->button('type=button|class=btn btn-primary|data-toggle=modal|data-target=#item-lookup-modal', $bootstrap->createicon('glyphicon glyphicon-plus'). ' Add Item');
                 $tb->tr()->td('colspan=2', $bootstrap->p('class=text-center', $button));
             }
@@ -53,7 +53,7 @@
                     if ($column == 'customerid') {
                         $attr = (!$customer->has_shipto()) ? 'value= |selected' : 'value= ';
                         $options = $bootstrap->option($attr, 'No Shipto Selected');
-                        $shiptos = get_customershiptos($customer->custID, wire('user')->loginid, wire('user')->hascontactrestrictions);
+                        $shiptos = get_customershiptos($customer->custID, Processwire\wire('user')->loginid, Processwire\wire('user')->hascontactrestrictions);
                         foreach ($shiptos as $shipto) {
                             $show = $shipto->shiptoid.' '.$shipto->name.' - '.$shipto->ccity.', '.$shipto->cst;
                             $options .= $bootstrap->option("value=$shipto->shiptoid", $show);
@@ -69,7 +69,7 @@
         }
         
         public function generate_pageform(Customer $customer) {
-            $action = wire('config')->pages->ajax."load/customers/cust-index/";
+            $action = Processwire\wire('config')->pages->ajax."load/customers/cust-index/";
             $form = new FormMaker("action=$action|method=POST|id=ci-cust-lookup");
             $form->input("type=hidden|name=action|value=ci-item-lookup");
             $form->input("type=hidden|name=shipID|class=shipID|value=$customer->shipID");
@@ -88,7 +88,7 @@
                     
                 } else {
                     $tb->tr();
-                    $class = wire('config')->textjustify[$this->json['columns']['left'][$column]['headingjustify']];
+                    $class = Processwire\wire('config')->textjustify[$this->json['columns']['left'][$column]['headingjustify']];
                     $tb->td("class=$class", $this->json['columns']['left'][$column]['heading']);
                     $tb->td('', TableScreenMaker::generate_celldata($this->json['data']['left'], $column));
                 }
@@ -98,22 +98,19 @@
         
         public function generate_tableright() {
             $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
-            foreach (array_keys($this->json['columns']['right']) as $section) {
+            foreach (array('activity', 'saleshistory')as $section) {
                 if ($section != 'rfml') {
                     $tb->tablesection('thead');
                     $tb->tr();
                     foreach ($this->json['columns']['right'][$section] as $column) {
-                        echo var_dump($column);
-                        echo "<br>";
-                        echo "<br>";
-                        $class = wire('config')->textjustify[$column['headingjustify']];
+                        $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
                         $tb->th("class=$class", $column['heading']);
                     }
                     $tb->closetablesection('thead');
                     foreach (array_keys($this->json['data']['right'][$section]) as $row) {
                         $tb->tr();
                         foreach (array_keys($this->json['data']['right'][$section][$row]) as $column) {
-                            $class = wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
+                            $class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
                             $tb->td("class=$class", $this->json['data']['right'][$section][$row][$column]);
                         }
                     }
@@ -124,9 +121,9 @@
             foreach(array_keys($this->json['data']['right']['misc']) as $misc) {
                 if ($misc != 'rfml') {
                     $tb->tr();
-                    $class = wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['headingjustify']];
+                    $class = Processwire\wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['headingjustify']];
                     $tb->td("class=$class", $this->json['columns']['right']['misc'][$misc]['heading']);
-                    $class = wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['datajustify']];
+                    $class = Processwire\wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['datajustify']];
                     $tb->td("class=$class", $this->json['data']['right']['misc'][$misc])->td();
                 }
             }

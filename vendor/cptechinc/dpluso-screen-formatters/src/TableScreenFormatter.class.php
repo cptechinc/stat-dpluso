@@ -37,7 +37,7 @@
 		/* =============================================================
           PUBLIC FUNCTIONS
        	============================================================ */
-			public function generate_formatterfrominput(WireInput $input) {
+			public function generate_formatterfrominput(Processwire\WireInput $input) {
 				$this->formatter = false;
 				$postarray = $table = array('cols' => 0);
 				$tablesections = array_keys($this->fields['data']);
@@ -46,7 +46,7 @@
 					$userID = $input->post->text('user');
 					$this->set_userid($userID);
 				} else {
-					$this->set_userid(wire('user')->loginid);
+					$this->set_userid(Processwire\wire('user')->loginid);
 				}
 				
 				foreach ($tablesections as $tablesection) {
@@ -112,9 +112,9 @@
 			}
 			
 			public function save($debug = false) {
-				$userID = wire('user')->loginid;
-				$userpermission = wire('pages')->get('/config/')->allow_userscreenformatter;
-				$userpermission = (!empty($userpermission)) ? $userpermission : wire('users')->get("name=$userID")->hasPermission('setup-screen-formatter');
+				$userID = Processwire\wire('user')->loginid;
+				$userpermission = Processwire\wire('pages')->get('/config/')->allow_userscreenformatter;
+				$userpermission = (!empty($userpermission)) ? $userpermission : Processwire\wire('users')->get("name=$userID")->hasPermission('setup-screen-formatter');
 				
 				if ($this->has_savedformatter()) {
 					return $this->update($debug);
@@ -127,7 +127,7 @@
 				$response = $this->save();
 				
 				if ($response['success']) {
-					$msg = $this->userID == wire('user')->loginid ? "Your table ($this->type) configuration has been saved" : "The configuration for $this->userID has been saved";
+					$msg = $this->userID == Processwire\wire('user')->loginid ? "Your table ($this->type) configuration has been saved" : "The configuration for $this->userID has been saved";
 					$json = array (
 						'response' => array (
 							'error' => false,
@@ -138,7 +138,7 @@
 						)
 					);
 				} else {
-					$msg = $this->userID == wire('user')->loginid ? "Your configuration ($this->type) was not able to be saved, you may have not made any discernable changes." : "The configuration for $this->userID was not able to be saved, you may have not made any discernable changes.";
+					$msg = $this->userID == Processwire\wire('user')->loginid ? "Your configuration ($this->type) was not able to be saved, you may have not made any discernable changes." : "The configuration for $this->userID was not able to be saved, you may have not made any discernable changes.";
 					$json = array (
 						'response' => array (
 							'error' => true,
@@ -161,20 +161,20 @@
 	   
 		protected function load_formatter() {
 			if ($this->does_userhaveformatter()) {
-				$this->formatter = getformatter(wire('user')->loginid, $this->type, false);
+				$this->formatter = getformatter(Processwire\wire('user')->loginid, $this->type, false);
 				$this->source = 'database';
 			} elseif ($this->does_userhaveformatter('default')) {
 				$this->formatter = getformatter('default', $this->type, false);
 				$this->source = 'database';
 			} else {
-				$this->formatter = file_get_contents(wire('config')->paths->vendor."cptechinc/dpluso-screen-formatters/src/default/$this->type.json");
+				$this->formatter = file_get_contents(Processwire\wire('config')->paths->vendor."cptechinc/dpluso-screen-formatters/src/default/$this->type.json");
 				$this->source = 'default';
 			}
 			$this->formatter = json_decode($this->formatter, true);
 		}
 		
 		protected function does_userhaveformatter($userID = false) {
-			$userID = !empty($userID) ? $userID : wire('user')->loginid;
+			$userID = !empty($userID) ? $userID : Processwire\wire('user')->loginid;
 			return checkformatterifexists($userID, $this->type, false);
 		}
 		

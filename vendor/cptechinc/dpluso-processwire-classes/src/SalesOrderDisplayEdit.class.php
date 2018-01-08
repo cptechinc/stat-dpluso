@@ -17,7 +17,7 @@
         }
         
         public function generate_confirmationurl(Order $order) {
-            $url = new \Purl\Url(wire('config')->pages->confirmorder);
+            $url = new \Purl\Url(Processwire\wire('config')->pages->confirmorder);
             $url->query->set('ordn', $order->orderno);
             return $url->getUrl();
         }

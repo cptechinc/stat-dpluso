@@ -5,7 +5,7 @@
  	   ============================================================ */
         public function generate_selectsubtype(UserAction $action) {
             $bootstrap = new Contento();
-            $subtypes = wire('pages')->get("/activity/$action->actiontype/")->children();
+            $subtypes = Processwire\wire('pages')->get("/activity/$action->actiontype/")->children();
             $content = '';
             
             foreach ($subtypes as $subtype) {
@@ -22,7 +22,7 @@
         
         public function generate_selectsalesperson($salespersonID) {
             $bootstrap = new Contento();
-            $salespersonarray = json_decode(file_get_contents(wire('config')->companyfiles."json/salespersontbl.json"), true);
+            $salespersonarray = json_decode(file_get_contents(Processwire\wire('config')->companyfiles."json/salespersontbl.json"), true);
 			$salesids = array_keys($salespersonarray['data']);
 			$salespeople = array();
             

@@ -9,34 +9,42 @@
  	   ============================================================ */
         public function __construct(\Purl\Url $pageurl) {
             $this->pageurl = new \Purl\Url($pageurl->getUrl());
-            $this->userID = wire('user')->loginid;
+            $this->userID = Processwire\wire('user')->loginid;
         }
         
         /* =============================================================
  		   CLASS FUNCTIONS 
  	   ============================================================ */
         public function generate_viewactionurl($action) {
-			return wire('config')->pages->actions."$action->actiontype/load/?id=".$action->id;
+			return Processwire\wire('config')->pages->actions."$action->actiontype/load/?id=".$action->id;
 		}
         
         public function generate_editactionurl($action) {
-			return wire('config')->pages->actions."$action->actiontype/edit/?id=".$action->id;
+			return Processwire\wire('config')->pages->actions."$action->actiontype/edit/?id=".$action->id;
 		}
 
 		public function generate_completionurl($action, $complete) {
-			return wire('config')->pages->actions."$action->actiontype/update/completion/?id=".$action->id."&complete=".$complete; //true or false
+			return Processwire\wire('config')->pages->actions."$action->actiontype/update/completion/?id=".$action->id."&complete=".$complete; //true or false
 		}
 
 		public function generate_rescheduleurl($action) {
-			return wire('config')->pages->actions."$action->actiontype/update/reschedule/?id=".$action->id;
+			return Processwire\wire('config')->pages->actions."$action->actiontype/update/reschedule/?id=".$action->id;
 		}
 
 		public function generate_viewactionjsonurl($action) {
-			return wire('config')->pages->ajax."json/load-action/?id=".$action->id;
+			return Processwire\wire('config')->pages->ajax."json/load-action/?id=".$action->id;
 		}
+        
+        public function generate_ciloadurl($action) {
+            if ($action->has_shiptolink()) {
+                return Processwire\wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($action->customerlink)."&shipID=".urlencode($action->shiptolink);
+            } else {
+                return Processwire\wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($action->customerlink);
+            }
+        }
 
 		public function generate_customerurl($action) {
-			return wire('config')->pages->customer."redir/?action=load-customer&custID=".urlencode($action->customerlink);
+			return Processwire\wire('config')->pages->customer."redir/?action=load-customer&custID=".urlencode($action->customerlink);
 		}
 
 		public function generate_shiptourl($action) {
@@ -45,9 +53,9 @@
 
 		public function generate_contacturl($action) {
 			if ($this->has_shiptolink()) {
-				return wire('config')->pages->customer.urlencode($action->customerlink) . "/shipto-".urlencode($action->shiptolink)."/contacts/?id=".urlencode($action->contactlink);
+				return Processwire\wire('config')->pages->customer.urlencode($action->customerlink) . "/shipto-".urlencode($action->shiptolink)."/contacts/?id=".urlencode($action->contactlink);
 			} else {
-				return wire('config')->pages->customer.urlencode($action->customerlink)."/contacts/?id=".urlencode($actions->contactlink);
+				return Processwire\wire('config')->pages->customer.urlencode($action->customerlink)."/contacts/?id=".urlencode($actions->contactlink);
 			}
 		}
         

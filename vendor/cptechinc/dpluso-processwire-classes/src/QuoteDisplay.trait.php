@@ -20,7 +20,7 @@
         
         public function generate_dplusnotesrequesturl(Order $quote, $linenbr) {
             $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->notes."redir/";
+            $url->path = Processwire\wire('config')->pages->notes."redir/";
             $url->query->setData(array('action' => 'get-quote-notes', 'qnbr' => $quote->quotnbr, 'linenbr' => $linenbr));
             return $url->getUrl();
         }
@@ -91,7 +91,7 @@
         
         public function generate_orderquoteurl(Order $quote) {
             $url = $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->orderquote;
+            $url->path = Processwire\wire('config')->pages->orderquote;
             $url->query->setData(array('qnbr' => $quote->quotnbr));
             return $url->getUrl();
         }
@@ -117,7 +117,7 @@
         
         public function generate_viewlinkeduseractionsurl(Order $quote) {
             $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->actions."all/load/list/quote/";
+            $url->path = Processwire\wire('config')->pages->actions."all/load/list/quote/";
             $url->query->setData(array('qnbr' => $quote->quotnbr));
             return $url->getUrl();
         }
@@ -131,7 +131,7 @@
         
         public function generate_viewdetailurl(Order $quote, OrderDetail $detail) {
             $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->ajax."load/view-detail/quote/";
+            $url->path = Processwire\wire('config')->pages->ajax."load/view-detail/quote/";
             $url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
             return $url->getUrl();
         }
@@ -149,7 +149,7 @@
 		}
         
         public function generate_detailviewediturl(Order $quote, OrderDetail $detail) {
-            $url = new \Purl\Url(wire('config')->pages->ajaxload.'edit-detail/quote/');
+            $url = new \Purl\Url(Processwire\wire('config')->pages->ajaxload.'edit-detail/quote/');
             $url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
             return $url->getUrl();
         }
@@ -178,14 +178,14 @@
          * @return \Purl\Url URL to REDIRECT page
          */
         public function generate_quotesredirurl() {
-            $url = new \Purl\Url(wire('config')->pages->quotes);
-            $url->path = wire('config')->pages->quotes."redir/";
+            $url = new \Purl\Url(Processwire\wire('config')->pages->quotes);
+            $url->path = Processwire\wire('config')->pages->quotes."redir/";
             return $url;
         }
         
         public function generate_customerredirurl() {
-            $url = new \Purl\Url(wire('config')->pages->customer);
-            $url->path = wire('config')->pages->customer."redir/";
+            $url = new \Purl\Url(Processwire\wire('config')->pages->customer);
+            $url->path = Processwire\wire('config')->pages->customer."redir/";
             return $url;
         }
     }

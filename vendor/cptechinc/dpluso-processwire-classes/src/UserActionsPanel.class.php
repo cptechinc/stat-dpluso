@@ -48,8 +48,8 @@
             $this->throughajax = $throughajax;
             $this->collapse = $throughajax ? '' : 'collapse';
             
-            $this->userID = wire('user')->loginid;
-            $this->assigneduserID = wire('user')->loginid;
+            $this->userID = Processwire\wire('user')->loginid;
+            $this->assigneduserID = Processwire\wire('user')->loginid;
             $this->setup_tasks($taskstatus);
             $this->start_querylinks();
         }
@@ -110,7 +110,7 @@
        public function generate_refreshurl($keepactiontype = false) { 
             $actionpath = ($keepactiontype) ? $this->actiontype : '{replace}';
             $url = new \Purl\Url($this->pageurl->getUrl());
-            $url->path = wire('config')->pages->actions.$actionpath."/load/list/";
+            $url->path = Processwire\wire('config')->pages->actions.$actionpath."/load/list/";
             $url->path->add(rtrim($this->generate_insertafter(), '/'));
 			$url->query->remove('id');
             if ($this->assigneduserID != $this->userID) {
@@ -121,13 +121,13 @@
 		}
         
 		function generate_addactionurl($keepactiontype = false) {
-            if (wire('config')->cptechcustomer == 'stempf') {
+            if (Processwire\wire('config')->cptechcustomer == 'stempf') {
                 $actionpath = ($this->actiontype == 'all') ? 'tasks' : $this->actiontype;
             } else {
                 $actionpath = ($keepactiontype) ? $this->actiontype : '{replace}';
             }
             $url = new \Purl\Url($this->generate_refreshurl(true));
-            $url->path = wire('config')->pages->actions.$actionpath."/add/";
+            $url->path = Processwire\wire('config')->pages->actions.$actionpath."/add/";
 			return $url->getUrl();
 		}
         
@@ -161,7 +161,7 @@
              $bootstrap = new Contento();
              $href = $this->generate_addactionurl();
              $icon = $bootstrap->createicon('material-icons md-18', '&#xE146;');
-             if (wire('config')->cptechcustomer == 'stempf') {
+             if (Processwire\wire('config')->cptechcustomer == 'stempf') {
                  return $bootstrap->openandclose('a', "href=$href|class=btn btn-info btn-xs load-into-modal pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
              }
              return $bootstrap->openandclose('a', "href=$href|class=btn btn-info btn-xs add-action pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
@@ -401,7 +401,7 @@
         }
         
         public function get_actions($debug = false) {
-            return get_useractions($this->assigneduserID, $this->querylinks, wire('session')->display, $this->pagenbr, $debug);
+            return get_useractions($this->assigneduserID, $this->querylinks, Processwire\wire('session')->display, $this->pagenbr, $debug);
         }
         
         public function generate_pagenumberdescription() {

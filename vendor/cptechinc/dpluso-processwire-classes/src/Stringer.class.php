@@ -8,7 +8,7 @@
          */
         function highlight($haystack, $needle) {
             $bootstrap = new Contento();
-            if ($this->matches_phone($haystack)) {
+            if ($this->does_matchphone($haystack)) {
                 $needle = $this->does_matchphone($needle);
             }
             $regex = "/(".str_replace('-', '\-?', $needle).")/i";

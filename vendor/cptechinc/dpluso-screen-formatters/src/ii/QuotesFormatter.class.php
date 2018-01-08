@@ -27,7 +27,7 @@
             			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
             				if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
             					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-            					$class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
+            					$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
             					$colspan = $column['col-length'];
             					$tb->th("colspan=$colspan|class=$class", $column['label']);
             				} else {
@@ -48,7 +48,7 @@
             				for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
             					if (isset($this->tableblueprint['header']['rows'][$x]['columns'][$i])) {
             						$column = $this->tableblueprint['header']['rows'][$x]['columns'][$i];
-            						$class = wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
+            						$class = Processwire\wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
             						$colspan = $column['col-length'];
             						$celldata = strlen($column['label']) ? '<b>'.$column['label'].'</b>: ' : '';
             						$celldata .= TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $quote, $column);
@@ -70,7 +70,7 @@
             					for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
             						if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
             							$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-            							$class = wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+            							$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
             							$colspan = $column['col-length'];
             							$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $item, $column);
             							$tb->td("colspan=$colspan|class=$class", $celldata);

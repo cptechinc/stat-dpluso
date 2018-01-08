@@ -10,7 +10,7 @@
         }
         
         public function generate_sendtoorderurl(Order $quote) {
-            $url = new \Purl\Url(wire('config')->pages->orderquote);
+            $url = new \Purl\Url(Processwire\wire('config')->pages->orderquote);
             $url->query->set('qnbr', $quote->quotnbr);
             return $url->getUrl();
         }
@@ -30,7 +30,7 @@
         }
         
         public function generate_confirmationurl(Order $quote) {
-            $url = new \Purl\Url(wire('config')->pages->confirmquote);
+            $url = new \Purl\Url(Processwire\wire('config')->pages->confirmquote);
             $url->query->set('qnbr', $quote->quotnbr);
             return $url->getUrl();
         }

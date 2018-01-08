@@ -69,8 +69,8 @@
 			$form .= $bootstrap->label('', 'Results Per Page') . '&nbsp; &nbsp;';
 			$form .= $bootstrap->open('select', 'class=form-control input-sm results-per-page|name=results-per-page');
 			
-			foreach (wire('config')->showonpageoptions as $val) {
-				if ($val == wire('session')->display) {
+			foreach (Processwire\wire('config')->showonpageoptions as $val) {
+				if ($val == Processwire\wire('session')->display) {
 					$form .= $bootstrap->openandclose('option',"value=$val|selected", $val);
 				} else {
 					$form .= $bootstrap->openandclose('option',"value=$val", $val);
@@ -90,7 +90,7 @@
 		public function __toString() {
 			$bootstrap = new Contento();
 			$list = '';
-			$totalpages = ceil($this->count / wire('session')->display); 
+			$totalpages = ceil($this->count / Processwire\wire('session')->display); 
 			if ($this->pagenbr == 1) {
 				$link = $bootstrap->openandclose('a', 'href=#|aria-label=Previous', '<span aria-hidden="true">&laquo;</span>');
 				$list .= $bootstrap->openandclose('li', 'class=disabled', $link);
@@ -147,14 +147,14 @@
 	    }
 		
 		/**
- 	    * Initializes the wire('session')->display value;
+ 	    * Initializes the Processwire\wire('session')->display value;
  	    */
  		public static function setup_displayonpage() {
- 			if (wire('input')->get->display) {
- 				wire('session')->display = wire('input')->get->text('display');
+ 			if (Processwire\wire('input')->get->display) {
+ 				Processwire\wire('session')->display = Processwire\wire('input')->get->text('display');
  			} else {
- 				if (!wire('session')->display) {
- 					wire('session')->display = wire('config')->showonpage;
+ 				if (!Processwire\wire('session')->display) {
+ 					Processwire\wire('session')->display = Processwire\wire('config')->showonpage;
  				}
  			}
  		}

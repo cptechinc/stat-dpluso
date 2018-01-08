@@ -3,9 +3,9 @@
         use OrderPanelCustomerTraits;
         
         public function generate_lastloadeddescription() {
-            if (wire('session')->{'orders-loaded-for'}) {
-                if (wire('session')->{'orders-loaded-for'} == $this->custID) {
-                    return 'Last Updated : ' . wire('session')->{'orders-updated'};
+            if (Processwire\wire('session')->{'orders-loaded-for'}) {
+                if (Processwire\wire('session')->{'orders-loaded-for'} == $this->custID) {
+                    return 'Last Updated : ' . Processwire\wire('session')->{'orders-updated'};
                 }
                 return '';
             }
@@ -23,13 +23,13 @@
         public function get_orders($debug = false) {
             if ($this->tablesorter->orderby) {
                 if ($this->tablesorter->orderby == 'orderdate') {
-                    $this->orders = get_customerordersorderdate($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
+                    $this->orders = get_customerordersorderdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
                 } else {
-                    $this->orders = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
+                    $this->orders = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
                 }
             } else {
                 $this->tablesorter->sortrule = 'DESC'; $this->tablesorter->orderby = 'orderno';
-                $this->orders = get_customerordersorderby($this->sessionID, $this->custID, wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
+                $this->orders = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
             }
         }
         
@@ -52,7 +52,7 @@
         
         public function generate_searchurl() {
             $url = new \Purl\Url(parent::generate_searchurl());
-            $url->path = wire('config')->pages->ajax.'load/orders/search/cust/';
+            $url->path = Processwire\wire('config')->pages->ajax.'load/orders/search/cust/';
             $url->query->set('custID', $this->custID);
             if ($this->shipID) {
                 $url->query->set('shipID', $this->shipID);

@@ -41,12 +41,8 @@
 	$config->scripts->append(hashtemplatefile('scripts/libs/key-listener.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/datatables.js'));
 	$config->scripts->append(hashtemplatefile('scripts/classes.js'));
-	
-	if (file_exists($config->paths->templates."scripts/$config->dplusocompany-scripts.js")) {
-		$config->scripts->append(hashtemplatefile("scripts/$config->dplusocompany-scripts.js"));
-	} else {
-		$config->scripts->append(hashtemplatefile('scripts/scripts.js'));
-	}
+	$config->scripts->append(hashtemplatefile('scripts/scripts.js'));
+	$config->scripts->append(hashtemplatefile('scripts/dplus-notes.js'));
 
 	//$config->scripts->append($config->urls->modules . 'Inputfield/InputfieldCKEditor/ckeditor-4.6.1/ckeditor.js'));
 

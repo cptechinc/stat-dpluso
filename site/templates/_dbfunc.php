@@ -37,7 +37,7 @@
 			return $q->generate_sqlquery($q->params);
 		} else {
 			$sql->execute($q->params);
-			return $sql->fetch();
+			return $sql->fetchColumn();
 		}
 	}
 /* =============================================================
@@ -302,6 +302,8 @@
 		if ($restrictions) {
 			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
 				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) GROUP BY custid, shiptoid ORDER BY custid <> '$keyword' $limiting");
+			} elseif (Processwire\wire('config')->cptechcustomer == 'stat') { 
+				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) GROUP BY custid $limiting"); 
 			} else {
 				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) ORDER BY custid <> '$keyword' $limiting");
 			}
@@ -310,6 +312,8 @@
 		} else {
 			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
 				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) GROUP BY custid, shiptoid ORDER BY custid <> '$keyword' $limiting");
+			} elseif (wire('config')->cptechcustomer == 'stat') {
+				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) GROUP BY custid $limiting");
 			} else {
 				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) ORDER BY custid <> '$keyword' $limiting");
 			}
@@ -332,6 +336,8 @@
 		if ($restrictions) {
 			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
 				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex GROUP BY custid, shiptoid) t WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
+			} elseif (Processwire\wire('config')->cptechcustomer == 'stat') {
+				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex) t WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
 			} else {
 				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
 			}
@@ -340,6 +346,8 @@
 		} else {
 			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
 				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex GROUP BY custid, shiptoid) t WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
+			} elseif (wire('config')->cptechcustomer == 'stat') {
+				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex) t WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
 			} else {
 				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
 			}

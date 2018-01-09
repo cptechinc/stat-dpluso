@@ -33,14 +33,16 @@ function validate_tableformatter() {
 			var row = $(this);
 			var line = row.find('.'+tab.attr('id')+'-line').val();
 			var column = row.find('.column').val();
-			var length = row.find('.')
+			var length = row.find('.column-length').val();
 			var label = row.find('.col-label').val();
 			var key = line + '-' + column;
 			
 			if (key !== ignore) {
 				if (structure[tab.attr('id')].includes(key)) {
 					row.addClass('has-error');
-					errors[tab.attr('id')].push(label)
+					errors[tab.attr('id')].push(label);
+				} else if (parseInt(length) == 0) { 
+					errors[tab.attr('id')].push(label);
 				} else {
 					structure[tab.attr('id')].push(key);
 				}

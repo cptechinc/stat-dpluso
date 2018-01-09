@@ -17,8 +17,6 @@
 				$page->body = $config->paths->content.'customer/cust-page/customer-access-denied.php';
 			}
 			$config->scripts->append(hashtemplatefile('scripts/pages/customer-page.js'));
-			$config->scripts->append(hashtemplatefile('scripts/dplusnotes/order-notes.js'));
-		    $config->scripts->append(hashtemplatefile('scripts/dplusnotes/quote-notes.js'));
 			$page->useractionpanelfactory = new UserActionPanelFactory($user->loginid, $page->fullURL);
 
 			if ($input->urlSegment(2)) {

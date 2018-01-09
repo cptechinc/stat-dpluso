@@ -16,7 +16,7 @@
 		<?php $notes = get_dplusnotes(session_id(), $qnbr, $linenbr, 'QUOT', false); ?>
 		<?php foreach ($notes as $note) : ?>
 			<?php $readnote = $config->pages->ajax."json/dplus-notes/?key1=".$qnbr."&key2=".$linenbr."&recnbr=".$note['recno']."&type=".$config->dplusnotes['quote']['type']; ?>
-			<a href="<?php echo $readnote; ?>" class="list-group-item salesnote rec<?php echo $note['recno']; ?>" data-form="#notes-form">
+			<a href="<?php echo $readnote; ?>" class="list-group-item dplusnote rec<?php echo $note['recno']; ?>" data-form="#notes-form">
 				<div class="row">
 					<div class="col-xs-2"><?php echo $note['form1']; ?></div> <div class="col-xs-2"><?php echo $note['form2']; ?></div>
 					<div class="col-xs-2"><?php echo $note['form3']; ?></div> <div class="col-xs-2"><?php echo $note['form4']; ?></div> <div class="col-xs-2"><?php echo $note['form5']; ?></div>
@@ -30,19 +30,19 @@
 		<div class="response"></div>
 		<div class="row">
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Quote</label><br><input type="checkbox" name="form1" id="so-form1" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Quote</label><br><input type="checkbox" name="form1" id="note1" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Pick Ticket</label><br><input type="checkbox" name="form2" id="so-form2" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Pick Ticket</label><br><input type="checkbox" name="form2" id="note2" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Pack Ticket</label><br><input type="checkbox" name="form3" id="so-form3" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Pack Ticket</label><br><input type="checkbox" name="form3" id="note3" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Invoice</label><br><input type="checkbox" name="form4" id="so-form4" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Invoice</label><br><input type="checkbox" name="form4" id="note4" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Acknowledgement</label><input type="checkbox" name="form5" id="so-form5" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Acknowledgement</label><input type="checkbox" name="form5" id="note5" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 		</div>
 
@@ -61,7 +61,9 @@
 				<?php if ($canwrite) : ?>
 					<button type="submit" id="submit-note" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> Save Changes</button>
 					&nbsp; &nbsp;
-					<button type="button" id="delete-note" class="btn btn-danger" data-form="#notes-form"><i class="fa fa-trash" aria-hidden="true"></i> Delete Note</button>
+					<?php if (100 == 1) : //TODO ?>
+						<button type="button" id="delete-note" class="btn btn-danger" data-form="#notes-form"><i class="fa fa-trash" aria-hidden="true"></i> Delete Note</button>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 		</div>

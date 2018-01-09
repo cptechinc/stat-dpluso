@@ -7,7 +7,6 @@
         $page->pagetitle = "Quote for ".get_customername($custID);
 		$noteurl = $config->pages->notes.'redir/?action=get-cart-notes';
     }
-	$config->scripts->append(hashtemplatefile('scripts/dplusnotes/cart-notes.js'));
     $config->scripts->append(hashtemplatefile('scripts/pages/cart.js'));
 	$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
 	$page->body = $config->paths->content.'cart/cart-outline.php';

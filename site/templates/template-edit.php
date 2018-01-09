@@ -15,7 +15,6 @@
                 $editorderdisplay->canedit = ($input->get->readonly) ? false : $order->can_edit();
                 $prefix = ($editorderdisplay->canedit) ? 'Editing' : 'Viewing';
                 $page->title = "$prefix Order #" . $ordn . ' for ' . get_customername($custID);
-                $config->scripts->append(hashtemplatefile('scripts/dplusnotes/order-notes.js'));
     			$config->scripts->append(hashtemplatefile('scripts/edit/card-validate.js'));
     			$config->scripts->append(hashtemplatefile('scripts/edit/edit-orders.js'));
     			$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
@@ -32,7 +31,6 @@
             $prefix = ($editquotedisplay->canedit) ? 'Editing' : 'Viewing';
             $page->title = "$prefix Quote #" . $qnbr . ' for ' . get_customername($quote->custid);
             $page->body = $config->paths->content."edit/quotes/outline.php";
-            $config->scripts->append(hashtemplatefile('scripts/dplusnotes/quote-notes.js'));
 			$config->scripts->append(hashtemplatefile('scripts/edit/edit-quotes.js'));
             $config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
             $itemlookup->set_customer($quote->custid, $quote->shiptoid);

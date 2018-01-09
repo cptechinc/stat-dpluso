@@ -17,28 +17,31 @@
 			<?php $readnote = $config->pages->ajax."json/dplus-notes/?key1=".$ordn."&key2=".$linenbr."&recnbr=".$note['recno']."&type=".$config->dplusnotes['order']['type']; ?>
 			<a href="<?php echo $readnote; ?>" class="list-group-item dplusnote rec<?php echo $note['recno']; ?>" data-form="#notes-form">
 				<div class="row">
-					<div class="col-xs-2 col-sm-3"><?php echo $note['form1']; ?></div> <div class="col-xs-2 col-sm-3"><?php echo $note['form2']; ?></div>
-					<div class="col-xs-2 col-sm-3"><?php echo $note['form3']; ?></div> <div class="col-xs-2 col-sm-3"><?php echo $note['form4']; ?></div>
+					<div class="col-xs-2 col-sm-3"><?= $note['form1']; ?></div> <div class="col-xs-2 col-sm-3"><?= $note['form2']; ?></div>
+					<div class="col-xs-2 col-sm-3"><?= $note['form3']; ?></div> <div class="col-xs-2 col-sm-3"><?= $note['form4']; ?></div>
 				</div>
 			</a>
 		<?php endforeach; ?>
 	</ul>
 </div>
 <div class="well">
-	<form class="notes" action="<?php echo $config->pages->notes."redir/"; ?>" method="POST" id="notes-form">
+	<form class="notes" action="<?= $config->pages->notes."redir/"; ?>" method="POST" id="notes-form">
 		<div class="response"></div>
 		<div class="row">
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Pick Ticket</label><br><input type="checkbox" name="form1" id="note-field1" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Pick Ticket</label><br><input type="checkbox" name="form1" id="note1" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 			<div class="form-group col-xs-6 col-sm-offset-1 col-sm-2">
-				<label class="control-label">Pack Ticket</label><br><input type="checkbox" name="form2" id="note-field2" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Pack Ticket</label><br><input type="checkbox" name="form2" id="note2" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 			<div class="form-group col-xs-6 col-sm-offset-1 col-sm-2">
-				<label class="control-label">Invoice</label><br><input type="checkbox" name="form3" id="note-field3" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Invoice</label><br><input type="checkbox" name="form3" id="note3" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 			<div class="form-group col-xs-6 col-sm-offset-1 col-sm-2">
-				<label class="control-label">Acknowledgement</label><input type="checkbox" name="form4" id="note-field4" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Acknowledgement</label><input type="checkbox" name="form4" id="note4" class="check-toggle" data-size="small" data-width="73px" value="Y">
+			</div>
+			<div class="form-group col-xs-6 col-sm-offset-1 col-sm-2 hidden">
+				<label class="control-label">Acknowledgement</label><input type="checkbox" name="form4" id="note5" class="check-toggle" data-size="small" data-width="73px" value="Y">
 			</div>
 		</div>
 
@@ -52,12 +55,14 @@
 				<input type="hidden" class="type" value="<?php echo $config->dplusnotes['order']['type']; ?>">
 				<input type="hidden" name="recnbr" class="recnbr" value="">
 				<input type="hidden" name="editorinsert" class="editorinsert" value="insert">
-				<input type="hidden" name="notepage" class="notepage" value="<?php echo $config->filename; ?>">
+				<input type="hidden" name="notepage" class="notepage" value="<?= $config->filename; ?>">
 				<span class="help-block"></span>
 				<?php if ($canwrite) : ?>
 					<button type="submit" id="submit-note" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> Save Changes</button>
 					&nbsp; &nbsp;
-					<button type="button" id="delete-note" class="btn btn-danger" data-form="#notes-form"><i class="fa fa-trash" aria-hidden="true"></i> Delete Note</button>
+					<?php if (100 == 1) : //TODO ?>
+						<button type="button" id="delete-note" class="btn btn-danger" data-form="#notes-form"><i class="fa fa-trash" aria-hidden="true"></i> Delete Note</button>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 		</div>

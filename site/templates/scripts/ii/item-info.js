@@ -104,7 +104,7 @@ $(function() {
 				wait(2500, function() {
 					hideajaxloading();
 					$(modal).find('.modal-body').addClass('modal-results');
-					$(modal).resizemodal('lg').modal();
+					$(modal).resizemodal('xl').modal();
 					listener.listen();
 				});
 

@@ -42,7 +42,7 @@ $(function() {
 		showajaxloading();
 		$(formid).postform({formdata: false, jsoncallback: false}, function() { //form, overwriteformdata, returnjson, callback
 			$(modal).modal('hide');
-			wait(500, function() {
+			wait(2000, function() {
 				$(loadinto).loadin(href, function() {
 					hideajaxloading();
 					$(modal).find('.modal-body').addClass('modal-results');

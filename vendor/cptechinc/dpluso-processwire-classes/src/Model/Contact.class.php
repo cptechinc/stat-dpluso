@@ -74,7 +74,7 @@
 			CLASS FUNCTIONS 
 		============================================================ */
         public function generate_customerurl() {
-            return Processwire\wire('config')->pages->customer."redir/?action=load-customer&custID=".urlencode($this->custid);
+            return $this->generate_ciloadurl();
         }
 
         public function generate_shiptourl() {
@@ -90,11 +90,14 @@
 		}
 
         public function generate_contacturl() {
+            $url = new \Purl\Url(Processwire\wire('config')->pages->contact);
+            $url->query->set('custID', $this->custid);
+            
             if ($this->has_shipto()) {
-                return Processwire\wire('config')->pages->customer.urlencode($this->custid) . "/shipto-".urlencode($this->shiptoid)."/contacts/?id=".urlencode($this->contact);
-            } else {
-                return Processwire\wire('config')->pages->customer.urlencode($this->custid)."/contacts/?id=".urlencode($this->contact);
-            }
+                $url->query->set('shipID', $this->shiptoid);
+            } 
+            $url->query->set('id', $this->contact);
+            return $url->getUrl();
         }
 
 		function generate_ciloadurl() {
@@ -168,7 +171,7 @@
 			public function _toArray()
 		============================================================ */
  		public static function remove_nondbkeys($array) {
-			unset($array['actionlineage']);
+			unset($array['fieldaliases']);
  			return $array;
  		}
     }

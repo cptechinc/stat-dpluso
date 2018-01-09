@@ -241,20 +241,32 @@
 			$shipID = $input->post->text('shipID');
 			$contactID = $input->post->text('contactID');
 			$contact = get_customercontact($custID, $shipID, $contactID, false);
-			$contact['contact'] = $input->post->text('name');
-			$contact['cphone'] = str_replace('-', '', $input->post->text('phone'));
-			$contact['cphext'] = $input->post->text('extension');
-			$contact['ccellphone'] = str_replace('-', '', $input->post->text('cellphone'));
-			$contact['email'] = $input->post->text('email');
+			$contact->contact = $input->post->text('name');
+			$contact->cphone = str_replace('-', '', $input->post->text('phone'));
+			$contact->cphext = $input->post->text('extension');
+			$contact->ccellphone = str_replace('-', '', $input->post->text('cellphone'));
+			$contact->email = $input->post->text('email');
 			$response = edit_customercontact($custID, $shipID, $contactID, $contact, false);
 			$session->sql = $response['sql'];
-			$data = array('DBNAME' => $config->dbName, 'EDITCONTACT' => false, 'CUSTID' => $custID, 'SHIPID' => $shipID, 'CONTACT' => $contactID, 'NAME' => $contact['contact'], 'PHONE' => $contact['cphone'], 'EXTENSION' => $contact['cphext'], 'CELLPHONE' => $contact['ccellphone'], 'EMAIL' => $contact['email']);
+			$data = array(
+				'DBNAME' => $config->dbName, 
+				'EDITCONTACT' => false, 
+				'CUSTID' => $custID, 
+				'SHIPID' => $shipID, 
+				'CONTACT' => $contactID, 
+				'NAME' => $contact->contact, 
+				'PHONE' => $contact->cphone, 
+				'EXTENSION' => $contact->cphext, 
+				'CELLPHONE' => $contact->ccellphone, 
+				'EMAIL' => $contact->email
+			);
 			$returnpage = new \Purl\Url($input->post->text('page'));
-			$returnpage->query->set('id', $contact['contact']);
+			$returnpage->query->set('id', $contact->contact);
 
 			$oldlinks = array('customerlink' => $custID, 'shiptolink' => $shipID, 'contactlink' => $contactID);
-			$newlinks = array('customerlink' => $custID, 'shiptolink' => $shipID, 'contactlink' => $contact['contact']);
-			if ($response['changes']) {
+			$newlinks = array('customerlink' => $custID, 'shiptolink' => $shipID, 'contactlink' => $contact->contact);
+			
+			if ($contactID != $contact->contact) {
 				$session->sql .= "<br>" . update_useractionlinks($oldlinks, $newlinks, $oldlinks, true);
 				update_useractionlinks($oldlinks, $newlinks, $oldlinks, false);
 			}

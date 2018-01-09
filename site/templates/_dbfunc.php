@@ -219,22 +219,26 @@
 		}
 	}
 
-	function edit_customercontact($custID, $shipID, $contactID, $contact, $debug) {
+	function edit_customercontact($custID, $shipID, $contactID, $contact, $debug = false) {
 		$originalcontact = get_customercontact($custID, $shipID, $contactID, false);
-		$query = returnpreppedquery($originalcontact, $contact);
-		$sql = Processwire\wire('database')->prepare("UPDATE custindex SET ".$query['setstatement']." WHERE custid = :custID AND shiptoid = :shipID AND contact = :originalcontactID");
-		$query['switching'][':custID'] = $custID; $query['switching'][':shipID'] = $shipID; $query['switching'][':originalcontactID'] = $contactID;
-		$query['withquotes'][] = true; $query['withquotes'][]= true; $query['withquotes'][] = true;
+		$q = (new QueryBuilder())->table('custindex');
+		$q->mode('update');
+		$q->generate_setdifferencesquery($originalcontact->_toArray(), $contact->_toArray());
+		$q->where('custid', $custID);
+		$q->where('shiptoid', $shipID);
+		$q->where('contact', $contactID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
+			return $q->generate_sqlquery();
 		} else {
-			$returnquery = returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
-				$success = $sql->rowCount();
-				return $success ? array('error' => false, 'changes' => $query['changecount'], 'sql' => $returnquery) : array('error' => true, 'changes' => 0, 'sql' => $returnquery);
+			$sql->execute($q->params);
+			$success = $sql->rowCount();
+			if ($success) {
+				return array("error" => false, "sql" => $q->generate_sqlquery($q->params));
+			} else {
+				return array("error" => true, "sql" => $q->generate_sqlquery($q->params));
 			}
-			return array('error' => false, 'changes' => 0, 'sql' => $returnquery);
 		}
 	}
 
@@ -1047,7 +1051,6 @@
 	}
 	
 	function edit_useraction(UserAction $updatedaction, $debug = false) {
-		global $db; //FIX
 		$originalaction = get_useraction($updatedaction->id); // (id, bool fetchclass, bool debug)
 		$q = (new QueryBuilder())->table('useractions');
 		$q->mode('update');

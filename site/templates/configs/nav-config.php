@@ -10,6 +10,7 @@
     $config->pages->cart = $config->urls->root . 'cart/';
     $config->pages->customer = $config->urls->root . 'customers/';
     $config->pages->custinfo = $config->urls->root . 'customers/cust-info/';
+    $config->pages->contact = $config->urls->root . 'customers/contact/';
     $config->pages->edit = $config->urls->root . 'edit/';
     $config->pages->editorder = $config->urls->root . 'edit/order/';
     $config->pages->editquote = $config->urls->root . 'edit/quote/';

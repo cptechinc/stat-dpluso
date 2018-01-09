@@ -83,7 +83,8 @@
             break;
 		case 'ii-lot-serial': // $itemID provided by $input->get
             $page->title = 'Viewing ' .$itemID. ' Lot/Serial Inquiry';
-            $page->body = $config->paths->content."item-information/item-lot-serial.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-lot-serial');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		case 'ii-sales-orders': 
             $page->title = $itemID . ' Sales Order Inquiry';
@@ -108,7 +109,8 @@
             break;
 		case 'ii-substitutes': // $itemID provided by $input->get
             $page->title = 'Viewing Item Substitutes for ' .$itemID;
-            $page->body = $config->paths->content."item-information/item-substitutes.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-substitutes');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
 		case 'ii-documents': // $itemID provided by $input->get
             switch ($input->urlSegment(3)) {
@@ -119,7 +121,8 @@
                     $page->title = 'Viewing Item Documents for ' .$itemID;
                     break;
             }
-            $page->body = $config->paths->content."item-information/item-documents.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-documents');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
         default:
             $page->title = 'Search for an item';

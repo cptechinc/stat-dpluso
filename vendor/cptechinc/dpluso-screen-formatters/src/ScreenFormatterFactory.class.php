@@ -26,8 +26,12 @@
             // NON FORMATABLE
             'ii-activity' => 'II_ItemActivityScreen',
             'ii-stock' => 'II_ItemWarehouseStockScreen',
+            'ii-item-stock' => 'II_ItemStockScreen',
             'ii-requirements' => 'II_ItemRequirementsScreen',
             'ii-kit' => 'II_ItemKitScreen',
+            'ii-lot-serial' => 'II_ItemLotSerialScreen',
+            'ii-documents' => 'II_ItemDocumentScreen',
+            'ii-substitutes' => 'II_ItemSubstituteScreen',
             
             'ci-customer-page' => 'CI_CustomerScreen',
             'ci-customer-shipto-page' => 'CI_CustomerShiptoScreen',

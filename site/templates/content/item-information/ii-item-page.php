@@ -22,7 +22,8 @@
 				echo $page->bootstrap->h3('', 'Pricing');
 				include $config->paths->content."item-information/item-price-breaks.php";
 				echo $page->bootstrap->h3('', 'Stock');
-				include $config->paths->content."item-information/item-stock.php";
+				$tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-item-stock');
+				include $config->paths->content."item-information/ii-formatted-screen.php";
 			}
 		}
 	} else {

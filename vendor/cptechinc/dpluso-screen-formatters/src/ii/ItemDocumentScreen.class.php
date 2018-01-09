@@ -12,7 +12,7 @@
        	============================================================ */
         
         public function generate_screen() {
-
+            $bootstrap = new Contento();
             $columns = array_keys($this->json['columns']);
             $documents = array_keys($this->json['data']);
 
@@ -33,21 +33,10 @@
                         $class = wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
                         $tb->td("class=$class", $this->json['data'][$doc][$column]);
                     }
-                    $button = $page->bootstrap->openandclose('button', "type=button|class=btn btn-sm btn-primary load-doc|data-doc=$doc", '<i class="fa fa-file-o" aria-hidden="true"></i> Load');
+                    $button = $bootstrap->openandclose('button', "type=button|class=btn btn-sm btn-primary load-doc|data-doc=$doc", '<i class="fa fa-file-o" aria-hidden="true"></i> Load');
                     $tb->td('', $button);
                 }
             $tb->closetablesection('tbody');
             return $tb->close();
         }
-        
-        public function generate_javascript() {
-			$bootstrap = new Contento();
-			$content = $bootstrap->open('script', '');
-				$content .= "\n";
-                // TODO
-				$content .= "\n";
-			$content .= $bootstrap->close('script');
-			return $content;
-		}
-        
     }

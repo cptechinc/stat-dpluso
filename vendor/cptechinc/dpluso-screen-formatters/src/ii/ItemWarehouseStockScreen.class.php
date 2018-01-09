@@ -38,7 +38,7 @@
                 
                 // Stock By Lot 
                 if (array_key_exists('lots', $whse)) {
-                    $tb = new Table('class=table table-striped table-bordered table-condensed table-excel|id='.key($this->json['data']));
+                    $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
 					$tb->tr();
 					foreach ($this->json['columns']['lots'] as $column) {
 						$class = Processwire\wire('config')->textjustify[$column['headingjustify']];

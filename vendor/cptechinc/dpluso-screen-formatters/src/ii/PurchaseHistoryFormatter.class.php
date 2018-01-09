@@ -18,9 +18,9 @@
             $content = '';
 			$this->generate_tableblueprint();
 		    
-			foreach ($this->json['data'] as $whse) {
+			foreach ($this->json['data'] as $whseid => $whse) {
 				$content .= $bootstrap->h3('', $whse['Whse Name']);
-				$tb = new Table('class=table table-striped table-bordered table-condensed table-excel|id='.key($this->json['data']));
+				$tb = new Table("class=table table-striped table-bordered table-condensed table-excel|id=$whseid");
 					$tb->tablesection('thead');
 						for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
 							$tb->tr();
@@ -92,6 +92,7 @@
 									foreach ($invoice['lots'] as $lot) {
 										for ($x = 1; $x < $this->tableblueprint['lotserial']['maxrows'] + 1; $x++) {
 											$tb->tr();
+											$columncount = 0;
 											for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 												if (isset($this->tableblueprint['lotserial']['rows'][$x]['columns'][$i])) {
 													$column = $this->tableblueprint['lotserial']['rows'][$x]['columns'][$i];
@@ -122,7 +123,7 @@
 								$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
 								$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
 								$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
-								$tb->td('colspan=|class='.$class, $celldata);
+								$tb->td("class=$class", $celldata);
 							} else {
 								$tb->td();
 							}
@@ -139,9 +140,8 @@
 				$content .= "\n";
 				$content .= $bootstrap->indent().'$(function() {';
 					if ($this->tableblueprint['detail']['rows'] < 2) {
-						foreach ($this->json['data'] as $whse) {
-							$name = key($this->json['data']);
-							$content .= $bootstrap->indent()."$('#$name').DataTable();";
+						foreach ($this->json['data'] as $whseid => $whse) {
+							$content .= $bootstrap->indent()."$('#$whseid').DataTable();";
 						}
 					}
 				$content .= $bootstrap->indent().'});';

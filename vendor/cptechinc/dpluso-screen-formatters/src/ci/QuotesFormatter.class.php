@@ -18,8 +18,8 @@
 			$this->generate_tableblueprint();
 			$content = '';
             
-            foreach ($this->json['data'] as $whse) {
-                $tb = new Table('class=table table-striped table-bordered table-condensed table-excel|id='.key($this->json['data']));
+            foreach ($this->json['data'] as $whseid => $whse) {
+                $tb = new Table("class=table table-striped table-bordered table-condensed table-excel|id=$whse");
             	$tb->tablesection('thead');
             		for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
             			$tb->tr();

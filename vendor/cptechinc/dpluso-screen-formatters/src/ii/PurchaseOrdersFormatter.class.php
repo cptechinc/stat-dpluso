@@ -17,10 +17,10 @@
             $content = '';
 			$this->generate_tableblueprint();
 		    
-            foreach ($this->json['data'] as $whse) {
+            foreach ($this->json['data'] as $whseid => $whse) {
                 $content .= $bootstrap->h3('', $whse['Whse Name']);
                 
-                $tb = new Table('class=table table-striped table-bordered table-condensed table-excel|id='.key($this->json['data']));
+                $tb = new Table("class=table table-striped table-bordered table-condensed table-excel|id=$whseid");
                 	$tb->tablesection('thead');
                 		for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
                 			$tb->tr();
@@ -108,10 +108,9 @@
 			$content = $bootstrap->open('script', '');
 				$content .= "\n";
 				$content .= $bootstrap->indent().'$(function() {';
-					if ($this->tableblueprint['detail']['rows'] < 2) {
-						foreach ($this->json['data'] as $whse) {
-							$name = key($this->json['data']);
-							$content .= $bootstrap->indent()."$('#$name').DataTable();";
+					if ($this->tableblueprint['detail']['maxrows'] < 2) {
+						foreach ($this->json['data'] as $whseid => $whse) {
+							$content .= $bootstrap->indent()."$('#$whseid').DataTable();";
 						}
 					}
 				$content .= $bootstrap->indent().'});';

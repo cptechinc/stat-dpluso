@@ -20,9 +20,9 @@
             $content = '';
 			$this->generate_tableblueprint();
 			
-            foreach ($this->json['data'] as $whse) {
+            foreach ($this->json['data'] as $whseid => $whse) {
                 $content .= $bootstrap->h3('', $whse['Whse Name']);
-                $tb = new Table('class=table table-striped table-bordered table-condensed table-excel|id='.key($this->json['data']));
+                $tb = new Table("class=table table-striped table-bordered table-condensed table-excel|id=$whseid");
             	$tb->tablesection('tbody');
             		foreach($whse['orders'] as $invoice) {
                     	for ($x = 1; $x < $this->tableblueprint['header']['maxrows'] + 1; $x++) {

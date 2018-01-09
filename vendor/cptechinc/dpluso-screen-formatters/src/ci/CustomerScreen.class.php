@@ -98,7 +98,7 @@
         
         public function generate_tableright() {
             $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
-            foreach (array('activity', 'saleshistory')as $section) {
+            foreach (array('activity', 'saleshistory') as $section) {
                 if ($section != 'rfml') {
                     $tb->tablesection('thead');
                     $tb->tr();

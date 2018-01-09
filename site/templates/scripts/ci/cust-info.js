@@ -207,7 +207,7 @@ function salesorder() { //CAN BE USED IF SHIPTO IS DEFINED
 		$(loadinto).loadin(href, function() {
 			hideajaxloading(); console.log(href);
 			$(modal).find('.modal-body').addClass('modal-results');
-			$(modal).resizemodal('lg').modal();
+			$(modal).resizemodal('xl').modal();
 		});
 	});
 }

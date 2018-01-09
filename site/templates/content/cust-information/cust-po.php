@@ -7,11 +7,17 @@
 	<div class="tab-content">
 		<div role="tabpanel" class="tab-pane active" id="salesorders">
 			<br>
-			<?php include $config->paths->content."cust-information/cust-sales-orders.php"; ?>
+			<?php
+				$tableformatter = $page->screenformatterfactory->generate_screenformatter('ci-sales-orders');
+				include $config->paths->content."cust-information/ci-formatted-screen.php";
+			?>
 		</div>
 		<div role="tabpanel" class="tab-pane" id="saleshistory">
 			<br>
-			<?php include $config->paths->content."cust-information/cust-sales-history.php"; ?>
+			<?php
+				$tableformatter = $page->screenformatterfactory->generate_screenformatter('ci-sales-history');
+				include $config->paths->content."cust-information/ci-formatted-screen.php";
+			?>
 		</div>
 	</div>
 </div>

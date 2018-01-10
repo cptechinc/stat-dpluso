@@ -18,14 +18,15 @@
             $useclass = true;
             if ($this->tablesorter->orderby) {
                 if ($this->tablesorter->orderby == 'orderdate') {
-                    $this->orders = get_salesrepordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, false);
+                    $orders = get_salesrepordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
                 } else {
-                    $this->orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, false);
+                    $orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
                 }
             } else {
                 $this->tablesorter->sortrule = 'DESC'; $this->tablesorter->orderby = 'orderno';
-                $this->orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, false);                
+                $orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);                
             }
+            return $debug ? $orders : $this->orders = $orders;
         }
     }
 ?>

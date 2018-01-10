@@ -1,7 +1,8 @@
 <?php
     function renderNavTree($items, $maxDepth = 3) {
     	// if we've been given just one item, convert it to an array of items
-    	if($items instanceof Page) $items = array($items);
+    	// 
+    	if($items instanceof \Processwire\Page) $items = array($items);
     	// if there aren't any items to output, exit now
     	if(!count($items)) return;
     	// $out is where we store the markup we are creating in this function

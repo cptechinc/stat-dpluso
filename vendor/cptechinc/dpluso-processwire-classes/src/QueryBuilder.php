@@ -145,6 +145,7 @@
                 return '';
             }
         }
+        
         /**
          * Parses the Paramterized query provided by $this->render()
          * Returns it in a Easy to read format with SQL keywords in CAPS and spaces after commas

@@ -503,7 +503,7 @@
 		$q->where('custid', $custID);
 		$q->where('type', 'O');
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order($q->generate_orderby($orderby));
+		$q->order($orderby . ' ' . $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {

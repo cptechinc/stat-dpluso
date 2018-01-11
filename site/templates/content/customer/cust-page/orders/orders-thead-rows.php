@@ -12,8 +12,8 @@
     </th>
     <th>Ship-To</th>
     <th>
-        <a href="<?= $orderpanel->generate_tablesortbyurl("subtotal") ; ?>" class="load-link" <?= $orderpanel->ajaxdata; ?>>
-            Order Totals <?= $orderpanel->tablesorter->generate_sortsymbol('subtotal'); ?>
+        <a href="<?= $orderpanel->generate_tablesortbyurl("odrtotal") ; ?>" class="load-link" <?= $orderpanel->ajaxdata; ?>>
+            Order Totals <?= $orderpanel->tablesorter->generate_sortsymbol('odrtotal'); ?>
         </a>
     </th>
     <th>

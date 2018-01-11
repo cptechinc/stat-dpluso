@@ -21,6 +21,7 @@
 		}
         
         public function get_orders($debug = false) {
+            $useclass = true;
             if ($this->tablesorter->orderby) {
                 if ($this->tablesorter->orderby == 'orderdate') {
                     $orders = get_customerordersorderdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);

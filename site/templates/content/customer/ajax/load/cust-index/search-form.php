@@ -3,7 +3,12 @@
         <?php if ($input->get->function) : ?>
         	<input type="hidden" name="function" class="function" value="<?= $input->get->function; ?>">
         <?php endif; ?>
-        <input type="text" class="form-control cust-index-search" name="q" placeholder="Type customer phone, name, ID, contact">
+        <div class="input-group">
+            <input type="text" class="form-control cust-index-search" name="q" placeholder="Type customer phone, name, ID, contact">
+            <span class="input-group-btn">
+            	<button type="submit" class="btn btn-default not-round"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+            </span>
+        </div>
     </div>
     <div>
         <?php

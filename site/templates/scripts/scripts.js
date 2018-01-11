@@ -529,17 +529,27 @@ $(document).ready(function() {
 
 		$("body").on("submit", "#cust-index-search-form", function(e) {
 			e.preventDefault();
+			var form = $(this);
+			var q = form.find('[name=q]').val();
+			var pagefunction = form.find('[name=function]').val();
+			var loadinto = '#cust-results';
+			var href = URI(form.attr('action')).addQuery('q', q)
+			 										.addQuery('function', pagefunction)
+			 										.toString();
+			$(loadinto).loadin(href+' '+loadinto, function() {
+				
+			});
 		});
 
-		$("body").on("keyup", ".cust-index-search", function() {
-				var thisform = $(this).closest('form');
-				var pagefunction = thisform.find('[name=function]').val();
-				var loadinto = '#cust-results';
-				var href = URI(thisform.attr('action')).addQuery('q', $(this).val())
-													   .addQuery('function', pagefunction)
-													   .toString();
-				$(loadinto).loadin(href+' '+loadinto, function() { });
-		});
+		// $("body").on("keyup", ".cust-index-search", function() {
+		// 		var thisform = $(this).closest('form');
+		// 		var pagefunction = thisform.find('[name=function]').val();
+		// 		var loadinto = '#cust-results';
+		// 		var href = URI(thisform.attr('action')).addQuery('q', $(this).val())
+		// 											   .addQuery('function', pagefunction)
+		// 											   .toString();
+		// 		$(loadinto).loadin(href+' '+loadinto, function() { });
+		// });
 		
 		$("body").on("submit", "#vi-search-item", function(e) {
 			e.preventDefault();

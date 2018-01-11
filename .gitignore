@@ -25,6 +25,7 @@ wire
 
 # Project Configurations
 .ftpconfig
+.ftpignore
 site/config.php
 composer.json
 composer.lock

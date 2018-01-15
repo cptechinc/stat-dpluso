@@ -42,27 +42,29 @@
 					echo '</div>';
 				echo '</div>';
 				
-				echo '<h3>Notes</h3>';
-				echo '<div class="row">';
-					echo '<div class="col-sm-12">';
-						$tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
-						$tb->tablesection('thead');
-							$tb->tr();
-							foreach ($notescolumns as $column) {
-								$tb->th('class='.$config->textjustify[$creditjson['columns']['notes'][$column]['headingjustify']], $creditjson['columns']['notes'][$column]['heading']);
-							}
-						$tb->closetablesection('thead');
-						$tb->tablesection('tbody');
-						$tb->closetablesection('tbody');
-							foreach ($creditjson['data']['notes'] as $note) {
+				if (isset($creditjson['data']['notes'])) {
+					echo '<h3>Notes</h3>';
+					echo '<div class="row">';
+						echo '<div class="col-sm-12">';
+							$tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
+							$tb->tablesection('thead');
 								$tb->tr();
 								foreach ($notescolumns as $column) {
-									$tb->td('class='.$config->textjustify[$creditjson['columns']['notes'][$column]['datajustify']], $note[$column].' &nbsp;');
+									$tb->th('class='.$config->textjustify[$creditjson['columns']['notes'][$column]['headingjustify']], $creditjson['columns']['notes'][$column]['heading']);
 								}
-							}
-						echo $tb->close();
+							$tb->closetablesection('thead');
+							$tb->tablesection('tbody');
+							$tb->closetablesection('tbody');
+								foreach ($creditjson['data']['notes'] as $note) {
+									$tb->tr();
+									foreach ($notescolumns as $column) {
+										$tb->td('class='.$config->textjustify[$creditjson['columns']['notes'][$column]['datajustify']], $note[$column].' &nbsp;');
+									}
+								}
+							echo $tb->close();
+						echo '</div>';
 					echo '</div>';
-				echo '</div>';
+				}
 			} else {
 				echo $page->bootstrap->createalert('warning', 'Information Not Available'); 
 			}

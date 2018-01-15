@@ -83,47 +83,45 @@ $(function() {
 				});
 			});
 		});
-		
-		$(window).resize(function() {
-			if ($(window).width() < 768) {
-				$('#show-toolbar').addClass('hidden');
-			} else {
-				$('#show-toolbar').removeClass('hidden');
-			}
-		});
 	});
 	
-	$(function() {
-		$('#contacts-div').on('shown.bs.collapse', function () {
-			if ($(this).data('tableloaded') === "no") {
-				$(this).data('tableloaded', "yes");
-				var table = $('#contacts-table').DataTable({
-					"columnDefs": [
-						{ "targets": [ 5 ], "visible": false, "bRegex": true, "bSmart": false },
-					]
-				});
+	$(window).resize(function() {
+		if ($(window).width() < 768) {
+			$('#show-toolbar').addClass('hidden');
+		} else {
+			$('#show-toolbar').removeClass('hidden');
+		}
+	});
+	
+	$('#contacts-div').on('shown.bs.collapse', function () {
+		if ($(this).data('tableloaded') === "no") {
+			$(this).data('tableloaded', "yes");
+			var table = $('#contacts-table').DataTable({
+				"columnDefs": [
+					{ "targets": [ 5 ], "visible": false, "bRegex": true, "bSmart": false },
+				]
+			});
 
-				$('#limit-shiptos').change(function() {
-					if ($(this).is(':checked')) {
-						if ($(this).val().length > 0) {
-							table.columns( 1 ).search("^" + this.value + "$", true, false, true).draw();
-						}
-					} else {
-						table.columns( 1 ).search('').draw();
+			$('#limit-shiptos').change(function() {
+				if ($(this).is(':checked')) {
+					if ($(this).val().length > 0) {
+						table.columns( 1 ).search("^" + this.value + "$", true, false, true).draw();
 					}
-				});
-				$('#limit-cc').change(function() {
-					if ($(this).is(':checked')) {
-						table.columns( 5 ).search("^" + 'CC' + "$", true, false, true).draw();
-					} else {
-						table.columns( 5 ).search('').draw();
-					}
-				});
-				if ($(this).data('shipid') !== '') {
-					$('#limit-shiptos').bootstrapToggle('on');
+				} else {
+					table.columns( 1 ).search('').draw();
 				}
+			});
+			$('#limit-cc').change(function() {
+				if ($(this).is(':checked')) {
+					table.columns( 5 ).search("^" + 'CC' + "$", true, false, true).draw();
+				} else {
+					table.columns( 5 ).search('').draw();
+				}
+			});
+			if ($(this).data('shipid') !== '') {
+				$('#limit-shiptos').bootstrapToggle('on');
 			}
-		});
+		}
 	});
 });
 
@@ -385,7 +383,7 @@ function docview() {
 		$(loadinto).loadin(href, function() {
 			hideajaxloading();
 			$(modal).find('.modal-body').addClass('modal-results');
-			$(modal).resizemodal('lg').modal();
+			$(modal).resizemodal('xl').modal();
 		});
 	});
 

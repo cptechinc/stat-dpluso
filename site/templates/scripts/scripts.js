@@ -587,13 +587,18 @@ $(document).ready(function() {
 			var button = $(this);
 			var doc = button.data('doc');
 			var href = config.urls.products.ii.json.ii_moveitemdoc + "?docnumber="+doc;
-
 			$.getJSON(href, function(json) {
 				if (!json.response.error) {
 					var td = button.parent();
 					td.find('.load-doc').remove();
 					var href = "<a href='"+config.urls.orderfiles+json.response.file+"' class='btn btn-sm btn-success' target='_blank'><i class='fa fa-file-text' aria-hidden='true'></i> View Document</a>";
 					$(href).appendTo(td);
+				} else {
+					swal({
+						title: 'Error!',
+						text: json.response.message,
+						type: 'error',
+					});
 				}
 			});
 		});

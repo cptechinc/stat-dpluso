@@ -424,7 +424,7 @@
 		}
 	}
 
-	function get_salesrepordersorderdate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass, $debug) {
+	function get_salesrepordersorderdate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
 		$limiting = returnlimitstatement($limit, $page);
 		$sql = Processwire\wire('database')->prepare("SELECT orderdate, STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder, orderno, custpo, shiptoid, sname, saddress, saddress2, scity, sst, szip, havenote,
 					status, havetrk, havedoc, odrsubtot, odrtax, odrfrt, odrmis, odrtotal, error, errormsg, shipdate, custid, custname, invdate, editord FROM ordrhed
@@ -442,7 +442,7 @@
 		}
 	}
 
-	function get_salesrepordersorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass, $debug) {
+	function get_salesrepordersorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = false, $debug = false) {
 		$limiting = returnlimitstatement($limit, $page);
 		$sql = Processwire\wire('database')->prepare("SELECT ordrhed.*, CAST(odrsubtot AS DECIMAL(8,2)) AS subtotal FROM ordrhed WHERE sessionid = :sessionID  AND type = :type ORDER BY $orderby $sortrule " . $limiting);
 		$switching = array(':sessionID' => $sessionID, ':type' => 'O'); $withquotes = array(true, true);
@@ -458,7 +458,7 @@
 		}
 	}
 
-	function get_salesreporders($sessionID, $limit = 10, $page = 1, $useclass, $debug) {
+	function get_salesreporders($sessionID, $limit = 10, $page = 1, $useclass = false, $debug = false) {
 		$limiting = returnlimitstatement($limit, $page);
 		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrhed WHERE sessionid = :sessionID AND type = :type ".$limiting);
 		$switching = array(':sessionID' => $sessionID, ':type' => 'O'); $withquotes = array(true, true);
@@ -485,19 +485,27 @@
 		}
 	}
 
-	function get_cust_orders($sessionID, $custID, $limit = 10, $page = 1, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrhed WHERE sessionid = :sessionID AND custid = :custID AND type = 'O' ".$limiting);
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+	function get_customerorders($sessionID, $custID, $limit = 10, $page = 1, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->where('type', 'O');
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll();
 		}
 	}
 
-	function get_customerordersorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $debug) {
+	function get_customerordersorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
@@ -510,19 +518,29 @@
 			return $q->generate_sqlquery($q->params);
 		} else {
 			$sql->execute($q->params);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
+				return $sql->fetchAll();
+			}
 			return $sql->fetchAll();
 		}
 	}
 
-	function get_customerordersorderdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT orderdate, STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder, orderno, custpo, shiptoid, sname, saddress, saddress2, scity, sst, szip, havenote, status, havetrk, havedoc, odrsubtot, odrtax, odrfrt, odrmis, odrtotal, error, errormsg, shipdate, custid, custname, invdate, editord FROM ordrhed WHERE sessionid = :sessionID AND custid = :custID AND type = 'O' ORDER BY dateoforder $sortrule ".$limiting);
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+	function get_customerordersorderdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field('ordrhed.*');
+		$q->field($q->expr("STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder"));
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->where('type', 'O');
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order('dateoforder ' . $sortrule);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			if ($useclass) {
 				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
 				return $sql->fetchAll();

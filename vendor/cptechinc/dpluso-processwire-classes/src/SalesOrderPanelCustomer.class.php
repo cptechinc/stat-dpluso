@@ -26,11 +26,11 @@
                 if ($this->tablesorter->orderby == 'orderdate') {
                     $orders = get_customerordersorderdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
                 } else {
-                    $orders = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
+                    $orders = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
                 }
             } else {
                 $this->tablesorter->sortrule = 'DESC'; $this->tablesorter->orderby = 'orderno';
-                $orders = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $debug);
+                $orders = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
             }
             return $debug ? $orders : $this->orders = $orders;
         }

@@ -80,6 +80,22 @@
             return '';
         }
         
+        public function process_andgeneratescreen($generatejavascript = false) {
+            $bootstrap = new Contento();
+            if (file_exists($this->fullfilepath)) {
+        		// JSON file will be false if an error occurred during file_get_contents or json_decode
+        		$this->process_json();
+        		
+        		if ($this->json['error']) {
+        			return $bootstrap->createalert('warning', $this->json['errormsg']);
+        		} else {
+                    return $generatejavascript ? $this->generate_screen() . $this->generate_javascript() : $this->generate_screen();
+        		}
+        	} else {
+        		return $bootstrap->createalert('warning', 'Information Not Available');
+        	}
+        }
+        
         public function generate_javascript() {
             return '';
         }

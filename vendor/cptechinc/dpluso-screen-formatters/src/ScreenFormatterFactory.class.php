@@ -32,6 +32,10 @@
             'ii-lot-serial' => 'II_ItemLotSerialScreen',
             'ii-documents' => 'II_ItemDocumentScreen',
             'ii-substitutes' => 'II_ItemSubstituteScreen',
+            'ii-pricing' => 'II_ItemPricingScreen',
+            'ii-usage' => 'II_ItemUsageScreen',
+            'ii-notes' => 'II_ItemNotesScreen',
+            'ii-misc' => 'II_ItemMiscScreen',
             
             'ci-customer-page' => 'CI_CustomerScreen',
             'ci-customer-shipto-page' => 'CI_CustomerShiptoScreen',

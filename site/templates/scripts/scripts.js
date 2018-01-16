@@ -1018,7 +1018,6 @@ $(document).ready(function() {
             var valid = true;
 			var form = $(this);
 			
-			
 			form.postform({formdata: false, jsoncallback: true, action: config.urls.json.validateitems}, function(json) {
 				form.attr('data-invaliditems', json.invalid);
 				form.find('.itemid').each(function() {

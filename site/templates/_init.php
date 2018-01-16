@@ -40,6 +40,7 @@
 	$config->scripts->append(hashtemplatefile('scripts/libs/timepicker.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/key-listener.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/datatables.js'));
+	$config->scripts->append(hashtemplatefile('scripts/libs/datatables-datetime.js'));
 	$config->scripts->append(hashtemplatefile('scripts/classes.js'));
 	$config->scripts->append(hashtemplatefile('scripts/scripts.js'));
 	$config->scripts->append(hashtemplatefile('scripts/dplus-notes.js'));

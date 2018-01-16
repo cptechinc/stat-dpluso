@@ -25,6 +25,7 @@
 			"src/UserActionsPanelQuote.class.php",
 			"src/UserActionsPanelFactory.class.php",
 			"src/Contento.class.php",
+			"src/JavaScripter.class.php",
 			"src/FormMaker.class.php",
 			"src/Table.class.php",
 			"src/Order.class.php",

@@ -51,7 +51,7 @@
         public function __call($name, $args) {
             if (!method_exists($this, $name)) {
                 if (in_array($name, $this->closeable)) {
-                    if (!$args[1]) {
+                    if (!isset($args[1])) {
                         return $this->open($name, $args[0]); // OPEN ONLY
                     }
                     return $this->openandclose($name, $args[0], $args[1]); // CLOSE ONLY
@@ -75,8 +75,8 @@
         * @return string element tag
         */
         public function open($element, $attributes) {
-            $attributes = $this->attributes($attributes);
-            return "<$element $attributes>";
+            $attributes = trim($this->attributes($attributes));
+            return empty($attributes) ? "<$element>" : "<$element $attributes>";
         }
         
         /**

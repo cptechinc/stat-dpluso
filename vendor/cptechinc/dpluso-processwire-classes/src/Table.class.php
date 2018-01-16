@@ -26,7 +26,7 @@
 		 */
 		public function tablesection($section = 'tbody') {
 			$this->opensection = $section;
-			$this->tablestring .= $this->indent() . '<'.$section.'>';
+			$this->tablestring .= $this->indent() . $this->indent() . '<'.$section.'>';
 			return $this;
 		}
 		
@@ -36,14 +36,16 @@
 		 */
 		public function closetablesection($section) {
 			$add = '';
-			$this->opensection = false;
+			
 			if ($this->tropen) {
-				if ($opensection = 'thead') {
+				if ($this->opensection == 'thead') {
 					$add .= '</th></tr>';
 				} else {
 					$add .= '</td></tr>';
 				}
 			}
+			$this->opensection = false;
+			$this->tropen = false;
 			$this->tablestring .= $add . $this->indent() . '</'.$section.'>';
 			return $this;
 		}
@@ -55,7 +57,7 @@
 		public function tr($vars = '') { // (across the board in every cell)
 			$add = '';
 			if ($this->tropen) {
-				if ($this->opensection = 'thead') {
+				if ($this->opensection == 'thead') {
 					$add .= '</th></tr>';
 				} else {
 					$add .= '</td></tr>';
@@ -106,8 +108,7 @@
 		 */
 		public function close() {
 			$add = '';
-			if (!$this->tdopen) $this->td();
-			$add .= '</td></tr>' . $this->indent() . '</table>';
+			$add .= $this->indent() . '</table>' . "\n";
 			self::$count--;
 			$this->tablestring .= $add;
 			return $this->tablestring;

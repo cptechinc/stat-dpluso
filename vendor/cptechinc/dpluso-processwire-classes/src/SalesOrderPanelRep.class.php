@@ -23,8 +23,11 @@
                     $orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
                 }
             } else {
-                $this->tablesorter->sortrule = 'DESC'; $this->tablesorter->orderby = 'orderno';
-                $orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);                
+                // DEFAULT BY ORDER DATE SINCE SALES ORDER # CAN BE ROLLED OVER
+                $this->tablesorter->sortrule = 'DESC'; 
+                //$this->tablesorter->orderby = 'orderno';
+                //$orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
+                $orders = get_salesrepordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
             }
             return $debug ? $orders : $this->orders = $orders;
         }

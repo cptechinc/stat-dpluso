@@ -5,6 +5,7 @@
         $items = $input->post->itemID;
         $custID = $input->post->text('custID');
         $itemexistsarray = array();
+        
         foreach ($items as $item) {
             $valid = validateitemid($sanitizer->text($item), $custID, false);
             if (!$valid) {
@@ -17,7 +18,8 @@
         if ($invalidcount < 1) {
             $response = array (
                 'error' => false,
-                'invalid' => true,
+                'invalid' => $invalidcount,
+                'items' => $itemexists
             );
         } else {
             if (empty($custID)) {

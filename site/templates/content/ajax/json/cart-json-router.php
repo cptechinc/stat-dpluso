@@ -1,8 +1,6 @@
 <?php
  	header('Content-Type: application/json');
-    $ordn = $input->get->text('ordn');
-
-
+    
 	switch ($input->urlSegment(2)) {
 		case 'get-added-items':
 			$from = $input->get->text('from');
@@ -33,4 +31,7 @@
                     break;
             }
 			break;
+        default: {
+            echo json_encode(getcart(session_id(), false));
+        }
 	}

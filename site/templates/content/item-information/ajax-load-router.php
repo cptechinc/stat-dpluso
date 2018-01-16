@@ -26,7 +26,8 @@
 		case 'ii-pricing': // $itemID provided by $input->get
 			$custID = $input->get->text('custID');
             $page->title = $itemID. ' Price Inquiry for ' . $custID;
-            $page->body = $config->paths->content."item-information/item-pricing.php";
+            $tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-pricing');
+            $page->body = $config->paths->content."item-information/ii-formatted-screen.php";
             break;
         case 'ii-costing': // $itemID provided by $input->get
             $page->title = $itemID .' Cost Inquiry';

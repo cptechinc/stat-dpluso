@@ -6,6 +6,7 @@
     <th>Ext Price</th>
     <th>Notes</th>
     <th></th>
+    <th></th>
 </tr>
 
 <?php $details = $quotepanel->get_quotedetails($quote); ?>
@@ -22,6 +23,7 @@
         <td class="text-right">$ <?= formatmoney($detail->quotprice); ?></td>
         <td class="text-right"><?= intval($detail->quotunit); ?></td>
         <td class="text-right">$ <?= formatmoney($detail->quotprice * $detail->quotunit); ?></td>
+        <td></td>
         <td><?= $quotepanel->generate_loaddplusnoteslink($quote, $detail->linenbr); ?></td>
         <td></td>
     </tr>

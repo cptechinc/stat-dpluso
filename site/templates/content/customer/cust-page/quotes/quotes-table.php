@@ -18,6 +18,7 @@
 				<td><?= $quote->quotdate; ?></td>
 				<td><?= $quote->revdate; ?></td>
 				<td><?= $quote->expdate; ?></td>
+				<td class="text-right">$ <?= $quote->subtotal; ?></td>
 				<td><?= $quotepanel->generate_loaddplusnoteslink($quote, '0'); ?></td>
 				<td><?= $quotepanel->generate_editlink($quote); ?></td>
 			</tr>
@@ -44,6 +45,7 @@
 					<td></td>
 					<td></td>
 					<td><a href="<?= $quotepanel->generate_closedetailsurl(); ?>" class="btn btn-sm btn-danger load-link" <?= $quotepanel->ajaxdata; ?>>Close</a></td>
+					<td></td>
 				</tr>
 			<?php endif; ?>
 		<?php endforeach; ?>

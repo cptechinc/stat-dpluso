@@ -5,22 +5,9 @@
 	$quotepanel->activeID = !empty($input->get->qnbr) ? $input->get->text('qnbr') : false;
 	$quotepanel->get_quotecount();
 	
-	//SETUP AJAX
-	$ajax = new stdClass();
-	$ajax->loadinto = "#quotes-panel"; //WHERE TO LOAD AJAX LOADED DATA
-	$ajax->focus = "#quotes-panel"; //WHERE TO FOCUS AFTER LOADED DATA IS LOADED
-	$ajax->searchlink = $config->pages->ajax.'load/quote-search/cust/'.$custID."/";  //LINK TO THE SEARCH PAGE FOR THIS OBJECT
-	$ajax->data = 'data-loadinto="'.$ajax->loadinto.'" data-focus="'.$ajax->focus.'"'; //DATA FIELDS FOR JAVASCRIPT
-
-	$ajax->url = $page->fullURL;
-	$ajax->url->path = $config->pages->ajax.'load/quote-search/cust/'.$custID."/";
-	$ajax->url->query->setData(array("display" => false, "ajax" => false));
-
-	$ajax->path = $ajax->url->path; //MODAL TO LOAD INTO IF NEED BE
-	$ajax->querystring = $ajax->url->query;//BASE QUERYSTRING NEEDED FOR AJAX
-	$ajax->link = $ajax->url; //LINK TO THE AJAX FILE
-	
 	$paginator = new Paginator($quotepanel->pagenbr, $quotepanel->count, $quotepanel->pageurl->getUrl(), $quotepanel->paginationinsertafter, $quotepanel->ajaxdata);
+	
+	// echo $quotepanel->get_quotes(true);
 ?>
 <div class="panel panel-primary not-round" id="quotes-panel">
     <div class="panel-heading not-round" id="quotes-panel-heading">

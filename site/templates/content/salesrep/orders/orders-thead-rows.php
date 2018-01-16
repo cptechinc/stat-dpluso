@@ -31,6 +31,6 @@
         <?= $orderpanel->generate_iconlegend(); ?>
         <?php if (isset($input->get->orderby)) : ?>
             <?= $orderpanel->generate_clearsortlink(); ?>
-        <?php endif; ?>``
+        <?php endif; ?>
     </th>
 </tr>

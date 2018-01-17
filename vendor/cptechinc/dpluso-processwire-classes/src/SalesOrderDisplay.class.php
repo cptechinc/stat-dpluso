@@ -75,6 +75,6 @@
         
         public function generate_loaddetailsurl(Order $order) {
             $url = new \Purl\Url($this->generate_loaddetailsurltrait($order));
-            return $url->getUrl();    
+            return $url->getUrl();
         }
     }

@@ -23,7 +23,7 @@
 </div>
 
 <?php include $config->paths->content."cust-information/cust-sales-data.php"; ?>
-<?php if ($appconfig->has_crm) : ?>
+<?php if ($appconfig->child('name=dplus')->has_crm) : ?>
 	<div class="row">
 		<div class="col-xs-12">
 			<?php include $config->paths->content.'customer/cust-page/actions/actions-panel.php'; ?>

@@ -1,4 +1,4 @@
-<?php if ($appconfig->has_crm) : ?>
+<?php if ($appconfig->child('name=dplus')->has_crm) : ?>
     <div class="row">
         <div class="col-sm-12">
             <?php include $config->paths->content.'dashboard/actions/actions-panel.php'; ?>

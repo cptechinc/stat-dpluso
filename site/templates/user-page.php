@@ -31,6 +31,5 @@
 				</ul>
 			</div>
 		</div>
-
 	</div>
 <?php include('./_foot.php'); // include footer markup ?>

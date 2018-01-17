@@ -36,7 +36,9 @@
 						var date = moment(row.weekstartdate).format('MM/DD/YYYY');
 						var hover = '<b>'+date+'</b><br>';
 						hover += '<b>Amt Sold: </b> $' + row.saleamount.formatMoney()+'<br>';
-						hover += '<b>Cost Amt: </b> $' + row.costamount.formatMoney()+'<br>';
+						if (user.permissions.show_cost) {
+							hover += '<b>Cost Amt: </b> $' + row.costamount.formatMoney()+'<br>';
+						}
 						hover += '<b># of Orders: </b> ' + row.nbroforders+'<br>';
 						hover += '<b># of Items: </b> ' + row.nbrofitems+'<br>';
 						return hover;

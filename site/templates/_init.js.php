@@ -1,4 +1,18 @@
 <?php 
+    $showcost = $appconfig->show_cost;
+
+    if (!$showcost) {
+        if (wire('users')->get("name=$user->loginid")->count) {
+            $showcost = $users->get("name=".$user->loginid)->hasPermission('can-view-cost');
+        }
+    }
+    
+    $config->js('pwuser', [
+        'permissions' => [
+            'show_cost' => $showcost
+        ]
+    ]);
+    
     $config->js('pwconfig', [
         'appconfig' => [
             'cptechcustomer' => $config->cptechcustomer

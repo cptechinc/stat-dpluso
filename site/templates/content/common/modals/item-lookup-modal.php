@@ -8,11 +8,13 @@
             <div class="modal-body">
                 <div>
                     <div class="row">
-                        <div class="col-xs-2">
-                            <a href="<?= $itemlookup->generate_nonstockformurl(); ?>" class="btn btn-primary load-into-modal nonstock-btn" data-modal="#ajax-modal" data-modalsize="xl">
-                                <i class="fa fa-cube" aria-hidden="true"></i> Non-stock
-                            </a>
-                        </div>
+                        <?php if ($appconfig->needs_nonstockadd) : ?>
+                            <div class="col-xs-2">
+                                <a href="<?= $itemlookup->generate_nonstockformurl(); ?>" class="btn btn-primary load-into-modal nonstock-btn" data-modal="#ajax-modal" data-modalsize="xl">
+                                    <i class="fa fa-cube" aria-hidden="true"></i> Non-stock
+                                </a>
+                            </div>
+                        <?php endif; ?>
                         <div class="col-xs-2">
                             <a href="<?= $itemlookup->generate_addmultipleurl(); ?>" class="btn btn-primary load-into-modal add-multiple-items" data-modal="#ajax-modal" data-modalsize="md">
                                 <i class="fa fa-cube" aria-hidden="true"></i> Add Multiple

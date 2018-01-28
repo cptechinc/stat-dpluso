@@ -190,7 +190,7 @@
         ============================================================ */
         public function generate_customerurl(Order $order) {
             $url = $this->generate_customerredirurl();
-            $url->query->setData(array('action' => 'load-customer', 'custID' => $order->custid));
+            $url->query->setData(array('action' => 'ci-customer', 'custID' => $order->custid));
             return $url->getUrl();
         }
         

@@ -30,10 +30,6 @@
             return ($this->pagenbr > 1) ? "Page $this->pagenbr" : '';
         }
         
-        public function generate_paginationinsertafter() {
-            
-        }
-        
         /* =============================================================
             OrderPanelInterface Functions
         ============================================================ */

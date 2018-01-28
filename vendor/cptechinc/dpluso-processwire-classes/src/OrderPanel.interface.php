@@ -18,5 +18,4 @@
         public function generate_closedetailsurl();
         public function generate_loaddetailsurl(Order $order);
         public function generate_lastloadeddescription();
-        public function generate_paginationinsertafter();
     }

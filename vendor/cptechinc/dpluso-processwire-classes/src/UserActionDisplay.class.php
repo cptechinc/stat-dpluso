@@ -44,7 +44,7 @@
         }
 
 		public function generate_customerurl($action) {
-			return Processwire\wire('config')->pages->customer."redir/?action=load-customer&custID=".urlencode($action->customerlink);
+			return Processwire\wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($action->customerlink);
 		}
 
 		public function generate_shiptourl($action) {

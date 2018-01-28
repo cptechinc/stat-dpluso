@@ -26,6 +26,4 @@
         'ci-sales-orders' => 'SO',
         'vi' => 'VI'
     );
-    
     $config->specialordercodes = array('"special_order" => "S", "dropship" => "D"');
-    

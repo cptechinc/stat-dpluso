@@ -2,7 +2,7 @@
     $showcost = $appconfig->show_cost;
 
     if (!$showcost) {
-        if (wire('users')->get("name=$user->loginid")->count) {
+        if ($users->get("name=$user->loginid")->count) {
             $showcost = $users->get("name=".$user->loginid)->hasPermission('can-view-cost');
         }
     }

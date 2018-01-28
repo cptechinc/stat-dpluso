@@ -38,7 +38,6 @@
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
-
 <?php if ($session->editdetail) : ?>
     <script>
         $(function() {

@@ -1136,6 +1136,11 @@ $(document).ready(function() {
 		});
 	}
 	
+	function returntopricing() {
+		var modal = config.modals.ajax;
+		$(modal).modal('hide');
+		pricing();
+	}
 /*==============================================================
  	STRING FUNCTIONS
 =============================================================*/

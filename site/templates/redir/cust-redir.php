@@ -28,7 +28,7 @@
 	*		DBNAME=$config->DBNAME
 	*		CUSTID=$custID
 	*		break;
-	*	case 'load-customer':
+	*	case 'load-customer': // START DEPRECATING 1/25/2018
 	*		DBNAME=$config->DBNAME
 	*		CUSTID=$custID
 	*		break;
@@ -223,7 +223,7 @@
 			$session->loc = $config->pages->customer . urlencode($custID)."/shipto-1/";
 			$data = array('DBNAME' => $config->dbName, 'CUSTID' => $custID);
 			break;
-		case 'load-customer':
+		case 'load-customer': // START DEPRECATING 1/25/2018
 			$session->loc = $config->pages->customer . urlencode($custID)."/";
 			if (!empty($shipID)) { $session->loc .= "shipto-".$input->get->shipID."/"; }
 			$data = array('DBNAME' => $config->dbName, 'CUSTID' => $custID);

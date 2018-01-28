@@ -35,17 +35,13 @@
 		</div>
 	</div>
 <?php endif; ?>
-<?php if (has_dpluspermission($user->loginid, 'eso')) : ?>
-	<div class="row">
-		<div class="col-sm-12">
-			<?php include $config->paths->content.'customer/cust-page/orders/orders-panel.php'; ?>
-		</div>
+<div class="row">
+	<div class="col-sm-12">
+		<?php include $config->paths->content.'customer/cust-page/orders/orders-panel.php'; ?>
 	</div>
-<?php endif; ?>
-<?php if (has_dpluspermission($user->loginid, 'eqo')) : ?>
-	<div class="row">
-		<div class="col-sm-12">
-			<?php include $config->paths->content.'customer/cust-page/quotes/quotes-panel.php'; ?>
-		</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<?php include $config->paths->content.'customer/cust-page/quotes/quotes-panel.php'; ?>
 	</div>
-<?php endif; ?>
+</div>

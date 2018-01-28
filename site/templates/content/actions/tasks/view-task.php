@@ -20,7 +20,12 @@
 	</ul>
 	<br>
 	<div class="tab-content">
-		<div role="tabpanel" class="tab-pane active" id="task"><?php include $config->paths->content."actions/tasks/view/view-task-details.php"; ?></div>
+		<div role="tabpanel" class="tab-pane active" id="task">
+            <?php if ($config->ajax) : ?>
+                <?= $page->bootstrap->openandclose('p', '', $page->bootstrap->makeprintlink($config->filename, 'View Printable Version')); ?>
+            <?php endif; ?>
+            <?php include $config->paths->content."actions/tasks/view/view-task-details.php"; ?>
+        </div>
 		<?php if (!empty($task->actionlineage)) : ?>
 			<div role="tabpanel" class="tab-pane" id="history"><?php include $config->paths->content."actions/tasks/view/view-task-history.php"; ?></div>
 		<?php endif; ?>

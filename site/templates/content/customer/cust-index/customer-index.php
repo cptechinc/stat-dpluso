@@ -10,7 +10,7 @@
 
 <div class="row form-group">
 	<div class="col-xs-12">
-		<a href="<?php echo $config->pages->customer.'add/'; ?>" class="btn btn-primary"><i class="fa fa-user-plus" aria-hidden="true"></i> Add new Customer</a>
+		<a href="<?= $config->pages->customer.'add/'; ?>" class="btn btn-primary"><i class="fa fa-user-plus" aria-hidden="true"></i> Add new Customer</a>
 	</div>
 </div>
 

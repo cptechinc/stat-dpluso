@@ -13,12 +13,12 @@
     </tr>
     <tr>
         <td>Customer:</td>
-        <td><?= get_customername($note->customerlink); ?> &nbsp;<a href="<?= $notedisplay->generate_customerurl($note); ?>"><i class="glyphicon glyphicon-share"></i> Go to Customer Page</a></td>
+        <td><?= get_customername($note->customerlink); ?> &nbsp;<a href="<?= $notedisplay->generate_ciloadurl($note); ?>"><i class="glyphicon glyphicon-share"></i> Go to Customer Page</a></td>
     </tr>
     <?php if ($note->has_shiptolink()) : ?>
         <tr>
             <td>Ship-to:</td>
-            <td><?= get_shiptoname($note->customerlink, $note->shiptolink, false); ?> &nbsp;<a href="<?= $notedisplay->generate_shiptourl($note); ?>"><i class="glyphicon glyphicon-share"></i> Go to Ship-to Page</a></td>
+            <td><?= get_shiptoname($note->customerlink, $note->shiptolink, false); ?> &nbsp;<a href="<?= $notedisplay->generate_ciloadurl($note); ?>"><i class="glyphicon glyphicon-share"></i> Go to Ship-to Page</a></td>
         </tr>
     <?php endif; ?>
     <?php if ($note->has_contactlink()) : ?>

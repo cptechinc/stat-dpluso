@@ -1,7 +1,6 @@
 <?php
 	// $action is Loaded by Crud Controller
 	$actiondisplay = new UserActionDisplay($page->fullURL);
-    
     $contactinfo = get_customercontact($action->customerlink, $action->shiptolink, $action->contactlink, false);
 ?>
 
@@ -11,6 +10,11 @@
 	</ul>
 	<br>
 	<div class="tab-content">
-		<div role="tabpanel" class="tab-pane active" id="action"><?php include $config->paths->content."actions/actions/view/view-action-details.php"; ?></div>
+		<div role="tabpanel" class="tab-pane active" id="action">
+			<?php if ($config->ajax) : ?>
+                <?= $page->bootstrap->openandclose('p', '', $page->bootstrap->makeprintlink($config->filename, 'View Printable Version')); ?>
+            <?php endif; ?>
+			<?php include $config->paths->content."actions/actions/view/view-action-details.php"; ?>
+		</div>
 	</div>
 </div>

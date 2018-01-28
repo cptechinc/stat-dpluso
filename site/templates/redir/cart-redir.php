@@ -88,7 +88,7 @@
 			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
 			if ($input->post->whse) { if (!empty($input->post->whse)) { $data['WHSE'] = $input->post->whse; } }
 			$session->data = $data;
-            $session->addtocart = 'You added ' . $qty . ' of ' . $itemID . ' to your cart';
+            $session->addtocart = 'You added ' . $qty . ' of ' . $itemID . ' to your worksheet';
             $session->loc = $input->post->page;
             break;
 		case 'add-nonstock-item':

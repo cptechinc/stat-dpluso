@@ -27,3 +27,12 @@
         ?>
     </div>
 </form>
+<?php if (100 == 1) : ?>
+    <?php if ($dplusfunction == 'ci') : ?>
+        <div class="row form-group">
+        	<div class="col-xs-12">
+        		<a href="<?= $config->pages->customer.'add/'; ?>" class="btn btn-primary"><i class="fa fa-user-plus" aria-hidden="true"></i> Add new Customer</a>
+        	</div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

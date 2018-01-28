@@ -17,13 +17,13 @@
     <?php if ($action->has_customerlink()) : ?>
         <tr>
             <td>Customer:</td>
-            <td><?= get_customername($action->customerlink); ?> &nbsp;<a href="<?= $actiondisplay->generate_customerurl($action); ?>" target="_blank"><i class="glyphicon glyphicon-share"></i> Go to Customer Page</a></td>
+            <td><?= get_customername($action->customerlink); ?> &nbsp;<a href="<?= $actiondisplay->generate_ciloadurl($action); ?>" target="_blank"><i class="glyphicon glyphicon-share"></i> Go to Customer Page</a></td>
         </tr>
     <?php endif; ?>
     <?php if ($action->has_shiptolink()) : ?>
         <tr>
             <td>Ship-to:</td>
-            <td><?= get_shiptoname($action->customerlink, $action->shiptolink, false); ?> <a href="<?= $actiondisplay->generate_shiptourl($action); ?>" target="_blank"><i class="glyphicon glyphicon-share"></i> Go to Ship-to Page</a></td>
+            <td><?= get_shiptoname($action->customerlink, $action->shiptolink, false); ?> <a href="<?= $actiondisplay->generate_ciloadurl($action); ?>" target="_blank"><i class="glyphicon glyphicon-share"></i> Go to Ship-to Page</a></td>
         </tr>
     <?php endif; ?>
     <?php if ($action->has_contactlink()) : ?>
@@ -39,26 +39,26 @@
         </tr>
         <tr>
             <td>Contact: </td>
-            <td><?= $contactinfo['contact']; ?></td>
+            <td><?= $contactinfo->contact; ?></td>
         </tr>
     <?php endif; ?>
     <tr>
         <td>Phone:</td>
         <td>
-            <a href="tel:<?= $contactinfo['cphone']; ?>"><?= $contactinfo['cphone']; ?></a> &nbsp; <?php if ($contactinfo['cphext'] != '') {echo ' Ext. '.$contactinfo['cphext'];} ?>
+            <a href="tel:<?= $contactinfo->cphone; ?>"><?= $contactinfo->cphone; ?></a> &nbsp; <?php if ($contactinfo->cphext != '') {echo ' Ext. '.$contactinfo->cphext;} ?>
         </td>
     </tr>
-    <?php if ($contactinfo['ccellphone'] != '') : ?>
+    <?php if ($contactinfo->ccellphone != '') : ?>
         <tr>
             <td>Cell Phone:</td>
             <td>
-                <a href="tel:<?= $contactinfo['ccellphone']; ?>"><?= $contactinfo['ccellphone']; ?></a>
+                <a href="tel:<?= $contactinfo->ccellphone; ?>"><?= $contactinfo->ccellphone; ?></a>
             </td>
         </tr>
     <?php endif; ?>
     <tr>
         <td>Email:</td>
-        <td><a href="mailto:<?= $contactinfo['email']; ?>"><?= $contactinfo['email']; ?></a></td>
+        <td><a href="mailto:<?= $contactinfo->email; ?>"><?= $contactinfo->email; ?></a></td>
     </tr>
     <?php if ($action->has_salesorderlink()) : ?>
         <tr>

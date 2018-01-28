@@ -13,7 +13,7 @@
 
 				<li> <a href="<?= $config->pages->index; ?>"><i class="glyphicon glyphicon-home"></i> Home</a> </li>
 				<?php if ($config->cptechcustomer != 'stat') : ?>
-					<li> <a href="<?= $config->pages->cart; ?>"> <i class="glyphicon glyphicon-list-alt"></i> Quote (<?php //echo get_cart_count(session_id()); ?>)</a> </li>
+					<li> <a href="<?= $config->pages->cart; ?>"> <i class="glyphicon glyphicon-list-alt"></i> Worksheet (<?php //echo get_cart_count(session_id()); ?>)</a> </li>
 				<?php endif; ?>
 				
 				<li class="divider"></li>

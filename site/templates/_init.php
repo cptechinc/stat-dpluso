@@ -9,13 +9,12 @@
  * You can initialize anything you want to here. In the case of this beginner profile,
  * we are using it just to include another file with shared functions.
  *
- */
+ */	
 	include_once("./_func.php"); // include our shared functions
 	include_once("./_dbfunc.php");
 	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/src/utfport.php"); // UTF8 conversion library functions
 	include_once($config->paths->content."common/initialize.php");  // includes class files
-	include_once($config->paths->templates."_init.js.php");
-	
+	include_once($config->paths->templates."_init.js.php");  // includes class files
 	$session->sessionName = session_name();
 
 	$page->fullURL = new \Purl\Url($page->httpUrl);

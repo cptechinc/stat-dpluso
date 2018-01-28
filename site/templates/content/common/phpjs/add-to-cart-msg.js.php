@@ -3,7 +3,7 @@
         $(function() {
             $.notify({
                 icon: "glyphicon glyphicon-shopping-cart",
-                message: "<?= $session->addtocart; ?> <br> (Click this Message to go to the cart.)" ,
+                message: "<?= $session->addtocart; ?> <br> (Click this Message to go to the Worksheet.)" ,
                 url: "<?= $config->pages->cart; ?>",
                 target: '_self'
             },{

@@ -48,29 +48,33 @@
                 Who to Contact
             </td>
         </tr>
-        <tr>
-            <td>Contact: </td>
-            <td><?= $contactinfo['contact']; ?></td>
-        </tr>
+        <?php if ($contactinfo) : ?>
+            <tr>
+                <td>Contact: </td>
+                <td><?= $contactinfo->contact; ?></td>
+            </tr>
+        <?php endif; ?>
     <?php endif; ?>
-    <tr>
-        <td>Phone:</td>
-        <td>
-            <a href="tel:<?= $contactinfo['cphone']; ?>"><?= $contactinfo['cphone']; ?></a> &nbsp; <?php if ($contactinfo['cphext'] != '') {echo ' Ext. '.$contactinfo['cphext'];} ?>
-        </td>
-    </tr>
-    <?php if ($contactinfo['ccellphone'] != '') : ?>
+    <?php if ($contactinfo) : ?>
         <tr>
-            <td>Cell Phone:</td>
+            <td>Phone:</td>
             <td>
-                <a href="tel:<?= $contactinfo['ccellphone']; ?>"><?= $contactinfo['ccellphone']; ?></a>
+                <a href="tel:<?= $contactinfo->cphone; ?>"><?= $contactinfo->cphone; ?></a> &nbsp; <?php if ($contactinfo->cphext != '') {echo ' Ext. '.$contactinfo->cphext;} ?>
             </td>
         </tr>
+        <?php if ($contactinfo->ccellphone != '') : ?>
+            <tr>
+                <td>Cell Phone:</td>
+                <td>
+                    <a href="tel:<?= $contactinfo->ccellphone; ?>"><?= $contactinfo->ccellphone; ?></a>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <tr>
+            <td>Email:</td>
+            <td><a href="mailto:<?= $contactinfo->email; ?>"><?= $contactinfo->email; ?></a></td>
+        </tr>
     <?php endif; ?>
-    <tr>
-        <td>Email:</td>
-        <td><a href="mailto:<?= $contactinfo['email']; ?>"><?= $contactinfo['email']; ?></a></td>
-    </tr>
     <?php if ($task->has_salesorderlink()) : ?>
         <tr>
             <td>Sales Order #:</td>

@@ -122,7 +122,7 @@
 /* =============================================================
    ORDERBY / SORT FUNCTIONS
  ============================================================ */
-	function get_symbols($orderby, $match, $page_orderby) {
+	function get_symbols($orderby, $match, $page_orderby) { // DEPRECATED 10/6/2017 REPLACED BY TABLEPAGESORTCLASS
 		$symbol = "";
 		if ($orderby == $match) {
 			if ($page_orderby == "ASC") {
@@ -136,7 +136,7 @@
 		return $symbol;
 	}
 
-	function get_sorting_rule($orderingby, $sort, $orderby) {
+	function get_sorting_rule($orderingby, $sort, $orderby) { // DEPRECATED 10/6/2017 REPLACED BY TABLEPAGESORTCLASS
 		if ($orderingby != $orderby || $sort == false) {
 			$sortrule = "ASC";
 		} else {
@@ -159,11 +159,11 @@
 		$link = '';
 		if (strpos(strtolower($carrier), 'fed') !== false) {
 			$link = "https://www.fedex.com/fedextrack/WTRK/index.html?action=track&trackingnumber=".$tracknbr."&cntry_code=us&fdx=1490";
-		} else if (strpos(strtolower($carrier), 'ups') !== false) {
+		} elseif (strpos(strtolower($carrier), 'ups') !== false) {
 			$link = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=".$tracknbr."&loc=en_us";
-		} else if (strpos(strtolower($carrier), 'gro') !== false) {
+		} elseif (strpos(strtolower($carrier), 'gro') !== false) {
 			$link = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=".$tracknbr."&loc=en_us";
-		} else if ((strpos(strtolower($carrier), 'will') !== false)) {
+		} elseif ((strpos(strtolower($carrier), 'will') !== false)) {
 			$link = "#$on";
 		} else {
 			$link = "#$on";

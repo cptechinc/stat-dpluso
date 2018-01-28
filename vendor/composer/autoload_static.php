@@ -4,10 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639
+class ComposerStaticInit2a810780675e3506dcf842a48fb147fe
 {
     public static $files = array (
-        '9e18ce4281630de2b98d43ef0289b581' => __DIR__ . '/../..' . '/wire/core/ProcessWire.php',
+        '4ba1167ff053aab3afcc2d28993cfca7' => __DIR__ . '/../..' . '/wire/core/ProcessWire.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -43,60 +43,12 @@ class ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639
         ),
     );
 
-    public static $classMap = array (
-        'Pdp\\HttpAdapter\\CurlHttpAdapter' => __DIR__ . '/..' . '/jeremykendall/php-domain-parser/library/Pdp/HttpAdapter/CurlHttpAdapter.php',
-        'Pdp\\HttpAdapter\\HttpAdapterInterface' => __DIR__ . '/..' . '/jeremykendall/php-domain-parser/library/Pdp/HttpAdapter/HttpAdapterInterface.php',
-        'Pdp\\Parser' => __DIR__ . '/..' . '/jeremykendall/php-domain-parser/library/Pdp/Parser.php',
-        'Pdp\\PublicSuffixList' => __DIR__ . '/..' . '/jeremykendall/php-domain-parser/library/Pdp/PublicSuffixList.php',
-        'Pdp\\PublicSuffixListManager' => __DIR__ . '/..' . '/jeremykendall/php-domain-parser/library/Pdp/PublicSuffixListManager.php',
-        'Pdp\\Uri\\Url' => __DIR__ . '/..' . '/jeremykendall/php-domain-parser/library/Pdp/Uri/Url.php',
-        'Pdp\\Uri\\Url\\Host' => __DIR__ . '/..' . '/jeremykendall/php-domain-parser/library/Pdp/Uri/Url/Host.php',
-        'Purl\\AbstractPart' => __DIR__ . '/..' . '/jwage/purl/src/Purl/AbstractPart.php',
-        'Purl\\Autoloader' => __DIR__ . '/..' . '/jwage/purl/src/Purl/Autoloader.php',
-        'Purl\\Fragment' => __DIR__ . '/..' . '/jwage/purl/src/Purl/Fragment.php',
-        'Purl\\Parser' => __DIR__ . '/..' . '/jwage/purl/src/Purl/Parser.php',
-        'Purl\\ParserInterface' => __DIR__ . '/..' . '/jwage/purl/src/Purl/ParserInterface.php',
-        'Purl\\Path' => __DIR__ . '/..' . '/jwage/purl/src/Purl/Path.php',
-        'Purl\\Query' => __DIR__ . '/..' . '/jwage/purl/src/Purl/Query.php',
-        'Purl\\Url' => __DIR__ . '/..' . '/jwage/purl/src/Purl/Url.php',
-        'atk4\\core\\AppScopeTrait' => __DIR__ . '/..' . '/atk4/core/src/AppScopeTrait.php',
-        'atk4\\core\\AppUserNotificationInterface' => __DIR__ . '/..' . '/atk4/core/src/AppUserNotificationInterface.php',
-        'atk4\\core\\ContainerTrait' => __DIR__ . '/..' . '/atk4/core/src/ContainerTrait.php',
-        'atk4\\core\\DIContainerTrait' => __DIR__ . '/..' . '/atk4/core/src/DIContainerTrait.php',
-        'atk4\\core\\DebugTrait' => __DIR__ . '/..' . '/atk4/core/src/DebugTrait.php',
-        'atk4\\core\\DynamicMethodTrait' => __DIR__ . '/..' . '/atk4/core/src/DynamicMethodTrait.php',
-        'atk4\\core\\Exception' => __DIR__ . '/..' . '/atk4/core/src/Exception.php',
-        'atk4\\core\\FactoryTrait' => __DIR__ . '/..' . '/atk4/core/src/FactoryTrait.php',
-        'atk4\\core\\HookBreaker' => __DIR__ . '/..' . '/atk4/core/src/HookBreaker.php',
-        'atk4\\core\\HookTrait' => __DIR__ . '/..' . '/atk4/core/src/HookTrait.php',
-        'atk4\\core\\InitializerTrait' => __DIR__ . '/..' . '/atk4/core/src/InitializerTrait.php',
-        'atk4\\core\\NameTrait' => __DIR__ . '/..' . '/atk4/core/src/NameTrait.php',
-        'atk4\\core\\PHPUnit_AgileExceptionWrapper' => __DIR__ . '/..' . '/atk4/core/src/PHPUnit_AgileExceptionWrapper.php',
-        'atk4\\core\\PHPUnit_AgileResultPrinter' => __DIR__ . '/..' . '/atk4/core/src/PHPUnit_AgileResultPrinter.php',
-        'atk4\\core\\PHPUnit_AgileTestCase' => __DIR__ . '/..' . '/atk4/core/src/PHPUnit_AgileTestCase.php',
-        'atk4\\core\\PsyshE' => __DIR__ . '/..' . '/atk4/core/src/PsyshE.php',
-        'atk4\\core\\QuickExceptionTrait' => __DIR__ . '/..' . '/atk4/core/src/QuickExceptionTrait.php',
-        'atk4\\core\\SessionTrait' => __DIR__ . '/..' . '/atk4/core/src/SessionTrait.php',
-        'atk4\\core\\TrackableTrait' => __DIR__ . '/..' . '/atk4/core/src/TrackableTrait.php',
-        'atk4\\dsql\\Connection' => __DIR__ . '/..' . '/atk4/dsql/src/Connection.php',
-        'atk4\\dsql\\Connection_Counter' => __DIR__ . '/..' . '/atk4/dsql/src/Connection_Counter.php',
-        'atk4\\dsql\\Connection_Dumper' => __DIR__ . '/..' . '/atk4/dsql/src/Connection_Dumper.php',
-        'atk4\\dsql\\Connection_Proxy' => __DIR__ . '/..' . '/atk4/dsql/src/Connection_Proxy.php',
-        'atk4\\dsql\\Exception' => __DIR__ . '/..' . '/atk4/dsql/src/Exception.php',
-        'atk4\\dsql\\Expression' => __DIR__ . '/..' . '/atk4/dsql/src/Expression.php',
-        'atk4\\dsql\\Expressionable' => __DIR__ . '/..' . '/atk4/dsql/src/Expressionable.php',
-        'atk4\\dsql\\Query' => __DIR__ . '/..' . '/atk4/dsql/src/Query.php',
-        'atk4\\dsql\\Query_MySQL' => __DIR__ . '/..' . '/atk4/dsql/src/Query_MySQL.php',
-        'atk4\\dsql\\Query_SQLite' => __DIR__ . '/..' . '/atk4/dsql/src/Query_SQLite.php',
-    );
-
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit993fbb441c512d1d2e36d2cc1a1ce639::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2a810780675e3506dcf842a48fb147fe::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2a810780675e3506dcf842a48fb147fe::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2a810780675e3506dcf842a48fb147fe::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }

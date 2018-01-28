@@ -48,8 +48,8 @@
             $config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
             break;
     }
- ?>
- <?php include('./_head.php'); // include header markup ?>
+?>
+<?php include('./_head.php'); // include header markup ?>
  	<div class="jumbotron pagetitle">
  		<div class="container">
  			<h1><?php echo $page->get('pagetitle|headline|title') ; ?></h1>
@@ -62,4 +62,4 @@
              } 
         ?>
      </div>
- <?php include('./_foot.php'); // include footer markup ?>
+<?php include('./_foot.php'); // include footer markup ?>

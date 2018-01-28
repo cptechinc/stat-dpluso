@@ -1,1900 +1,344 @@
 <?php
-	use atk4\dsql\Query;
-/* =============================================================
-	LOGIN FUNCTIONS
-============================================================ */
-	function is_validlogin($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT IF(validlogin = 'Y',1,0) FROM logperm WHERE sessionid = :sessionID LIMIT 1");
-		$switching = array(':sessionID' => $sessionID);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
+	/**
+	*  QUOTE REDIRECT
+	* @param string $action
+	*
+	*/
 
-	function get_loginerrormsg($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT errormsg FROM logperm WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
 
-	function get_loginrecord($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT IF(restrictcustomers = 'Y',1,0) as restrictcustomer, IF(restrictaccess = 'Y',1,0) as restrictuseraccess, logperm.* FROM logperm WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID);
-		$sql->execute($switching);
-		return $sql->fetch(PDO::FETCH_ASSOC);
-	}
-/* =============================================================
-	PERMISSION FUNCTIONS
-============================================================ */
-	function has_dpluspermission($loginID, $dplusfunction, $debug = false) {
-		$q = (new QueryBuilder())->table('funcperm');
-		$q->field($q->expr("IF(permission = 'Y',1,0)"));
-		$q->where('loginid', $loginID);
-		$q->where('function', $dplusfunction);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-/* =============================================================
-	CUSTOMER FUNCTIONS
-============================================================ */
-	function can_accesscustomer($loginID, $restrictions, $custID, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custperm WHERE custid = :custID) t WHERE loginid = :loginID OR loginid = :shared");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true);
-			if ($debug) {
-				return returnsqlquery($sql->queryString, $switching, $withquotes);
+	$action = ($input->post->action ? $input->post->text('action') : $input->get->text('action'));
+
+	// USED FOR MAINLY ORDER LISTING FUNCTIONS
+	$pagenumber = (!empty($input->get->page) ? $input->get->int('page') : 1);
+	$sortaddon = (!empty($input->get->orderby) ? '&orderby=' . $input->get->text('orderby') : '');
+
+	$linkaddon = $sortaddon;
+	$session->{'from-redirect'} = $page->url;
+	$session->remove('quote-search');
+	$filename = session_id();
+
+	//TODO merge get-quote-details and get-quote-details-print
+	/**
+	*  QUOTE REDIRECT
+	*
+	*
+	*
+	*
+	* switch ($action) {
+	* 	case 'load-cust-quotes':
+	*		DBNAME=$config->DBNAME
+	*		LOADCUSTQUOTEHEAD
+	*		TYPE=QUOTE
+	*		CUSTID=$custID
+	*		break;
+	*	case 'load-quote-details':
+	*		DBNAME=$config->DBNAME
+	*		LOADQUOTEDETAIL
+	*		QUOTENO=$qnbr
+	*		CUSTID=$custID
+	*		break;
+	*	case 'get-quote-details-print': // DEPRECATED 10/30/2017
+	*		DBNAME=$config->DBNAME
+	*		LOADQUOTEDETAIL
+	*		QUOTENO=$qnbr
+	*		CUSTID=$custID
+	*		break;
+	*	case 'edit-quote':
+	*		DBNAME=$config->DBNAME
+	*		EDITQUOTE=$qnbr
+	*		QUOTENO=$qnbr
+	*		break;
+	*	case 'edit-new-quote':
+	*		DBNAME=$config->DBNAME
+	*		EDITQUOTE=$qnbr
+	*		QUOTENO=$qnbr
+	*		break;
+	*	case 'save-quotehead':
+	*		DBNAME=$config->DBNAME
+	*		UPDATEQUOTEHEAD
+	*		QUOTENO=$qnbr
+	*		CUSTID=$custID
+	*		break;
+	*	case 'add-to-quote':
+	*		DBNAME=$config->DBNAME
+	*		UPDATEQUOTEDETAIL
+	*		QUOTENO=$qnbr
+	*		ITEMID=$itemID
+	*		QTY=$qty
+	*		break;
+	*	case 'add-multiple-items':
+	*		DBNAME=$config->DBNAME
+	*		ORDERADDMULTIPLE
+	*		ORDERNO=$ordn
+	*		ITEMID=$custID   QTY=$qty  **REPEAT
+	*		break;
+	*	case 'add-nonstock-item':
+	*		DBNAME=$config->DBNAME
+	*		QUOTNO=$qnbr
+	*		UPDATEQUOTEDETAIL
+	*		ITEMID=N
+	*		QTY=$qty
+	*		CUSTID=$custID
+	* 		break;
+	*	case 'update-line':
+	*		DBNAME=$config->DBNAME
+	*		UPDATEQUOTEDETAIL
+	*		QUOTENO=$qnbr
+	*		LINENO=$linenbr
+	*		break;
+	*	case 'remove-line':
+	*		DBNAME=$config->DBNAME
+	*		UPDATEQUOTEDETAIL
+	*		QUOTENO=$qnbr
+	*		LINENO=$linenbr
+	*		QTY=0
+	*		break;
+	*	case 'unlock-quote':
+	*		UNLOCKING QUOTE
+	*		break;
+	*	case 'send-quote-to-order':
+	*		SETTING UP QUOTE TO ORDER
+	*		break;
+	* }
+	*
+	**/
+
+
+
+	switch ($action) {
+		case 'load-cust-quotes':
+			$custID = $input->get->text('custID');
+			$data = array('DBNAME' => $config->dbName, 'LOADCUSTQUOTEHEAD' => false, 'TYPE' => 'QUOTE', 'CUSTID' => $custID);
+			$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$linkaddon;
+			$session->{'quotes-loaded-for'} = $custID;
+			$session->{'quotes-updated'} = date('m/d/Y h:i A');
+			break;
+		case 'load-quote-details':
+			$qnbr = $input->get->text('qnbr');
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
+			if ($input->get->lock) {
+				$session->loc = $config->pages->editquote."?qnbr=".$qnbr;
+			} elseif ($input->get->print) {
+				$session->loc = $config->pages->print."quote/?qnbr=".$qnbr;
 			} else {
-				$sql->execute($switching);
-				return $sql->fetchColumn();
+				$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$qnbr.$linkaddon;
 			}
-		} else {
-			return 1;
-		}
-	}
+			break;
+		case 'get-quote-details-print': // DEPRECATED 10/30/2017
+			$qnbr = $input->get->text('qnbr');
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
+			$session->loc = $config->pages->print."quote/?qnbr=".$qnbr;
+			break;
+		case 'edit-quote':
+			$qnbr = $input->get->text('qnbr');
+			$date = date('Ymd');
+			$time = date('Hi');
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'EDITQUOTE' => $qnbr, 'QUOTENO' => $qnbr);
+			$session->loc= $config->pages->editquote."?qnbr=".$qnbr;
+			break;
+		case 'edit-new-quote':
+			$qnbr = getcreatedordn(session_id(), false);
+			$date = date('Ymd');
+			$time = date('Hi');
+			$data = array('DBNAME' => $config->dbName, 'EDITQUOTE' => $qnbr, 'QUOTENO' => $qnbr);
+			$session->loc = $config->pages->editquote."?qnbr=".$qnbr;
+			break;
+		case 'save-quotehead':
+			$qnbr = $input->post->text('qnbr');
+			$quote = get_quotehead(session_id(), $qnbr, false);
+			$quote = Quote::load(session_id(), $qnbr);
+			//$quote->status = ''; //TODO ON FORM
+			// $quote->btname = $input->post->text('cust-name');
+			// $quote->btadr1 = $input->post->text('cust-address');
+			// $quote->btadr2 = $input->post->text('cust-address2');
+			// $quote->btcity = $input->post->text('cust-city');
+			// $quote->btstate = $input->post->text('cust-state');
+			// $quote->btzip = $input->post->text('cust-zip');
+			$quote->shiptoid = $input->post->text('shiptoid');
+			$quote->stname = $input->post->text('shiptoname');
+			$quote->stadr1 = $input->post->text('shipto-address');
+			$quote->stadr2 = $input->post->text('shipto-address2');
+			$quote->stcity = $input->post->text('shipto-city');
+			$quote->ststate = $input->post->text('shipto-state');
+			$quote->stzip = $input->post->text('shipto-zip');
+			$quote->contact = $input->post->text('contact');
+			$quote->emailadr = $input->post->text('contact-email');
+			$quote->careof = $input->post->text('careof');
+			$quote->revdate = $input->post->text('reviewdate');
+			$quote->expdate = $input->post->text('expiredate');
+			$quote->sviacode = $input->post->text('shipvia');
+			$quote->deliverydesc = $input->post->text('delivery');
+			$quote->custpo = $input->post->text('custpo');
+			$quote->custref = $input->post->text('reference');
+			$quote->telenbr = str_replace('-', '', $input->post->text('contact-phone'));
+			$quote->faxnbr = str_replace('-', '', $input->post->text('contact-fax'));
 
-	function can_accesscustomershipto($loginID, $restrictions, $custID, $shipID, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custperm WHERE custid = :custID AND shiptoid = :shipID) t WHERE loginid = :loginID OR loginid = :shared");
-			$switching = array(':custID' => $custID, ':shipID' => $shipID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true, true, true);
-			if ($debug) {
-				return returnsqlquery($sql->queryString, $switching, $withquotes);
+			$session->sql = $quote->update();
+			$session->quoteupdated = 'yes';
+		
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEHEAD' => false, 'QUOTENO' => $qnbr);
+			
+			if ($input->post->exitquote) {
+				$session->loc = $config->pages->edit."quote/confirm/?qnbr=".$qnbr.$linkaddon;
+				
+				if (!$quote->has_changes()) {
+					$data = array('UNLOCKING QUOTE' => false);
+				}
 			} else {
-				$sql->execute($switching);
-				return $sql->fetchColumn();
+				$session->loc = $config->pages->editquote."?qnbr=".$qnbr.$linkaddon;
 			}
-		} else {
-			return 1;
-		}
-	}
+			break;
+		case 'add-to-quote':
+			$qnbr = $input->post->text('qnbr');
+			$itemID = $input->post->text('itemID');
+			$qty = $input->post->text('qty');
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'ITEMID' => $itemID, 'QTY' => $qty);
+			$session->editdetail = true;
+			break;
+		case 'add-multiple-items':
+			$qnbr = $input->post->text('qnbr');
+			$itemids = $input->post->itemID;
+			$qtys = $input->post->qty;
+			$data = array("DBNAME=$config->dbName", 'ORDERADDMULTIPLE', "QUOTENO=$qnbr");
+			$data = writedataformultitems($data, $itemids, $qtys);
+            $session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
+			break;
+		case 'add-nonstock-item':
+			$qnbr = $input->post->text('qnbr');
+			$qty = $input->post->text('qty');
+			insertquoteline(session_id(), $qnbr, '0', false);
+			$quotedetail = getquotelinedetail(session_id(), $qnbr, '0', false);
+			$quotedetail['quotenbr'] = $qnbr;
+			$quotedetail['recno'] = '0';
+			$quotedetail['linenbr'] = '0';
+			$quotedetail['ordrprice'] = $input->post->text('price');
+			$quotedetail['qty'] = $qty;
+			$quotedetail['desc1'] = $input->post->text('desc1');
+			$quotedetail['desc2'] = $input->post->text('desc2');
+			$quotedetail['vendorid'] = $input->post->text('vendorID');
+			$quotedetail['shipfromid'] = $input->post->text('shipfromid');
+			$quotedetail['vendoritemid'] = $input->post->text('itemID');
+			$quotedetail['nsitemgroup'] = $input->post->text('itemgroup');
+			//$quotedetail['ponbr'] = $input->post->text('ponbr');
+			//$quotedetail['poref'] = $input->post->text('poref');
+			$quotedetail['uom'] = $input->post->text('uofm');
+			$quotedetail['spcord'] = 'S';
+			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
 
-	function get_customername($custID) {
-		$sql = Processwire\wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID LIMIT 1");
-		$switching = array(':custID' => $custID);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-
-	function get_shiptoname($custID, $shipID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
-		$switching = array(':custID' => $custID, ':shipID' => $shipID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_customerinfo($sessionID, $custID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT custindex.*, customer.dateentered FROM custindex JOIN customer ON custindex.custid = customer.custid WHERE custindex.custid = :custID AND customer.sessionid = :sessionID LIMIT 1");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function get_firstcustindexrecord($debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex LIMIT 1");
-		if ($debug) {
-			return $sql->queryString;
-		} else {
-			$sql->execute();
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function count_shiptos($custID, $loginID, $restrictions, $debug = false) { // TODO use QueryBuilder
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custperm WHERE custid = :custID AND shiptoid != '') t WHERE loginid = :loginID OR loginid = :shared ");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custperm WHERE custid = :custID AND shiptoid != ''");
-			$switching = array(':custID' => $custID); $withquotes = array(true);
-		}
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_shiptoinfo($custID, $shipID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
-		$switching = array(':custID' => $custID, ':shipID' => $shipID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function get_customershiptos($custID, $loginID, $restrictions, $debug = false) { // TODO use QueryBuilder
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM (SELECT * FROM custperm WHERE custid = :custID AND shiptoid != '') t WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid, shiptoid");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID AND shiptoid != '' GROUP BY custid, shiptoid");
-			$switching = array(':custID' => $custID); $withquotes = array(true);
-		}
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
-			return $sql->fetchAll();
-		}
-	}
-
-	function get_customercontacts($loginID, $restrictions, $custID, $debug = false) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM (SELECT * FROM custperm WHERE custid = :custID) t WHERE loginid = :loginID OR loginid = :shared)");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID");
-			$switching = array(':custID' => $custID); $withquotes = array(true);
-		}
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
-			return $sql->fetchAll();
-		}
-	}
-
-	function can_accesscustomercontact($loginID, $restrictions, $custID, $shipID, $contactID, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM (SELECT * FROM custperm WHERE custid = :custID) t WHERE loginid = :loginID OR loginid = :shared) AND shiptoid = :shipID AND contact = :contactID");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS, ':shipID' => $shipID, ':contactID' => $contactID);
-			$withquotes = array(true, true, true, true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE custid = :custID AND shiptoid = :shipID AND contact = :contactID");
-			$switching = array(':custID' => $custID, ':shipID' => $shipID, ':contactID' => $contactID);
-			$withquotes = array(true, true, true);
-		}
-		$sql->execute($switching);
-		if ($debug) { return returnsqlquery($sql->queryString, $switching, $withquotes); } else { if ($sql->fetchColumn() > 0){return true;} else {return false; } }
-	}
-
-	function get_customercontact($custID, $shipID = '', $contactID = '', $debug = false) {
-		$q = (new QueryBuilder())->table('custindex');
-		$q->limit(1);
-		$q->where('custid', $custID);
-		$q->where('shiptoid', $shipID);
-		if (!empty($contactID)) {
-			$q->where('contact', $contactID);
-		}
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
-			return $sql->fetch();
-		}
-	}
-
-	function edit_customercontact($custID, $shipID, $contactID, $contact, $debug = false) {
-		$originalcontact = get_customercontact($custID, $shipID, $contactID, false);
-		$q = (new QueryBuilder())->table('custindex');
-		$q->mode('update');
-		$q->generate_setdifferencesquery($originalcontact->_toArray(), $contact->_toArray());
-		$q->where('custid', $custID);
-		$q->where('shiptoid', $shipID);
-		$q->where('contact', $contactID);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery();
-		} else {
-			$sql->execute($q->params);
-			$success = $sql->rowCount();
-			if ($success) {
-				return array("error" => false, "sql" => $q->generate_sqlquery($q->params));
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => '0', 'ITEMID' => 'N', 'QTY' => $qty);
+			if ($input->post->page) {
+				$session->loc = $input->post->text('page');
 			} else {
-				return array("error" => true, "sql" => $q->generate_sqlquery($q->params));
+				$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
 			}
-		}
-	}
-
-	function get_customersalesperson($custID, $shipID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT splogin1 FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
-		$switching = array(':custID' => $custID, ':shipID' => $shipID);
-		$withquotes = array(true, true);
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-/* =============================================================
-	CUST INDEX FUNCTIONS
-============================================================ */
-	function get_distinctcustindexpaged($loginID, $limit = 10, $page = 1, $restrictions, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		$limiting = returnlimitstatement($limit, $page);
-
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE custid IN (SELECT DISTINCT(custid) FROM custperm WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid ".$limiting);
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE shiptoid = '' GROUP BY custid " . $limiting);
-			$switching = array(); $withquotes = array();
-		}
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
-			return $sql->fetchAll();
-		}
-	}
-
-	function count_distinctcustindex($loginID, $restrictions, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(DISTINCT(custid)) FROM custindex WHERE custid IN (SELECT DISTINCT(custid) FROM custperm WHERE loginid = :loginID OR loginid = :shared)");
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(DISTINCT(custid)) FROM custindex WHERE shiptoid = ''");
-			$switching = array(); $withquotes = array();
-		}
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function search_custindexpaged($loginID, $limit = 10, $page = 1, $restrictions, $keyword, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		$limiting = returnlimitstatement($limit, $page);
-		$search = '%'.str_replace(' ', '%', str_replace('-', '', $keyword)).'%';
-	
-		if ($restrictions) {
-			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) GROUP BY custid, shiptoid ORDER BY custid <> '$keyword' $limiting");
-			} elseif (Processwire\wire('config')->cptechcustomer == 'stat') { 
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) GROUP BY custid $limiting"); 
+			$session->editdetail = true;
+			break;
+		case 'update-line':
+			if ($input->post) {
+				$qnbr = $input->post->text('qnbr');
+				$linenbr = $input->post->text('linenbr');
 			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) ORDER BY custid <> '$keyword' $limiting");
+				$qnbr = $input->get->text('qnbr');
+				$linenbr = $input->get->text('linenbr');
 			}
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS, ':search' => $search);
-			$withquotes = array(true, true, true);
-		} else {
-			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) GROUP BY custid, shiptoid ORDER BY custid <> '$keyword' $limiting");
-			} elseif (wire('config')->cptechcustomer == 'stat') {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) GROUP BY custid $limiting");
+
+			$quotedetail = getquotelinedetail(session_id(), $qnbr, $linenbr, false);
+			$quotedetail['quotprice'] = $input->post->text('price');
+			$quotedetail['discpct'] =  $input->post->text('discount');
+			$quotedetail['quotunit'] = $input->post->text('qty');
+			$quotedetail['ordrqty'] = $input->post->text('qty');
+			$quotedetail['rshipdate'] = $input->post->text('rqstdate');
+			$quotedetail['whse'] = $input->post->text('whse');
+			$quotedetail['linenbr'] = $input->post->text('linenbr');
+			
+			$quotedetail['spcord'] = $input->post->text('specialorder');
+			$quotedetail['vendorid'] = $input->post->text('vendorID');
+			$quotedetail['shipfromid'] = $input->post->text('shipfromid');
+			$quotedetail['vendoritemid'] = $input->post->text('itemID');
+			$quotedetail['nsitemgroup'] = $input->post->text('group');
+			$quotedetail['ponbr'] = $input->post->text('ponbr');
+			$quotedetail['poref'] = $input->post->text('poref');
+			$quotedetail['uom'] = $input->post->text('uofm');
+
+			if ($quotedetail['spcord'] != 'N') {
+				$quotedetail['desc1'] = $input->post->text('desc1');
+				$quotedetail['desc2'] = $input->post->text('desc2');
+			}
+
+			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
+			$session->detail = $quotedetail;
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'CUSTID' => $custID);
+			if ($input->post->page) {
+				$session->loc = $input->post->text('page');
 			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search) ORDER BY custid <> '$keyword' $limiting");
+				$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
 			}
-			$switching = array(':search' => $search); $withquotes = array(true);
-		}
-	
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
-			return $sql->fetchAll();
-		}
-	}
-	
-	function count_searchcustindex($loginID, $restrictions, $keyword, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		$search = '%'.str_replace(' ', '%', str_replace('-', '', $keyword)).'%';
-
-		if ($restrictions) {
-			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex GROUP BY custid, shiptoid) t WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
-			} elseif (Processwire\wire('config')->cptechcustomer == 'stat') {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex) t WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
+			$session->editdetail = true;
+			break;
+		case 'remove-line':
+			$qnbr = $input->post->text('qnbr');
+			$linenbr = $input->post->text('linenbr');
+			$quotedetail = getquotelinedetail(session_id(), $qnbr, $linenbr, false);
+			$quotedetail['quotunit'] = '0';
+			$quotedetail['linenbr'] = $input->post->text('linenbr');
+			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
+			$session->detail = $quotedetail;
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
+			if ($input->post->page) {
+				$session->loc = $input->post->text('page');
 			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
+				$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
 			}
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS, ':search' => $search);
-			$withquotes = array(true, true, true, true);
-		} else {
-			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex GROUP BY custid, shiptoid) t WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
-			} elseif (wire('config')->cptechcustomer == 'stat') {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex) t WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
+			$session->editdetail = true;
+			break;
+		case 'remove-line-get':
+			$qnbr = $input->get->text('qnbr');
+			$linenbr = $input->get->text('linenbr');
+			$quotedetail = getquotelinedetail(session_id(), $qnbr, $linenbr, false);
+			$quotedetail['quotunit'] = '0';
+			$quotedetail['linenbr'] = $input->post->text('linenbr');
+			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
+			$session->detail = $quotedetail;
+			$custID = get_custidfromquote(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
+			if ($input->get->page) {
+				$session->loc = $input->get->text('page');
 			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', ccity, ' ', cst, ' ', czip, ' ', cphone, ' ', contact, ' ', source, ' ', cphext), '-', '')) LIKE UCASE(:search)");
+				$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
 			}
-			$switching = array(':search' => $search); $withquotes = array(true);
-		}
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_topxsellingcustomers($loginID, $numberofcustomers, $restrictions, $debug = false) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid, shiptoid ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS); $withquotes = array(true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex GROUP BY custid, shiptoid ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
-			$switching = array(); $withquotes = array();
-		}
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
-			return $sql->fetchAll();
-		}
-	}
-
-	function insert_newcustindexrecord($customer, $debug) {
-		$query = returninsertlinks($customer);
-		$sql = Processwire\wire('database')->prepare("INSERT INTO custindex (".$query['columnlist'].") VALUES (".$query['valuelist'].")");
-		$switching = $query['switching']; $withquotes = $query['withquotes'];
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		}
-	}
-
-	function getmax_custindexrecnbr() {
-		$sql = Processwire\wire('database')->prepare("SELECT MAX(recno) FROM custindex");
-		$sql->execute();
-		return $sql->fetchColumn();
-	}
-
-	function edit_custindexcustid($originalcustID, $newcustID) {
-		$sql = Processwire\wire('database')->prepare("UPDATE custindex SET custid = :newcustid WHERE custid = :originalcustid");
-		$switching = array(':newcustid' => $newcustID, ':originalcustid' => $originalcustID); $withquotes = array(true, true);
-		$sql->execute($switching);
-		return returnsqlquery($sql->queryString, $switching, $withquotes);
-	}
-
-/* =============================================================
-	ORDERS FUNCTIONS
-============================================================ */
-	function count_salesreporders($sessionID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT IF(COUNT(DISTINCT(custid)) > 1,COUNT(*),0) as count FROM ordrhed WHERE sessionid = :sessionID AND type = :type");
-		$switching = array(':sessionID' => $sessionID, ':type' => 'O'); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_salesrepordersorderdate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
-		$q = (new QueryBuilder())->table('ordrhed');
-		$q->field('ordrhed.*');
-		$q->field($q->expr("STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder"));
-		$q->where('sessionid', $sessionID);
-		$q->where('type', 'O');
-		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order('dateoforder ' . $sortrule);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
-				return $sql->fetchAll();
+			$session->editdetail = true;
+			break;
+		case 'unlock-quote':
+			$qnbr = $input->get->text('qnbr');
+			$data = array('UNLOCKING QUOTE' => false);
+			$session->loc = $config->pages->edit."quote/confirm/?qnbr=".$qnbr.$linkaddon;
+			remove_orderlock($sessionID, $ordn, $userID, $debug);
+			break;
+		case 'send-quote-to-order':
+			$qnbr = $input->post->text('qnbr');
+			$linenbrs = $input->post->linenbr;
+			$linecount = nextquotelinenbr(session_id(), $qnbr);
+			for ($i = 1; $i < $linecount; $i++) {
+				$quotedetail = getquotelinedetail(session_id(), $qnbr, $i, false);
+				if (in_array($i, $linenbrs)) {
+					$quotedetail['ordrqty'] = $quotedetail['quotunit'];
+				} else {
+					$quotedetail['ordrqty'] = '0';
+				}
+				$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
 			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function get_salesrepordersorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = false, $debug = false) {
-		$q = (new QueryBuilder())->table('ordrhed');
-		$q->field('ordrhed.*');
-		$q->field($q->expr("CAST(odrsubtot AS DECIMAL(8,2)) AS subtotal"));
-		$q->where('sessionid', $sessionID);
-		$q->where('type', 'O');
-		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order($orderby .' '. $sortrule);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function get_salesreporders($sessionID, $limit = 10, $page = 1, $useclass = false, $debug = false) {
-		$q = (new QueryBuilder())->table('ordrhed');
-		$q->field('*');
-		$q->where('sessionid', $sessionID);
-		$q->where('type', 'O');
-		$q->limit($limit, $q->generate_offset($page, $limit));
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function count_customerorders($sessionID, $custID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) as count FROM ordrhed WHERE sessionid = :sessionID AND custid = :custID AND type = 'O'");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_customerorders($sessionID, $custID, $limit = 10, $page = 1, $useclass = false, $debug = false) {
-		$q = (new QueryBuilder())->table('ordrhed');
-		$q->where('sessionid', $sessionID);
-		$q->where('custid', $custID);
-		$q->where('type', 'O');
-		$q->limit($limit, $q->generate_offset($page, $limit));
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll();
-		}
-	}
-
-	function get_customerordersorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = false, $debug = false) {
-		$q = (new QueryBuilder())->table('ordrhed');
-		$q->where('sessionid', $sessionID);
-		$q->where('custid', $custID);
-		$q->where('type', 'O');
-		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order($orderby . ' ' . $sortrule);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll();
-		}
-	}
-
-	function get_customerordersorderdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
-		$q = (new QueryBuilder())->table('ordrhed');
-		$q->field('ordrhed.*');
-		$q->field($q->expr("STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder"));
-		$q->where('sessionid', $sessionID);
-		$q->where('custid', $custID);
-		$q->where('type', 'O');
-		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order('dateoforder ' . $sortrule);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function get_custidfromorder($sessionID, $ordn, $debug = false) {
-		$q = (new QueryBuilder())->table('ordrhed');
-		$q->field('custid');
-		$q->where('sessionid', $sessionID);
-		$q->where('orderno', $ordn);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_shiptoidfromorder($sessionID, $ordn, $debug = false) {
-		$q = (new QueryBuilder())->table('ordrhed');
-		$q->field('shiptoid');
-		$q->where('sessionid', $sessionID);
-		$q->where('orderno', $ordn);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_orderdetails($sessionID, $ordn, $useclass = false, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrdet WHERE sessionid = :sessionID AND orderno = :ordn");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderDetail');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function hasanorderlocked($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM ordlock WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID);
-		$sql->execute($switching);
-		return $sql->fetchColumn() > 0 ? true : false;
-	}
-
-	function getlockedordn($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT orderno FROM ordlock WHERE sessionid = :sessionID LIMIT 1");
-		$switching = array(':sessionID' => $sessionID);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-
-	function is_orderlocked($sessionID, $ordn) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM ordlock WHERE sessionid = :sessionID AND orderno = :ordn LIMIT 1");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-	
-	function get_nextorderlock($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT MAX(recno) FROM ordlock WHERE sessionid = :sessionID LIMIT 1");
-		$switching = array(':sessionID' => $sessionID);
-		$sql->execute($switching);
-		return (intval($sql->fetchColumn()) + 1);
-	}
-
-	function get_order_docs($sessionID, $ordn, $debug) { // FIXME USE PARAMATERS
-		$sql = "SELECT * FROM orddocs WHERE sessionid = '$sessionID' AND orderno = '$ordn' AND itemnbr = '' ";
-		if ($debug) {
-			return $sql;
-		} else {
-			$results = Processwire\wire('database')->query($sql);
-			return $results;
-		}
-	}
-/* =============================================================
-	QUOTES FUNCTIONS
-============================================================ */
-	function hasaquotelocked($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM quotelock WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-
-	function getlockedquotenbr($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT quotenbr FROM quotelock WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-
-	function caneditquote($sessionID, $qnbr) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM quotelock WHERE sessionid = :sessionID AND quotenbr = :qnbr");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-
-	function count_customerquotes($sessionID, $custID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) as count FROM quothed WHERE sessionid = :sessionID AND custid = :custID");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true,true);
-		if ($debug) {
-			returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_customerquotes($sessionID, $custID, $limit, $page, $useclass = false, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM quothed WHERE sessionid = :sessionID AND custid = :custID $limiting");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function get_customerquotesquotedate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT quotdate, STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate, quothed.* FROM quothed WHERE sessionid = :sessionID AND custid = :custID ORDER BY quotedate $sortrule ".$limiting);
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function get_customerquotesrevdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT revdate, STR_TO_DATE(revdate, '%m/%d/%Y') as reviewdate, quothed.* FROM quothed WHERE sessionid = :sessionID AND custid = :custID ORDER BY reviewdate $sortrule ".$limiting);
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-		
-	function get_customerquotesexpdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT expdate, STR_TO_DATE(expdate, '%m/%d/%Y') as expiredate, quothed.* FROM quothed WHERE sessionid = :sessionID AND custid = :custID ORDER BY expiredate $sortrule ".$limiting);
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function get_customerquotesorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = true, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM quothed WHERE sessionid = :sessionID AND custid = :custID ORDER BY $orderby $sortrule $limiting");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
-		if ($debug) {
-			returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function get_custidfromquote($sessionID, $qnbr, $debug = false) {
-		$q = (new QueryBuilder())->table('quothed');
-		$q->field('custid');
-		$q->where('sessionid', $sessionID);
-		$q->where('quotnbr', $qnbr);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_shiptoidfromquote($sessionID, $qnbr, $debug = false) {
-		$q = (new QueryBuilder())->table('quothed');
-		$q->field('shiptoid');
-		$q->where('sessionid', $sessionID);
-		$q->where('quotnbr', $qnbr);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_quotehead($sessionID, $qnbr, $useclass = false, $debug = false) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM quothed WHERE sessionid = :sessionID AND quotnbr = :qnbr");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr); $withquotes = array(true, true);
-		if ($debug) {
-			returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
-				return $sql->fetch();
-			}
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function get_quotedetails($sessionID, $qnbr, $useclass, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM quotdet WHERE sessionid = :sessionID AND quotenbr = :qnbr");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr); $withquotes = array(true, true);
-		if ($debug) {
-			returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'QuoteDetail');
-				return $sql->fetchAll();
-			}
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function get_quoteline($sessionID, $qnbr, $line, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM quotdet WHERE sessionid = :sessionID AND quotenbr = :qnbr AND linenbr = :line");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr, ':line' => $line); $withquotes = array(true, true, true);
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getquotelinedetail($sessionID, $qnbr, $line, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM quotdet WHERE sessionid = :sessionID AND quotenbr = :qnbr AND linenbr = :linenbr");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr, ':linenbr' => $line); $withquotes = array(true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function insertquoteline($sessionID, $qnbr, $linenbr, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO quotdet (sessionid, quotenbr, linenbr) VALUES (:sessionID, :qnbr, :linenbr)");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr, ':linenbr' => $linenbr); $withquotes = array(true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => Processwire\wire('database')->lastInsertId());
-		}
-	}
-
-	function nextquotelinenbr($sessionID, $qnbr) {
-		$sql = Processwire\wire('database')->prepare("SELECT MAX(linenbr) FROM quotdet WHERE sessionid = :sessionID AND quotenbr = :qnbr ");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr); $withquotes = array(true, true);
-		$sql->execute($switching);
-		return intval($sql->fetchColumn()) + 1;
-	}
-
-	function edit_quotehead($sessionID, $qnbr, Quote $quote, $debug = false) {
-		$originalquote = Quote::load(session_id(), $qnbr);
-		$properties = array_keys($quote->_toArray());
-		$q = (new QueryBuilder())->table('quothed');
-		$q->mode('update');
-		
-		foreach ($properties as $property) {
-			if ($quote->$property != $originalquote->$property) {
-				$q->set($property, $quote->$property);
-			}
-		}
-		$q->where('quotnbr', $quote->quotnbr);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		if ($debug) {
-			return $q->generate_sqlquery();
-		} else {
-			if ($quote->has_changes()) {
-				$sql->execute($q->params);
-			}
-			return $q->generate_sqlquery($q->params);
-		}
-	}
-
-	function edit_quoteline($sessionID, $qnbr, $newdetails, $debug) {
-		$originaldetail = getquotelinedetail(session_id(), $qnbr, $newdetails['linenbr'], false);
-		$query = returnpreppedquery($originaldetail, $newdetails);
-		$sql = Processwire\wire('database')->prepare("UPDATE quotdet SET ".$query['setstatement']." WHERE sessionid = :sessionID AND quotenbr = :qnbr AND linenbr = :linenbr");
-		$query['switching'][':sessionID'] = $sessionID; $query['switching'][':qnbr'] = $qnbr; $query['switching'][':linenbr'] = $newdetails['linenbr'];
-		$query['withquotes'][] = true; $query['withquotes'][]= true; $query['withquotes'][] = true;
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
-			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		}
-	}
-
-	function insert_orderlock($sessionID, $recnbr, $ordn, $userID, $date, $time, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO ordlock (sessionid, recno, date, time, orderno, userid) VALUES (:sessionID, :recnbr, :date, :time, :orderno, :userID)");
-		$switching = array(':sessionID' => $sessionID, ':recnbr' => $recnbr, ':date' => $time, ':time' => $time, ':orderno' => $ordn, ':userID' => $userID);
-		$withquotes = array(true, true, true, true, true, true);
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		}
-	}
-
-	function remove_orderlock($sessionID, $ordn, $userID, $debug) {
-		$sql = Processwire\wire('database')->prepare("DELETE FROM ordlock WHERE sessionid = :sessionID AND orderno = :ordn AND userid = :userID");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn, ':userID' => $userID);
-		$withquotes = array(true, true, true);
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		}
-	}
-
-
-/* =============================================================
-	NOTES FUNCTIONS
-============================================================ */
-	function can_write_sales_note($sessionID, $ordn) {
-		$sql = Processwire\wire('database')->prepare("SELECT status FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn LIMIT 1 ");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn);
-		$sql->execute($switching);
-		$status = $sql->fetchColumn();
-		if (strtolower($status) == "open" || strtolower($status) == "new") {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function get_dplusnotes($sessionID, $key1, $key2, $type, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND rectype = :type");
-		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':type' => $type);
-		$withquotes = array(true, true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getdplusnotecount($sessionID, $key1, $key2, $type, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND rectype = :type");
-		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':type' => $type);
-		$withquotes = array(true, true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function hasdplusnote($sessionID, $key1, $key2, $type) {
-		if (getdplusnotecount($sessionID, $key1, $key2, $type, false)) {
-			return 'Y';
-		} else {
-			return 'N';
-		}
-	}
-
-	function get_dplusnote($sessionID, $key1, $key2, $type, $recnbr, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND rectype = :type AND recno = :recnbr");
-		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':type' => $type, ':recnbr' => $recnbr);
-		$withquotes = array(true, true, true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-
-	function edit_note($sessionID, $key1, $key2, $form1, $form2, $form3, $form4, $form5, $note, $recnbr, $date, $time, $width) {
-		$sql = Processwire\wire('database')->prepare("UPDATE qnote SET notefld = :note  WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND form1 = :form1 AND form2 = :form2 AND form3 = :form3 AND form4 = :form4 AND form5 = :form5 AND recno = :recnbr");
-		$switching = array(':note' => $note, ':form1' => $form1, ':form2' => $form2, ':form3' => $form3, ':form4' => $form4, ':form5' => $form5, ':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':recnbr' => $recnbr);
-		$withquotes = array(true, true, true, true, true, true, true, true, true, true);
-		$sql->execute($switching);
-		return returnsqlquery($sql->queryString, $switching, $withquotes);
-	}
-
-	function deletenote($sessionID, $key1, $key2, $form1, $form2, $form3, $form4, $form5, $rectype, $recnbr) {
-		$sql = Processwire\wire('database')->prepare("DELETE FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND form1 = :form1 AND form2 = :form2 AND form3 = :form3 AND form4 = :form4 AND form5 = :form5 AND recno = :recnbr AND rectype = :rectype");
-		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':form1' => $form1, ':form2' => $form2, ':form3' => $form3, ':form4' => $form4, ':form5' => $form5, ':recnbr' => $recnbr, ':rectype' => $rectype);
-		$withquotes = array(true, true, true, true, true, true, true, true, true, true);
-		$sql->execute($switching);
-		return returnsqlquery($sql->queryString, $switching, $withquotes);
-	}
-
-	function insert_note($sessionID, $key1, $key2, $form1, $form2, $form3, $form4, $form5, $note, $rectype, $recno, $date, $time, $width) { // FIXME USE PARAMATERS
-		$sql = "INSERT INTO qnote (sessionid, notefld, key1, key2, form1, form2, form3, form4, form5, rectype, recno, date, time, colwidth) VALUES ('$sessionID', '$note',
-		'$key1', '$key2', '$form1', '$form2', '$form3', '$form4', '$form5', '$rectype', '$recno', '$date', '$time', '$width')";
-		Processwire\wire('database')->query($sql);
-		return $sql;
-	}
-
-	function insertdplusnote($sessionID, $key1, $key2, $form1, $form2, $form3, $form4, $form5, $note, $rectype, $recno, $date, $time, $width) {// FIXME USE PARAMATERS
-		$sql = Processwire\wire('database')->prepare("INSERT INTO qnote (sessionid, notefld, key1, key2, form1, form2, form3, form4, form5, rectype, recno, date, time, colwidth) VALUES (:sessionID, :note,
-		:key1, :key2, :form1, :form2, :form3, :form4, :form5, :rectype, :recno, :date, :time, :width)");
-		$switching = array(':sessionID' => $sessionID, ':note' => $note, ':key1' => $key1, ':key2' => $key2, ':form1' => $form1, ':form2' => $form2, ':form3' => $form3, ':form4' => $form4, ':form5' => $form5, ':rectype' => $rectype, ':recno' => $recno, ':date' => $date, ':time' => $time, ':width' => $width);
-		$withquotes = array(true, true, true, true, true, true, true, true, true, true, true, true, true, true);
-		$sql->execute($switching);
-		return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => Processwire\wire('database')->lastInsertId());
-	}
-
-	function get_next_note_recno($sessionID, $key1, $key2, $rectype) { // FIXME USE PARAMATERS
-		$sql = "SELECT MAX(recno) as max FROM qnote WHERE sessionid = '$sessionID' AND key1 = '$key1' AND key2 = '$key2' AND rectype = '$rectype'";
-		$res = Processwire\wire('database')->query($sql);
-		$result = $res->fetchColumn();
-		$nextrecnbr =  intval($result) + 1;
-		return $nextrecnbr;
-	}
-
-
-/* =============================================================
-	PRODUCT FUNCTIONS
-============================================================ */
-	function get_itemsearchresults($sessionID, $limit = 10, $page = 1, $debug = false) {
-		$q = (new QueryBuilder())->table('pricing');
-		$q->where('sessionid', $sessionID);
-		$q->limit($limit, $q->generate_offset($page, $limit));
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'PricingItem');
-			return $sql->fetchAll();
-		}
-	}
-	
-	function count_itemsearchresults($sessionID, $debug = false) {
-		$q = (new QueryBuilder())->table('pricing');
-		$q->field($q->expr('COUNT(*)'));
-		$q->where('sessionid', $sessionID);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function count_itemhistory($sessionID, $itemID, $debug = false) {
-		$q = (new QueryBuilder())->table('custpricehistory');
-		$q->field($q->expr('COUNT(*)'));
-		$q->where('sessionid', $sessionID);
-		$q->where('itemid', $itemID);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_itemhistoryfield($sessionID, $itemID, $field, $debug = false) {
-		$q = (new QueryBuilder())->table('custpricehistory');
-		$q->field($field);
-		$q->where('sessionid', $sessionID);
-		$q->where('itemid', $itemID);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_itemavailability($sessionID, $itemID, $debug = false) {
-		$q = (new QueryBuilder())->table('whseavail');
-		$q->where('sessionid', $sessionID);
-		$q->where('itemid', $itemID);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	/* =============================================================
-		USER ACTION FUNCTIONS
-	============================================================ */
-	function get_useractions($user, $querylinks, $limit, $page, $debug) {
-		$q = (new QueryBuilder())->table('useractions');
-		
-		if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-			$q->generate_query($querylinks, "duedate-ASC", $limit, $page);
-		} else {
-			$q->generate_query($querylinks, false, $limit, $page);
-		}
-		
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'UserAction');
-			return $sql->fetchAll();
-		}
-	}
-
-	function count_useractions($user, $querylinks, $debug) {
-		$q = (new QueryBuilder())->table('useractions');
-		$q->field($q->expr('COUNT(*)'));
-		$q->generate_query($querylinks, false, false, false);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function get_useraction($id, $debug = false) {
-		$q = (new QueryBuilder())->table('useractions');
-		$q->where('id', $id);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'UserAction');
-			return $sql->fetch();
-		}
-	}
-	
-	function edit_useraction(UserAction $updatedaction, $debug = false) {
-		$originalaction = get_useraction($updatedaction->id); // (id, bool fetchclass, bool debug)
-		$q = (new QueryBuilder())->table('useractions');
-		$q->mode('update');
-		$q->generate_setdifferencesquery($originalaction->_toArray(), $updatedaction->_toArray());
-		$q->where('id', $updatedaction->id);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery();
-		} else {
-			$sql->execute($q->params);
-			$success = $sql->rowCount();
-			if ($success) {
-				return array("error" => false,  "sql" => $q->generate_sqlquery($q->params));
-			} else {
-				return array("error" => true,  "sql" => $q->generate_sqlquery($q->params));
-			}
-		}
-	}
-	
-	function update_useraction(UserAction $updatedaction, $debug = false) {
-		return edit_useraction($updatedaction, $debug);
-	}
-
-	function update_useractionlinks($oldlinks, $newlinks, $wherelinks, $debug) {
-		$q = (new QueryBuilder())->table('useractions');
-		$q->mode('update');
-		$q->generate_setdifferencesquery($oldlinks, $newlinks);
-		$q->generate_query($wherelinks);
-		$q->set('dateupdated', date("Y-m-d H:i:s"));
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery();
-		} else {
-			$sql->execute($q->params);
-			$success = $sql->rowCount();
-			if ($success) {
-				return array("error" => false,  "sql" => $q->generate_sqlquery($q->params));
-			} else {
-				return array("error" => true,  "sql" => $q->generate_sqlquery($q->params));
-			}
-		}
-	}
-	
-	function create_useraction(UserAction $action, $debug = false) {
-		$q = (new QueryBuilder())->table('useractions');
-		$q->mode('insert');
-		$q->generate_setvaluesquery($action->_toArray());
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return array('sql' => $q->generate_sqlquery($q->params), 'insertedid' => Processwire\wire('database')->lastInsertId());
-		}
-	}
-
-	function get_useractions_maxrec($loginID) {
-		$sql = Processwire\wire('database')->prepare("SELECT MAX(id) AS id FROM useractions WHERE createdby = :login");
-		$switching = array(':login' => $loginID);
-		$withquotes = array(true, true);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-/* =============================================================
-	VENDOR FUNCTIONS
-============================================================ */
-	function getvendors($debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM vendors WHERE shipfrom = ''");
-		$switching = array(); $withquotes = array();
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute();
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function get_vendor($vendorID, $shipfromID = '', $debug = false) {
-		$q = (new QueryBuilder())->table('vendors');
-		$q->where('vendid', $vendorID);
-		$q->where('shipfrom', $shipfromID);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Vendor');
-			return $sql->fetch();
-		}
-	}
-
-	function getvendorshipfroms($vendorID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM vendors WHERE vendid = :vendor AND shipfrom != ''");
-		$switching = array(':vendor' => $vendorID); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function search_vendorspaged($limit = 10, $page = 1, $keyword, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		$limiting = returnlimitstatement($limit, $page);
-		$search = '%'.str_replace(' ', '%',$keyword).'%';
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM vendors WHERE UCASE(CONCAT(vendid, ' ', shipfrom, ' ', name, ' ', address1, ' ', address2, ' ', address3, ' ', city, ' ', state, ' ', zip, ' ', country, ' ', phone, ' ', fax, ' ', email)) LIKE UCASE(:search) $limiting");
-		$switching = array(':search' => $search); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function count_searchvendors($keyword, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		$search = '%'.str_replace(' ', '%',$keyword).'%';
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM vendors WHERE UCASE(CONCAT(vendid, ' ', shipfrom, ' ', name, ' ', address1, ' ', address2, ' ', address3, ' ', city, ' ', state, ' ', zip, ' ', country, ' ', phone, ' ', fax, ' ', email)) LIKE UCASE(:search)");
-		$switching = array(':search' => $search); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getunitofmeasurements($debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM unitofmeasure");
-		if ($debug) {
-			return $sql->queryString;
-		} else {
-			$sql->execute();
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getitemgroups($debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM itemgroup");
-		if ($debug) {
-			return $sql->queryString;
-		} else {
-			$sql->execute();
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-	
-	function get_vendorname($vendorID) {
-		$sql = Processwire\wire('database')->prepare("SELECT name FROM vendors WHERE vendid = :vendorID LIMIT 1");
-		$switching = array(':vendorID' => $vendorID);
-		$sql->execute($switching);
-		return $sql->fetchColumn();
-	}
-
-/* =============================================================
-	CART FUNCTIONS
-============================================================ */
-	function getcartheadcount($sessionID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM carthed WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_custidfromcart($sessionID, $debug = false) {
-		$q = (new QueryBuilder())->table('carthed');
-		$q->field($q->expr('custid'));
-		$q->where('sessionid', $sessionID);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function getcarthead($sessionID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM carthed WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function editcarthead($sessionID, $carthead, $debug) {
-		$orginalcarthead = getcarthead($sessionID, false);
-		$query = returnpreppedquery($originalcarthead, $carthead);
-		$sql = Processwire\wire('database')->prepare("UPDATE carthed SET ".$query['setstatement']." WHERE sessionid = :sessionID");
-		$query['switching'][':sessionID'] = $sessionID; $query['withquotes'][] = true;
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
-			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		}
-	}
-
-	function getcart($sessionID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM cartdet WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-
-	}
-
-	function insertcarthead($sessionID, $custID, $shipID, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO carthed (sessionid, custid, shiptoid, date, time) VALUES (:sessionID, :custID, :shipID, :date, :time)");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID, ':shipID' => $shipID, ':date' => date('Ymd'), ':time' =>date('His')); $withquotes = array(true, true, true, false, false);
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		}
-	}
-
-	function getcartline($sessionID, $linenbr, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM cartdet WHERE sessionid = :sessionID AND linenbr = :linenbr");
-		$switching = array(':sessionID' => $sessionID, ':linenbr' => $linenbr); $withquotes = array(true, true);
-		$sql->execute($switching);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function insertcartline($sessionID, $linenbr, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO cartdet (sessionid, linenbr) VALUES (:sessionID, :linenbr)");
-		$switching = array(':sessionID' => $sessionID, ':linenbr' => $linenbr); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => Processwire\wire('database')->lastInsertId());
-		}
-	}
-
-	function getcartlinedetail($sessionID, $linenbr, $debug) {
-		return getcartline($sessionID, $linenbr, $debug);
-	}
-
-	function edit_cartline($sessionID, $newdetails, $debug) {
-		$originaldetail = getcartlinedetail($sessionID, $newdetails['linenbr'], false);
-		$query = returnpreppedquery($originaldetail, $newdetails);
-		$sql = Processwire\wire('database')->prepare("UPDATE cartdet SET ".$query['setstatement']." WHERE sessionid = :sessionID AND linenbr = :linenbr");
-		$query['switching'][':sessionID'] = $sessionID; $query['switching'][':linenbr'] = $newdetails['linenbr'];
-		$query['withquotes'][] = true; $query['withquotes'][]= true; $query['withquotes'][] = true;
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
-			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		}
-	}
-
-	function nextcartlinenbr($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT MAX(linenbr) FROM cartdet WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
-		return intval($sql->fetchColumn()) + 1;
-	}
-
-	function getcreatedordn($sessionID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT ordernbr FROM logperm WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			return $sql->fetchColumn();
-		}
-	}
-
-
-
-/* =============================================================
-	EDIT ORDER FUNCTIONS
-============================================================ */
-	function can_editorder($sessionID, $ordn, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT editord FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn LIMIT 1");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			$column = $sql->fetchColumn();
-			if ($column != 'Y') { return false; } else { return true; }
-		}
-	}
-
-	function get_orderhead($sessionID, $ordn, $useclass = false, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn AND type = 'O'");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			if ($useclass) {
-				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder'); // CAN BE SalesOrder|SalesOrderEdit
-				return $sql->fetch();
-			}
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getorderdetails($sessionID, $ordn, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrdet WHERE sessionid = :sessionID AND orderno = :ordn");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		$sql->execute($switching);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getorderlinedetail($sessionID, $ordn, $linenumber, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrdet WHERE sessionid = :sessionID AND orderno = :ordn AND linenbr = :linenbr");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn, ':linenbr' => $linenumber); $withquotes = array(true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getallorderdocs($sessionID, $ordn, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM orddocs WHERE sessionid = :sessionID AND orderno = :ordn ORDER BY itemnbr ASC");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getordertracking($sessionID, $ordn, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrtrk WHERE sessionid = :sessionID AND orderno = :ordn");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		$sql->execute($switching);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function edit_orderhead($sessionID, $ordn, $order, $debug) {
-		$orginalorder = get_orderhead(session_id(), $ordn, false, false);
-		$query = returnpreppedquery($orginalorder, $order);
-		$sql = Processwire\wire('database')->prepare("UPDATE ordrhed SET ".$query['setstatement']." WHERE sessionid = :sessionID AND orderno = :ordn");
-		$query['switching'][':sessionID'] = $sessionID; $query['switching'][':ordn'] = $ordn;
-		$query['withquotes'][] = true; $query['withquotes'][]= true;
-
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
-			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		}
-	}
-
-	function edit_orderhead_credit($sessionID, $ordn, $paytype, $ccno, $xpd, $ccv) {
-		$sql = Processwire\wire('database')->prepare("UPDATE ordrhed SET paytype = :paytype, ccno = AES_ENCRYPT(:ccno, HEX(:sessionID)), xpdate = AES_ENCRYPT(:xpd, HEX(:sessionID)), ccvalidcode = AES_ENCRYPT(:ccv, HEX(:sessionID)) WHERE sessionid = :sessionID AND orderno = :ordn");
-		$switching = array(':paytype' => $paytype, ':ccno' => $ccno, ':sessionID' => $sessionID, ':xpd' => $xpd, ':ccv' => $ccv, ':sessionID' => $sessionID, ':ordn' => $ordn);
-		$withquotes = array(true ,true, true, true, true, true,true);
-		$sql->execute($switching);
-		return returnsqlquery($sql->queryString, $switching, $withquotes);
-	}
-
-	function edit_orderline($sessionID, $ordn, $newdetails, $debug) {
-		$originaldetail = getorderlinedetail($sessionID, $ordn, $newdetails['linenbr'], false);
-		$query = returnpreppedquery($originaldetail, $newdetails);
-		$sql = Processwire\wire('database')->prepare("UPDATE ordrdet SET ".$query['setstatement']." WHERE sessionid = :sessionID AND orderno = :ordn AND linenbr = :linenbr");
-		$query['switching'][':sessionID'] = $sessionID; $query['switching'][':ordn'] = $ordn; $query['switching'][':linenbr'] = $newdetails['linenbr'];
-		$query['withquotes'][] = true; $query['withquotes'][]= true; $query['withquotes'][] = true;
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
-			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		}
-	}
-
-	function insertorderline($sessionID, $ordn, $linenbr, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO ordrdet (sessionid, orderno, linenbr) VALUES (:sessionID, :ordn, :linenbr)");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn, ':linenbr' => $linenbr); $withquotes = array(true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => Processwire\wire('database')->lastInsertId());
-		}
-	}
-
-	function get_ordercreditcard($sessionID, $ordn, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT sessionid, AES_DECRYPT(ccno , HEX(sessionid)) AS cardnumber, AES_DECRYPT(ccvalidcode , HEX(sessionid)) AS cardcode, AES_DECRYPT(xpdate, HEX(sessionid)) AS expiredate FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn AND type = 'O'");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		$sql->execute($switching);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'OrderCreditCard');
-			return $sql->fetch();
-		}
-	}
-
-	function getshipvias($sessionID) {
-		$sql = Processwire\wire('database')->prepare("SELECT code, via FROM shipvia WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
-		return $sql->fetchAll(PDO::FETCH_ASSOC);
-	}
-
-/* =============================================================
-	MISC ORDER FUNCTIONS
-============================================================ */
-	function getstates() {
-		$sql = Processwire\wire('database')->prepare("SELECT abbreviation as state, name FROM states");
-		$sql->execute();
-		return $sql->fetchAll(PDO::FETCH_ASSOC);
-	}
-
-	function getcountries() {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM countries");
-		$sql->execute();
-		return $sql->fetchAll(PDO::FETCH_ASSOC);
-	}
-
-
-
-/* =============================================================
-	ITEM FUNCTIONS
-============================================================ */
-	function getiteminfo($sessionID, $itemID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM pricing WHERE sessionid = :sessionID AND itemid = :itemid LIMIT 1");
-		$switching = array(':sessionID' => $sessionID, ':itemid' => $itemID); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function getitemfromim($itemID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM pricing WHERE itemid = :itemid LIMIT 1");
-		$switching = array(':itemid' => $itemID); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
-		}
-	}
-
-	/* =============================================================
-		ITEM MASTER FUNCTIONS
-	============================================================ */
-	function search_itm($q, $onlyitemid, $custID, $limit, $page, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$search = '%'.str_replace(' ', '%', $q).'%';
-		if (empty($custID)) {
-			if ($onlyitemid) {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM itemsearch WHERE UCASE(itemid) LIKE UCASE(:search) AND origintype IN ('I', 'V') GROUP BY itemid $limiting");
-				$switching = array(':search' => $search); $withquotes = array(true);
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM itemsearch WHERE UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V') GROUP BY itemid $limiting");
-				$switching = array(':search' => $search); $withquotes = array(true);
-			}
-		} else {
-			if ($onlyitemid) {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM itemsearch WHERE (originid = (:custID) AND UCASE(refitemid) LIKE UCASE(:search)) OR (UCASE(itemid) like UCASE(:search)) GROUP BY itemid $limiting ");
-				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM itemsearch WHERE (UCASE(CONCAT(itemid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V')) OR (UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND originid = :custID) GROUP BY itemid $limiting");
-				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
-			}
-		}
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
-		}
-	}
-
-	function validateitemid($itemID, $custID, $debug) {
-		if (empty($custID)) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE UCASE(itemid) = UCASE(:itemID) AND originid = 'I'");
-			$switching = array(':itemID' => $itemID); $withquotes = array(true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE (originid = (:custID) AND UCASE(refitemid) = UCASE(:itemID)) OR (UCASE(itemid) = UCASE(:itemID) AND origintype = 'I')");
-			$switching = array(':itemID' => $itemID, ':custID' => $custID); $withquotes = array(true, true);
-		}
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function search_itmcount($q, $onlyitemid, $custID, $debug) {
-		$search = '%'.str_replace(' ', '%', $q).'%';
-		if (empty($custID)) {
-			if ($onlyitemid) {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE UCASE(itemid) LIKE UCASE(:search) AND origintype IN ('I', 'V') GROUP BY itemid $limiting");
-				$switching = array(':search' => $search); $withquotes = array(true);
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V')");
-				$switching = array(':search' => $search); $withquotes = array(true);
-			}
-		} else {
-			if ($onlyitemid) {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE (originid = (:custID) AND UCASE(refitemid) LIKE UCASE(:search)) OR (UCASE(itemid) like UCASE(:search))");
-				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE (UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V')) OR (UCASE(CONCAT(itemid, ' ', refitemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND originid = :custID)");
-				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
-			}
-		}
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function getitemdescription($itemID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT desc1 FROM itemsearch WHERE itemid = :itemid LIMIT 1");
-		$switching = array(':itemid' => $itemID); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function getnextrecno($itemID, $nextorprev, $debug) {
-		if ($nextorprev == 'next') {
-			$sql = Processwire\wire('database')->prepare("SELECT MAX(recno) + 1 FROM itemsearch WHERE itemid = :itemid");
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT MIN(recno) - 1 FROM itemsearch WHERE itemid = :itemid");
-		}
-		$switching = array(':itemid' => $itemID); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function getitembyrecno($recno, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT itemid FROM itemsearch WHERE recno = :recno");
-		$switching = array(':recno' => $recno); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-
-	}
-
-	/* =============================================================
-		TABLE FORMATTER FUNCTIONS
-	============================================================ */
-	function getformatter($user, $formatter, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT data FROM tableformatter WHERE user = :user AND formattertype = :formatter LIMIT 1");
-		$switching = array(':user' => $user, ':formatter' => $formatter); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function addformatter($user, $formatter, $data, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO tableformatter (user, formattertype, data) VALUES (:user, :formatter, :data)");
-		$switching = array(':user' => $user, ':formatter' => $formatter, ':data' => $data); $withquotes = array(true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => Processwire\wire('database')->lastInsertId());
-		}
-	}
-	
-	function does_tableformatterexist($userID, $formatter, $debug = false) {
-		$q = (new QueryBuilder())->table('tableformatter');
-		$q->field($q->expr('COUNT(*)'));
-		$q->where('user', $userID);
-		$q->where('formattertype', $formatter);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function checkformatterifexists($user, $formatter, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM tableformatter WHERE user = :user AND formattertype = :formatter");
-		$switching = array(':user' => $user, ':formatter' => $formatter); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_maxtableformatterid($userID, $formatter, $debug = false) {
-		$q = (new QueryBuilder())->table('tableformatter');
-		$q->field($q->expr('MAX(id)'));
-		$q->where('user', $userID);
-		$q->where('formattertype', $formatter);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function getmaxtableformatterid($user, $formatter, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT MAX(id) FROM tableformatter WHERE user = :user AND formattertype = :formatter");
-		$switching = array(':user' => $user, ':formatter' => $formatter); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function editformatter($user, $formatter, $data, $debug) {
-		$sql = Processwire\wire('database')->prepare("UPDATE tableformatter SET data = :data WHERE user = :user AND formattertype =  :formatter");
-		$switching = array(':user' => $user, ':formatter' => $formatter, ':data' => $data); $withquotes = array(true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'affectedrows' => $sql->rowCount() ? true : false);
-		}
-	}
-	
-	function update_formatter($userID, $formatter, $data, $debug = false) {
-		$q = (new QueryBuilder())->table('tableformatter');
-		$q->mode('update');
-		$q->set('data', $data);
-		$q->where('user', $userID);
-		$q->where('formattertype', $formatter);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return array('sql' => $q->generate_sqlquery($q->params), 'success' => $sql->rowCount() ? true : false, 'updated' => $sql->rowCount() ? true : false, 'querytype' => 'update');
-		}
-	}
-	
-	function create_formatter($userID, $formatter, $data, $debug = false) {
-		$q = (new QueryBuilder())->table('tableformatter');
-		$q->mode('insert');
-		$q->set('data', $data);
-		$q->set('user', $userID);
-		$q->set('formattertype', $formatter);
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return array('sql' => $q->generate_sqlquery($q->params), 'success' => Processwire\wire('database')->lastInsertId() > 0 ? true : false, 'id' => Processwire\wire('database')->lastInsertId(), 'querytype' => 'create');
-		}
-	}
-	
-	/* =============================================================
-		USER CONFIGS FUNCTIONS
-	============================================================ */
-	function checkconfigifexists($user, $configuration, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM userconfigs WHERE user = :user AND configtype = :config");
-		$switching = array(':user' => $user, ':config' => $configuration); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function getconfiguration($user, $configuration, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT data FROM userconfigs WHERE user = :user AND configtype = :config LIMIT 1");
-		$switching = array(':user' => $user, ':config' => $configuration); $withquotes = array(true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
+			$session->custID = $custID = get_custidfromquote(session_id(), $qnbr, false);
+			$data = array('DBNAME' => $config->dbName, 'QUOTETOORDER' => false, 'QUOTENO' => $qnbr, 'LINENO' => 'ALL');
+			$session->loc = $config->pages->orders."redir/?action=edit-new-order";
+			break;
+	}
+
+	writedplusfile($data, $filename);
+	header("location: /cgi-bin/" . $config->cgi . "?fname=" . $filename);
+ 	exit;
 ?>

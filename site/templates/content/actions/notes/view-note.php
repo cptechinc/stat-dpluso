@@ -11,6 +11,11 @@
 	</ul>
 	<br>
 	<div class="tab-content">
-		<div role="tabpanel" class="tab-pane active" id="note"><?php include $config->paths->content."actions/notes/view/view-note-details.php"; ?></div>
+		<div role="tabpanel" class="tab-pane active" id="note">
+            <?php if ($config->ajax) : ?>
+                <?= $page->bootstrap->openandclose('p', '', $page->bootstrap->makeprintlink($config->filename, 'View Printable Version')); ?>
+            <?php endif; ?>
+            <?php include $config->paths->content."actions/notes/view/view-note-details.php"; ?>
+        </div>
 	</div>
 </div>

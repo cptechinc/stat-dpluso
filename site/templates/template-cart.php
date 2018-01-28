@@ -4,7 +4,7 @@
         $custID = $carthead['custid'];
         $shipID = $carthead['shiptoid'];
 		$itemlookup->set_customer($carthead['custid'], $carthead['shiptoid']); 
-        $page->pagetitle = "Quote for ".get_customername($custID);
+        $page->pagetitle = "Worksheet for ".get_customername($custID);
 		$noteurl = $config->pages->notes.'redir/?action=get-cart-notes';
     }
     $config->scripts->append(hashtemplatefile('scripts/pages/cart.js'));

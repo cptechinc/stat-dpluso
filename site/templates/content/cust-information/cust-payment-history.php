@@ -2,11 +2,8 @@
 	$historyfile = $config->jsonfilepath.session_id()."-cipayment.json";
 	//$historyfile = $config->jsonfilepath."cioi-cipayment.json";
 
-	if (checkformatterifexists($user->loginid, 'ci-payment-history', false)) {
-		$defaultjson = json_decode(getformatter($user->loginid, 'ci-payment-history', false), true);
-	} else {
-		$default = $config->paths->content."cust-information/screen-formatters/default/ci-payment-history.json";
-		$defaultjson = json_decode(file_get_contents($default), true);
+	if ($config->ajax) {
+		echo $page->bootstrap->openandclose('p', '', $page->bootstrap->makeprintlink($config->filename, 'View Printable Version'));
 	}
 	
 	if (file_exists($historyfile)) {
@@ -21,26 +18,7 @@
 			include $config->paths->content."cust-information/tables/payment-history-formatted.php";
 			include $config->paths->content."cust-information/scripts/payment-history.js.php";
 		}
-	}
-
-	if ($config->ajax) {
-		echo '<p>' . makeprintlink($config->filename, 'View Printable Version') . '</p>';
+	} else {
+		echo $page->bootstrap->createalert('warning', 'Information Not Available');
 	}
 ?>
-<?php if (file_exists($historyfile)) : ?>
-	<?php $historyjson = json_decode(file_get_contents($historyfile), true);  ?>
-	<?php if (!$historyjson) { $historyjson= array('error' => true, 'errormsg' => 'The Payment History JSON contains errors');} ?>
-
-	<?php if ($historyjson['error']) : ?>
-		<div class="alert alert-warning" role="alert"><?php echo $historyjson['errormsg']; ?></div>
-	<?php else : ?>
-		<?php include $config->paths->content."/cust-information/tables/payment-history-formatted.php"; ?>
-   		<script>
-			$(function() {
-				$('#payments').DataTable();
-			})
-		</script>
-	<?php endif; ?>
-<?php else : ?>
-	<div class="alert alert-warning" role="alert">Information Not Available</div>
-<?php endif; ?>

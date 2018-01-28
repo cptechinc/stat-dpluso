@@ -11,10 +11,8 @@
     </div>
 <?php endif; ?>
 
-<?php if (has_dpluspermission($user->loginid, 'eso')) : ?>
-    <div class="row">
-        <div class="col-sm-12">
-            <?php include $config->paths->content.'salesrep/orders/orders-panel.php'; ?>
-        </div>
+<div class="row">
+    <div class="col-sm-12">
+        <?php include $config->paths->content.'salesrep/orders/orders-panel.php'; ?>
     </div>
-<?php endif; ?>
+</div>

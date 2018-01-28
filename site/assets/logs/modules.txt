@@ -1,3 +1,2 @@
-2017-10-06 12:59:33	guest	http://216.17.51.114/crm/install.php	Saved module info caches
-2017-10-06 12:59:33	guest	http://216.17.51.114/crm/http404/	Saved module 'SystemUpdater' config data
-2017-10-06 12:59:33	guest	http://216.17.51.114/crm/http404/	Saved module 'AdminThemeDefault' config data
+2018-01-28 13:55:56	guest	http://testsalesportal.stat-technologies.com/install.php	Saved module info caches
+2018-01-28 13:55:57	guest	http://testsalesportal.stat-technologies.com/http404/	Saved module 'AdminThemeDefault' config data

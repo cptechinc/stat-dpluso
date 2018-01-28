@@ -6,6 +6,8 @@
 		echo $page->bootstrap->openandclose('p', '', $page->bootstrap->makeprintlink($config->filename, 'View Printable Version'));
 	}
 	
+	echo $page->bootstrap->p('', $page->bootstrap->a('href=#|class=h3|onclick=returntopricing()', $page->bootstrap->createicon('fa fa-arrow-circle-left'). ' Go Back'));
+	
 	if (file_exists($pricefile)) {
 		// JSON file will be false if an error occurred during file_get_contents or json_decode
 		$pricejson = json_decode(file_get_contents($pricefile), true);

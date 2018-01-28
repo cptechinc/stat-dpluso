@@ -83,8 +83,8 @@
 		}
 
 		public function can_edit() {
-			//return $this->editord == 'Y' ? true : false;
-			return true;
+			$quoteconfig = Processwire\wire('pages')->get('/config/')->child('name=quotes');
+            return $quoteconfig->allow_edit;
 		}
 
 		// public function is_phoneintl() {
@@ -105,4 +105,29 @@
        public static function remove_nondbkeys($array) {
            return $array;
        }
+       
+       /* =============================================================
+          CRUD FUNCTIONS
+      ============================================================ */
+       public static function load($sessionID, $qnbr) {
+           return get_quotehead($sessionID, $qnbr, true, false);
+       }
+       
+       public function update($debug = false) {
+           return edit_quotehead($this->sessionid, $this->quotnbr, $this, $debug);
+       }
+       
+       public function has_changes() {
+           $properties = array_keys(get_object_vars($this));
+           $quote = Quote::load($this->sessionid, $this->quotnbr);
+           
+           foreach ($properties as $property) {
+               if ($this->$property != $quote->$property) {
+                   Processwire\wire('session')->property = $property;
+                   return true;
+               }
+           }
+           return false;
+       }
+       
     }

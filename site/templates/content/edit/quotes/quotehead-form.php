@@ -17,7 +17,7 @@
     <div class="row">
         <div class="col-sm-6">
             <div class="text-center form-group">
-        		<button type="submit" class="btn btn-success btn-block"><i class="glyphicon glyphicon-floppy-disk"></i> Save Changes</button>
+        		<button type="submit" class="btn btn-success btn-block"><i class="glyphicon glyphicon-floppy-disk"></i> Save</button>
         	</div>
         </div>
         <div class="col-sm-6">
@@ -32,22 +32,13 @@
     <?php if (!$editquotedisplay->canedit) : ?>
          <?= $editquotedisplay->generate_confirmationlink($quote); ?>
     <?php else : ?>
-        <?php if (($config->pages->orderquote.'?qnbr='.$qnbr) != $config->filename) : ?>
+        <?php if (($config->pages->orderquote.'?qnbr='.$qnbr) != $config->filename && has_dpluspermission($user->loginid, 'eso')) : ?>
             <div class="form-group">
                 <?= $editquotedisplay->generate_sendtoorderlink($quote); ?>
             </div>
         <?php endif; ?>
-        <div class="row">
-            <div class="col-sm-6 form-group">
-    			<div class="text-center">
-    				<?= $editquotedisplay->generate_discardchangeslink($quote); ?>
-    			</div>
-    		</div>
-    		<div class="col-sm-6 form-group">
-    			<div class="text-center">
-                    <?= $editquotedisplay->generate_saveunlockbutton($quote); ?>
-    			</div>
-    		</div>
-    	</div>    
+		<div class="text-center">
+            <?= $editquotedisplay->generate_saveunlockbutton($quote); ?>
+		</div>
     <?php endif; ?>
 </form>

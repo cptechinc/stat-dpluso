@@ -790,7 +790,7 @@
 		}
 	}
 
-	function get_quotehead($sessionID, $qnbr, $useclass = false, $debug) {
+	function get_quotehead($sessionID, $qnbr, $useclass = false, $debug = false) {
 		$sql = Processwire\wire('database')->prepare("SELECT * FROM quothed WHERE sessionid = :sessionID AND quotnbr = :qnbr");
 		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr); $withquotes = array(true, true);
 		if ($debug) {
@@ -860,20 +860,26 @@
 		return intval($sql->fetchColumn()) + 1;
 	}
 
-	function edit_quotehead($sessionID, $qnbr, $quote, $debug) {
-		$originalquote = get_quotehead(session_id(), $qnbr, false);
-		$query = returnpreppedquery($originalquote, $quote);
-		$sql = Processwire\wire('database')->prepare("UPDATE quothed SET ".$query['setstatement']." WHERE sessionid = :sessionID AND quotnbr = :quotnbr");
-		$query['switching'][':sessionID'] = $sessionID; $query['switching'][':quotnbr'] = $qnbr;
-		$query['withquotes'][]= true; $query['withquotes'][] = true;
-
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
+	function edit_quotehead($sessionID, $qnbr, Quote $quote, $debug = false) {
+		$originalquote = Quote::load(session_id(), $qnbr);
+		$properties = array_keys($quote->_toArray());
+		$q = (new QueryBuilder())->table('quothed');
+		$q->mode('update');
+		
+		foreach ($properties as $property) {
+			if ($quote->$property != $originalquote->$property) {
+				$q->set($property, $quote->$property);
 			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
+		}
+		$q->where('quotnbr', $quote->quotnbr);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		if ($debug) {
+			return $q->generate_sqlquery();
+		} else {
+			if ($quote->has_changes()) {
+				$sql->execute($q->params);
+			}
+			return $q->generate_sqlquery($q->params);
 		}
 	}
 
@@ -1891,4 +1897,3 @@
 			return $sql->fetchColumn();
 		}
 	}
-?>

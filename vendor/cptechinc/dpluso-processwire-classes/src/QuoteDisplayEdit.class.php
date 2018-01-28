@@ -45,14 +45,14 @@
         public function generate_saveunlockbutton(Order $quote) {
             $bootstrap = new Contento();
             $icon = $bootstrap->createicon('fa fa-unlock');
-            return $bootstrap->openandclose('button', "class=btn btn-block btn-emerald save-unlock-quotehead|data-form=#quotehead-form", $icon. " Save and Unlock Quote");
+            return $bootstrap->openandclose('button', "class=btn btn-block btn-emerald save-unlock-quotehead|data-form=#quotehead-form", $icon. " Save and Exit");
         }
         
         public function generate_confirmationlink(Order $quote) {
-            $href = generate_confirmationurl($quote);
+            $href = $this->generate_confirmationurl($quote);
             $bootstrap = new Contento();
             $href = $this->generate_unlockurl($quote);
-            $icon = $bootstrap->createicon('btn btn-block btn-success');
+            $icon = $bootstrap->createicon('fa fa-unlock');
             return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-success", $icon. " Finished with quote");
         }
         

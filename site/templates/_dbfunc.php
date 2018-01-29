@@ -669,25 +669,33 @@
 		return $sql->fetchColumn();
 	}
 
-	function count_customerquotes($sessionID, $custID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) as count FROM quothed WHERE sessionid = :sessionID AND custid = :custID");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true,true);
+	function count_customerquotes($sessionID, $custID, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('COUNT(*) as count');
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
-	function get_customerquotes($sessionID, $custID, $limit, $page, $useclass = false, $debug) {
+	function get_customerquotes($sessionID, $custID, $limit, $page, $useclass = false, $debug = false) {
 		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM quothed WHERE sessionid = :sessionID AND custid = :custID $limiting");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+		$q = (new QueryBuilder())->table('quothed');
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			if ($useclass) {
 				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
 				return $sql->fetchAll();
@@ -696,14 +704,22 @@
 		}
 	}
 	
-	function get_customerquotesquotedate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
+	function get_customerquotesquotedate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
 		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT quotdate, STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate, quothed.* FROM quothed WHERE sessionid = :sessionID AND custid = :custID ORDER BY quotedate $sortrule ".$limiting);
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field('quotdate');
+		$q->field($q->expr("STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate"));
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order('quotedate', $sortrule, $limiting);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			if ($useclass) {
 				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
 				return $sql->fetchAll();
@@ -712,14 +728,22 @@
 		}
 	}
 	
-	function get_customerquotesrevdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
+	function get_customerquotesrevdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
 		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT revdate, STR_TO_DATE(revdate, '%m/%d/%Y') as reviewdate, quothed.* FROM quothed WHERE sessionid = :sessionID AND custid = :custID ORDER BY reviewdate $sortrule ".$limiting);
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field('revdate');
+		$q->field($q->expr("STR_TO_DATE(revdate, '%m/%d/%Y') as reviewdate"));
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order('reviewdate', $sortrule, $limiting);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			if ($useclass) {
 				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
 				return $sql->fetchAll();
@@ -728,14 +752,22 @@
 		}
 	}
 		
-	function get_customerquotesexpdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
+	function get_customerquotesexpdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
 		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT expdate, STR_TO_DATE(expdate, '%m/%d/%Y') as expiredate, quothed.* FROM quothed WHERE sessionid = :sessionID AND custid = :custID ORDER BY expiredate $sortrule ".$limiting);
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field('expdate');
+		$q->field($q->expr("STR_TO_DATE(expdate, '%m/%d/%Y') as expiredate"));
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order('expiredate', $sortrule, $limiting);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			if ($useclass) {
 				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
 				return $sql->fetchAll();
@@ -744,14 +776,19 @@
 		}
 	}
 	
-	function get_customerquotesorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = true, $debug) {
+	function get_customerquotesorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = true, $debug = false) {
 		$limiting = returnlimitstatement($limit, $page);
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM quothed WHERE sessionid = :sessionID AND custid = :custID ORDER BY $orderby $sortrule $limiting");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+		$q = (new QueryBuilder())->table('quothed');
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order($orderby, $sortrule, $limiting);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			if ($useclass) {
 				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
 				return $sql->fetchAll();

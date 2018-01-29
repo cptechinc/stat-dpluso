@@ -11,8 +11,9 @@
 		}
         
         public static function create_fromobject($object) {
+            if (!is_object($object)) return false;
             $myClass = get_class();
-			$newobject  = new $myClass(); 
+			$newobject = new $myClass(); 
             
             foreach (get_class_vars(get_class()) as $property => $value) {
                 $newobject->$property = $object->$property;

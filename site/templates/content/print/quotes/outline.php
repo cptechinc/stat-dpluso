@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-sm-6">
-		<img src="<?= $config->urls->files."images/dplus.png"; ?>" alt="">
+		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
 	</div>
 	<div class="col-sm-6 text-right">
 		<h1>Quote # <?= $quote->quotnbr; ?></h1>

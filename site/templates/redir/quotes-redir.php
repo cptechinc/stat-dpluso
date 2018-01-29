@@ -25,6 +25,11 @@
 	*
 	*
 	* switch ($action) {
+	* 	case 'load-quotes':
+	*		DBNAME=$config->DBNAME
+	*		LOADREPQUOTEHED
+	*		TYPE=QUOTE
+	*		break;
 	* 	case 'load-cust-quotes':
 	*		DBNAME=$config->DBNAME
 	*		LOADCUSTQUOTEHEAD
@@ -106,6 +111,12 @@
 
 
 	switch ($action) {
+		case 'load-quotes':
+			$data = array('DBNAME' => $config->dbName, 'LOADREPQUOTEHED' => false);
+			$session->loc = $config->pages->ajax."load/quotes/salesrep/".urlencode($custID)."/?qnbr=".$linkaddon;
+			$session->{'quotes-loaded-for'} = $user->loginid;
+			$session->{'quotes-updated'} = date('m/d/Y h:i A');
+			break;
 		case 'load-cust-quotes':
 			$custID = $input->get->text('custID');
 			$data = array('DBNAME' => $config->dbName, 'LOADCUSTQUOTEHEAD' => false, 'TYPE' => 'QUOTE', 'CUSTID' => $custID);
@@ -340,5 +351,4 @@
 
 	writedplusfile($data, $filename);
 	header("location: /cgi-bin/" . $config->cgi . "?fname=" . $filename);
- 	exit;
-?>
+	exit;

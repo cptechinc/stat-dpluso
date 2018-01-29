@@ -49,6 +49,7 @@
 			"src/QuoteDisplay.class.php",
 			"src/QuoteDisplayEdit.class.php",
 			"src/QuotePanel.class.php",
+			"src/QuotePanelRep.class.php",
 			"src/QuotePanelCustomer.class.php",
 			"src/Order.interface.php",
 			"src/Model/Quote.class.php",

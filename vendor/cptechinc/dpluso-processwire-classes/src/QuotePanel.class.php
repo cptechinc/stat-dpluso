@@ -21,7 +21,10 @@
             SalesOrderPanelInterface Functions
             LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
         ============================================================ */
-		public function get_quotecount() { }
+		public function get_quotecount() {
+			$this->count = count_customerquotes($this->sessionID, $this->custID, false);
+		}
+		
 		public function get_quotes($debug = false) { }
 		
 		/* =============================================================

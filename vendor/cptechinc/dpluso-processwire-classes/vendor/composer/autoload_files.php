@@ -49,6 +49,7 @@ return array(
     '84e837d35411d3a06101706aad206d8e' => $baseDir . '/src/QuoteDisplay.class.php',
     '216f7aa59ad2f7ae96b009d0eaf58c0a' => $baseDir . '/src/QuoteDisplayEdit.class.php',
     'ed409ce542f1d5d80114f7ae67e4d711' => $baseDir . '/src/QuotePanel.class.php',
+    '679bc2c192bccdd8f9c96e22e270e97e' => $baseDir . '/src/QuotePanelRep.class.php',
     'e69e427b906be5f7ae60104f00b7179d' => $baseDir . '/src/QuotePanelCustomer.class.php',
     'dca1f918cc3f57b5b1177ec2c4cf7aac' => $baseDir . '/src/Order.interface.php',
     '57d47d833120351f22c3f1fb75379d10' => $baseDir . '/src/Model/Quote.class.php',

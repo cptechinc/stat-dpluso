@@ -12,7 +12,7 @@
             $page->body = $config->paths->content.'customer/cust-page/quotes/quotes-panel.php';
             break;
         case 'salesrep': //TODO
-            //$include = $config->paths->content.'salesrep/orders/orders-panel.php'; //FIX
+            //$include = $config->paths->content.'salesrep/quotes/quotes-panel.php'; //FIX
             break;
 		case 'search': //TODO
 			//$include = $config->paths->content.'recent-orders/ajax/load/order-search-modal.php'; //FIX

@@ -50,6 +50,7 @@ class ComposerStaticInitf9c34235226de117fa23ba132ae64d6f
         '84e837d35411d3a06101706aad206d8e' => __DIR__ . '/../..' . '/src/QuoteDisplay.class.php',
         '216f7aa59ad2f7ae96b009d0eaf58c0a' => __DIR__ . '/../..' . '/src/QuoteDisplayEdit.class.php',
         'ed409ce542f1d5d80114f7ae67e4d711' => __DIR__ . '/../..' . '/src/QuotePanel.class.php',
+        '679bc2c192bccdd8f9c96e22e270e97e' => __DIR__ . '/../..' . '/src/QuotePanelRep.class.php',
         'e69e427b906be5f7ae60104f00b7179d' => __DIR__ . '/../..' . '/src/QuotePanelCustomer.class.php',
         'dca1f918cc3f57b5b1177ec2c4cf7aac' => __DIR__ . '/../..' . '/src/Order.interface.php',
         '57d47d833120351f22c3f1fb75379d10' => __DIR__ . '/../..' . '/src/Model/Quote.class.php',

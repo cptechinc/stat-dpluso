@@ -7,7 +7,6 @@ var fields = {
 
 
 $(function() {
-
     $("body").on("change", ".special-order-select", function() {
         var select = $(this);
         if (select.val() != 'N') {
@@ -18,11 +17,11 @@ $(function() {
     });
 
     $("body").on("change", fields.qty, function() {
-        calculateextendedprice();
+        calculate_extendedprice();
     });
 
     $("body").on("change", fields.price, function() {
-        calculateextendedprice();
+        calculate_extendedprice();
         if ($(fields.price).val() < $(fields.minprice)) {
             console.log('Does not meet Minimum Price');
             if (config.edit.show_minprice_error) {
@@ -45,7 +44,7 @@ $(function() {
 });
 
 
-function calculateextendedprice() {
+function calculate_extendedprice() {
     var price = $(fields.price).val();
     var qty = $(fields.qty).val();
     var extendedamount = price * qty;

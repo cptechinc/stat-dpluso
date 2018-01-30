@@ -24,10 +24,10 @@
 	<input type="hidden" class="cost" value="<?= formatmoney($linedetail['cost']); ?>">
 	<input type="hidden" class="minprice" value="<?= formatmoney($linedetail['minprice']); ?> ">
 	<input type="hidden" class="calculate-from" value="percent">
-	<?php if (!$appconfig->child('name=sales-orders')->use_discount): ?>
+	<?php if (!$appconfig->child('name=sales-orders')->allow_discount): ?>
 		<input type="hidden" class="discpct" name="discount" value="<?= formatmoney($linedetail['discpct']); ?>">
 	<?php endif; ?>
-	<?php if (!$appconfig->child('name=sales-orders')->change_price) : ?>
+	<?php if (!$appconfig->allow_changeprice) : ?>
 		<input type="hidden" name="price" value="<?= formatmoney($linedetail['price']); ?>">
 	<?php endif; ?>
 	<div class="row">
@@ -53,7 +53,7 @@
 		<div class="col-sm-4 item-form">
 			<h4>Current Price</h4>
 			<?php
-				if ($appconfig->child('name=sales-orders')->change_price) {
+				if ($appconfig->allow_changeprice) {
 					include $config->paths->content.'edit/pricing/tables/price-edit-table.php';
 				} else {
 					include $config->paths->content.'edit/pricing/tables/price-static-table.php';
@@ -147,7 +147,6 @@
 				<br>
 				<button type="button" class="btn btn-danger btn-block remove-item"><i class="fa fa-trash" aria-hidden="true"></i> Delete Line</button>
 			<?php endif; ?>
-
 		</div>
 	</div>
 </form>

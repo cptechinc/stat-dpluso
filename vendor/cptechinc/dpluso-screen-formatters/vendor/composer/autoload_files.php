@@ -20,7 +20,7 @@ return array(
     '48ec62c9e53427f2a2351d56838965d5' => $baseDir . '/src/ii/ItemWarehouseStockScreen.class.php',
     '71d6fc0bbfb22a3b82c9b14178d19781' => $baseDir . '/src/ii/ItemRequirementsScreen.class.php',
     '3e58fdde191e6fab8bc319d79680abd7' => $baseDir . '/src/ii/ItemKitScreen.class.php',
-    'b6b6545d37681d90dd518aa8efa4aa9e' => $baseDir . '/src/ii/ItemLotSerialScreen.class.php',
+    'b6ac0f47c88ebf87101bc0916b13652e' => $baseDir . '/src/ii/ItemLotSerialFormatter.class.php',
     '7991aa9298fee401be50150adf82843e' => $baseDir . '/src/ii/ItemDocumentScreen.class.php',
     '6f2af9174ea7dfabbbdd8b5444e34c7b' => $baseDir . '/src/ii/ItemSubstituteScreen.class.php',
     '058e7e1e4647ea6058737149ee8ca429' => $baseDir . '/src/ii/ItemPricingScreen.class.php',

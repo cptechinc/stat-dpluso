@@ -21,7 +21,7 @@ class ComposerStaticInit60d0ce33873e823796c7fb8b01b9c750
         '48ec62c9e53427f2a2351d56838965d5' => __DIR__ . '/../..' . '/src/ii/ItemWarehouseStockScreen.class.php',
         '71d6fc0bbfb22a3b82c9b14178d19781' => __DIR__ . '/../..' . '/src/ii/ItemRequirementsScreen.class.php',
         '3e58fdde191e6fab8bc319d79680abd7' => __DIR__ . '/../..' . '/src/ii/ItemKitScreen.class.php',
-        'b6b6545d37681d90dd518aa8efa4aa9e' => __DIR__ . '/../..' . '/src/ii/ItemLotSerialScreen.class.php',
+        'b6ac0f47c88ebf87101bc0916b13652e' => __DIR__ . '/../..' . '/src/ii/ItemLotSerialFormatter.class.php',
         '7991aa9298fee401be50150adf82843e' => __DIR__ . '/../..' . '/src/ii/ItemDocumentScreen.class.php',
         '6f2af9174ea7dfabbbdd8b5444e34c7b' => __DIR__ . '/../..' . '/src/ii/ItemSubstituteScreen.class.php',
         '058e7e1e4647ea6058737149ee8ca429' => __DIR__ . '/../..' . '/src/ii/ItemPricingScreen.class.php',

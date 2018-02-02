@@ -14,6 +14,7 @@
 			"src/Model/Contact.class.php",
 			"src/Model/Customer.class.php",
 			"src/Model/PricingItem.class.php",
+			"src/Model/Qnote.class.php",
 			"src/DplusDateTime.class.php",
 			"src/Model/UserAction.class.php",
 			"src/UserActionDisplay.class.php",

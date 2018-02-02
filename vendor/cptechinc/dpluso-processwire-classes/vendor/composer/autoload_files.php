@@ -14,6 +14,7 @@ return array(
     '16549aec784a66a31e2f46525b4e1d36' => $baseDir . '/src/Model/Contact.class.php',
     '34090432ba33ef4a6717b80199aa69f2' => $baseDir . '/src/Model/Customer.class.php',
     'd5a3f2858c56e1d35401cc2f3a1510ed' => $baseDir . '/src/Model/PricingItem.class.php',
+    '7a2e6293c395b474896948c89ca0fd20' => $baseDir . '/src/Model/Qnote.class.php',
     'bd8bf74d70613675ab92685140191001' => $baseDir . '/src/DplusDateTime.class.php',
     'fcb8bf629f10208cb0cd7ed34611b338' => $baseDir . '/src/Model/UserAction.class.php',
     '99cdb7b00d1b32397a34259baa6470e4' => $baseDir . '/src/UserActionDisplay.class.php',

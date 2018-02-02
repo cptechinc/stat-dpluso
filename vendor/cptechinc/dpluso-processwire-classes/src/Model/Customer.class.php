@@ -24,8 +24,14 @@
                         }
                     }
                     $i++; // Get the next 
-                    echo $i;
-                    return ($i > sizeof($shiptos)) ? $shiptos[0]->shiptoid : $shiptos[$i]->shiptoid;
+                    
+                    if ($i > sizeof($shiptos)) {
+                        return $shiptos[0]->shiptoid;
+                    } elseif ($i == sizeof($shiptos)) {
+                        return $shiptos[$i - 1]->shiptoid;
+                    } else {
+                        $shiptos[$i]->shiptoid;
+                    }
                 } else {
                     return $shiptos[0]->shiptoid;
                 }

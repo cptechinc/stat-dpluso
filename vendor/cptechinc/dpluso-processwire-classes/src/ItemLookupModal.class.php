@@ -2,7 +2,7 @@
     class ItemLookupModal {
         use ThrowErrorTrait;
         
-        protected $type = 'cart';
+        protected $type = 'worksheet';
         protected $custID;
         protected $shipID;
         

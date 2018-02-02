@@ -980,6 +980,16 @@
 		$sql = Processwire\wire('database')->prepare("SELECT * FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND rectype = :type");
 		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':type' => $type);
 		$withquotes = array(true, true, true, true);
+	
+	function get_qnote($sessionID, $key1, $key2, $type, $recnbr, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('qnote');
+		$q->where('sessionid', $sessionID);
+		$q->where('key1', $key1);
+		$q->where('key2', $key2);
+		$q->where('rectype', $type);
+		$q->where('recno', $recnbr);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {

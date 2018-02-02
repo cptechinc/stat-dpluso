@@ -7,14 +7,11 @@
 
 	if ($input->get->recnbr) {
 		$recnbr = $input->get->text('recnbr');
-		$dplusnotes = get_dplusnote(session_id(), $key1, $key2, $type, $recnbr, false);
+		$dplusnotes = get_qnote(session_id(), $key1, $key2, $type, $recnbr) ;
 		$response = array('note' => $dplusnotes);
 	} else {
-		$dplusnotes = get_dplusnotes(session_id(), $key1, $key2, $type, false); 
+		$dplusnotes = get_qnotes(session_id(), $key1, $key2, $type);
 		$response = array('notes' => $dplusnotes);
 	}
 	
-	
-	
 	echo json_encode($response);
-?>

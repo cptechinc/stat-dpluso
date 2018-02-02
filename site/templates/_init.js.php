@@ -19,7 +19,7 @@
         ],
         'edit' => [
             'pricing' => [
-                'show_minpriceerror' => false
+                'allow_belowminprice' => $appconfig->allow_belowminprice
             ]
         ],
         'products' => [

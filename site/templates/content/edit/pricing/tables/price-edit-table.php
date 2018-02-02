@@ -27,6 +27,12 @@
             </div>
         </td>
     </tr>
+    
+    <tr>
+        <td colspan="2" class="hidden text-right text-danger minpricewarning">
+            This price is below the minimum!
+        </td>
+    </tr>
 
     <?php if ($appconfig->child('name=sales-orders')->use_discount) : ?>
         <tr>

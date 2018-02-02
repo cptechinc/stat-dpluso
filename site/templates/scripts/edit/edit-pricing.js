@@ -2,7 +2,7 @@
 var fields = {
     qty: ".qty", margin: ".margin", price: ".price", discountamt: ".discount-amt", discountpercent: ".discount-percent", originalprice: ".originalprice", listprice: ".listprice",
     linenumber: ".linenumber", discountprice: ".discountprice", cost: ".cost", calculatefrom: ".calculate-from", extendedamtspan: ".extended-amount-span", whse: '.item-whse', totalprice: '.totalprice',
-    minprice: ".minprice"
+    minprice: ".minprice", minpricewarning: ".minpricewarning"
 };
 
 
@@ -22,16 +22,15 @@ $(function() {
 
     $("body").on("change", fields.price, function() {
         calculate_extendedprice();
-        if ($(fields.price).val() < $(fields.minprice)) {
-            console.log('Does not meet Minimum Price');
-            if (config.edit.show_minprice_error) {
-                $(fields.price).closest('tr').addClass('has-error');
-                var descriptionrow = "<tr class='has-error'>"
-                                     +"<td class='control-label'>Error: </td>"
-                                     +"<td><p class='form-control-static text-danger'>Does not meet Minimum Price</p></td>"
-                                     + "</tr>";
-                $(fields.price).closest('tr').before(descriptionrow);
+        if ($(fields.price).val() < $(fields.minprice).val()) {
+            if (!config.edit.pricing.allow_belowminprice) {
+                $(fields.price).parent().addClass('has-error');
+                console.log('Does not meet Minimum Price');
+                $('.minpricewarning').removeClass('hidden');
             }
+        } else {
+            $(fields.price).parent().removeClass('has-error');
+            $('.minpricewarning').addClass('hidden');
         }
     });
 

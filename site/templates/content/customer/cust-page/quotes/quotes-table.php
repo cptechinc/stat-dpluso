@@ -15,6 +15,7 @@
 				</td>
 				<td><?= $quote->quotnbr; ?></td>
 				<td><?= $quote->shiptoid; ?></td>
+				<td><?= $quote->sp1name; ?></td>
 				<td><?= $quote->quotdate; ?></td>
 				<td><?= $quote->revdate; ?></td>
 				<td><?= $quote->expdate; ?></td>

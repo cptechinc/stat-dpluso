@@ -36,7 +36,7 @@ $(function() {
 			$(formid).postform({formdata: false, jsoncallback: false}, function() { //{formdata: data/false, jsoncallback: true/false}
 				$.notify({
 					icon: "glyphicon glyphicon-floppy-disk",
-					message: "Your orderhead changes have been submitted",
+					message: "Your changes have been submitted",
 				},{
 					type: "info",
 					onClose: function() {
@@ -191,7 +191,7 @@ $(expirefields.date).change(function() {
 			} else {
 				$.notify({
 					icon: "glyphicon glyphicon-floppy-saved",
-					message: "Your orderhead changes have been saved" ,
+					message: "Your changes have been saved" ,
 				},{
 					type: "success",
 					onShow: function() {

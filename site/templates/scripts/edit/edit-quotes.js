@@ -7,7 +7,7 @@ $(function() {
 			$(formid).postform({formdata: false, jsoncallback: false}, function() { //{formdata: data/false, jsoncallback: true/false}
 				$.notify({
 					icon: "glyphicon glyphicon-floppy-disk",
-					message: "Your quotehead changes have been submitted",
+					message: "Your changes have been submitted",
 				},{
 					type: "info",
 					onClose: function() {
@@ -70,7 +70,7 @@ function getquoteheadresults(qnbr, form, callback) {
 		} else {
 			$.notify({
 				icon: "glyphicon glyphicon-floppy-saved",
-				message: "Your quotehead changes have been saved" ,
+				message: "Your changes have been saved" ,
 			},{
 				type: "success",
 				onClose: function() {

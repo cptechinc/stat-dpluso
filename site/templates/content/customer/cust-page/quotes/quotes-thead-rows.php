@@ -11,6 +11,11 @@
        </a>
    </th>
    <th>
+       <a href="<?= $quotepanel->generate_tablesortbyurl("sp1name") ; ?>" class="load-link" <?= $quotepanel->ajaxdata; ?>>
+           Sales Rep <?= $quotepanel->tablesorter->generate_sortsymbol('sp1name'); ?>
+       </a>
+   </th>
+   <th>
        <a href="<?= $quotepanel->generate_tablesortbyurl("quotdate") ; ?>" class="load-link" <?= $quotepanel->ajaxdata; ?>>
            Quote Date <?= $quotepanel->tablesorter->generate_sortsymbol('quotdate'); ?>
        </a>

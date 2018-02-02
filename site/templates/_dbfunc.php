@@ -668,10 +668,125 @@
 		$sql->execute($switching);
 		return $sql->fetchColumn();
 	}
+	
+	function count_salesrepquotes($sessionID, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('COUNT(*)');
+		$q->where('sessionid', $sessionID);
+		
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_salesrepquotes($sessionID, $limit, $page, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->where('sessionid', $sessionID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_salesrepquotesquotedate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field($q->expr("STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate"));
+		$q->where('sessionid', $sessionID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order('quotedate', $sortrule, $limiting);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_salesrepquotesrevdate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field($q->expr("STR_TO_DATE(revdate, '%m/%d/%Y') as reviewdate"));
+		$q->where('sessionid', $sessionID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order('reviewdate', $sortrule, $limiting);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+		
+	function get_salesrepquotesexpdate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field($q->expr("STR_TO_DATE(expdate, '%m/%d/%Y') as expiredate"));
+		$q->where('custid', $custID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order('expiredate', $sortrule, $limiting);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_salesrepquotesorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = true, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->where('sessionid', $sessionID);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->order($orderby, $sortrule, $limiting);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'Quote');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
 
 	function count_customerquotes($sessionID, $custID, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
-		$q->field('COUNT(*) as count');
+		$q->field('COUNT(*)');
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -685,7 +800,6 @@
 	}
 
 	function get_customerquotes($sessionID, $custID, $limit, $page, $useclass = false, $debug = false) {
-		$limiting = returnlimitstatement($limit, $page);
 		$q = (new QueryBuilder())->table('quothed');
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
@@ -705,15 +819,13 @@
 	}
 	
 	function get_customerquotesquotedate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
-		$limiting = returnlimitstatement($limit, $page);
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
-		$q->field('quotdate');
 		$q->field($q->expr("STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order('quotedate', $sortrule, $limiting);
+		$q->order('quotedate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -729,7 +841,6 @@
 	}
 	
 	function get_customerquotesrevdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
-		$limiting = returnlimitstatement($limit, $page);
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field('revdate');
@@ -737,7 +848,7 @@
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order('reviewdate', $sortrule, $limiting);
+		$q->order('reviewdate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -753,7 +864,6 @@
 	}
 		
 	function get_customerquotesexpdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
-		$limiting = returnlimitstatement($limit, $page);
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field('expdate');
@@ -761,7 +871,7 @@
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order('expiredate', $sortrule, $limiting);
+		$q->order('expiredate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -777,12 +887,11 @@
 	}
 	
 	function get_customerquotesorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = true, $debug = false) {
-		$limiting = returnlimitstatement($limit, $page);
 		$q = (new QueryBuilder())->table('quothed');
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order($orderby, $sortrule, $limiting);
+		$q->order($orderby, $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -909,11 +1018,13 @@
 			}
 		}
 		$q->where('quotnbr', $quote->quotnbr);
+		$q->where('sessionid', $quote->sessionid);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery();
 		} else {
 			if ($quote->has_changes()) {
+				Processwire\wire('session')->execute = true;
 				$sql->execute($q->params);
 			}
 			return $q->generate_sqlquery($q->params);
@@ -962,24 +1073,27 @@
 
 
 /* =============================================================
-	NOTES FUNCTIONS
+	QNOTES FUNCTIONS
 ============================================================ */
-	function can_write_sales_note($sessionID, $ordn) {
-		$sql = Processwire\wire('database')->prepare("SELECT status FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn LIMIT 1 ");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn);
-		$sql->execute($switching);
-		$status = $sql->fetchColumn();
-		if (strtolower($status) == "open" || strtolower($status) == "new") {
-			return true;
+	function get_qnotes($sessionID, $key1, $key2, $type, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('qnote');
+		$q->where('sessionid', $sessionID);
+		$q->where('key1', $key1);
+		$q->where('key2', $key2);
+		$q->where('rectype', $type);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
 		} else {
-			return false;
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'QNote');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
-
-	function get_dplusnotes($sessionID, $key1, $key2, $type, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND rectype = :type");
-		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':type' => $type);
-		$withquotes = array(true, true, true, true);
 	
 	function get_qnote($sessionID, $key1, $key2, $type, $recnbr, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('qnote');
@@ -991,86 +1105,139 @@
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'QNote');
+				return $sql->fetch();
+			}
+			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}
-
-	function getdplusnotecount($sessionID, $key1, $key2, $type, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND rectype = :type");
-		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':type' => $type);
-		$withquotes = array(true, true, true, true);
+	
+	function count_qnotes($sessionID, $key1, $key2, $type, $debug = false) {
+		$q = (new QueryBuilder())->table('qnote');
+		$q->field($q->expr('COUNT(*)'));
+		$q->where('sessionid', $sessionID);
+		$q->where('key1', $key1);
+		$q->where('key2', $key2);
+		$q->where('rectype', $type);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
-	function hasdplusnote($sessionID, $key1, $key2, $type) {
-		if (getdplusnotecount($sessionID, $key1, $key2, $type, false)) {
+	function has_dplusnote($sessionID, $key1, $key2, $type) {
+		if (count_qnotes($sessionID, $key1, $key2, $type)) {
 			return 'Y';
 		} else {
 			return 'N';
 		}
 	}
-
-	function get_dplusnote($sessionID, $key1, $key2, $type, $recnbr, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND rectype = :type AND recno = :recnbr");
-		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':type' => $type, ':recnbr' => $recnbr);
-		$withquotes = array(true, true, true, true, true);
+	
+	function update_note($sessionID, Qnote $qnote, $debug = false) {
+		$originalnote = Qnote::load($sessionID, $qnote->key1, $qnote->key2, $qnote->rectype, $qnote->recno); // LOADS as Class
+		$q = (new QueryBuilder())->table('qnote');
+		$q->mode('update');
+		$q->set('notefld', $qnote->notefld);
+		$q->where('sessionid', $sessionID);
+		$q->where('key1', $qnote->key1);
+		$q->where('key2', $qnote->key2);
+		$q->where('form1', $qnote->form1);
+		$q->where('form2', $qnote->form2);
+		$q->where('form3', $qnote->form3);
+		$q->where('form4', $qnote->form4);
+		$q->where('form5', $qnote->form5);
+		$q->where('recno', $qnote->recno);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
+			$sql->execute($q->params);
+			return array(
+				'sql' => $q->generate_sqlquery($q->params), 
+				'success' => $sql->rowCount() ? true : false, 
+				'updated' => $sql->rowCount() ? true : false, 
+				'querytype' => 'update'
+			);
 		}
 	}
-
-
-	function edit_note($sessionID, $key1, $key2, $form1, $form2, $form3, $form4, $form5, $note, $recnbr, $date, $time, $width) {
-		$sql = Processwire\wire('database')->prepare("UPDATE qnote SET notefld = :note  WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND form1 = :form1 AND form2 = :form2 AND form3 = :form3 AND form4 = :form4 AND form5 = :form5 AND recno = :recnbr");
-		$switching = array(':note' => $note, ':form1' => $form1, ':form2' => $form2, ':form3' => $form3, ':form4' => $form4, ':form5' => $form5, ':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':recnbr' => $recnbr);
-		$withquotes = array(true, true, true, true, true, true, true, true, true, true);
-		$sql->execute($switching);
-		return returnsqlquery($sql->queryString, $switching, $withquotes);
+	
+	function add_qnote($sessionID, Qnote $qnote, $debug = false) {
+		$q = (new QueryBuilder())->table('qnote');
+		wire('session')->obj = json_encode(get_object_vars($qnote));
+		$q->mode('insert');
+		$qnote->recno = get_maxqnoterecnbr($qnote->sessionid, $qnote->key1, $qnote->key2, $qnote->rectype) + 1;
+		
+		foreach ($qnote->_toArray() as $property => $value) {
+			$q->set($property, $value);
+		}
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return array(
+				'sql' => $q->generate_sqlquery($q->params), 
+				'success' => $sql->rowCount() ? true : false, 
+				'updated' => $sql->rowCount() ? true : false, 
+				'querytype' => 'insert'
+			);
+		}
 	}
-
-	function deletenote($sessionID, $key1, $key2, $form1, $form2, $form3, $form4, $form5, $rectype, $recnbr) {
-		$sql = Processwire\wire('database')->prepare("DELETE FROM qnote WHERE sessionid = :sessionID AND key1 = :key1 AND key2 = :key2 AND form1 = :form1 AND form2 = :form2 AND form3 = :form3 AND form4 = :form4 AND form5 = :form5 AND recno = :recnbr AND rectype = :rectype");
-		$switching = array(':sessionID' => $sessionID, ':key1' => $key1, ':key2' => $key2, ':form1' => $form1, ':form2' => $form2, ':form3' => $form3, ':form4' => $form4, ':form5' => $form5, ':recnbr' => $recnbr, ':rectype' => $rectype);
-		$withquotes = array(true, true, true, true, true, true, true, true, true, true);
-		$sql->execute($switching);
-		return returnsqlquery($sql->queryString, $switching, $withquotes);
+	
+	function get_maxqnoterecnbr($sessionID, $key1, $key2, $rectype, $debug = false) {
+		$q = (new QueryBuilder())->table('qnote');
+		$q->field($q->expr('MAX(recno)'));
+		$q->where('sessionid', $sessionID);
+		$q->where('key1', $key1);
+		$q->where('key2', $key2);
+		//$q->where('rectype', $rectype);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return intval($sql->fetchColumn());
+		}
 	}
-
-	function insert_note($sessionID, $key1, $key2, $form1, $form2, $form3, $form4, $form5, $note, $rectype, $recno, $date, $time, $width) { // FIXME USE PARAMATERS
-		$sql = "INSERT INTO qnote (sessionid, notefld, key1, key2, form1, form2, form3, form4, form5, rectype, recno, date, time, colwidth) VALUES ('$sessionID', '$note',
-		'$key1', '$key2', '$form1', '$form2', '$form3', '$form4', '$form5', '$rectype', '$recno', '$date', '$time', '$width')";
-		Processwire\wire('database')->query($sql);
-		return $sql;
+	
+	function delete_note($sessionID, Qnote $qnote, $debug = false) {
+		$q = (new QueryBuilder())->table('qnote');
+		$q->mode('delete');
+		$q->where('sessionid', $sessionID);
+		$q->where('key1', $qnote->key1);
+		$q->where('key2', $qnote->key2);
+		$q->where('form1', $qnote->form1);
+		$q->where('form2', $qnote->form2);
+		$q->where('form3', $qnote->form3);
+		$q->where('form4', $qnote->form4);
+		$q->where('form5', $qnote->form5);
+		$q->where('recno', $qnote->recno);
+		$q->where('rectype', $qnote->rectype);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return array(
+				'sql' => $q->generate_sqlquery($q->params), 
+				'success' => $sql->rowCount() ? true : false, 
+				'updated' => $sql->rowCount() ? true : false, 
+				'querytype' => 'update'
+			);
+		}
 	}
-
-	function insertdplusnote($sessionID, $key1, $key2, $form1, $form2, $form3, $form4, $form5, $note, $rectype, $recno, $date, $time, $width) {// FIXME USE PARAMATERS
-		$sql = Processwire\wire('database')->prepare("INSERT INTO qnote (sessionid, notefld, key1, key2, form1, form2, form3, form4, form5, rectype, recno, date, time, colwidth) VALUES (:sessionID, :note,
-		:key1, :key2, :form1, :form2, :form3, :form4, :form5, :rectype, :recno, :date, :time, :width)");
-		$switching = array(':sessionID' => $sessionID, ':note' => $note, ':key1' => $key1, ':key2' => $key2, ':form1' => $form1, ':form2' => $form2, ':form3' => $form3, ':form4' => $form4, ':form5' => $form5, ':rectype' => $rectype, ':recno' => $recno, ':date' => $date, ':time' => $time, ':width' => $width);
-		$withquotes = array(true, true, true, true, true, true, true, true, true, true, true, true, true, true);
-		$sql->execute($switching);
-		return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => Processwire\wire('database')->lastInsertId());
-	}
-
-	function get_next_note_recno($sessionID, $key1, $key2, $rectype) { // FIXME USE PARAMATERS
-		$sql = "SELECT MAX(recno) as max FROM qnote WHERE sessionid = '$sessionID' AND key1 = '$key1' AND key2 = '$key2' AND rectype = '$rectype'";
-		$res = Processwire\wire('database')->query($sql);
-		$result = $res->fetchColumn();
-		$nextrecnbr =  intval($result) + 1;
-		return $nextrecnbr;
-	}
-
 
 /* =============================================================
 	PRODUCT FUNCTIONS
@@ -1514,14 +1681,17 @@
 			if ($column != 'Y') { return false; } else { return true; }
 		}
 	}
-
+	
 	function get_orderhead($sessionID, $ordn, $useclass = false, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn AND type = 'O'");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->where('sessionid', $sessionID);
+		$q->where('orderno', $ordn);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			if ($useclass) {
 				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder'); // CAN BE SalesOrder|SalesOrderEdit
 				return $sql->fetch();

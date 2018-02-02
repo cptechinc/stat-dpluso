@@ -16,7 +16,6 @@
 				</select>
 			</td>
 		</tr>
-   		<?php include $config->paths->content.'edit/orders/orderhead/phone-intl.php'; ?>
     	<?php include $config->paths->content.'edit/orders/orderhead/phone-domestic.php'; ?>
     <?php else : ?>
     	<?php include $config->paths->content.'edit/orders/orderhead/phone-domestic.php'; ?>
@@ -24,7 +23,7 @@
     
     <tr>
     	<td class="control-label">Contact Email</td>
-        <td> <input type="email" name="contact-email" class="form-control input-sm email" value="<?= $order->email; ?>"> </td>
+        <td> <input type="text" name="contact-email" class="form-control input-sm email" value="<?= $order->email; ?>"> </td>
     </tr>
 </table>
 

@@ -16,7 +16,6 @@
 				</select>
 			</td>
 		</tr>
-   		<?php include $config->paths->content.'edit/quotes/quotehead/phone-intl.php'; ?>
     	<?php include $config->paths->content.'edit/quotes/quotehead/phone-domestic.php'; ?>
     <?php else : ?>
     	<?php include $config->paths->content.'edit/quotes/quotehead/phone-domestic.php'; ?>

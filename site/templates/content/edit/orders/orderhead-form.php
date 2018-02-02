@@ -32,13 +32,6 @@
 	<?php if (!$editorderdisplay->canedit) : ?>
 		<?= $editorderdisplay->generate_confirmationlink($order); ?>
 	<?php else : ?>
-		<div class="row">
-			<div class="col-sm-6 form-group">
-				 <?= $editorderdisplay->generate_discardchangeslink($order); ?>
-			</div>
-			<div class="col-sm-6 form-group">
-				<?= $editorderdisplay->generate_saveunlocklink($order); ?>
-			</div>
-		</div>
+		<?= $editorderdisplay->generate_saveunlocklink($order); ?>
 	<?php endif; ?>
 </form>

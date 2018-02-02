@@ -38,6 +38,14 @@
             return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Quotes");
         }
 		
+		public function generate_refreshlink() {
+            $bootstrap = new Contento();
+            $href = $this->generate_loadurl();
+            $icon = $bootstrap->createicon('fa fa-refresh');
+            $ajaxdata = $this->generate_ajaxdataforcontento();
+            return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Quotes");
+        }
+		
 		public function generate_expandorcollapselink(Order $quote) {
 			$bootstrap = new Contento();
 			
@@ -186,5 +194,14 @@
             $bootstrap = new Contento();
             $href = $this->generate_detailviewediturl($quote, $detail);
             return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);    
+        }
+		
+		public function generate_lastloadeddescription() {
+            if (Processwire\wire('session')->{'quotes-loaded-for'}) {
+                if (Processwire\wire('session')->{'quotes-loaded-for'} == Processwire\wire('user')->loginid) {
+                    return 'Last Updated : ' . Processwire\wire('session')->{'quotes-updated'};
+                }
+            }
+            return '';
         }
 	}

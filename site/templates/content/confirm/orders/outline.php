@@ -3,7 +3,7 @@
 </div>
 <div class="row">
 	<div class="col-sm-6">
-		<img src="<?= $config->urls->files."images/dplus.png"; ?>" alt="">
+		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
 	</div>
 	<div class="col-sm-6 text-right">
 		<h1>Order # <?= $order->orderno; ?></h1>
@@ -72,19 +72,19 @@
 		</tr>
 	<?php endforeach; ?>
 	<tr>
-		<td></td> <td><b>Subtotal</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($order->odrsubtot); ?></td>
+		<td></td> <td><b>Subtotal</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->odrsubtot); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Tax</b></td> <td></td> <td colspan="2" class="text-right">$ <?= formatmoney($order->odrtax); ?></td>
+		<td></td><td><b>Tax</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->odrtax); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Freight</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($order->odrfrt); ?></td>
+		<td></td><td><b>Freight</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->odrfrt); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Misc.</b></td> <td></td> <td></td><td class="text-right">$ <?= formatmoney($order->odrmis); ?></td>
+		<td></td><td><b>Misc.</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->odrmis); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Total</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($order->odrtotal); ?></td>
+		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->odrtotal); ?></td>
 	</tr>
 </table>
 <hr>

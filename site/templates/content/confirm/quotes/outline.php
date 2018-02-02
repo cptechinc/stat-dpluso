@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-sm-6">
-		<img src="<?= $config->urls->files."images/dplus.png"; ?>" alt="">
+		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
 	</div>
 	<div class="col-sm-6 text-right">
 		<h1>Summary for Quote # <?= $qnbr; ?></h1>
@@ -65,7 +65,6 @@
 	</tr>
 	<?php $details = $quotedisplay->get_quotedetails($quote); ?>
 	<?php foreach ($details as $detail) : ?>
-		<?php $qtyo = $detail->ordrqty + 0; ?>
 		<tr class="detail">
 			<td>
 				<?= $detail->itemid; ?>
@@ -78,23 +77,23 @@
             </td>
 			<td class="text-right"> <?= intval($detail->ordrqty); ?> </td>
 			<td class="text-right">$ <?= formatmoney($detail->ordrprice); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->ordrprice * $qtyo) ?> </td>
+			<td class="text-right">$ <?= formatmoney($detail->ordrprice * intval($detail->ordrqty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>
-		<td></td> <td><b>Subtotal</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($quote->subtotal); ?></td>
+		<td></td> <td><b>Subtotal</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->subtotal); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Tax</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($quote->salestax); ?></td>
+		<td></td><td><b>Tax</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->salestax); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Freight</b></td> <td></td> <td></td><td class="text-right">$ <?=formatmoney($quote->freight); ?></td>
+		<td></td><td><b>Freight</b></td> <td colspan="3" class="text-right">$ <?=formatmoney($quote->freight); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Misc.</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($quote->miscellaneous); ?></td>
+		<td></td><td><b>Misc.</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->miscellaneous); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Total</b></td> <td></td> <td></td> <td class="text-right">$ <?= formatmoney($quote->order_total); ?></td>
+		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->order_total); ?></td>
 	</tr>
 </table>
 

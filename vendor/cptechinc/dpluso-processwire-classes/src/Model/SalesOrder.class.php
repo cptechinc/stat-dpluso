@@ -110,7 +110,11 @@
 
 		public function can_edit() {
 			$config = Processwire\wire('pages')->get('/config/')->child("name=sales-orders");
-			return $config->allow_edit ? ($this->editord == 'Y' ? true : false) : false;
+			$allowed = $config->allow_edit;
+			if (!$config->allow_edit) {
+				$allowed = has_dpluspermission(wire('user')->loginid, 'eso');
+			}
+			return $allowed ? ($this->editord == 'Y' ? true : false) : false;
 		}
 
 		public function is_phoneintl() {
@@ -130,4 +134,11 @@
 		public static function remove_nondbkeys($array) {
 			return $array;
 		}
+		
+		/* =============================================================
+           CRUD FUNCTIONS
+       ============================================================ */
+        public static function load($sessionID, $ordn) {
+            return get_orderhead($sessionID, $ordn, true, false);
+        }
 	}

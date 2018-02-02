@@ -35,7 +35,7 @@
             } else {
                 $quotes = get_customerquotes($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $useclass, $debug);
             }
-            return $debug ? $quotes: $this->quotes= $quotes;
+            return $debug ? $quotes: $this->quotes = $quotes;
         }
         
         /* =============================================================
@@ -47,14 +47,6 @@
             $url->query->set('action', 'load-cust-quotes');
             $url->query->set('custID', $this->custID);
             return $url->getUrl();
-        }
-        
-        public function generate_refreshlink() {
-            $bootstrap = new Contento();
-            $href = $this->generate_loadurl();
-            $icon = $bootstrap->createicon('fa fa-refresh');
-            $ajaxdata = $this->generate_ajaxdataforcontento();
-            return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Quotes");
         }
         
         public function generate_loaddetailsurl(Order $quote) {

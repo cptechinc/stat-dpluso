@@ -6,8 +6,6 @@
 	$quotepanel->get_quotecount();
 	
 	$paginator = new Paginator($quotepanel->pagenbr, $quotepanel->count, $quotepanel->pageurl->getUrl(), $quotepanel->paginationinsertafter, $quotepanel->ajaxdata);
-	
-	// echo $quotepanel->get_quotes(true);
 ?>
 <div class="panel panel-primary not-round" id="quotes-panel">
     <div class="panel-heading not-round" id="quotes-panel-heading">

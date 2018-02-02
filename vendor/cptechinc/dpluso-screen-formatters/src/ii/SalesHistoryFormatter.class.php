@@ -54,7 +54,6 @@
             							$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
             							$colspan = $column['col-length'];
             							$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
-										
 										if ($column['id'] == 'Invoice Number') {
 											$url->query->setData(array('itemID' => $this->json['itemid'], 'ordn' => $ordn, 'returnpage' => urlencode(Processwire\wire('page')->fullURL->getUrl())));
 											$href = $url->getUrl();

@@ -4,7 +4,8 @@
 		protected $formatter = false; // WILL BE JSON DECODED ARRAY
 		protected $tableblueprint = false; // WILL BE ARRAY
 		protected $source;
-	
+		protected $datetypes = array('m/d/y' => 'MM/DD/YY', 'm/d/Y' => 'MM/DD/YYYY', 'm/d' => 'MM/DD', 'm/Y' => 'MM/YYYY');
+		
 		/* =============================================================
            CONSTRUCTOR AND SETTER FUNCTIONS
        ============================================================ */
@@ -32,6 +33,18 @@
                 $this->load_formatter();
             }
             return $this->formatter;
+		}
+		
+		public function get_defaultformattercolumn() {
+			return array(
+				"line" => 0,
+				"column"=> 0,
+				"col-length"=> 0,
+				"label"=> "Label",
+				"before-decimal"=> false,
+				"after-decimal"=> false,
+				"date-format"=> false
+			);
 		}
 		
 		/* =============================================================
@@ -152,6 +165,14 @@
 				return $json;
 			}
 			
+			public function can_edit() {
+	            $allowed = false;
+	            if (Processwire\wire('users')->get("name=".Processwire\wire('user')->loginid)->count) {
+	               $allowed = Processwire\wire('users')->get("name=".Processwire\wire('user')->loginid)->hasPermission('setup-screen-formatter');
+	            }
+				return $allowed;
+	        }
+			
 		/* =============================================================
           INTERNAL FUNCTIONS
        	============================================================ */
@@ -192,7 +213,8 @@
             
                 for ($i = 1; $i < $this->formatter[$section]['rows'] + 1; $i++) {
             		$table[$section]['rows'][$i] = array('columns' => array());
-            		foreach($columns as $column) {
+            		foreach ($columns as $column) {
+						echo $column . "<br>";
             			if ($this->formatter[$section]['columns'][$column]['line'] == $i) {
             				$col = array(
             					'id' => $column, 

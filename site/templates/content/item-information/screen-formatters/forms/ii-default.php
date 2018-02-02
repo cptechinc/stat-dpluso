@@ -1,6 +1,3 @@
-<?php
-	$datetypes = array('m/d/y' => 'MM/DD/YY', 'm/d/Y' => 'MM/DD/YYYY', 'm/d' => 'MM/DD', 'm/Y' => 'MM/YYYY')
-?>
 <ol class="breadcrumb">
 	<li><a href="<?= $page->parent->parent->url; ?>"><?= $page->parent->parent->title; ?></a></li>
 	<li><a href="<?= $page->parent->url; ?>"><?= $page->parent->title; ?></a></li>
@@ -45,7 +42,7 @@
 		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Save Configuration</button>
 	<?php endif; ?>
 
-	<?php if ($users->get("name=".$user->loginid)->hasPermission('setup-screen-formatter')) : ?>
+	<?php if ($tableformatter->can_edit()) : ?>
 		<button type="button" class="btn btn-emerald" onclick="save_tableformatterfor('default')"><i class="glyphicon glyphicon-floppy-disk"></i> Save as Default</button>
 	<?php endif; ?>
 </form>

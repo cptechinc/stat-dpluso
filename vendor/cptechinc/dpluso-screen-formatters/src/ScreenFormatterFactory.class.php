@@ -30,6 +30,7 @@
             'ii-requirements' => 'II_ItemRequirementsScreen',
             'ii-kit' => 'II_ItemKitScreen',
             'ii-lot-serial' => 'II_ItemLotSerialScreen',
+            'ii-lot-serial' => 'II_ItemLotSerialFormatter',
             'ii-documents' => 'II_ItemDocumentScreen',
             'ii-substitutes' => 'II_ItemSubstituteScreen',
             'ii-pricing' => 'II_ItemPricingScreen',

@@ -8,12 +8,12 @@
 			<td class="field"><?= $column; ?></td>
 			<td>
 				<?php if ($tableformatter->fields['data'][$datasection][$column]['type'] == 'D') : ?>
-					<select class="form-control input-sm" name="<?php echo $name."-date-format";?>">
-						<?php foreach ($datetypes as $key => $value) : ?>
+					<select class="form-control input-sm" name="<?= $name."-date-format";?>">
+						<?php foreach ($tableformatter->datetypes as $key => $value) : ?>
 							<?php if ($key == $tableformatter->formatter[$datasection]['columns'][$column]['date-format']) : ?>
-								<option value="<?= $key; ?>" selected><?php echo $value . ' - '. date($key); ?></option>
+								<option value="<?= $key; ?>" selected><?= $value . ' - '. date($key); ?></option>
 							<?php else : ?>
-								<option value="<?= $key; ?>"><?php echo $value . ' - '. date($key); ?></option>
+								<option value="<?= $key; ?>"><?= $value . ' - '. date($key); ?></option>
 							<?php endif; ?>
 						<?php endforeach; ?>
 					</select>
@@ -31,10 +31,11 @@
 					</div>
 				<?php endif; ?>
 			</td>
-			<td><input type="text" class="form-control input-sm qty-sm <?= $datasection; ?>-line" name="<?= $name."-line";?>" value="<?= $tableformatter->formatter[$datasection]['columns'][$column]['line']; ?>"></td>
-			<td><input type="text" class="form-control input-sm qty-sm column" name="<?= $name."-column";?>" value="<?= $tableformatter->formatter[$datasection]['columns'][$column]['column']; ?>"></td>
-			<td><input type="text" class="form-control input-sm qty-sm column-length" name="<?= $name."-length";?>" value="<?= $tableformatter->formatter[$datasection]['columns'][$column]['col-length']; ?>"></td>
-			<td><input type="text" class="form-control input-sm col-label" name="<?= $name."-label";?>" value="<?= $tableformatter->formatter[$datasection]['columns'][$column]['label']; ?>"></td>
+			<?php $columndefinition = array_key_exists($column, $tableformatter->formatter[$datasection]['columns']) ? $tableformatter->formatter[$datasection]['columns'][$column] : $tableformatter->get_defaultformattercolumn(); ?>
+			<td><input type="text" class="form-control input-sm qty-sm <?= $datasection; ?>-line" name="<?= $name."-line";?>" value="<?= $columndefinition['line']; ?>"></td>
+			<td><input type="text" class="form-control input-sm qty-sm column" name="<?= $name."-column";?>" value="<?= $columndefinition['column']; ?>"></td>
+			<td><input type="text" class="form-control input-sm qty-sm column-length" name="<?= $name."-length";?>" value="<?= $columndefinition['col-length']; ?>"></td>
+			<td><input type="text" class="form-control input-sm col-label" name="<?= $name."-label";?>" value="<?= $columndefinition['label']; ?>"></td>
 		</tr>
 	<?php endforeach; ?>
 </table>

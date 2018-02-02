@@ -109,6 +109,59 @@
 				$session->sql = insert_note(session_id(), $key1, $key2, $form1, $form2, $form3, $form4, $form5, $note, $notetype, $recnbr, $date, $time, $notewidth);
 			}
 			break;
+		case 'edit-note':
+			$type = $input->post->text('type');
+			$recnbr = $input->post->text('recnbr');
+			$key1 = $input->post->text('key1');
+			$key2 = $input->post->text('key2');
+			$note = Qnote::load(session_id(), $key1, $key2, $type, $recnbr);
+			$note->form1 = $input->post->form1 ? "Y" : "N"; $note->form2 = $input->post->form2 ? "Y" : "N";
+			$note->form3 = $input->post->form3 ? "Y" : "N"; $note->form4 = $input->post->form4 ? "Y" : "N";
+			$note->form5 = ($note->rectype == Qnote::get_qnotetype('sales-order')) ? '' : ($input->post->form5 ? "Y" : "N");
+			$note->notefld = addslashes($input->post->text('note'));
+			$session->sql = $note->update();
+			
+			$data = array(
+				'DBNAME' => $config->dbName, 
+				'RQNOTE' => $note->rectype , 
+				'KEY1' => $note->key1, 
+				'KEY2' => $note->key2,
+				'FORM1' => $note->form1,
+				'FORM2' => $note->form2,
+				'FORM3' => $note->form3,
+				'FORM4' => $note->form4,
+			);
+			if ($note->rectype != Qnote::get_qnotetype('sales-order')) {
+				$data['FORM5'] = $note->form5;
+			}
+			break;
+		case 'add-note':
+			$note = new QNote();
+			$note->sessionid = session_id();
+			$note->rectype = $input->post->text('type');
+			$note->key1 = $input->post->text('key1');
+			$note->key2 = $input->post->text('key2');
+			$note->form1 = $input->post->form1 ? "Y" : "N"; $note->form2 = $input->post->form2 ? "Y" : "N";
+			$note->form3 = $input->post->form3 ? "Y" : "N"; $note->form4 = $input->post->form4 ? "Y" : "N";  
+			$note->form5 = ($note->rectype == Qnote::get_qnotetype('sales-order')) ? '' : ($input->post->form5 ? "Y" : "N");
+			$note->notefld = addslashes($input->post->text('note'));
+			$session->sql = $note->add();
+			
+			$data = array(
+				'DBNAME' => $config->dbName, 
+				'RQNOTE' => $note->rectype, 
+				'KEY1' => $note->key1, 
+				'KEY2' => $note->key2,
+				'FORM1' => $note->form1,
+				'FORM2' => $note->form2,
+				'FORM3' => $note->form3,
+				'FORM4' => $note->form4,
+				'FORM5' => $note->form5
+			);
+			if ($note->rectype != Qnote::get_qnotetype('sales-order')) {
+				$data['FORM5'] = $note->form5;
+			}
+			break;
 		case 'write-quote-note':
 			$form1 = $input->post->form1 ? "Y": "N";  $form2 = $input->post->form2 ? "Y": "N";
 			$form3 = $input->post->form3 ? "Y": "N";  $form4 = $input->post->form4 ? "Y": "N";  $form5 = $input->post->form5 ? "Y": "N";

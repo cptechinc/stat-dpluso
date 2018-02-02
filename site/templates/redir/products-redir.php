@@ -308,5 +308,4 @@
 
     writedplusfile($data, $filename);
 	header("location: /cgi-bin/" . $config->cgi . "?fname=" . $filename);
- 	exit;
-?>
+	exit;

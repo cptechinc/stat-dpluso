@@ -3,7 +3,7 @@
     $config->nonstockitems = array('N');
     $config->fob_array = array('Origin' => 'O', 'Delivery' => 'D');
     $config->dplusnotes = array(
-        'order' => array(
+        'sales-order' => array(
             'width' => '35', 'type' => 'SORD', 'forms' => 4, 'form1' => 'Pick Ticket', 'form2' => 'Pack Ticket', 'form3' => 'Invoice', 'form4' => 'Acknowledgement'
         ),
         'quote' => array(

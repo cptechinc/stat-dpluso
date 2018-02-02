@@ -48,11 +48,6 @@
 	*		QUOTENO=$qnbr
 	*		CUSTID=$custID
 	*		break;
-	*	case 'edit-quote':
-	*		DBNAME=$config->DBNAME
-	*		EDITQUOTE=$qnbr
-	*		QUOTENO=$qnbr
-	*		break;
 	*	case 'edit-new-quote':
 	*		DBNAME=$config->DBNAME
 	*		EDITQUOTE=$qnbr
@@ -74,13 +69,14 @@
 	*	case 'add-multiple-items':
 	*		DBNAME=$config->DBNAME
 	*		ORDERADDMULTIPLE
-	*		ORDERNO=$ordn
+	*		QUOTENO=$ordn
 	*		ITEMID=$custID   QTY=$qty  **REPEAT
 	*		break;
 	*	case 'add-nonstock-item':
 	*		DBNAME=$config->DBNAME
-	*		QUOTNO=$qnbr
 	*		UPDATEQUOTEDETAIL
+	*		QUOTENO=$qnbr
+	*		LINENO=0
 	*		ITEMID=N
 	*		QTY=$qty
 	*		CUSTID=$custID
@@ -98,16 +94,19 @@
 	*		LINENO=$linenbr
 	*		QTY=0
 	*		break;
+	*	case 'remove-line-get' // SAME AS ABOVE
+	*		break;
 	*	case 'unlock-quote':
 	*		UNLOCKING QUOTE
 	*		break;
 	*	case 'send-quote-to-order':
-	*		SETTING UP QUOTE TO ORDER
+	*		DBNAME=$config->DBNAME
+	*		QUOTETOORDER
+	*		QUOTENO=$quotnbr
+	*		LINENO = 'ALL'
 	*		break;
 	* }
-	*
 	**/
-
 
 
 	switch ($action) {
@@ -128,12 +127,17 @@
 			$qnbr = $input->get->text('qnbr');
 			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
+			
 			if ($input->get->lock) {
 				$session->loc = $config->pages->editquote."?qnbr=".$qnbr;
 			} elseif ($input->get->print) {
 				$session->loc = $config->pages->print."quote/?qnbr=".$qnbr;
 			} else {
-				$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$qnbr.$linkaddon;
+				if ($input->get->custID) {
+					$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$qnbr.$linkaddon;
+				} else {
+					$session->loc = $config->pages->ajax."load/quotes/salesrep/?qnbr=".$qnbr.$linkaddon;
+				}
 			}
 			break;
 		case 'get-quote-details-print': // DEPRECATED 10/30/2017
@@ -147,7 +151,7 @@
 			$date = date('Ymd');
 			$time = date('Hi');
 			$custID = get_custidfromquote(session_id(), $qnbr, false);
-			$data = array('DBNAME' => $config->dbName, 'EDITQUOTE' => $qnbr, 'QUOTENO' => $qnbr);
+			$data = array('DBNAME' => $config->dbName, 'EDITQUOTE' => false, 'QUOTENO' => $qnbr);
 			$session->loc= $config->pages->editquote."?qnbr=".$qnbr;
 			break;
 		case 'edit-new-quote':
@@ -161,13 +165,6 @@
 			$qnbr = $input->post->text('qnbr');
 			$quote = get_quotehead(session_id(), $qnbr, false);
 			$quote = Quote::load(session_id(), $qnbr);
-			//$quote->status = ''; //TODO ON FORM
-			// $quote->btname = $input->post->text('cust-name');
-			// $quote->btadr1 = $input->post->text('cust-address');
-			// $quote->btadr2 = $input->post->text('cust-address2');
-			// $quote->btcity = $input->post->text('cust-city');
-			// $quote->btstate = $input->post->text('cust-state');
-			// $quote->btzip = $input->post->text('cust-zip');
 			$quote->shiptoid = $input->post->text('shiptoid');
 			$quote->stname = $input->post->text('shiptoname');
 			$quote->stadr1 = $input->post->text('shipto-address');
@@ -184,18 +181,17 @@
 			$quote->deliverydesc = $input->post->text('delivery');
 			$quote->custpo = $input->post->text('custpo');
 			$quote->custref = $input->post->text('reference');
-			$quote->telenbr = str_replace('-', '', $input->post->text('contact-phone'));
-			$quote->faxnbr = str_replace('-', '', $input->post->text('contact-fax'));
-
+			$quote->telenbr = $input->post->text('contact-phone');
+			$quote->faxnbr = $input->post->text('contact-fax');
+			$haschanges = $quote->has_changes();
 			$session->sql = $quote->update();
-			$session->quoteupdated = 'yes';
 		
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEHEAD' => false, 'QUOTENO' => $qnbr);
 			
 			if ($input->post->exitquote) {
 				$session->loc = $config->pages->edit."quote/confirm/?qnbr=".$qnbr.$linkaddon;
 				
-				if (!$quote->has_changes()) {
+				if (!$haschanges) {
 					$data = array('UNLOCKING QUOTE' => false);
 				}
 			} else {

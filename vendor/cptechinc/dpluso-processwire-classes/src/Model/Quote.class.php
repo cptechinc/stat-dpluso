@@ -79,7 +79,7 @@
 		}
 
 		public function has_notes() {
-			return $this->notes == 'Y' ? true : false;
+			return $this->notes == 'Y' ? true : count_qnotes($this->sessionid, $this->quotnbr, '0', Qnote::get_qnotetype('quote'));
 		}
 
 		public function can_edit() {
@@ -123,11 +123,9 @@
            
            foreach ($properties as $property) {
                if ($this->$property != $quote->$property) {
-                   Processwire\wire('session')->property = $property;
                    return true;
                }
            }
            return false;
        }
-       
     }

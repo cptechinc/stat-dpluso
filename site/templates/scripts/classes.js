@@ -22,17 +22,13 @@ function dplusquotenotevalues(form, quotetf) { // DEPRECATED 1/9/2018 DELETE BY 
     this.form2 = 'N';
     this.form3 = 'N';
     this.form4 = 'N';
-    if (quotetf) {
-        this.form5 = 'N';
-    }
+    this.form5 = 'N';
 
     if ($(form.form1).prop('checked')) { this.form1 = 'Y'; }
     if ($(form.form2).prop('checked')) { this.form2 = 'Y'; }
     if ($(form.form3).prop('checked')) { this.form3 = 'Y'; }
     if ($(form.form4).prop('checked')) { this.form4 = 'Y'; }
-    if (quotetf) {
-        if ($(form.form5).prop('checked')) { this.form5 = 'Y'; }
-    }
+    if ($(form.form5).prop('checked')) { this.form5 = 'Y'; }
 }
 
 function dplusqnotevalues(form) {

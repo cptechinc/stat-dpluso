@@ -16,8 +16,8 @@
 					<p class="text-center"><?= $user->loginid; ?></p>
 				</div>
 				<ul class="list-group">
-					<?php if (wire('users')->get("name=$user->loginid")->count) : ?>
-						<?php if (wire('users')->get("name=$user->loginid")->hasPermission('setup-screen-formatter')) : ?>
+					<?php if ($users->find("name=$user->loginid")->count) : ?>
+						<?php if ($users->get("name=$user->loginid")->hasPermission('setup-screen-formatter')) : ?>
 							<a href="<?= $config->pages->tableformatters; ?>" class="list-group-item">Screen Configurations</a>
 						<?php endif; ?>
 					<?php else : ?>

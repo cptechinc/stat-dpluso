@@ -969,7 +969,7 @@ $(document).ready(function() {
 			} else if (options.html) {
 				$.post(options.action, options.formdata, function(html) {callback(html);});
 			} else {
-				$.post(options.action, options.formdata).done(callback());
+				$.post(options.action, options.formdata).done(function() {callback();});
 			}
 		},
 		postformsync: function(options, callback) {

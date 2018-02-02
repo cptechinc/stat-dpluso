@@ -87,27 +87,24 @@ $(function() {
 
 	$("body").on("submit", "#ii-sales-history-form", function(e) {
 		e.preventDefault();
-		var formid = '#'+$(this).attr('id');
+		var form = $(this);
 		var modal = config.modals.ajax;
 		var loadinto = modal+" .modal-content";
 		var itemID = $(itemlookupform + " .itemID").val();
 		var custID = $(itemlookupform + " .custID").val();
 		var href = URI(config.urls.products.ii.load.ii_saleshistory).addQuery("itemID", itemID)
-														.addQuery("custID", custID)
-														.addQuery('modal', 'modal')
-														.query(cleanparams)
-														.toString();
+																	.addQuery("custID", custID)
+																	.addQuery('modal', 'modal')
+																	.query(cleanparams)
+																	.toString();
 		showajaxloading();
-		$(formid).postform({formdata: false, jsoncallback: false}, function() { //form, overwriteformdata, returnjson, callback
+		form.postform({}, function() { //form, overwriteformdata, returnjson, callback
 			$(modal).modal('hide');
 			$(loadinto).loadin(href, function() {
-				wait(2500, function() {
-					hideajaxloading();
-					$(modal).find('.modal-body').addClass('modal-results');
-					$(modal).resizemodal('xl').modal();
-					listener.listen();
-				});
-
+				hideajaxloading();
+				$(modal).find('.modal-body').addClass('modal-results');
+				$(modal).resizemodal('xl').modal();
+				listener.listen();
 			});
 		});
 	});

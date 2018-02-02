@@ -45,13 +45,11 @@
 		case 'logout':
 			$data = array('DBNAME' => $config->dbName, 'LOGOUT' => false);
 			$session->loc = $config->pages->login;
-
 			$session->remove('shipID');
 			$session->remove('custID');
 			$session->remove('locked-ordernumber');
 			break;
 		//DELETED CASES add-task get-order-notes write-recent-order-note
-
 	}
 
 	writedplusfile($data, $filename);

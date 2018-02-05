@@ -1,7 +1,7 @@
 #################################################################################################
 # START PROCESSWIRE HTACCESS DIRECTIVES
-# @version 2.8
-# @indexVersion 280
+# @version 3.0
+# @indexVersion 300
 #################################################################################################
 
 # -----------------------------------------------------------------------------------------------
@@ -93,6 +93,10 @@ DirectoryIndex index.php index.html index.htm
   # -----------------------------------------------------------------------------------------------
   # RewriteCond %{HTTPS} off
   # RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
+  # If using an AWS load balancer, use these two lines below instead of those above:
+  # RewriteCond %{HTTP:X-Forwarded-Proto} =http 
+  # RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # -----------------------------------------------------------------------------------------------
   # 10. Set an environment variable so the installer can detect that mod_rewrite is active.
@@ -114,10 +118,11 @@ DirectoryIndex index.php index.html index.htm
   # RewriteBase /~user/
 
   # -----------------------------------------------------------------------------------------------
-  # 12. Access Restrictions: Keep web users out of dirs that begin with a period
+  # 12. Access Restrictions: Keep web users out of dirs that begin with a period,
+  # but let services like Lets Encrypt use the webroot authentication method.
   # -----------------------------------------------------------------------------------------------
 
-  RewriteRule "(^|/)\." - [F]
+  RewriteRule "(^|/)\.(?!well-known)" - [F]
 
   # -----------------------------------------------------------------------------------------------
   # 13. OPTIONAL: Redirect users to the 'www.' version of the site (uncomment to enable).
@@ -222,4 +227,3 @@ DirectoryIndex index.php index.html index.htm
 #################################################################################################
 # END PROCESSWIRE HTACCESS DIRECTIVES
 #################################################################################################
-

@@ -1,4 +1,4 @@
-<?php 
+<?php namespace ProcessWire;
 
 /**
  * ProcessWire Bootstrap
@@ -10,10 +10,10 @@
  * do so after you have installed the site, as the installer is not informed
  * of any changes made in this file. 
  * 
- * ProcessWire 2.8.x (development), Copyright 2016 by Ryan Cramer
+ * ProcessWire 3.x, Copyright 2016 by Ryan Cramer
  * https://processwire.com
  *
- * @version 2.8
+ * @version 3.0
  *
  * Index Versions
  * ==============
@@ -24,7 +24,7 @@
  *
  */
 
-if(!defined("PROCESSWIRE")) define("PROCESSWIRE", 280); // index version
+if(!defined("PROCESSWIRE")) define("PROCESSWIRE", 300); // index version
 $rootPath = __DIR__;
 if(DIRECTORY_SEPARATOR != '/') $rootPath = str_replace(DIRECTORY_SEPARATOR, '/', $rootPath);
 $composerAutoloader = $rootPath . '/vendor/autoload.php'; // composer autoloader
@@ -63,4 +63,3 @@ try {
 	if($config->debug || ($wire && $wire->user && $wire->user->isSuperuser())) $errorMessage .= "\n\n" . $e->getTraceAsString();
 	trigger_error($errorMessage, E_USER_ERROR);
 }
-

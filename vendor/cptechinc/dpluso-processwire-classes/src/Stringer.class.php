@@ -37,7 +37,7 @@
          * @return string formatted phone string         
          */
         function format_needleforphone($string) {
-            $string = str_replace('-', '', $string);
+            $string = str_replace(array('-',' '), array('', ''), $string);
             return sprintf("%s-%s-%s",
               substr($string, 0, 3),
               substr($string, 3, 3),

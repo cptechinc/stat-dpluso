@@ -16,6 +16,8 @@ class ComposerStaticInitf9c34235226de117fa23ba132ae64d6f
         '34090432ba33ef4a6717b80199aa69f2' => __DIR__ . '/../..' . '/src/Model/Customer.class.php',
         'd5a3f2858c56e1d35401cc2f3a1510ed' => __DIR__ . '/../..' . '/src/Model/PricingItem.class.php',
         '7a2e6293c395b474896948c89ca0fd20' => __DIR__ . '/../..' . '/src/Model/Qnote.class.php',
+        '9a3c67d063ffcb554126d2ba2ddfdaa4' => __DIR__ . '/../..' . '/src/Model/XRefItem.class.php',
+        'deddd0d196a2048343e2938f9f6e7a50' => __DIR__ . '/../..' . '/src/Model/LogmUser.class.php',
         'bd8bf74d70613675ab92685140191001' => __DIR__ . '/../..' . '/src/DplusDateTime.class.php',
         'fcb8bf629f10208cb0cd7ed34611b338' => __DIR__ . '/../..' . '/src/Model/UserAction.class.php',
         '99cdb7b00d1b32397a34259baa6470e4' => __DIR__ . '/../..' . '/src/UserActionDisplay.class.php',

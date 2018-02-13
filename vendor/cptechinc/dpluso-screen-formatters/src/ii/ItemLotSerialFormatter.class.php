@@ -64,7 +64,6 @@
             $bootstrap = new Contento();
             $content = '';
 			$count = 0; 
-            
             //if ($column['sortavailable'] == 'n') { $array[] = $count; }
             $tb = new Table("class=table table-striped table-bordered table-condensed table-excel|id=table");
 			$tb->tablesection('thead');
@@ -97,7 +96,7 @@
                                 $column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
                                 $class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
                                 $colspan = $column['col-length'];
-                                $celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
+                                $celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $lot, $column);
                                 $tb->td("colspan=$colspan|class=$class", $celldata);
                             } else {
                                 if ($columncount < $this->tableblueprint['cols']) {

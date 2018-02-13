@@ -167,7 +167,7 @@
 			
 			public function can_edit() {
 	            $allowed = false;
-	            if (Processwire\wire('users')->get("name=".Processwire\wire('user')->loginid)->count) {
+	            if (Processwire\wire('users')->find("name=".Processwire\wire('user')->loginid)->count) {
 	               $allowed = Processwire\wire('users')->get("name=".Processwire\wire('user')->loginid)->hasPermission('setup-screen-formatter');
 	            }
 				return $allowed;
@@ -214,7 +214,6 @@
                 for ($i = 1; $i < $this->formatter[$section]['rows'] + 1; $i++) {
             		$table[$section]['rows'][$i] = array('columns' => array());
             		foreach ($columns as $column) {
-						echo $column . "<br>";
             			if ($this->formatter[$section]['columns'][$column]['line'] == $i) {
             				$col = array(
             					'id' => $column, 

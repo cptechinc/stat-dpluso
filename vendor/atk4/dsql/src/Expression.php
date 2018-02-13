@@ -40,6 +40,14 @@ class Expression implements \ArrayAccess, \IteratorAggregate
     protected $paramBase = 'a';
 
     /**
+     * Field, table and alias name escaping symbol.
+     * By SQL Standard it's double quote, but MySQL uses backtick.
+     *
+     * @var string
+     */
+    protected $escape_char = '"';
+
+    /**
      * Used for Linking.
      *
      * @var string
@@ -57,7 +65,7 @@ class Expression implements \ArrayAccess, \IteratorAggregate
      * When you are willing to execute the query, connection needs to be specified.
      * By default this is PDO object.
      *
-     * @var PDO
+     * @var PDO|Connection
      */
     public $connection = null;
 
@@ -181,10 +189,27 @@ class Expression implements \ArrayAccess, \IteratorAggregate
      */
     public function expr($properties = [], $arguments = null)
     {
-        $e = new self($properties, $arguments);
-        $e->connection = $this->connection;
+        // If we use DSQL Connection, then we should call expr() from there.
+        // Connection->expr() will return correct, connection specific Expression class.
+        if ($this->connection instanceof Connection) {
+            return $this->connection->expr($properties, $arguments);
+        }
 
-        return $e;
+        // Otherwise, connection is probably PDO and we don't know which Expression
+        // class to use, so we make a smart guess :)
+        if ($this instanceof Query) {
+            $e = new self($properties, $arguments);
+            $e->escape_char = $this->escape_char;
+            $e->connection = $this->connection;
+
+            return $e;
+        }
+        if ($this instanceof self) {
+            $e = new static($properties, $arguments);
+            $e->connection = $this->connection;
+
+            return $e;
+        }
     }
 
     /**
@@ -279,8 +304,9 @@ class Expression implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Given the string parameter, it will detect some "deal-braker" for our soft escaping, such
-     * as "*" or "(".  Those will typically indicate that expression is passed and shouldn't
+     * Given the string parameter, it will detect some "deal-breaker" for our
+     * soft escaping, such as "*" or "(".
+     * Those will typically indicate that expression is passed and shouldn't
      * be escaped.
      */
     protected function isUnescapablePattern($value)
@@ -288,16 +314,16 @@ class Expression implements \ArrayAccess, \IteratorAggregate
         return is_object($value)
             || $value === '*'
             || strpos($value, '(') !== false
-            || strpos($value, '`') !== false;
+            || strpos($value, $this->escape_char) !== false;
     }
 
     /**
      * Soft-escaping SQL identifier. This method will attempt to put
-     * backticks around the identifier, however will not do so if you
-     * are using special characters like ".", "(" or "`".
+     * escaping char around the identifier, however will not do so if you
+     * are using special characters like ".", "(" or escaping char.
      *
      * It will smartly escape table.field type of strings resulting
-     * in `table`.`field`.
+     * in "table"."field".
      *
      * @param mixed $value Any string or array of strings
      *
@@ -319,7 +345,7 @@ class Expression implements \ArrayAccess, \IteratorAggregate
             return implode('.', array_map(__METHOD__, explode('.', $value)));
         }
 
-        return '`'.trim($value).'`';
+        return $this->escape_char.trim($value).$this->escape_char;
     }
 
     /**
@@ -355,7 +381,10 @@ class Expression implements \ArrayAccess, \IteratorAggregate
         }
 
         // in all other cases we should escape
-        return '`'.str_replace('`', '``', $value).'`';
+        return
+            $this->escape_char
+            .str_replace($this->escape_char, $this->escape_char.$this->escape_char, $value)
+            .$this->escape_char;
     }
 
     /**
@@ -398,7 +427,7 @@ class Expression implements \ArrayAccess, \IteratorAggregate
         }
 
         $res = preg_replace_callback(
-            '/\[[a-z0-9_]*\]|{[a-z0-9_]*}/',
+            '/\[[a-z0-9_]*\]|{[a-z0-9_]*}/i',
             function ($matches) use (&$nameless_count) {
                 $identifier = substr($matches[0], 1, -1);
                 $escaping = ($matches[0][0] == '[') ? 'param' : 'escape';
@@ -506,7 +535,7 @@ class Expression implements \ArrayAccess, \IteratorAggregate
     /**
      * Execute expression.
      *
-     * @param PDO $connection
+     * @param PDO|Connection $connection
      *
      * @return PDOStatement
      */

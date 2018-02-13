@@ -151,9 +151,11 @@ class Query extends Expression
     /**
      * Returns template component for [field].
      *
+     * @param bool $add_alias Should we add aliases, see _render_field_noalias()
+     *
      * @return string Parsed template chunk
      */
-    protected function _render_field()
+    protected function _render_field($add_alias = true)
     {
         // will be joined for output
         $ret = [];
@@ -169,20 +171,23 @@ class Query extends Expression
 
         // process each defined field
         foreach ($this->args['field'] as $alias => $field) {
-            // Do not use alias, if it's same as field
-            if ($alias === $field) {
+            // Do not add alias, if:
+            //  - we don't want aliases OR
+            //  - alias is the same as field OR
+            //  - alias is numeric
+            if (
+                $add_alias === false
+                || (is_string($field) && $alias === $field)
+                || is_numeric($alias)
+            ) {
                 $alias = null;
             }
 
-            if (is_numeric($alias)) {
-                $alias = null;
-            }
-
-            // Will parameterize the value and backtick if necessary
+            // Will parameterize the value and escape if necessary
             $field = $this->_consume($field, 'soft-escape');
 
             if ($alias) {
-                // field alias cannot be expression, so only backtick
+                // field alias cannot be expression, so simply escape it
                 $field .= ' '.$this->_escape($alias);
             }
 
@@ -190,6 +195,17 @@ class Query extends Expression
         }
 
         return implode(',', $ret);
+    }
+
+    /**
+     * Renders part of the template: [field_noalias]
+     * Do not call directly.
+     *
+     * @return string Parsed template chunk
+     */
+    protected function _render_field_noalias()
+    {
+        return $this->_render_field(false);
     }
 
     // }}}
@@ -276,12 +292,15 @@ class Query extends Expression
                 throw new Exception('Table cannot be Query in UPDATE, INSERT etc. query modes');
             }
 
-            // don't add alias if it's the same as table name
-            if ($add_alias === false || (is_string($table) && $alias === $table)) {
-                $alias = '';
-            }
-
-            if (is_numeric($alias)) {
+            // Do not add alias, if:
+            //  - we don't want aliases OR
+            //  - alias is the same as table name OR
+            //  - alias is numeric
+            if (
+                $add_alias === false
+                || (is_string($table) && $alias === $table)
+                || is_numeric($alias)
+            ) {
                 $alias = null;
             }
 
@@ -439,7 +458,7 @@ class Query extends Expression
     public function _render_join()
     {
         if (!isset($this->args['join'])) {
-            return'';
+            return '';
         }
         $joins = [];
         foreach ($this->args['join'] as $j) {
@@ -481,7 +500,7 @@ class Query extends Expression
      *  $q->where('id',1);
      *
      * By default condition implies equality. You can specify a different comparison
-     * operator by eithre including it along with the field or using 3-argument
+     * operator by either including it along with the field or using 3-argument
      * format:
      *  $q->where('id>','1');
      *  $q->where('id','>',1);
@@ -520,7 +539,7 @@ class Query extends Expression
      * @param mixed  $value    Value. Will be quoted unless you pass expression
      * @param string $kind     Do not use directly. Use having()
      * @param string $num_args When $kind is passed, we can't determine number of
-     *                         actual arguments, so this argumen must be specified.
+     *                         actual arguments, so this argument must be specified.
      *
      * @return $this
      */
@@ -584,9 +603,26 @@ class Query extends Expression
                 $this->args[$kind][] = [$field];
                 break;
             case 2:
+                if (is_object($cond) && !$cond instanceof Expressionable && !$cond instanceof Expression) {
+                    throw new Exception([
+                        'Value cannot be converted to SQL-compatible expression',
+                        'field'=> $field,
+                        'value'=> $cond,
+                    ]);
+                }
+
                 $this->args[$kind][] = [$field, $cond];
                 break;
             case 3:
+                if (is_object($value) && !$value instanceof Expressionable && !$value instanceof Expression) {
+                    throw new Exception([
+                        'Value cannot be converted to SQL-compatible expression',
+                        'field'=> $field,
+                        'cond' => $cond,
+                        'value'=> $value,
+                    ]);
+                }
+
                 $this->args[$kind][] = [$field, $cond, $value];
                 break;
         }

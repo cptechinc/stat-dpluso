@@ -1,8 +1,11 @@
 <?php
     $custresults = search_custindexpaged($user->loginid, $config->showonpage, $input->pageNum, $user->hascontactrestrictions, $input->get->text('q'),  false);
     $resultscount = count_searchcustindex($user->loginid, $user->hascontactrestrictions, $input->get->text('q'), false);
+    
+    $pageurl = ($input->get->q) ? $page->fullURL->getUrl() : $config->pages->ajaxload."customers/cust-index/?function=ii";
+    $insertafter = 'cust-index';
+    $paginator = new Paginator($input->pageNum, $resultscount, $pageurl, $insertafter, "data-loadinto='#cust-index-search-form' data-focus='#cust-index-search-form'");
 ?>
-
 
 <div id="cust-results">
     <table id="cust-index" class="table table-striped table-bordered">
@@ -31,4 +34,5 @@
             <?php endif; ?>
         </tbody>
     </table>
+    <?= $resultscount ? $paginator : ''; ?>
 </div>

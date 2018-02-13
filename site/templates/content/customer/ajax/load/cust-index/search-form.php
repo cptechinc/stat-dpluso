@@ -1,4 +1,4 @@
-<form action="<?php echo $config->pages->ajax."load/customers/cust-index/"; ?>" method="POST" id="cust-index-search-form">
+<form action="<?= $config->pages->ajax."load/customers/cust-index/"; ?>" method="POST" id="cust-index-search-form">
     <div class="form-group">
         <?php if ($input->get->function) : ?>
         	<input type="hidden" name="function" class="function" value="<?= $input->get->function; ?>">
@@ -22,7 +22,7 @@
                         break;
                 }
             } else {
-                include $config->paths->content."customer/ajax/load/cust-index/cust-search-table.php";
+                include $config->paths->content."customer/ajax/load/cust-index/ci-cust-list.php";
             }
         ?>
     </div>

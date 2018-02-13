@@ -432,18 +432,10 @@ function choosecisaleshistoryitem(itemID) {
 }
 
 function refreshshipto(shipID, custID) {
-	var href = new URI();
-	href.segment(-1, ""); // GETS RID OF LAST SLASH
-	var lastsegment = href.segment(-1);
-	
-	if (lastsegment.indexOf('shipto') !== -1) {
-		href.segment(-1, "");
-	} 
+	var href = URI(config.urls.customer.redir.ci_shiptoinfo).addQuery("custID", custID);
 	
 	if (shipID.trim() != '') {
-		href = URI(config.urls.customer.redir.ci_shiptoinfo).addQuery("custID", custID).addQuery('shipID', shipID).toString();
-	} else {
-		href.segment('');
+		href.addQuery('shipID', shipID);
 	}
 	
 	var location = href.toString();

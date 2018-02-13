@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <div>
                     <div class="row">
-                        <?php if ($appconfig->needs_nonstockadd) : ?>
+                        <?php if ($appconfig->show_nonstockadd) : ?>
                             <div class="col-xs-2">
                                 <a href="<?= $itemlookup->generate_nonstockformurl(); ?>" class="btn btn-primary load-into-modal nonstock-btn" data-modal="#ajax-modal" data-modalsize="xl">
                                     <i class="fa fa-cube" aria-hidden="true"></i> Non-stock

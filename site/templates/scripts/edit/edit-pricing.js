@@ -25,7 +25,6 @@ $(function() {
         if ($(fields.price).val() < $(fields.minprice).val()) {
             if (!config.edit.pricing.allow_belowminprice) {
                 $(fields.price).parent().addClass('has-error');
-                console.log('Does not meet Minimum Price');
                 $('.minpricewarning').removeClass('hidden');
             }
         } else {
@@ -47,6 +46,6 @@ function calculate_extendedprice() {
     var price = $(fields.price).val();
     var qty = $(fields.qty).val();
     var extendedamount = price * qty;
-    $(fields.extendedamtspan).text(extendedamount.formatMoney(2, '.', ','));
-    $(fields.extendedamtspan).text(extendedamount.formatMoney(2, '.', ','));
+    $(fields.totalprice).val(extendedamount.formatMoney(2, '.', ','));
+    //$(fields.extendedamtspan).text(extendedamount.formatMoney(2, '.', ','));
 }

@@ -21,7 +21,7 @@
     <input type="hidden" class="originalprice" value="<?= formatmoney($linedetail['quotprice']); ?>">
     <input type="hidden" class="discountprice" value="<?= formatmoney($linedetail['quotprice']); ?>">
     <input type="hidden" class="cost" value="<?= formatmoney($linedetail['quotcost']); ?>">
-	<input type="hidden" class="minprice" value="<?= formatmoney($linedetail['minprice']); ?> ">
+	<input type="hidden" class="minprice" value="<?= formatmoney($linedetail['minprice']); ?>">
     <input type="hidden" class="calculate-from" value="percent">
     <?php if (!$appconfig->child('name=sales-orders')->allowdiscount): ?>
         <input type="hidden" class="discpct" name="discount" value="<?= formatmoney($linedetail['discpct']); ?>">
@@ -139,7 +139,6 @@
 				<br>
 				<button type="button" class="btn btn-danger btn-block remove-item"><i class="fa fa-trash" aria-hidden="true"></i> Delete Line</button>
 		    <?php endif; ?>
-
     	</div>
     </div>
 </form>

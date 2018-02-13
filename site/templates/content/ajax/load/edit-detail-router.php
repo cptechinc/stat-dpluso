@@ -33,13 +33,9 @@
 			$qnbr = $input->get->text('qnbr');
 			$custID = get_custidfromquote(session_id(), $qnbr);
 			$linedetail = get_quoteline(session_id(), $qnbr, $linenbr, false);
-            $linedetail['can-edit'] = false;
+            $linedetail['can-edit'] = true;
 			$formaction = $config->pages->quotes."redir/";
             $page->title = 'Edit Pricing for '. $linedetail['itemid'];
-            if (is_orderlocked(session_id(), $qnbr)) {
-                $linedetail['can-edit'] = true;
-            }
-
 			$page->body = $config->paths->content."edit/pricing/quotes/edit-pricing-form.php";
     }
 

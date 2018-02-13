@@ -68,7 +68,8 @@
 			"src/QueryBuilder.php",
 			"src/Report.class.php",
 			"src/UserActionsReport.class.php",
-			"src/ItemLookupModal.class.php"
+			"src/ItemLookupModal.class.php",
+			"src/FormFieldsConfig.class.php"
 		]
 	}
 }

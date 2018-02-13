@@ -159,12 +159,10 @@ $(document).ready(function() {
 		$("body").on("submit", "#email-file-form", function(e) {
 			e.preventDefault();
 			var form = $(this);
-			
+
 			form.hide(1000).animatecss('zoomOutRight');
-				
 			$('#show-email-sending').removeClass('hidden').find('h4').text('Sending Email');
 			$('#show-email-sending').find('.fa-spinner').addClass('fa-pulse');
-			
 			
 			form.postform({formdata: false, jsoncallback: true, action: false}, function(json) {
 				$.notify({
@@ -179,14 +177,17 @@ $(document).ready(function() {
 					}
 				});
 			}); 
+		});
 		
-      $("body").on("change", ".required", function() {
-        if ($(this).val() != '') {
-          $(this).closest('tr').removeClass('has-error');
-        } else if ($(this).val() == '') {
-          $(this).closest('tr').addClass('has-error');
-        }
-      });
+		$("body").on("change", ".required", function() {
+			if ($(this).val() != '') {
+				$(this).closest('tr').removeClass('has-error');
+			} else if ($(this).val() == '') {
+				$(this).closest('tr').addClass('has-error');
+			}
+        });
+		
+      
 
 	/*==============================================================
 	  AJAX LOAD FUNCTIONS

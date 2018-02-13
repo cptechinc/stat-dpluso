@@ -70,6 +70,7 @@ class ComposerStaticInitf9c34235226de117fa23ba132ae64d6f
         '0fc8ec2fafa063f84b33c82ab1d68a25' => __DIR__ . '/../..' . '/src/Report.class.php',
         '69b228a040ed5fb7f87edbe646451aee' => __DIR__ . '/../..' . '/src/UserActionsReport.class.php',
         'fe9c33ba53cea7f108c2733e70ba57fd' => __DIR__ . '/../..' . '/src/ItemLookupModal.class.php',
+        '5f966af3ffa411ee7d6988bcbf586492' => __DIR__ . '/../..' . '/src/FormFieldsConfig.class.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

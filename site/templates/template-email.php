@@ -1,19 +1,72 @@
 <?php
-    $order = json_decode(file_get_contents($config->paths->content.'email/test/order-head.json'), true);
-    $orderdetails = json_decode(file_get_contents($config->paths->content.'email/test/order-details.json'), true);
-    $css = file_get_contents($config->paths->templates.'styles/email/email-styles.css');
-    include ($config->paths->content.'email/templates/order-details-table.php');
-    include ($config->paths->content.'email/templates/order-confirmation.php');
-    $send = SimpleMail::make()
-    ->setTo('paul@cptechinc.com', 'Paul Gomez')
-    ->setFrom('sales@cptechinc.com', 'CPTech Sales')
-    ->setSubject('Order Confirmation')
-    ->setMessage($page->body)
-    ->setReplyTo('sales@cptechinc.com', 'Cptech Sales')
-    ->setHtml()
-    //->setWrap(100)
-    //->send();
-    ;
-    //echo ($send) ? 'Email sent successfully' : 'Could not send email';
-
-    echo $page->body;
+    $sessionID = $input->get->referenceID ? $input->get->text('referenceID') : session_id();
+    $emailer = new DplusEmailer($user->loginid);
+    $emailer->set_filedirectory($config->documentstoragedirectory);
+    
+    if ($input->requestMethod() == "POST") {
+        $emailer->set_subject($input->post->text('subject'));
+        $emailer->set_emailto($input->post->text('email'), $input->post->text('emailname'));
+        $emailer->set_body($input->post->text('message'));
+        $emailer->set_bcc('paul@cptechinc.com', 'Paul Gomez');
+    }
+    
+    switch ($page->name) { //$page->name is what we are printing
+        case 'sales-order':
+            $ordn = $input->get->text('ordn');
+            $orderdisplay = new SalesOrderDisplay($sessionID, $page->fullURL, '#ajax-modal', $ordn);
+            $order = $orderdisplay->get_order(); 
+            $printurl = new \Purl\Url($orderdisplay->generate_viewprintpage($order));
+            $printurl->query->set('referenceID', $sessionID);
+            $pdfmaker = new PDFMaker($sessionID, $printurl->getUrl());
+            $file = $pdfmaker->process();
+            break;
+        case 'quote':
+            $qnbr = $input->get->text('qnbr');
+            $quotedisplay = new QuoteDisplay($sessionID, $page->fullURL, '#ajax-modal', $qnbr);
+            $quote = $quotedisplay->get_quote();
+            $printurl = new \Purl\Url($quotedisplay->generate_viewprintpage($quote));
+            $printurl->query->set('referenceID', $sessionID);
+            $pdfmaker = new PDFMaker($sessionID, $printurl->getUrl());
+            $file = $pdfmaker->process();
+            break;
+    }
+    
+    if ($file) {
+        $error = false;
+        $notifytype = 'success';
+        $icon = 'fa fa-paper-plane-o';
+        $emailer->set_file($file);
+        $emailsent = $emailer->send();
+        
+        if ($emailsent) {
+            $msg = "Document was created and emailed";
+        } else {
+            $error = true;
+            $notifytype = 'danger';
+            $msg = "Email Failed to Send";
+            $icon = "fa fa-exclamation-triangle";
+        }
+        
+        $page->body = array(
+            'response' => array (
+				'error' => $error,
+				'notifytype' => $notifytype,
+				'message' => $msg,
+				'icon' => $icon,
+                'from' => $emailer->emailfrom
+			)
+        );
+    } else {
+        $page->body = array(
+            'response' => array (
+				'error' => true,
+				'notifytype' => 'danger',
+				'message' => "Could not make PDF",
+				'icon' => "fa fa-exclamation-triangle",
+			)
+        );
+    }
+    
+    include $config->paths->content.'common/include-json-page.php';
+    
+    

@@ -109,6 +109,21 @@
             return $url->getUrl();
         }
         
+        public function generate_viewprintpage(Order $quote) {
+            $url = new \Purl\Url($this->pageurl->getUrl());
+            $url->path = wire('config')->pages->print."quote/";
+            $url->query->set('qnbr', $quote->quotnbr);
+            $url->query->set('print', 'true');
+            return $url->getUrl();
+        }
+        
+        public function generate_sendemailurl(Order $quote) {
+            $url = new \Purl\Url(wire('config')->pages->email."quote/");
+            $url->query->set('qnbr', $quote->quotnbr);
+            $url->query->set('referenceID', $this->sessionID);
+            return $url->getUrl();
+        }
+        
         public function generate_viewlinkeduseractionslink(Order $quote) {
             $href = $this->generate_viewlinkeduseractionsurl($quote);
             $icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-check'));

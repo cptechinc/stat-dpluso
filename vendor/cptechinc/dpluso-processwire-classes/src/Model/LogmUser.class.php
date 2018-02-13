@@ -13,6 +13,7 @@
 		protected $dummy;
         
         public function __get($property) {
+			$method = "get_{$property}";
             if (method_exists($this, $method)) {
                 return $this->$method();
             } elseif (property_exists($this, $property)) {

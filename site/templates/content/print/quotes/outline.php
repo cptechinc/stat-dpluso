@@ -1,15 +1,19 @@
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
 	</div>
-	<div class="col-sm-6 text-right">
+	<div class="col-xs-6 text-right">
 		<h1>Quote # <?= $quote->quotnbr; ?></h1>
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-6"></div>
+	<div class="col-xs-6">
+		<?php if (!$input->get->print) : ?>
+			<a href="<?= $emailurl->getUrl(); ?>" class="btn btn-primary load-into-modal" data-modal="#ajax-modal"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> Send as Email</a>
+		<?php endif; ?>
+	</div>
 
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<table class="table table-bordered table-striped table-condensed">
 			<tr> <td>Quote Date</td> <td><?= $quote->quotdate; ?></td> </tr>
 			<tr> <td>Review Date</td> <td><?= $quote->revdate; ?></td> </tr>
@@ -20,7 +24,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<div class="page-header"><h3>Bill-to</h3></div>
 		<address>
 			<?= $quote->btname; ?><br>
@@ -31,10 +35,12 @@
 			<?= $quote->btcity.", ".$quote->btstate." ".$quote->btzip; ?>
 		</address>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<div class="page-header"><h3>Ship-to</h3></div>
 		<address>
-			<?= $quote->stname; ?><br>
+			<?php if (strlen($quote->stname) > 0) : ?>
+				<?= $quote->stname; ?><br>
+			<?php endif; ?>
 			<?= $quote->stadr1; ?><br>
 			<?php if (strlen($quote->stadr2) > 0) : ?>
 				<?= $quote->stadr2; ?><br>

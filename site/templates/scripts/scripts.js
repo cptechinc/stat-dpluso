@@ -155,6 +155,31 @@ $(document).ready(function() {
 				window.location.href = href;
 			}
 		});
+		
+		$("body").on("submit", "#email-file-form", function(e) {
+			e.preventDefault();
+			var form = $(this);
+			
+			form.hide(1000).animatecss('zoomOutRight');
+				
+			$('#show-email-sending').removeClass('hidden').find('h4').text('Sending Email');
+			$('#show-email-sending').find('.fa-spinner').addClass('fa-pulse');
+			
+			
+			form.postform({formdata: false, jsoncallback: true, action: false}, function(json) {
+				$.notify({
+					icon: json.response.icon,
+					message: json.response.message
+				},{
+					type: json.response.notifytype,
+					onClose: function() {
+						form.closest('.modal').modal('hide');
+						$('#show-email-sending').addClass('hidden').find('h4').text('');
+						$('#show-email-sending').find('fa-spinner').removeClass('fa-pulse');
+					}
+				});
+			}); 
+		});
 
 	/*==============================================================
 	  AJAX LOAD FUNCTIONS
@@ -195,9 +220,6 @@ $(document).ready(function() {
 			}
 			
 			$(ajaxloader.loadinto).loadin(ajaxloader.url, function() {
-				
-				
-				
 				if (button.hasClass('info-screen')) {
 					hideajaxloading();
 					$(ajaxloader.modal).find('.modal-body').addClass('modal-results');
@@ -1033,8 +1055,6 @@ $(document).ready(function() {
 	            }
 				callback();
 			});
-			
-            
         }
 	});
 

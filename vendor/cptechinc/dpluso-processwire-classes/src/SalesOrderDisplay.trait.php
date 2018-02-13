@@ -107,6 +107,21 @@
             return $url->getUrl();
         }
         
+        public function generate_viewprintpage(Order $order) {
+            $url = new \Purl\Url($this->pageurl->getUrl());
+            $url->path = wire('config')->pages->print."order/";
+            $url->query->set('ordn', $order->orderno);
+            $url->query->set('print', 'true');
+            return $url->getUrl();
+        }
+        
+        public function generate_sendemailurl(Order $order) {
+            $url = new \Purl\Url(wire('config')->pages->email."sales-order/");
+            $url->query->set('ordn', $order->orderno);
+            $url->query->set('referenceID', $this->sessionID);
+            return $url->getUrl();
+        }
+        
         public function generate_viewlinkeduseractionslink(Order $order) {
             $bootstrap = new Contento();
             $href = $this->generate_viewlinkeduseractionsurl($order);

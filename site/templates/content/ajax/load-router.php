@@ -39,6 +39,9 @@
         case 'vendors':
             include $config->paths->content . 'ajax/load/vendor-router.php';
             break;
+        case 'email':
+            include $config->paths->content . 'email/ajax-load-router.php';
+            break;
         default:
             throw new Wire404Exception();
             break;

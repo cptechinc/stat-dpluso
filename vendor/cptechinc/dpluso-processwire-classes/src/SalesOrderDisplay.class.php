@@ -13,7 +13,7 @@
         }
         
         public function get_order($debug = false) {
-            return get_orderhead($this->sessionID, $this->ordn, 'SalesOrder', false);
+            return get_orderhead($this->sessionID, $this->ordn, 'SalesOrder', $debug);
         }
         
         public function get_creditcard($debug = false) {

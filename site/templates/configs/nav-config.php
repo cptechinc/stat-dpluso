@@ -18,6 +18,7 @@
     $config->pages->confirmorder = $config->urls->root . 'edit/order/confirm/';
     $config->pages->confirmquote = $config->urls->root . 'edit/quote/confirm/';
     $config->pages->print = $config->urls->root."print/";
+    $config->pages->email = $config->urls->root."sys/email/";
     $config->pages->products = $config->urls->root . 'products/';
     $config->pages->iteminfo = $config->urls->root . 'products/item-info/';
     $config->pages->user = $config->urls->root . 'user/';
@@ -36,3 +37,4 @@
     $config->pages->documentstorage = $config->documentstorage;
     $config->pages->vendor = $config->urls->root . "vendors/";
     $config->pages->vendorinfo = $config->urls->root . "vendors/vend-info/";
+    $config->pages->sys = $config->urls->root . "sys/";

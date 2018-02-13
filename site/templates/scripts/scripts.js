@@ -155,7 +155,7 @@ $(document).ready(function() {
 				window.location.href = href;
 			}
 		});
-		
+
 		$("body").on("submit", "#email-file-form", function(e) {
 			e.preventDefault();
 			var form = $(this);
@@ -179,7 +179,14 @@ $(document).ready(function() {
 					}
 				});
 			}); 
-		});
+		
+      $("body").on("change", ".required", function() {
+        if ($(this).val() != '') {
+          $(this).closest('tr').removeClass('has-error');
+        } else if ($(this).val() == '') {
+          $(this).closest('tr').addClass('has-error');
+        }
+      });
 
 	/*==============================================================
 	  AJAX LOAD FUNCTIONS

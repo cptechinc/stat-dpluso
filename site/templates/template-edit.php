@@ -22,6 +22,7 @@
                 $itemlookup->set_customer($order->custid, $order->shiptoid);
                 $itemlookup = $itemlookup->set_ordn($ordn);
             }
+            $formconfig = new FormFieldsConfig('sales-order');
             break;
         case 'quote':
             $qnbr = $input->get->text('qnbr');
@@ -35,6 +36,7 @@
             $config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
             $itemlookup->set_customer($quote->custid, $quote->shiptoid);
             $itemlookup = $itemlookup->set_qnbr($qnbr);
+            $formconfig = new FormFieldsConfig('quote');
             break;
         case 'quote-to-order':
             $qnbr = $input->get->text('qnbr');

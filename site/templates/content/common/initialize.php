@@ -13,3 +13,5 @@
 
 	$config->pages = new Processwire\Paths($config->rootURL);
 	include $config->paths->templates."configs/nav-config.php"; 
+	
+	FormFieldsConfig::set_defaultconfigdirectory($config->paths->templates."configs/customer/");

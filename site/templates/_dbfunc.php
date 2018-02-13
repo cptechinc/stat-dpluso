@@ -2118,12 +2118,75 @@
 		}
 	}
 
+  /* =============================================================
+		CUSTOMER JSON CONFIGS
+	============================================================ */
+	function does_customerconfigexist($config, $debug = false) {
+		$q = (new QueryBuilder())->table('customerconfigs');
+		$q->field($q->expr('COUNT(*)'));
+		$q->where('configtype', $config);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+
+	function get_customerconfig($config, $debug = false) {
+		$q = (new QueryBuilder())->table('customerconfigs');
+		$q->field('data');
+		$q->where('configtype', $config);
+		$q->limit(1);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function update_customerconfig($config, $data, $debug = false) {
+		$q = (new QueryBuilder())->table('customerconfigs');
+		$q->mode('update');
+		$q->set('data', $data);
+		$q->where('configtype', $config);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return array('sql' => $q->generate_sqlquery($q->params), 'success' => $sql->rowCount() ? true : false, 'updated' => $sql->rowCount() ? true : false, 'querytype' => 'update');
+		}
+	}
+	
+	function create_customerconfig($config, $data, $debug = false) {
+		$q = (new QueryBuilder())->table('customerconfigs');
+		$q->mode('insert');
+		$q->set('data', $data);
+		$q->set('configtype', $config);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return array('sql' => $q->generate_sqlquery($q->params), 'success' => Processwire\wire('database')->lastInsertId() > 0 ? true : false, 'id' => Processwire\wire('database')->lastInsertId(), 'querytype' => 'create');
+		}
+	}
+
 	/* =============================================================
 		LOGM FUNCTIONS
 	============================================================ */
 	function get_logmuser($loginID, $debug = false) {
 		$q = (new QueryBuilder())->table('logm');
 		$q->where('loginid', $loginID);
+
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {

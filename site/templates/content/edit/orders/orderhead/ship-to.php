@@ -13,9 +13,9 @@
 
 <table class="table table-striped table-bordered table-condensed">
 	<tr>
-    	<td class="control-label">Ship-To ID <b class="text-danger">*</b> <input type="hidden" id="shipto-id" value="<?= $order->shiptoid; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['shiptoid']['label']; ?><?= $formconfig->generate_asterisk('shiptoid'); ?><input type="hidden" id="shipto-id" value="<?= $order->shiptoid; ?>"></td>
         <td>
-        	<select class="form-control input-sm ordrhed shipto-select" name="shiptoid" data-custid="<?= $order->custid; ?>">
+        	<select class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shiptoid'); ?> shipto-select" name="shiptoid" data-custid="<?= $order->custid; ?>">
 				<?php $shiptos = get_customershiptos($order->custid, $user->loginid, $user->hasrestrictions, false); ?>
                 <?php foreach ($shiptos as $shipto) : ?>
                     <?php if ($order->shiptoid == $shipto->shiptoid) : ?>
@@ -29,25 +29,25 @@
         </td>
     </tr>
     <tr>
-    	<td class="control-label">Ship-To Name <b class="text-danger">*</b></td>
-    	<td><input type="text" class="form-control input-sm ordrhed required shipto-name" name="shiptoname" value="<?= $order->sname; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['sname']['label']; ?><?= $formconfig->generate_asterisk('sname'); ?></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('sname'); ?> shipto-name" name="shiptoname" value="<?= $order->sname; ?>"></td>
     </tr>
     <tr>
-    	<td class="control-label">Address <b class="text-danger">*</b></td>
-    	<td><input type="text" class="form-control input-sm ordrhed required shipto-address" name="shipto-address" value="<?= $order->saddress; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['saddress']['label']; ?><?= $formconfig->generate_asterisk('saddress'); ?></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('saddress'); ?> shipto-address" name="shipto-address" value="<?= $order->saddress; ?>"></td>
     </tr>
     <tr>
-    	<td class="control-label">Address 2 <b class="text-danger">*</b></td>
-    	<td><input type="text" class="form-control input-sm ordrhed shipto-address2" name="shipto-address2" value="<?= $order->saddress2; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['saddress2']['label']; ?><?= $formconfig->generate_asterisk('saddress2'); ?></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('saddress2'); ?> shipto-address2" name="shipto-address2" value="<?= $order->saddress2; ?>"></td>
     </tr>
     <tr>
-    	<td class="control-label">City <b class="text-danger">*</b></td>
-    	<td><input type="text" class="form-control input-sm required shipto-city" name="shipto-city" value="<?= $order->scity; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['scity']['label']; ?><?= $formconfig->generate_asterisk('scity'); ?></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('scity'); ?> shipto-city" name="shipto-city" value="<?= $order->scity; ?>"></td>
     </tr>
     <tr>
-    	<td class="control-label">State <b class="text-danger">*</b></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['sst']['label']; ?><?= $formconfig->generate_asterisk('sst'); ?></td>
     	<td>
-        	<select class="form-control input-sm shipto-state" name="shipto-state">
+        	<select class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('sst'); ?> shipto-state" name="shipto-state">
             <option value="">---</option>
 				<?php $states = getstates(); ?>
                 <?php foreach ($states as $state) : ?>
@@ -58,8 +58,8 @@
         </td>
     </tr>
     <tr>
-    	<td class="control-label">Zip <b class="text-danger">*</b></td>
-    	<td><input type="text" class="form-control input-sm required shipto-zip" name="shipto-zip" value="<?= $order->szip; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['szip']['label']; ?><?= $formconfig->generate_asterisk('szip'); ?></td>
+    	<td><input type="text" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('szip'); ?> shipto-zip" name="shipto-zip" value="<?= $order->szip; ?>"></td>
     </tr>
 	<tr>
 		<td class="control-label">Country</td>

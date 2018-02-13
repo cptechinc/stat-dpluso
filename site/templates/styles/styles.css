@@ -394,4 +394,11 @@
 /*==============================================================
    ACTIONS STYLES
  =============================================================*/
-	#new-action-form #note, .display-notes {white-space: pre-wrap};
+	#new-action-form #note, .display-notes {white-space: pre-wrap;}
+	
+/*==============================================================
+   DOCS STYLES
+=============================================================*/
+	.docs-nav {font-size: 105%;}
+	.docs-nav li { padding-left: 5px;}
+	.docs-nav li.active {border-left: 2px solid #2c3e50;}

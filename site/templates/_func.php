@@ -29,6 +29,62 @@
     	// end our <ul> markup
     	echo "</div>";
     }
+    
+    function generate_documentationmenu(\Processwire\Page $page, $maxdepth = 4) {
+        $page = Processwire\wire('pages')->get('/documentation/');
+        
+        if (Processwire\wire('page')->id == $page->id) {
+            generate_documentationsubmenu($page, 1);
+        } else {
+            generate_documentationsubmenu($page, $maxdepth);
+        }
+    }
+    
+    function generate_documentationsubmenu($items, $maxdepth) {
+        if ($items instanceof \Processwire\Page) $items = array($items);
+    	// if there aren't any items to output, exit now
+    	if (!count($items)) return;
+        
+        $parents = array();
+        foreach(Processwire\wire('page')->parents as $parent) {
+            $parents[] = $parent->id;
+        }
+        
+        
+        echo "<ul class='list-unstyled docs-nav'>";
+    	// cycle through all the items
+    	foreach ($items as $item) {
+    		// markup for the list item...
+    		// if current item is the same as the page being viewed, add a "current" class to it
+    		// markup for the link
+    		if ($item->dplusfunction == '' || has_dpluspermission(Processwire\wire('user')->loginid, $item->dplusfunction)) {
+                if ($item->id == Processwire\wire('page')->id) {
+        			echo "<li class='active'>$item->title</li>";
+                    $parents[] = $item->id;
+        		} elseif (in_array($item->id, $parents)) {
+                    echo "<li class='active'>$item->title</li>";
+                } else {
+        			echo "<li><a href='$item->url'>$item->title</a></li>";
+        		}
+            }
+    		
+            
+            if (in_array($item->id, $parents)) {
+                if ($item->hasChildren() && $maxdepth) {
+        			generate_documentationsubmenu($item->children, $maxdepth-1);
+        		}
+            } elseif ($maxdepth == 1) {
+                if ($item->hasChildren() && $maxdepth) {
+        			generate_documentationsubmenu($item->children, $maxdepth-1);
+        		}
+            }
+            
+    		// close the list item
+    		//echo "</li>";
+    	}
+    	// end our <ul> markup
+    	echo "</ul>";
+    }
 /* =============================================================
    STRING FUNCTIONS
  ============================================================ */

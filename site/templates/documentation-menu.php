@@ -11,21 +11,7 @@
     </div>
     <div class="container page">
     	<div class="col-sm-3">
-    		<?php 
-			
-
-				// if there's more than 1 page in this section...
-				if ($page->hasChildren) {
-					// output sidebar navigation
-					// see _init.php for the renderNavTree function
-					if ($page == $page->rootParent) {
-						renderNavTree($page, 1);
-					} else {
-						renderNavTree($page);
-					}
-					
-				}
-			?>
+    		<?php generate_documentationmenu($page); ?>
     	</div>
     	<div class="col-sm-9">
     		<ol class="breadcrumb">

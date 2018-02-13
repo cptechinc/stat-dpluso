@@ -5,8 +5,8 @@
 	if (!empty($vendorID)) { $itemlink .= "&vendorID=".urlencode($vendorID); }
 	if ($input->get->q) {
 		$q = $input->get->text('q');
-		$items = search_itm($q, false, $vendorID, $config->showonpage, $input->pageNum, false);
-		$resultscount = search_itmcount($q, false, $vendorID, false);
+		$items = search_items($q, $custID, $session->display, $input->pageNum); 
+		$resultscount = count_searchitems($q, $vendorID);
 	}
 ?>
 
@@ -33,6 +33,7 @@
 					</div>
 				</a>
 			<?php endforeach; ?>
+			
 		<?php else : ?>
 			<a href="#" class="list-group-item item-master-result">
 				<div class="row">

@@ -1860,31 +1860,61 @@
 	/* =============================================================
 		ITEM MASTER FUNCTIONS
 	============================================================ */
-	function search_itm($q, $onlyitemid, $custID, $limit, $page, $debug) {
-		$limiting = returnlimitstatement($limit, $page);
-		$search = '%'.str_replace(' ', '%', $q).'%';
+	function search_items($query, $custID, $limit, $page, $debug = false) {
+		$search = '%'.str_replace(' ', '%', $query).'%';
+		$q = (new QueryBuilder())->table('itemsearch');
+		
 		if (empty($custID)) {
-			if ($onlyitemid) {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM itemsearch WHERE UCASE(itemid) LIKE UCASE(:search) AND origintype IN ('I', 'V') GROUP BY itemid $limiting");
-				$switching = array(':search' => $search); $withquotes = array(true);
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM itemsearch WHERE UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V') GROUP BY itemid $limiting");
-				$switching = array(':search' => $search); $withquotes = array(true);
-			}
+			$q->where('origintype', ['I', 'V']);
+			$q->where(
+		        $q
+		        ->orExpr()
+		        ->where($q->expr("UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2))"), 'like', $q->expr("UCASE([])",[$search]))
+		        ->where($q->expr("UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2))"), 'like', $q->expr("UCASE([])",[$search]))
+		    );
 		} else {
-			if ($onlyitemid) {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM itemsearch WHERE (originid = (:custID) AND UCASE(refitemid) LIKE UCASE(:search)) OR (UCASE(itemid) like UCASE(:search)) GROUP BY itemid $limiting ");
-				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM itemsearch WHERE (UCASE(CONCAT(itemid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V')) OR (UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND originid = :custID) GROUP BY itemid $limiting");
-				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
-			}
+			$q->where('origintype', ['I', 'V', 'C']);
+			$q->where($q->expr("UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2))"), 'like', $q->expr("UCASE([])",[$search]));
 		}
+		$q->order($q->expr("itemid LIKE UCASE([]) DESC", [$search]));
+		$q->group('itemid');
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'XRefItem');
+			return $sql->fetchAll();
+		}
+	}
+	
+	function count_searchitems($q, $custID, $debug = false) {
+		$search = '%'.str_replace(' ', '%', $q).'%';
+		$q = (new QueryBuilder())->table('itemsearch');
+		$q->field('COUNT(DISTINCT(itemid))');
+		
+		if (empty($custID)) {
+			$q->where('origintype', ['I', 'V']);
+			$q->where(
+		        $q
+		        ->orExpr()
+		        ->where($q->expr("UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2))"), 'like', $q->expr("UCASE([])",[$search]))
+		        ->where($q->expr("UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2))"), 'like', $q->expr("UCASE([])",[$search]))
+		    );
+		} else {
+			$q->where('origintype', ['I', 'V', 'C']);
+			$q->where($q->expr("UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2))"), 'like', $q->expr("UCASE([])",[$search]));
+		}
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
 		}
 	}
 
@@ -1897,33 +1927,6 @@
 			$switching = array(':itemID' => $itemID, ':custID' => $custID); $withquotes = array(true, true);
 		}
 
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function search_itmcount($q, $onlyitemid, $custID, $debug) {
-		$search = '%'.str_replace(' ', '%', $q).'%';
-		if (empty($custID)) {
-			if ($onlyitemid) {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE UCASE(itemid) LIKE UCASE(:search) AND origintype IN ('I', 'V') GROUP BY itemid $limiting");
-				$switching = array(':search' => $search); $withquotes = array(true);
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V')");
-				$switching = array(':search' => $search); $withquotes = array(true);
-			}
-		} else {
-			if ($onlyitemid) {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE (originid = (:custID) AND UCASE(refitemid) LIKE UCASE(:search)) OR (UCASE(itemid) like UCASE(:search))");
-				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE (UCASE(CONCAT(itemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND origintype IN ('I', 'V')) OR (UCASE(CONCAT(itemid, ' ', refitemid, ' ', originid, ' ', desc1, ' ', desc2)) LIKE UCASE(:search) AND originid = :custID)");
-				$switching = array(':search' => $search, ':custID' => $custID); $withquotes = array(true, true);
-			}
-		}
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
@@ -2112,5 +2115,22 @@
 		} else {
 			$sql->execute($switching);
 			return $sql->fetchColumn();
+		}
+	}
+
+	/* =============================================================
+		LOGM FUNCTIONS
+	============================================================ */
+	function get_logmuser($loginID, $debug = false) {
+		$q = (new QueryBuilder())->table('logm');
+		$q->where('loginid', $loginID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'LogmUser');
+			return $sql->fetch();
 		}
 	}

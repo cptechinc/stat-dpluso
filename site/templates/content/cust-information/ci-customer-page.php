@@ -37,6 +37,11 @@
 <?php endif; ?>
 <div class="row">
 	<div class="col-sm-12">
+		<?php include $config->paths->content."cust-information/shipto-sales-data.php"; ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
 		<?php include $config->paths->content.'customer/cust-page/orders/orders-panel.php'; ?>
 	</div>
 </div>

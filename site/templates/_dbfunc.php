@@ -23,6 +23,20 @@
 		$sql->execute($switching);
 		return $sql->fetch(PDO::FETCH_ASSOC);
 	}
+	
+	function has_restrictedcustomers($sessionID, $debug = false) {
+		$q = (new QueryBuilder())->table('logperm');
+		$q->field($q->expr("IF(restrictcustomers = 'Y',1,0)"));
+		$q->where('sessionid', $sessionID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
 /* =============================================================
 	PERMISSION FUNCTIONS
 ============================================================ */
@@ -84,7 +98,7 @@
 		return $sql->fetchColumn();
 	}
 
-	function get_shiptoname($custID, $shipID, $debug) {
+	function get_shiptoname($custID, $shipID, $debug = false) {
 		$sql = Processwire\wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
 		$switching = array(':custID' => $custID, ':shipID' => $shipID); $withquotes = array(true, true);
 		if ($debug) {
@@ -162,6 +176,24 @@
 			$sql->execute($switching);
 			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
 			return $sql->fetchAll();
+		}
+	}
+	
+	function get_topxsellingshiptos($sessionID, $custID, $count, $debug = false) {
+		$loginID = (Processwire\wire('user')->hascontactrestrictions) ? Processwire\wire('user')->loginid : 'admin';
+		$q = (new QueryBuilder())->table('custperm');
+		$q->where('loginid', $loginID);
+		$q->where('custid', $custID);
+		$q->where('shiptoid', '!=', '');
+		$q->limit($count);
+		$q->order('amountsold DESC');
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
 
@@ -366,22 +398,20 @@
 		}
 	}
 
-	function get_topxsellingcustomers($loginID, $numberofcustomers, $restrictions, $debug = false) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid, shiptoid ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS); $withquotes = array(true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT custid, shiptoid, name, amountsold, timesold, lastsaledate FROM custindex GROUP BY custid, shiptoid ORDER BY CAST(amountsold as Decimal(10,8)) DESC LIMIT $numberofcustomers");
-			$switching = array(); $withquotes = array();
-		}
+	function get_topxsellingcustomers($sessionID, $numberofcustomers, $debug = false) {
+		$loginID = (Processwire\wire('user')->hascontactrestrictions) ? Processwire\wire('user')->loginid : 'admin';
+		$q = (new QueryBuilder())->table('custperm');
+		$q->where('loginid', $loginID);
+		$q->where('shiptoid', '');
+		$q->limit($numberofcustomers);
+		$q->order('amountsold DESC');
+		$sql = Processwire\wire('database')->prepare($q->render());
 
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
-			return $sql->fetchAll();
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
 
@@ -414,12 +444,15 @@
 	ORDERS FUNCTIONS
 ============================================================ */
 	function count_salesreporders($sessionID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT IF(COUNT(DISTINCT(custid)) > 1,COUNT(*),0) as count FROM ordrhed WHERE sessionid = :sessionID AND type = :type");
-		$switching = array(':sessionID' => $sessionID, ':type' => 'O'); $withquotes = array(true, true);
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field($q->expr('IF (COUNT(*) = 1, 1, IF(COUNT(DISTINCT(custid)) > 1, COUNT(*), 0)) as count'));
+		$q->where('sessionid', $sessionID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}

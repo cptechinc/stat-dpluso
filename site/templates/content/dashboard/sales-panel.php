@@ -5,18 +5,21 @@
         </a>
     </div>
     <div id="salesdata-div" class="collapse" aria-expanded="true">
-        <div>
-            <table class="table table-bordered table-condensed table-striped small" id="cust-sales">
+        <div class="table-responsive">
+            <table class="table table-bordered table-condensed table-striped" id="cust-sales">
                 <thead> <tr> <th>CustID</th> <th>Name</th> <th>Amount Sold</th> <th>Times Sold</th> <th>Last Sale Date</th> </tr> </thead>
                 <tbody>
-                    <?php $customers = get_topxsellingcustomers($user->loginid, 25, $user->hascontactrestrictions); ?>
+                    <?php $customers = get_topxsellingcustomers(session_id(), 25); ?>
                     <?php foreach ($customers as $customer) : ?>
+                        <?php $cust = Customer::load($customer['custid']); ?>
                         <tr>
                             <td>
-                                <a href="<?= $customer->generate_ciloadurl(); ?>" class="btn btn-primary btn-sm"><?= $customer->custid; ?></a>
+                                <a href="<?= $cust->generate_ciloadurl(); ?>" class="btn btn-primary btn-sm"><?= $customer['custid']; ?></a>
                             </td>
-                            <td><?= $customer->name; ?></td> <td class="text-right">$ <?= $customer->amountsold; ?></td>
-                            <td class="text-right"><?= $customer->timesold; ?></td> <td><?= DplusDateTime::formatdate($customer->lastsaledate); ?></td>
+                            <td><?= $cust->get_name(); ?></td>
+                            <td class="text-right">$ <?= $page->stringerbell->format_money($customer['amountsold']); ?></td>
+                            <td class="text-right"><?= $customer['timesold']; ?></td> 
+                            <td class="text-right"><?= DplusDateTime::formatdate($customer['lastsaledate']); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

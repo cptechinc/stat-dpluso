@@ -1,4 +1,4 @@
-# Welcome to Distribution Plus CRM / Salesportal
+# Welcome to Distribution Plus Online / Dpluso
 
 This document is in Markdown.
 
@@ -14,15 +14,29 @@ https://github.com/processwire/processwire/blob/master/README.md
 4. [Developer](#developer)
 
 
-## About Distribution Plus CRM
+## About Distribution Plus Dpluso
+DPluso is a PHP based browser front-end for Distribution Plus.
+Starting off as a tool for Salesreps, The software allows them to handle many aspects of their Day to Day
 
-CRM is a Customer Relation Management tool. Sales reps can use this tool
-to manage their day-to-day tasks and activities. They can view their customer's
-orders and add actions like notes or tasks that will be tied to them. Sales reps can
-also use the CRM to create quotes and orders, and also push quotes to orders.
+1. CRM 
+   We give the user the ability to Manage their Customers view sales data about their customer and
+review Quotes and Sales Orders. The User can also make notes and tasks regarding that customer.
+User can also run reports, some which are formattable, that give them further insight into their customer such as sales history,
+standing orders, open invoices etc.
+
+2. Ordering
+   Users can also create orders and quotes for their customers. They can add items to a cart and then decide if the items 
+need to be saved a quote or proceed with a sales order. The user can also can edit existing sales orders and quotes if they have permissions.
+
+3. Item Info
+   Users can also can gain insight on the items they sell, run some formattable reports. They can view stock info, view sales history, view what lots the items is contained in.
+   
+   
+4. Vendor Info
 
 
-## Installing DPlus CRM
+
+## Installing DPluso
 1. Get the most recent copy of DPlus CRM on the [Soft Server](http://192.168.1.2/dpluso/)
 and log in to the Processwire, click on Setup -> Export. Name it dpluso, get a zip/file download, leave the config properties checked.
 2. Prepare the new server with directories each Dplus CRM installation needs these directories:
@@ -49,7 +63,7 @@ and log in to the Processwire, click on Setup -> Export. Name it dpluso, get a z
 * Include screenshots if you can, and then we can issue fixes based on those issues and track issues
 
 ## Developer
-    For git commits use this [guide](https://github.com/sparkbox/standard/tree/master/style/git)
+ For git commits use this [guide](https://github.com/sparkbox/standard/tree/master/style/git)
 
 
 

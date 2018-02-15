@@ -5,6 +5,7 @@
   "keywords": [ "processwire", "cms","cmf", "content management system" ],
   "license": "MPL-2.0",
   "homepage": "https://processwire.com",
+  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Ryan Cramer",
@@ -21,7 +22,9 @@
     "php": ">=5.3.8",
     "ext-gd": "*",
     "jwage/purl": "dev-cptechinc",
-    "atk4/dsql": "^1.1"
+    "atk4/dsql": "1.1",
+    "mikehaertl/phpwkhtmltopdf": "^2.3",
+    "eoghanobrien/php-simple-mail": "^1.7"
   },
   "autoload": {
     "files": [ "wire/core/ProcessWire.php" ]

@@ -59,21 +59,12 @@ trait ContainerTrait
     {
         if (isset($this->_factoryTrait)) {
             // Factory allows us to pass string-type objects
-            $args1 = $args;
-            if (is_array($args1)) {
-                unset($args1['desired_name']);
-                unset($args1[0]);
-                $obj = $this->factory($obj, $args1);
-            } else {
-                $obj = $this->factory($obj);
-            }
+            $obj = $this->factory($obj, $args);
         }
         $obj = $this->_add_Container($obj, $args);
 
         if (isset($obj->_initializerTrait)) {
-            if (!$obj->_initialized) {
-                $obj->init();
-            }
+            $obj->init();
             if (!$obj->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
@@ -114,7 +105,7 @@ trait ContainerTrait
 
             // passed as string
             $args = [$args];
-        } elseif (!is_array($args) && !is_null($args)) {
+        } elseif (!is_array($args)) {
             throw new Exception(['Second argument must be array', 'arg2' => $args]);
         } elseif (isset($args['desired_name'])) {
 
@@ -209,7 +200,7 @@ trait ContainerTrait
             $rest = substr($desired, $left);
 
             if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = '_'.dechex(crc32($key));
+                $this->app->unique_hashes[$key] = dechex(crc32($key));
             }
             $desired = $this->app->unique_hashes[$key].'__'.$rest;
         }

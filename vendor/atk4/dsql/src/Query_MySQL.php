@@ -12,18 +12,5 @@ namespace atk4\dsql;
  */
 class Query_MySQL extends Query
 {
-    /**
-     * Field, table and alias name escaping symbol.
-     * By SQL Standard it's double quote, but MySQL uses backtick.
-     *
-     * @var string
-     */
-    protected $escape_char = '`';
-
-    /**
-     * UPDATE template.
-     *
-     * @var string
-     */
     protected $template_update = 'update [table][join] set [set] [where]';
 }

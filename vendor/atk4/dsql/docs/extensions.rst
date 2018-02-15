@@ -8,7 +8,6 @@ Vendor      Support   PDO      Dependency
 =========== ========= ======== ============
 MySQL       Full      mysql:   native, PDO
 SQLite      Full      sqlite:  native, PDO
-Oracle      Untested  oci:     native, PDO
 PostgreSQL  Untested  pgsql:   native, PDO
 MSSQL       Untested  mssql:   native, PDO
 =========== ========= ======== ============

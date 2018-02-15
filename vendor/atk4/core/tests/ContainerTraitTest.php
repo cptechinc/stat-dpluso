@@ -114,10 +114,6 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m = new ContainerFactoryMock();
         $m2 = $m->add('atk4/core/tests/ContainerMock');
         $this->assertEquals('atk4\core\tests\ContainerMock', get_class($m2));
-
-        $m3 = $m->add('atk4/core/tests/TrackableContainerMock', 'name');
-        $this->assertEquals('atk4\core\tests\TrackableContainerMock', get_class($m3));
-        $this->assertEquals('name', $m3->short_name);
     }
 
     public function testArgs()
@@ -137,15 +133,6 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 'foo');
         $m->add(new TrackableMock(), 'foo');
-    }
-
-    public function testDesiredName()
-    {
-        $m = new ContainerMock();
-        $m->add(new TrackableMock(), ['desired_name'=>'foo']);
-        $m->add(new TrackableMock(), ['desired_name'=>'foo']);
-
-        $this->assertNotEmpty($m->hasElement('foo'));
     }
 
     /**

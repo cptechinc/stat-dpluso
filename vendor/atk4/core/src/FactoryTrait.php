@@ -12,174 +12,55 @@ trait FactoryTrait
     public $_factoryTrait = true;
 
     /**
-     * Given two seeds (or more) will merge them, prioritizing the first argument.
-     * If object is passed on either of arguments, then it will setDefaults() remaining
-     * arguments, respecting their positioning.
+     * Creates and returns new object.
+     * If object is passed as $object parameter, then same object is returned.
      *
-     * See full documentation.
-     *
-     * @param array|object|mixed $seed
-     * @param array|object|mixed $seed2
-     * @param array              $more_seeds
-     *
-     * @return object|array if at least one seed is an object, will return object
-     */
-    public function mergeSeeds($seed, $seed2, ...$more_seeds)
-    {
-
-        // recursively merge extra seeds
-        if ($more_seeds) {
-            $seed2 = $this->mergeSeeds($seed2, ...$more_seeds);
-        }
-
-        if (is_object($seed)) {
-            if (is_array($seed2)) {
-                // set defaults but don't override existing properties
-                $arguments = array_filter($seed2, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
-                $injection = array_diff_key($seed2, $arguments); // with string keys
-                if ($injection) {
-                    if (isset($seed->_DIContainerTrait)) {
-                        $seed->setDefaults($injection, true);
-                    } else {
-                        throw new Exception([
-                            'factory() requested to passively inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
-                            'object'   => $seed,
-                            'injection'=> $injection,
-                        ]);
-                    }
-                }
-            }
-
-            return $seed;
-        }
-
-        if (is_object($seed2)) {
-            // seed is not object, and setDefaults will complain if it's not array
-            if (is_array($seed)) {
-                $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
-                $injection = array_diff_key($seed, $arguments); // with string keys
-                if ($injection) {
-                    if (isset($seed2->_DIContainerTrait)) {
-                        $seed2->setDefaults($injection);
-                    } else {
-                        throw new Exception([
-                            'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
-                            'object'   => $seed2,
-                            'injection'=> $seed,
-                        ]);
-                    }
-                }
-            }
-
-            return $seed2;
-        }
-
-        if (!is_array($seed)) {
-            $seed = [$seed];
-        }
-
-        if (!is_array($seed2)) {
-            $seed2 = [$seed2];
-        }
-
-        // overwrite seed2 with seed
-        foreach ($seed as $key=>$value) {
-            if ($value !== null) {
-                $seed2[$key] = $value;
-            }
-        }
-
-        return $seed2;
-    }
-
-    /**
-     * Given a Seed (see doc) as a first argument, will create object of a corresponding
-     * class, call constructor with numerical arguments of a seed and inject key/value
-     * arguments.
-     *
-     * Argument $defaults has the same effect as the seed, but will not contain the class.
-     * Class is always determined by seed, except if you pass object into defaults.
-     *
-     * To learn more about mechanics of factory trait, see documentation
-     *
-     * @param mixed  $seed
-     * @param array  $defaults
-     * @param string $prefix   Optional prefix for class name
+     * @param mixed $object
+     * @param array $defaults
      *
      * @return object
      */
-    public function factory($seed, $defaults = [], $prefix = null)
+    public function factory($object, $defaults = [])
     {
-        if ($defaults === null) {
-            $defaults = [];
+        if (is_object($object)) {
+            return $object;
         }
 
-        if (!$seed) {
-            $seed = [];
-        }
-
-        if (!is_array($seed)) {
-            $seed = [$seed];
-        }
-
-        if (is_array($defaults)) {
-            array_unshift($defaults, null); // insert argument 0
-        } elseif (!is_object($defaults)) {
-            $defaults = [null, $defaults];
-        }
-        $seed = $this->mergeSeeds($seed, $defaults);
-
-        if (is_object($seed)) {
-            // setDefaults already called
-            return $seed;
-        }
-
-        $object = array_shift($seed); // first numeric key argument is object
-
-        $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
-        $injection = array_diff_key($seed, $arguments); // with string keys
-
-        if (is_string($object)) {
-            $class = $this->normalizeClassName($object, $prefix);
-
-            if (!$class) {
+        if (is_array($object)) {
+            if (!isset($object[0])) {
                 throw new Exception([
-                    'Class name was not specified by the seed',
-                    'seed'=> $seed,
-                ]);
-            }
-
-            $object = new $class(...$arguments);
-        }
-
-        if ($injection) {
-            if (isset($object->_DIContainerTrait)) {
-                $object->setDefaults($injection);
-            } else {
-                throw new Exception([
-                    'factory() could not inject properties into new object. It does not use \atk4\core\DIContainerTrait',
+                    'Object factory definition must use ["class name or object", "x"=>"y"] form',
                     'object'   => $object,
-                    'seed'     => $seed,
-                    'injection'=> $injection,
+                    'defaults' => $defaults,
                 ]);
             }
+            $class = $object[0];
+            unset($object[0]);
+
+            return $this->factory($class, array_merge($object, $defaults));
         }
 
-        return $object;
+        if (!is_string($object)) {
+            throw new Exception([
+                'Factory needs object or string',
+                'object'   => $object,
+                'defaults' => $defaults,
+            ]);
+        }
+
+        $object = $this->normalizeClassName($object);
+
+        return new $object($defaults);
     }
 
     /**
      * First normalize class name, then add specified prefix to
-     * class name. Finally if $app is defined, and has method
-     * `normalizeClassNameApp` it will also get a chance to
-     * add prefix.
+     * class name if it's passed and not already added.
+     * Class name can contain namespace.
      *
-     * Rule observed: If first character of class, or prefix is
-     * '/' or '\' then no more prefixing is done. Also after all the
-     * prefixing took place, the slashes '/' will be replaced
-     * with '\'.
+     * If object is passed as $name parameter, then same object is returned.
      *
-     * Example: normalizeClassName('User', 'Model') == 'Model\User';
+     * Example: normalizeClassName('User','Model') == 'Model_User';
      *
      * @param mixed  $name   Name of class or object
      * @param string $prefix Optional prefix for class name
@@ -188,32 +69,32 @@ trait FactoryTrait
      */
     public function normalizeClassName($name, $prefix = null)
     {
-        if (!$name) {
-            if (
-                isset($this->_appScopeTrait, $this->app)
-                && method_exists($this->app, 'normalizeClassNameApp')
-            ) {
-                $name = $this->app->normalizeClassNameApp($name);
-            }
+        if (is_array($name) && isset($name[0])) {
+            $name[0] = $this->normalizeClassName($name[0]);
 
             return $name;
         }
 
-        // Add prefix only if name doesn't start with / and name doesn't contain \\
-        if ($name[0] != '/' && $name[0] != '\\' && $prefix) {
-            $name = $prefix.'\\'.$name;
-        }
-
         if (
-            $name[0] != '/'
-            && $name[0] != '\\'
+            is_string($name)
             && isset($this->_appScopeTrait, $this->app)
             && method_exists($this->app, 'normalizeClassNameApp')
         ) {
-            $name = $this->app->normalizeClassNameApp($name);
+            $name = $this->app->normalizeClassNameApp($name, $prefix);
+        }
+
+        if (!is_string($name)) {
+            return $name;
         }
 
         $name = str_replace('/', '\\', $name);
+        if ($prefix !== null) {
+            $class = ltrim(strrchr($name, '\\'), '\\') ?: $name;
+            $prefix = ucfirst($prefix);
+            if (strpos($class, $prefix) !== 0) {
+                $name = preg_replace('|^(.*\\\)?(.*)$|', '\1'.$prefix.'_\2', $name);
+            }
+        }
 
         return $name;
     }

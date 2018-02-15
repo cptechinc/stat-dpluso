@@ -18,7 +18,6 @@ class Exception extends \Exception
      */
     private $params = [];
 
-    /** @var array */
     public $trace2; // because PHP's use of final() sucks!
 
     /**
@@ -31,7 +30,7 @@ class Exception extends \Exception
     public function __construct(
         $message = '',
         $code = 0,
-        /* \Throwable */ $previous = null
+        \Exception $previous = null
     ) {
         if (is_array($message)) {
             // message contain additional parameters
@@ -43,26 +42,6 @@ class Exception extends \Exception
         $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
     }
 
-    /**
-     * Change message (subject) of a current exception. Primary use is
-     * for localization purposes.
-     *
-     * @param string $message
-     *
-     * @return $this
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * Return trace array.
-     *
-     * @return array
-     */
     public function getMyTrace()
     {
         return $this->trace2;
@@ -156,89 +135,6 @@ class Exception extends \Exception
         $output .= "\n\033[1;31m--------------------------------------------------------\n";
 
         return $output."\033[0m";
-    }
-
-    /**
-     * Similar to getColorfulText() but will use raw HTML for outputting colors.
-     *
-     * @return string
-     */
-    public function getHTMLText()
-    {
-        $output = "--[ Agile Toolkit Exception ]---------------------------\n";
-        $output .= get_class($this).": <font color='pink'><b>".$this->getMessage().'</b></font>'.
-            ($this->getCode() ? ' [code: '.$this->getCode().']' : '');
-
-        foreach ($this->params as $key => $val) {
-            $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
-            $output .= "\n".$key.': '.$this->toString($val);
-        }
-
-        $output .= "\nStack Trace: ";
-
-        $in_atk = true;
-        $escape_frame = false;
-
-        foreach ($this->getMyTrace() as $call) {
-            if (!isset($call['file'])) {
-                $call['file'] = '';
-            } elseif (
-                $in_atk &&
-                strpos($call['file'], '/data/src/') === false &&
-                strpos($call['file'], '/core/src/') === false &&
-                strpos($call['file'], '/dsql/src/') === false
-            ) {
-                $escape_frame = true;
-                $in_atk = false;
-            }
-
-            $file = str_pad(substr($call['file'], -40), 40, ' ', STR_PAD_LEFT);
-
-            $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
-
-            $output .= "\n<font color='cyan'>".$file.'</font>';
-            $output .= ":<font color='pink'>".$line.'</font>';
-
-            if (isset($call['object'])) {
-                $name = (!isset($call['object']->name)) ? get_class($call['object']) : $call['object']->name;
-                $output .= " - <font color='yellow'>".$name.'</font>';
-            }
-
-            $output .= " <font color='gray'>";
-
-            if (isset($call['class'])) {
-                $output .= $call['class'].'::';
-            }
-            $output .= '</font>';
-
-            if ($escape_frame) {
-                $output .= "<font color='pink'>".$call['function'].'</font>';
-                $escape_frame = false;
-
-                $args = [];
-                foreach ($call['args'] as $arg) {
-                    $args[] = $this->toString($arg);
-                }
-
-                $output .= "\n".str_repeat(' ', 20)."<font color='pink'>(".implode(', ', $args);
-            } else {
-                $output .= "<font color='gray'>".$call['function'].'(';
-            }
-
-            $output .= ')</font>';
-        }
-
-        if ($p = $this->getPrevious()) {
-            $output .= "\n\nCaused by Previous Exception:\n";
-            $output .= get_class($p).": <font color='pink'>".$p->getMessage().'</font>'.
-                ($p->getCode() ? ' [code: '.$p->getCode().']' : '');
-        }
-
-        // next print params
-
-        $output .= "\n--------------------------------------------------------\n";
-
-        return $output;
     }
 
     /**

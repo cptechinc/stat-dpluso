@@ -1,6 +1,7 @@
 <?php 
     class DplusEmailer {
         use ThrowErrorTrait;
+        
         protected $user;
         protected $hashtml = false;
         protected $hasfile;
@@ -67,7 +68,7 @@
             $this->hashtml = $html;
             $body .= "<br>". $this->user->name;
             $body .= "<br>" . $this->user->email;
-            $body .= "<br>" . $stringer->format_needleforphone($this->user->phone) ;
+            $body .= "<br>" . $stringer->format_phone($this->user->phone) ;
             $this->body = $body;
         }
         
@@ -121,9 +122,6 @@
             if ($this->hashtml) {
                 $emailer->setHtml();
             }
-            
             return $emailer->send();
         }
-        
-        
     }

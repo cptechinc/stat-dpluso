@@ -6,7 +6,7 @@
          * @param  string $needle   the word to look for
          * @return string           html string with the $needle highlighted or returns just the string
          */
-        function highlight($haystack, $needle) {
+        public function highlight($haystack, $needle) {
             $bootstrap = new Contento();
             if ($this->does_matchphone($haystack)) {
                 $needle = $this->does_matchphone($needle);
@@ -26,7 +26,7 @@
          * @param  string $string 
          * @return bool         
          */
-        function does_matchphone($string) {
+        public function does_matchphone($string) {
             $regex = "/\d{3}-?\d{3}-?\d{4}/i";
             return preg_match($regex, $string) ? true : false;
         }
@@ -36,11 +36,15 @@
          * @param  string $string 
          * @return string formatted phone string         
          */
-        function format_needleforphone($string) {
+        public function format_phone($string) {
             $string = str_replace(array('-',' '), array('', ''), $string);
             return sprintf("%s-%s-%s",
               substr($string, 0, 3),
               substr($string, 3, 3),
               substr($string, 6));
         }
+        
+        public function format_money($amt) {
+    		return number_format($amt, 2, '.', ',');
+    	}
     }

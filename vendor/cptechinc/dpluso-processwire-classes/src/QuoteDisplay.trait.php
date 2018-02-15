@@ -83,6 +83,9 @@
         }
         
         public function generate_orderquotelink(Order $quote) {
+            if (!has_dpluspermission(Processwire\wire('user')->loginid, 'eso')) {
+                return false;
+            }
             $bootstrap = new Contento();
             $href = $this->generate_orderquoteurl($quote);
             $icon = $bootstrap->createicon('glyphicon glyphicon-print');

@@ -39,6 +39,7 @@
         public function generate_iiselecturl($custID = false) {
             $url = new \Purl\Url(wire('config')->pages->products."redir/?action=ii-select");
             if (!empty($custID)) $url->query->set('custID', $custID);
+            $url->query->set('itemID', $this->itemid);
             return $url->getUrl();
         }
         

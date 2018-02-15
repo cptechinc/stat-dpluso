@@ -11,7 +11,8 @@
 		}
         
         public function get_ordercount($debug = false) {
-            $this->count = count_salesreporders($this->sessionID, $debug);
+            $count = count_salesreporders($this->sessionID, $debug);
+            return $debug ? $count : $this->count = $count;
         }
         
         public function get_orders($debug = false) {

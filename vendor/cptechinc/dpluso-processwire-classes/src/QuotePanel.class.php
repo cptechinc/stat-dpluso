@@ -1,7 +1,8 @@
 <?php 	
 	class QuotePanel extends OrderPanel implements OrderDisplayInterface, QuoteDisplayInterface, QuotePanelInterface {
-		public $quotes = array();
 		use QuoteDisplayTraits;
+		
+		public $quotes = array();
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
@@ -18,33 +19,50 @@
 		}
 		
 		/* =============================================================
-            SalesOrderPanelInterface Functions
-            LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
-        ============================================================ */
-		public function get_quotecount() {
-			$this->count = count_customerquotes($this->sessionID, $this->custID, false);
+			SalesOrderPanelInterface Functions
+			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+		============================================================ */
+		public function get_quotecount($debug = false) {
+			$count = count_userquotes($this->sessionID, $debug);
+			return $debug ? $count : $this->count = $count;
 		}
 		
-		public function get_quotes($debug = false) { }
+		public function get_quotes($debug = false) {
+			$useclass = true;
+			if ($this->tablesorter->orderby) {
+				if ($this->tablesorter->orderby == 'quotdate') {
+					$quotes = get_userquotesquotedate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
+				} elseif ($this->tablesorter->orderby == 'revdate') {
+					$quotes = get_userquotesrevdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
+				} elseif ($this->tablesorter->orderby == 'expdate') {
+					$quotes = get_userquotesexpdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug); 
+				} else {
+					$quotes = get_userquotesorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
+				}
+			} else {
+				$quotes = get_userquotes($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $useclass, $debug);
+			}
+			return $debug ? $quotes: $this->quotes = $quotes;
+		}
 		
 		/* =============================================================
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_loadlink() {
-            $bootstrap = new Contento();
-            $href = $this->generate_loadurl();
-            $ajaxdata = $this->generate_ajaxdataforcontento();
-            return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Quotes");
-        }
+			$bootstrap = new Contento();
+			$href = $this->generate_loadurl();
+			$ajaxdata = $this->generate_ajaxdataforcontento();
+			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Quotes");
+		}
 		
 		public function generate_refreshlink() {
-            $bootstrap = new Contento();
-            $href = $this->generate_loadurl();
-            $icon = $bootstrap->createicon('fa fa-refresh');
-            $ajaxdata = $this->generate_ajaxdataforcontento();
-            return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Quotes");
-        }
+			$bootstrap = new Contento();
+			$href = $this->generate_loadurl();
+			$icon = $bootstrap->createicon('fa fa-refresh');
+			$ajaxdata = $this->generate_ajaxdataforcontento();
+			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Quotes");
+		}
 		
 		public function generate_expandorcollapselink(Order $quote) {
 			$bootstrap = new Contento();
@@ -75,9 +93,9 @@
 		
 		function generate_shiptopopover(Order $quote) {
 			$bootstrap = new Contento();
-			$address = $quote->saddress.'<br>';
-			$address .= (!empty($quote->saddress2)) ? $quote->saddress2."<br>" : '';
-			$address .= $quote->scity.", ". $quote->sst.' ' . $quote->szip;
+			$address = $quote->shipaddress.'<br>';
+			$address .= (!empty($quote->shipaddress2)) ? $quote->shipaddress2."<br>" : '';
+			$address .= $quote->shipcity.", ". $quote->shipstate.' ' . $quote->shipzip;
 			$attr = "tabindex=0|role=button|class=btn btn-default bordered btn-sm|data-toggle=popover";
 			$attr .= "|data-placement=top|data-trigger=focus|data-html=true|title=Ship-To Address|data-content=$address";
 			return $bootstrap->openandclose('a', $attr, '<b>?</b>');
@@ -124,9 +142,9 @@
 		}
 		
 		/* =============================================================
-            OrderDisplayInterface Functions
-            LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
-        ============================================================ */
+			OrderDisplayInterface Functions
+			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+		============================================================ */
 		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
 			$bootstrap = new Contento();
 			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
@@ -144,11 +162,11 @@
 		}
 		
 		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
-            $url = new \Purl\Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
+			$url = new \Purl\Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
-            return $url->getUrl();
-        }
+			return $url->getUrl();
+		}
 		
 		public function generate_viewlinkeduseractionslink(Order $quote) {
 			$bootstrap = new Contento();
@@ -178,30 +196,30 @@
 		}
 		
 		public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
-            $bootstrap = new Contento();
-            $href = $this->generate_documentsrequesturl($quote, $quotedetail);
-            $icon = $bootstrap->createicon('material-icons md-36', '&#xE873;');
-            $ajaxdata = $this->generate_ajaxdataforcontento();
-            
-            if ($quote->has_documents()) {
-                return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
-            } else {
-                return $bootstrap->openandclose('a', "href=#|class=text-muted|title=No Documents Available", $icon);
-            }
-        }
+			$bootstrap = new Contento();
+			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
+			$icon = $bootstrap->createicon('material-icons md-36', '&#xE873;');
+			$ajaxdata = $this->generate_ajaxdataforcontento();
+			
+			if ($quote->has_documents()) {
+				return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
+			} else {
+				return $bootstrap->openandclose('a', "href=#|class=text-muted|title=No Documents Available", $icon);
+			}
+		}
 		
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail, $display = false) {
-            $bootstrap = new Contento();
-            $href = $this->generate_detailviewediturl($quote, $detail);
-            return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);    
-        }
+			$bootstrap = new Contento();
+			$href = $this->generate_detailviewediturl($quote, $detail);
+			return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);	
+		}
 		
 		public function generate_lastloadeddescription() {
-            if (Processwire\wire('session')->{'quotes-loaded-for'}) {
-                if (Processwire\wire('session')->{'quotes-loaded-for'} == Processwire\wire('user')->loginid) {
-                    return 'Last Updated : ' . Processwire\wire('session')->{'quotes-updated'};
-                }
-            }
-            return '';
-        }
+			if (Processwire\wire('session')->{'quotes-loaded-for'}) {
+				if (Processwire\wire('session')->{'quotes-loaded-for'} == Processwire\wire('user')->loginid) {
+					return 'Last Updated : ' . Processwire\wire('session')->{'quotes-updated'};
+				}
+			}
+			return '';
+		}
 	}

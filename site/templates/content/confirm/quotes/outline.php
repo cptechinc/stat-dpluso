@@ -23,7 +23,7 @@
 		<table class="table table-bordered table-striped table-condensed">
 			<tr> <td>Customer PO</td> <td><?= $quote->custpo; ?></td> </tr>
             <tr> <td>Cust Ref</td> <td><?= $quote->custref; ?></td> </tr>
-            <tr> <td>Ship Via</td> <td><?= $quote->sviacode.' - '.$quote->sviacodedesc; ?></td> </tr>
+            <tr> <td>Ship Via</td> <td><?= $quote->shipviacd.' - '.$quote->shipviadesc; ?></td> </tr>
             <tr> <td>FOB</td> <td><?= $quote->fob; ?></td> </tr>
             <tr> <td>Delivery</td> <td><?= $quote->deliverydesc; ?></td> </tr>
             <tr> <td>Whse</td> <td><?= $quote->whse; ?></td> </tr>
@@ -35,23 +35,23 @@
 	<div class="col-sm-6">
 		<div class="page-header"><h3>Bill-to</h3></div>
 		<address>
-			<?= $quote->btname; ?><br>
-			<?= $quote->btadr1; ?><br>
-			<?php if (strlen($quote->btadr2) > 0) : ?>
-				<?= $quote->btadr2; ?><br>
+			<?= $quote->billname; ?><br>
+			<?= $quote->billaddress; ?><br>
+			<?php if (strlen($quote->billaddress2) > 0) : ?>
+				<?= $quote->billaddress2; ?><br>
 			<?php endif; ?>
-			<?= $quote->btcity.", ".$quote->btstate." ".$quote->btzip; ?>
+			<?= $quote->billcity.", ".$quote->billstate." ".$quote->billzip; ?>
 		</address>
 	</div>
 	<div class="col-sm-6">
 		<div class="page-header"><h3>Ship-to</h3></div>
 		<address>
-			<?= $quote->stname; ?><br>
-			<?= $quote->stadr1; ?><br>
-			<?php if (strlen($quote->stadr2) > 0) : ?>
-				<?= $quote->stadr2; ?><br>
+			<?= $quote->shipname; ?><br>
+			<?= $quote->shipaddress; ?><br>
+			<?php if (strlen($quote->shipaddress2) > 0) : ?>
+				<?= $quote->shipaddress2; ?><br>
 			<?php endif; ?>
-			<?= $quote->stcity.", ".$quote->ststate." ".$quote->stzip; ?>
+			<?= $quote->shipcity.", ".$quote->shipstate." ".$quote->shipzip; ?>
 		</address>
 	</div>
 </div>
@@ -90,10 +90,10 @@
 		<td></td><td><b>Freight</b></td> <td colspan="3" class="text-right">$ <?=formatmoney($quote->freight); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Misc.</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->miscellaneous); ?></td>
+		<td></td><td><b>Misc.</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->misccost); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->order_total); ?></td>
+		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->ordertotal); ?></td>
 	</tr>
 </table>
 

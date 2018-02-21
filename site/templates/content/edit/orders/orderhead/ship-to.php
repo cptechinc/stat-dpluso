@@ -19,7 +19,7 @@
 				<?php $shiptos = get_customershiptos($order->custid, $user->loginid, $user->hasrestrictions, false); ?>
                 <?php foreach ($shiptos as $shipto) : ?>
                     <?php if ($order->shiptoid == $shipto->shiptoid) : ?>
-                        <option value="<?= $order->shiptoid; ?>" selected><?= $order->shiptoid.' - '.$order->sname; ?></option>
+                        <option value="<?= $order->shiptoid; ?>" selected><?= $order->shiptoid.' - '.$order->shipname; ?></option>
                     <?php else : ?>
                         <option value="<?= $shipto->shiptoid;?>"><?= $shipto->shiptoid.' - '.$shipto->name; ?></option>
                     <?php endif; ?>
@@ -29,45 +29,45 @@
         </td>
     </tr>
     <tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['sname']['label']; ?><?= $formconfig->generate_asterisk('sname'); ?></td>
-    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('sname'); ?> shipto-name" name="shiptoname" value="<?= $order->sname; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['shipname']['label']; ?><?= $formconfig->generate_asterisk('shipname'); ?></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipname'); ?> shipto-name" name="shiptoname" value="<?= $order->shipname; ?>"></td>
     </tr>
     <tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['saddress']['label']; ?><?= $formconfig->generate_asterisk('saddress'); ?></td>
-    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('saddress'); ?> shipto-address" name="shipto-address" value="<?= $order->saddress; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['shipaddress']['label']; ?><?= $formconfig->generate_asterisk('shipaddress'); ?></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipaddress'); ?> shipto-address" name="shipto-address" value="<?= $order->shipaddress; ?>"></td>
     </tr>
     <tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['saddress2']['label']; ?><?= $formconfig->generate_asterisk('saddress2'); ?></td>
-    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('saddress2'); ?> shipto-address2" name="shipto-address2" value="<?= $order->saddress2; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['shipaddress2']['label']; ?><?= $formconfig->generate_asterisk('shipaddress2'); ?></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipaddress2'); ?> shipto-address2" name="shipto-address2" value="<?= $order->shipaddress2; ?>"></td>
     </tr>
     <tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['scity']['label']; ?><?= $formconfig->generate_asterisk('scity'); ?></td>
-    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('scity'); ?> shipto-city" name="shipto-city" value="<?= $order->scity; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['shipcity']['label']; ?><?= $formconfig->generate_asterisk('shipcity'); ?></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipcity'); ?> shipto-city" name="shipto-city" value="<?= $order->shipcity; ?>"></td>
     </tr>
     <tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['sst']['label']; ?><?= $formconfig->generate_asterisk('sst'); ?></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['shipstate']['label']; ?><?= $formconfig->generate_asterisk('shipstate'); ?></td>
     	<td>
-        	<select class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('sst'); ?> shipto-state" name="shipto-state">
+        	<select class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipstate'); ?> shipto-state" name="shipto-state">
             <option value="">---</option>
 				<?php $states = getstates(); ?>
                 <?php foreach ($states as $state) : ?>
-                    <?php if ($state['state'] == $order->sst ) { $selected = 'selected'; } else { $selected = ''; } ?>
+                    <?php if ($state['state'] == $order->shipstate) { $selected = 'selected'; } else { $selected = ''; } ?>
                     <option value="<?= $state['state']; ?>" <?= $selected; ?>><?= $state['state'] . ' - ' . $state['name']; ?></option>
                 <?php endforeach; ?>
             </select>
         </td>
     </tr>
     <tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['szip']['label']; ?><?= $formconfig->generate_asterisk('szip'); ?></td>
-    	<td><input type="text" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('szip'); ?> shipto-zip" name="shipto-zip" value="<?= $order->szip; ?>"></td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['shipzip']['label']; ?><?= $formconfig->generate_asterisk('shipzip'); ?></td>
+    	<td><input type="text" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('shipzip'); ?> shipto-zip" name="shipto-zip" value="<?= $order->shipzip; ?>"></td>
     </tr>
 	<tr>
 		<td class="control-label">Country</td>
 		<td>
-			<?php $countries = getcountries(); if (empty($order->scountry)) {$order->scountry = 'USA';}?>
+			<?php $countries = getcountries(); if (empty($order->shipcountry)) {$order->shipcountry = 'USA';}?>
 			<select name="shipto-country" class="form-control input-sm">
 				<?php foreach ($countries as $country) : ?>
-					<?php if ($country['ccode'] == $order->scountry ) { $selected = 'selected'; } else { $selected = ''; } ?>
+					<?php if ($country['ccode'] == $order->shipcountry ) { $selected = 'selected'; } else { $selected = ''; } ?>
 					<option value="<?= $country['ccode']; ?>" <?= $selected; ?>><?= $country['name']; ?></option>
 				<?php endforeach; ?>
 			</select>

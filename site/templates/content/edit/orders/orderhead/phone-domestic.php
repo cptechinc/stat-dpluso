@@ -9,5 +9,5 @@
 
 <tr class="domestic ">
     <td class="control-label">Contact Fax</td>
-    <td> <input type="text" name="contact-fax" class="form-control input-sm phone-input" value="<?= $order->faxnumber; ?>"> </td>
+    <td> <input type="text" name="contact-fax" class="form-control input-sm phone-input" value="<?= $order->faxnbr; ?>"> </td>
 </tr>

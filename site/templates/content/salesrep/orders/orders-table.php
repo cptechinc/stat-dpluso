@@ -19,7 +19,7 @@
 					<a href="<?= $orderpanel->generate_customershiptourl($order); ?>"><?= $order->shiptoid; ?></a>
                     <?= $orderpanel->generate_shiptopopover($order); ?>
                 </td>
-                <td align="right">$ <?= formatmoney($order->odrtotal); ?></td>
+                <td align="right">$ <?= formatmoney($order->ordertotal); ?></td>
                 <td align="right"><?= $order->orderdate; ?></td>
                 <td align="right"><?= $order->status; ?></td>
                 <td colspan="3">

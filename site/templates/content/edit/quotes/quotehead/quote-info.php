@@ -21,8 +21,8 @@
     	<?php include $config->paths->content.'edit/quotes/quotehead/phone-domestic.php'; ?>
     <?php endif; ?>
     <tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['emailadr']['label']; ?><?= $formconfig->generate_asterisk('emailadr'); ?></td>
-        <td> <input type="text" name="contact-email" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('emailadr'); ?> email" value="<?= $quote->emailadr; ?>"> </td>
+    	<td class="control-label"><?= $formconfig->fields['fields']['email']['label']; ?><?= $formconfig->generate_asterisk('email'); ?></td>
+        <td> <input type="text" name="contact-email" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('email'); ?> email" value="<?= $quote->email; ?>"> </td>
     </tr>
 </table>
 
@@ -66,13 +66,13 @@
         </td>
     </tr>
     <tr>
-        <td class="control-label"><?= $formconfig->fields['fields']['sviacode']['label']; ?><?= $formconfig->generate_asterisk('sviacode'); ?></td>
+        <td class="control-label"><?= $formconfig->fields['fields']['shipviacd']['label']; ?><?= $formconfig->generate_asterisk('shipviacd'); ?></td>
         <td>
             <select name="shipvia" class="form-control input-sm">
 				<option value="N/A">Choose Ship Method</option>
                 <?php $shipvias = getshipvias(session_id()); ?>
                 <?php foreach($shipvias as $shipvia) : ?>
-					<?php $selected = ($quote->sviacode == $shipvia['code']) ? 'selected' : ''; ?>
+					<?php $selected = ($quote->shipviacd == $shipvia['code']) ? 'selected' : ''; ?>
                     <option value="<?= $shipvia['code']; ?>" <?= $selected; ?>><?= $shipvia['via']; ?> </option>
                 <?php endforeach; ?>
             </select>

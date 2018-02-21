@@ -56,7 +56,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btname": {
+        "billname": {
             "label": "Billing Name",
             "required": false,
             "datatype": "C",
@@ -64,7 +64,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btadr1": {
+        "billaddress": {
             "label": "Billing Address",
             "required": false,
             "datatype": "C",
@@ -72,7 +72,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btadr2": {
+        "billaddress2": {
             "label": "Billing Address 2",
             "required": false,
             "datatype": "C",
@@ -80,7 +80,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btadr3": {
+        "billaddress3": {
             "label": "Billing Address 3",
             "required": false,
             "datatype": "C",
@@ -88,7 +88,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btctry": {
+        "billcountry": {
             "label": "Billing Country",
             "required": false,
             "datatype": "C",
@@ -96,7 +96,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btcity": {
+        "billcity": {
             "label": "Billing City",
             "required": false,
             "datatype": "C",
@@ -104,7 +104,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btstate": {
+        "billstate": {
             "label": "Billing State",
             "required": false,
             "datatype": "C",
@@ -112,7 +112,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btzip": {
+        "billzip": {
             "label": "Billing Zip",
             "required": false,
             "datatype": "C",
@@ -128,7 +128,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "stname": {
+        "shipname": {
             "label": "Shipping Name",
             "required": false,
             "datatype": "C",
@@ -136,7 +136,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "stadr1": {
+        "shipaddress": {
             "label": "Shipping Address",
             "required": false,
             "datatype": "C",
@@ -144,7 +144,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "stadr2": {
+        "shipaddress2": {
             "label": "Shipping Address 2",
             "required": false,
             "datatype": "C",
@@ -152,7 +152,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "stadr3": {
+        "shipaddress3": {
             "label": "Shipping Address 3",
             "required": false,
             "datatype": "C",
@@ -160,7 +160,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "stctry": {
+        "shipcountry": {
             "label": "Shipping Country",
             "required": false,
             "datatype": "C",
@@ -168,7 +168,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "stcity": {
+        "shipcity": {
             "label": "Shipping City",
             "required": false,
             "datatype": "C",
@@ -176,7 +176,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "ststate": {
+        "shipstate": {
             "label": "Shipping State",
             "required": false,
             "datatype": "C",
@@ -184,7 +184,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "stzip": {
+        "shipzip": {
             "label": "Shipping Zip",
             "required": false,
             "datatype": "C",
@@ -200,7 +200,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "telenbr": {
+        "phone": {
             "label": "Phone",
             "required": false,
             "datatype": "C",
@@ -216,7 +216,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "emailadr": {
+        "email": {
             "label": "Email",
             "required": false,
             "datatype": "C",
@@ -256,7 +256,7 @@
             "after-decimal": false,
             "date-format": "m/d/Y"
         },
-        "priccode": {
+        "pricecode": {
             "label": "Price Code",
             "required": false,
             "datatype": "C",
@@ -264,7 +264,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "priccodedesc": {
+        "pricecodedesc": {
             "label": "Price Code Desc",
             "required": false,
             "datatype": "C",
@@ -304,7 +304,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "sviacode": {
+        "shipviacd": {
             "label": "Ship Via Code",
             "required": false,
             "datatype": "C",
@@ -312,7 +312,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "sviacodedesc": {
+        "shipviadesc": {
             "label": "Svia Code Desc",
             "required": false,
             "datatype": "C",
@@ -480,7 +480,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "miscellaneous": {
+        "misccost": {
             "label": "Misc",
             "required": false,
             "datatype": "C",
@@ -488,7 +488,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "order_total": {
+        "ordertotal": {
             "label": "Order Total",
             "required": false,
             "datatype": "N",

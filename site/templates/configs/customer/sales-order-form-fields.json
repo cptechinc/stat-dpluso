@@ -176,7 +176,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "odrsubtot": {
+        "subtotal": {
             "label": "Order Subtotal",
             "required": false,
             "datatype": "N",
@@ -184,7 +184,7 @@
             "after-decimal": 3,
             "date-format": false
         },
-        "odrtax": {
+        "salestax": {
             "label": "Order Tax",
             "required": false,
             "datatype": "N",
@@ -192,7 +192,7 @@
             "after-decimal": 3,
             "date-format": false
         },
-        "odrfrt": {
+        "freight": {
             "label": "Order Format",
             "required": false,
             "datatype": "N",
@@ -200,7 +200,7 @@
             "after-decimal": 3,
             "date-format": false
         },
-        "odrmis": {
+        "misccost": {
             "label": "Order Misc",
             "required": false,
             "datatype": "N",
@@ -208,7 +208,7 @@
             "after-decimal": 3,
             "date-format": false
         },
-        "odrtotal": {
+        "ordertotal": {
             "label": "Order Total",
             "required": false,
             "datatype": "N",
@@ -216,7 +216,7 @@
             "after-decimal": 3,
             "date-format": false
         },
-        "havenote": {
+        "hasnote": {
             "label": "Have Note",
             "required": false,
             "datatype": "C",
@@ -256,7 +256,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "sname": {
+        "shipname": {
             "label": "Shipping Name",
             "required": false,
             "datatype": "C",
@@ -264,7 +264,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "saddress": {
+        "shipaddress": {
             "label": "Shipping Address",
             "required": false,
             "datatype": "C",
@@ -272,7 +272,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "saddress2": {
+        "shipaddress2": {
             "label": "Shipping Address2",
             "required": false,
             "datatype": "C",
@@ -280,7 +280,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "scity": {
+        "shipcity": {
             "label": "Shipping City",
             "required": false,
             "datatype": "C",
@@ -288,7 +288,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "sst": {
+        "shipstate": {
             "label": "Shipping State",
             "required": false,
             "datatype": "C",
@@ -296,7 +296,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "szip": {
+        "shipzip": {
             "label": "Shipping Zip",
             "required": false,
             "datatype": "C",
@@ -304,7 +304,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "scountry": {
+        "shipcountry": {
             "label": "Shipping Country",
             "required": false,
             "datatype": "C",
@@ -344,7 +344,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "faxnumber": {
+        "faxnbr": {
             "label": "Fax Number",
             "required": false,
             "datatype": "C",
@@ -384,7 +384,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "priccode": {
+        "pricecode": {
             "label": "Price Code",
             "required": false,
             "datatype": "C",
@@ -392,7 +392,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "pricdesc": {
+        "pricecodedesc": {
             "label": "Price Desc",
             "required": false,
             "datatype": "C",
@@ -400,7 +400,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "pricdisp": {
+        "pricedisp": {
             "label": "Price Disp",
             "required": false,
             "datatype": "C",
@@ -560,23 +560,23 @@
             "after-decimal": false,
             "date-format": false
         },
-        "ccno": {
-            "label": "Credit Card No",
+        "cardnumber": {
+            "label": "Credit Card #",
             "required": false,
             "datatype": "C",
             "before-decimal": false,
             "after-decimal": false,
             "date-format": false
         },
-        "xpdate": {
-            "label": "CC Exp Date",
+        "cardexpire": {
+            "label": "Card Expire Date",
             "required": false,
             "datatype": "D",
             "before-decimal": false,
             "after-decimal": false,
             "date-format": "m/d/Y"
         },
-        "ccvalidcode": {
+        "cardcode": {
             "label": "CC Code",
             "required": false,
             "datatype": "C",
@@ -584,7 +584,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "ccapproval": {
+        "cardapproval": {
             "label": "CC Approval",
             "required": false,
             "datatype": "C",
@@ -592,7 +592,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "costtot": {
+        "totalcost": {
             "label": "Cost Total",
             "required": false,
             "datatype": "N",
@@ -600,15 +600,15 @@
             "after-decimal": 3,
             "date-format": false
         },
-        "totdisc": {
-            "label": "Total Disc",
+        "totaldiscount": {
+            "label": "Total Discount",
             "required": false,
             "datatype": "N",
             "before-decimal": 7,
             "after-decimal": 3,
             "date-format": false
         },
-        "paytype": {
+        "paymenttype": {
             "label": "Pay Type",
             "required": false,
             "datatype": "C",
@@ -632,7 +632,7 @@
             "after-decimal": false,
             "date-format": "m/d/Y"
         },
-        "btname": {
+        "billname": {
             "label": "Billing Name",
             "required": false,
             "datatype": "C",
@@ -640,7 +640,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btadr1": {
+        "billaddress": {
             "label": "Billing Address",
             "required": false,
             "datatype": "C",
@@ -648,7 +648,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btadr2": {
+        "billaddress2": {
             "label": "Billing Address2",
             "required": false,
             "datatype": "C",
@@ -656,7 +656,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btadr3": {
+        "billaddress3": {
             "label": "Billing Address3",
             "required": false,
             "datatype": "C",
@@ -664,7 +664,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btctry": {
+        "billcountry": {
             "label": "Billing Country",
             "required": false,
             "datatype": "C",
@@ -672,7 +672,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btcity": {
+        "billcity": {
             "label": "Billing City",
             "required": false,
             "datatype": "C",
@@ -680,7 +680,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btstate": {
+        "billstate": {
             "label": "Billing State",
             "required": false,
             "datatype": "C",
@@ -688,7 +688,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "btzip": {
+        "billzip": {
             "label": "Billing Zip",
             "required": false,
             "datatype": "C",

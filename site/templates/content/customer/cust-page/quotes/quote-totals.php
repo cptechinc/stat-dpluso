@@ -8,8 +8,8 @@
     <td></td> <td></td> <td></td> <td>Freight:</td> <td></td> <td class="text-right">$ <?= $quote->freight; ?></td> <td></td> <td></td> <td></td>
 </tr>
 <tr class="detail">
-    <td></td> <td></td> <td></td> <td>Misc:</td> <td></td> <td class="text-right">$ <?= $quote->miscellaneous; ?></td> <td></td> <td></td> <td></td>
+    <td></td> <td></td> <td></td> <td>Misc:</td> <td></td> <td class="text-right">$ <?= $quote->misccost; ?></td> <td></td> <td></td> <td></td>
 </tr>
 <tr class="detail">
-    <td></td> <td></td> <td></td> <td>Total:</td> <td></td> <td class="text-right">$ <?= $quote->order_total; ?></td> <td></td> <td></td> <td></td>
+    <td></td> <td></td> <td></td> <td>Total:</td> <td></td> <td class="text-right">$ <?= $quote->ordertotal; ?></td> <td></td> <td></td> <td></td>
 </tr>

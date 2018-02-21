@@ -23,11 +23,11 @@
 	        	</tr>
 	        	<tr>
 	        		<td>Misc.</td>
-	        		<td class="text-right">$ <?= formatmoney($quote->miscellaneous); ?></td>
+	        		<td class="text-right">$ <?= formatmoney($quote->misccost); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Total</td>
-	        		<td class="text-right">$ <?= formatmoney($quote->order_total); ?></td>
+	        		<td class="text-right">$ <?= formatmoney($quote->ordertotal); ?></td>
 	        	</tr>
 	        </table>
 	    </div>

@@ -11,23 +11,23 @@
 	    	<table class="table-condensed table table-striped numeric">
 	        	<tr>
 	        		<td>Subtotal</td>
-	        		<td class="text-right">$ <?= formatmoney($order->odrsubtot); ?></td>
+	        		<td class="text-right">$ <?= formatmoney($order->subtotal); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Tax</td>
-	        		<td class="text-right">$ <?= formatmoney($order->odrtax); ?></td>
+	        		<td class="text-right">$ <?= formatmoney($order->salestax); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Freight</td>
-	        		<td class="text-right">$ <?= formatmoney($order->odrfrt); ?></td>
+	        		<td class="text-right">$ <?= formatmoney($order->freight); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Misc.</td>
-	        		<td class="text-right">$ <?= formatmoney($order->odrmis); ?></td>
+	        		<td class="text-right">$ <?= formatmoney($order->misccost); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Total</td>
-	        		<td class="text-right">$ <?= formatmoney($order->odrtotal); ?></td>
+	        		<td class="text-right">$ <?= formatmoney($order->ordertotal); ?></td>
 	        	</tr>
 	        </table>
 	    </div>

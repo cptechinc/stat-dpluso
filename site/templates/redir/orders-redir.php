@@ -255,56 +255,54 @@
 			break;
 		case 'update-orderhead':
 			$ordn = $input->post->text("ordn");
-			$order = get_orderhead(session_id(), $ordn, false, false);
+			$order = SalesOrder::load(session_id(), $ordn);
+			//$order = get_orderhead(session_id(), $ordn, false, false);
 			$intl = $input->post->text("intl");
-			$paytype = addslashes($input->post->text("paytype"));
+			$order->shiptoid = $input->post->text('shiptoid');
+			$order->custname = $input->post->text('cust-name');
+			$order->custpo = $input->post->text("custpo");
+			$order->shipname = $input->post->text("shiptoname");
+			$order->shipaddress = $input->post->text("shipto-address");
+			$order->shipaddress2 = $input->post->text("shipto-address2");
+			$order->shipcity = $input->post->text("shipto-city");
+			$order->shipstate = $input->post->text("shipto-state");
+			$order->shipzip = $input->post->text("shipto-zip");
+			$order->contact = $input->post->text('contact');
+			$order->phone = $input->post->text("contact-phone");
+			$order->extension = $input->post->text("contact-extension");
+			$order->faxnbr = $fax = $input->post->text("contact-fax");
+			$order->email = $input->post->text("contact-email");
+			$order->releasenbr = $input->post->text("release-number");
+			$order->shipviacd = $input->post->text('shipvia');
+			$order->rqstdate = $input->post->text("rqstdate");
+			$order->shipcom = $input->post->text("shipcomplete");
+			$order->billname = $input->post->text('cust-name');
+			// $order->billaddress = $input->post->text('cust-address');
+			// $order->billaddress2 = $input->post->text('cust-address2');
+			// $order->billcity = $input->post->text('cust-city');
+			// $order->billstate = $input->post->text('cust-state');
+			// $order->billzip = $input->post->text('cust-zip');
 
-			$order['shiptoid'] = $input->post->text('shiptoid');
-			$order['custname'] = $input->post->text('cust-name');
-			$order['custpo'] = $input->post->text("custpo");
-			$order['sname'] = $input->post->text("shiptoname");
-			$order['saddress'] = $input->post->text("shipto-address");
-			$order['saddress2'] = $input->post->text("shipto-address2");
-			$order['scity'] = $input->post->text("shipto-city");
-			$order['sst'] = $input->post->text("shipto-state");
-			$order['szip'] = $input->post->text("shipto-zip");
-			$order['contact'] = $input->post->text('contact');
-			$order['phone'] = $input->post->text("contact-phone");
-			$order['extension'] = $input->post->text("contact-extension");
-			$order['faxnumber'] = $fax = $input->post->text("contact-fax");
-			$order['email'] = $input->post->text("contact-email");
-			$order['releasenbr'] = $input->post->text("release-number");
-			$order['shipviacd'] = $input->post->text('shipvia');
-			$order['rqstdate'] = $input->post->text("rqstdate");
-			$order['shipcom'] = $input->post->text("shipcomplete");
-			$order['btname'] = $input->post->text('cust-name');
-			// $order['btadr1'] = $input->post->text('cust-address');
-			// $order['btadr2'] = $input->post->text('cust-address2');
-			// $order['btcity'] = $input->post->text('cust-city');
-			// $order['btstate'] = $input->post->text('cust-state');
-			// $order['btzip'] = $input->post->text('cust-zip');
-			$ccno = '';
-			$xpd = '';
-			$ccv = '';
-			
 			if ($intl == 'Y') {
-				$order['phone'] = $input->post->text("office-accesscode") . $input->post->text("office-countrycode") . $input->post->text("intl-office");
-				$order['extension'] = $input->post->text("intl-ofice-ext");
-				$order['faxnumber'] = $input->post->text("fax-accesscode") . $input->post->text("fax-countrycode") . $input->post->text("intl-fax");
+				$order->phone = $input->post->text("office-accesscode") . $input->post->text("office-countrycode") . $input->post->text("intl-office");
+				$order->extension = $input->post->text("intl-ofice-ext");
+				$order->faxnbr = $input->post->text("fax-accesscode") . $input->post->text("fax-countrycode") . $input->post->text("intl-fax");
 			} else {
-				$order['phone'] = $input->post->text("contact-phone");
-				$order['extension'] = $input->post->text("contact-extension");
-				$order['faxnumber'] = $input->post->text("contact-fax");
-			}
-
-			if ($paytype == 'cc') {
-				$ccno = $input->post->text("ccno");
-				$xpd = $input->post->text("xpd");
-				$ccv = $input->post->text("ccv");
+				$order->phone = $input->post->text("contact-phone");
+				$order->extension = $input->post->text("contact-extension");
+				$order->faxnbr = $input->post->text("contact-fax");
 			}
 			$custID = get_custidfromorder(session_id(), $ordn);
-			$session->sql = edit_orderhead(session_id(), $ordn, $order, false);
-			$session->sql .= '<br>'. edit_orderhead_credit(session_id(), $ordn, $paytype, $ccno, $xpd, $ccv);
+			$session->sql = $order->update();
+			$order->paymenttype = addslashes($input->post->text("paytype"));
+			
+			if ($paymenttype == 'cc') {
+				$order->cardnumber = $input->post->text("ccno");
+				$order->cardexpire = $input->post->text("xpd");
+				$order->cardcode = $input->post->text("ccv");
+			}
+			
+			$session->sql .= '<br>'. $order->update_payment();
 			$data = array('DBNAME' => $config->dbName, 'SALESHEAD' => false, 'ORDERNO' => $ordn, 'CUSTID' => $custID);
 			
 			if ($input->post->exitorder) {

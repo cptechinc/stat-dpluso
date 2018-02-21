@@ -54,7 +54,7 @@
                                         $custID = $this->json['custid'];
  										$url->query->setData(array('custID' => $custID, 'ordn' => $ordn, 'returnpage' => urlencode(Processwire\wire('page')->fullURL->getUrl())));
  										$href = $url->getUrl();
- 										$celldata .= "&nbsp; " . $bootstrap->openandclose('a', "href=$href|class=load-order-documents|title=Load Order Documents|aria-label=Load Order Documents|data-ordn=$ordn|data-custid=$custID|data-type=hist", $bootstrap->createicon('fa fa-file-text'));
+ 										$celldata .= "&nbsp; " . $bootstrap->openandclose('a', "href=$href|class=load-order-documents|title=Load Order Documents|aria-label=Load Order Documents|data-ordn=$ordn|data-custid=$custID|data-type=ci-sales-history", $bootstrap->createicon('fa fa-file-text'));
         							}
                                     $tb->td("colspan=$colspan|class=$class", $celldata);
         						} else {

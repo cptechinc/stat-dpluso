@@ -84,7 +84,7 @@
                     'ci_custpo' => $config->pages->customer."redir/?action=ci-custpo"
     			],
     			'load' => [
-    				'loadindex' =>  $config->pages->ajaxload."customers/cust-index/",
+    				'loadindex' =>  $config->pages->ajaxload."customers/cust-index/"
     			]
     		],
     		'products' => [
@@ -201,6 +201,13 @@
                 ],
                 'json' => [
                     'vi_shipfromlist' => $config->pages->ajaxjson."vi/vi-shipfrom-list/"
+                ]
+            ],
+            'sales_order' => [
+                'load' => [
+                    'page' => $config->pages->ajaxload."order/",
+                    'docs'=> $config->pages->ajaxload."order/documents/",
+                    'tracking'=> $config->pages->ajaxload."order/tracking/"
                 ]
             ]
     	],

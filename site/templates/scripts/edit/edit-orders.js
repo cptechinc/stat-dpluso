@@ -128,16 +128,17 @@ $(expirefields.date).change(function() {
 		e.preventDefault();
 		var loadinto = $(this).data('loadinto');
 		var focuson = $(this).data('focus');
-		var geturl = $(this).attr('href');
+		var geturl = URI($(this).attr('href')).addQuery('page', 'edit').toString();
 		var clickon = $(this).data('click');
+		
 		$.get(geturl, function() {
 			generateurl(function(url) {
-				console.log(url);
 				loadin(url, loadinto, function() {
 					$(clickon).click();
-					if (focuson.length > 0) { $('html, body').animate({scrollTop: $(focuson).offset().top - 60}, 1000); }
-
-				} );
+					if (focuson.length > 0) { 
+						$('html, body').animate({scrollTop: $(focuson).offset().top - 60}, 1000); 
+					}
+				});
 			});
 		});
 	});
@@ -186,7 +187,7 @@ $(expirefields.date).change(function() {
 	function getorderheadresults(ordn, form, callback) {
 		$.getJSON(config.urls.json.getorderhead+"?ordn="+ordn, function( json ) {
 			if (json.response.order.error === 'Y') {
-				createalertpanel(form + ' .response', json.response.order.errormsg, "<i span='glyphicon glyphicon-floppy-remove'> </i> Error! ", "danger");
+				$(form + ' .response').createalertpanel(json.response.order.errormsg, "<i span='glyphicon glyphicon-floppy-remove'> </i> Error! ", "danger");
 				$('html, body').animate({scrollTop: $(form + ' .response').offset().top - 120}, 1000);
 			} else {
 				$.notify({

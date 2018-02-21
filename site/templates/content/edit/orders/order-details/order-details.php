@@ -27,8 +27,8 @@
 					<?php endif; ?>
                 </td>
                 <td data-title="Price" class="text-right">$ <?= formatMoney($detail->price); ?></td>
-                <td data-title="Ordered" class="text-right"><?= $detail->qtyordered + 0; ?></td>
-                <td data-title="Total" class="text-right">$ <?= formatMoney($detail->extamt); ?></td>
+                <td data-title="Ordered" class="text-right"><?= $detail->qty + 0; ?></td>
+                <td data-title="Total" class="text-right">$ <?= formatMoney($detail->totalprice); ?></td>
                 <td data-title="Shipped" class="text-right"><?= $detail->qtyshipped + 0; ?></td>
                 <td data-title="Requested Ship Date" class="text-right"><?= $detail->rshipdate; ?></td>
                 <td data-title="Warehouse"><?= $detail->whse; ?></td>

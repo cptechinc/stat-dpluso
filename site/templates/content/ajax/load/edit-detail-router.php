@@ -4,6 +4,7 @@
     if ($input->get->vendorID) {
         $vendorID = $input->get->text('vendorID');
     }
+    
     switch ($edittype) {
         case 'cart':
             $linedetail = getcartline(session_id(), $linenbr, false);

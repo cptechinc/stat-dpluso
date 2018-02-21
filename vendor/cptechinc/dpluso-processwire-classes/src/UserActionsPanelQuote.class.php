@@ -28,7 +28,7 @@
         /* =============================================================
            CONTENT FUNCTIONS
         ============================================================ */
-         public function draw_allactionstable($actions) {
+         public function draw_allactionstable($actions) { 
              $tb = new Table('class=table table-bordered table-condensed table-striped');
              $tb->tablesection('thead');
                  $tb->tr();
@@ -42,7 +42,6 @@
                  
                  foreach ($actions as $action) {
                      $class = $this->generate_rowclass($action);
-                     
                      $tb->tr("class=$class");
                      $tb->td('', $action->generate_duedatedisplay('m/d/Y'));
                      $tb->td('', $action->actiontype);
@@ -54,7 +53,7 @@
              return $tb->close();
          }
          
-         public function draw_actionstable($actions) {
+         public function draw_actionstable($actions) { // DEPRECATED 02/21/2018
              $tb = new Table('class=table table-bordered table-condensed table-striped');
              $tb->tablesection('thead');
                  $tb->tr();
@@ -68,7 +67,6 @@
                  
                  foreach ($actions as $action) {
                      $class = $this->generate_rowclass($action);
-                     
                      $tb->tr("class=$class");
                      $tb->td('', date('m/d/Y g:i A', strtotime($action->datecreated)));
                      $tb->td('', ucfirst($action->generate_actionsubtypedescription()));
@@ -93,7 +91,6 @@
                  
                  foreach ($notes as $note) {
                      $class = $this->generate_rowclass($note);
-                     
                      $tb->tr("class=$class");
                      $tb->td('', date('m/d/Y g:i A', strtotime($note->datecreated)));
                      $tb->td('', ucfirst($note->generate_actionsubtypedescription()));
@@ -118,7 +115,6 @@
                  
                  foreach ($tasks as $task) {
                      $class = $this->generate_rowclass($task);
-                     
                      $tb->tr("class=$class");
                      $tb->td('', $task->generate_duedatedisplay('m/d/Y'));
                      $tb->td('', $task->generate_actionsubtypedescription());

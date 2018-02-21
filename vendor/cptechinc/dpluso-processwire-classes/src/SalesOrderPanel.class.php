@@ -128,13 +128,15 @@
 				if (Processwire\wire('session')->{'orders-loaded-for'} == Processwire\wire('user')->loginid) {
 					return 'Last Updated : ' . Processwire\wire('session')->{'orders-updated'};
 				}
-				return '';
 			}
 			return '';
 		}
 		
 		public function generate_detailreorderform(Order $order, OrderDetail $detail) {
-			if (empty($detail->itemid)) return '';
+			if (empty(($detail->itemid))) {
+				echo $detail->itemid;
+				return '';
+			}
 			$action = Processwire\wire('config')->pages->cart.'redir/';
 			$id = $order->orderno.'-'.$detail->itemid.'-form';
 			$form = new FormMaker("method=post|action=$action|class=item-reorder|id=$id");
@@ -142,7 +144,7 @@
 			$form->input("type=hidden|name=ordn|value=$order->orderno");
 			$form->input("type=hidden|name=custID|value=$order->custid");
 			$form->input("type=hidden|name=itemID|value=$detail->itemid");
-			$form->input("type=hidden|name=qty|value=".intval($detail->qtyordered));
+			$form->input("type=hidden|name=qty|value=".intval($detail->qty));
 			$form->input("type=hidden|name=desc|value=$detail->desc1");
 			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->createicon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->openandclose('span', 'class=sr-only', 'Submit Reorder'));
 			return $form->finish();
@@ -200,7 +202,6 @@
 			$icon = $bootstrap->createicon('fa fa-file-text');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			$documentsTF = ($orderdetail) ? $orderdetail->has_documents() : $order->has_documents();
-			
 			if ($documentsTF) {
 				return $bootstrap->openandclose('a', "href=$href|class=h3 generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
 			} else {

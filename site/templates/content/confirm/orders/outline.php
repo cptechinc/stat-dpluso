@@ -66,9 +66,9 @@
 			<td>
 				<?= $orderdisplay->generate_detailvieweditlink($order, $detail); ?>
 			</td>
-			<td class="text-right"> <?= intval($detail->qtyordered) ; ?> </td>
+			<td class="text-right"> <?= intval($detail->qty) ; ?> </td>
 			<td class="text-right">$ <?= formatmoney($detail->price); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->price * intval($detail->qtyordered)) ?> </td>
+			<td class="text-right">$ <?= formatmoney($detail->price * intval($detail->qty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>

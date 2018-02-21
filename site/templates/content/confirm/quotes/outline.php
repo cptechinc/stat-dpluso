@@ -75,9 +75,9 @@
 			<td>
 				<?= $quotedisplay->generate_detailvieweditlink($quote, $detail, $page->bootstrap->createicon('glyphicon glyphicon-eye-open')); ?>
             </td>
-			<td class="text-right"> <?= intval($detail->ordrqty); ?> </td>
+			<td class="text-right"> <?= intval($detail->qty); ?> </td>
 			<td class="text-right">$ <?= formatmoney($detail->ordrprice); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->ordrprice * intval($detail->ordrqty)) ?> </td>
+			<td class="text-right">$ <?= formatmoney($detail->ordrprice * intval($detail->qty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>

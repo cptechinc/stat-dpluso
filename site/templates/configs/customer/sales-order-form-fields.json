@@ -160,7 +160,7 @@
             "after-decimal": false,
             "date-format": "m/d/Y"
         },
-        "havedoc": {
+        "hasdocuments": {
             "label": "Has Docs",
             "required": false,
             "datatype": "C",
@@ -168,7 +168,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "havetrk": {
+        "hastracking": {
             "label": "Tracking",
             "required": false,
             "datatype": "C",
@@ -216,7 +216,7 @@
             "after-decimal": 3,
             "date-format": false
         },
-        "hasnote": {
+        "hasnotes": {
             "label": "Have Note",
             "required": false,
             "datatype": "C",

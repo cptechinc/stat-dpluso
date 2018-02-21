@@ -30,7 +30,7 @@
         /* =============================================================
            CONTENT FUNCTIONS
        ============================================================ */
-            public function draw_allactionstable($actions) {
+            public function draw_allactionstable($actions) { 
                 $tb = new Table('class=table table-bordered table-condensed table-striped');
                 $tb->tablesection('thead');
                     $tb->tr();
@@ -56,7 +56,7 @@
                 return $tb->close();
             }
             
-            public function draw_actionstable($actions) {
+            public function draw_actionstable($actions) { // DEPRECATED 02/21/2018
                 $tb = new Table('class=table table-bordered table-condensed table-striped');
                 $tb->tablesection('thead');
                     $tb->tr();

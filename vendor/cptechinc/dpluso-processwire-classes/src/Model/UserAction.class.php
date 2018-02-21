@@ -174,10 +174,10 @@
 					$subpage = Processwire\wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
 					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
 					break;
-				case 'actions':
+				/* case 'actions': // DEPRECATED 02/21/2018
 					$subpage = Processwire\wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
 					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
-					break;
+					break; */
 				default:
 					return '';
 					break;

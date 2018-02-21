@@ -150,10 +150,10 @@
 			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
 			
 			if ($quote->can_edit()) {
-				$title = ($quote->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
+				$title = ($quote->has_notes()) ? "View and Create Quote Notes" : "Create Quote Notes";
 				$addclass = ($quote->has_notes()) ? '' : 'text-muted';
 			} else {
-				$title = ($quote->has_notes()) ? "View Order Notes" : "View Order Notes";
+				$title = ($quote->has_notes()) ? "View Quote Notes" : "View Quote Notes";
 				$addclass = ($quote->has_notes()) ? '' : 'text-muted';
 			}
 			$content = $bootstrap->createicon('material-icons md-36', '&#xE0B9;');

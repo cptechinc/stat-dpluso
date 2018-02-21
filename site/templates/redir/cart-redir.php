@@ -130,7 +130,7 @@
 					$details = get_orderdetails(session_id(), $ordn, true, false);
 					foreach ($details as $detail) {
 						$itemids[] = $detail->itemid;
-						$qtys[] = $detail->qtyordered;
+						$qtys[] = $detail->qty;
 		 			}
 					break;
 			}
@@ -143,7 +143,7 @@
 			$cartdetail = getcartline(session_id(), $linenbr, false);
 			$cartdetail['price'] = $input->post->text('price');
 			$cartdetail['discpct'] =  $input->post->text('discount');
-			$cartdetail['qtyordered'] = $qty;
+			$cartdetail['qty'] = $qty;
 			$cartdetail['rshipdate'] = $input->post->text('rqst-date');
 			$cartdetail['whse'] = $input->post->text('whse');
 			$cartdetail['spcord'] = $input->post->text('specialorder');
@@ -168,7 +168,7 @@
 		case 'remove-line':
 			$linenbr = $input->post->text('linenbr');
 			$cartdetail = getcartline(session_id(), $linenbr, false);
-			$cartdetail['qtyordered'] = '0';
+			$cartdetail['qty'] = '0';
 			$session->sql = edit_cartline(session_id(), $cartdetail, false);
 			$session->loc = $config->pages->cart;
 			$custID = get_custidfromcart(session_id());

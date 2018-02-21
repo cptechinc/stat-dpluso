@@ -61,9 +61,9 @@
 				<br>
 				<small><?= $detail->desc1. ' ' . $detail->desc2 ; ?></small>
 			</td>
-			<td class="text-right"><?= intval($detail->qtyordered); ?></td>
+			<td class="text-right"><?= intval($detail->qty); ?></td>
 			<td class="text-right">$ <?= formatmoney($detail->price); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->price * $detail->qtyordered) ?> </td>
+			<td class="text-right">$ <?= formatmoney($detail->price * $detail->qty) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>

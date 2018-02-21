@@ -10,7 +10,7 @@
             $ordersredirect->setPath($config->pages->customer."redir/");
 
 			$docsurl = $ordersredirect->setData(array('action' => 'get-order-documents', 'ordn' => $ordn, 'linenbr' => '0', 'page' => $input->pageNum));
-			if ($order['havedoc'] == 'Y') {
+			if ($order['hasdocuments'] == 'Y') {
 				$documentlink = '
 							<a class="load-sales-docs" href="'.$docsurl.'" '.$ajax->data.'> <span class="sr-only">View Documents</span>
 								<i class="material-icons md-36" title="Click to View Documents">&#xE873;</i>
@@ -22,7 +22,7 @@
 			}
 
             $trackhref = $ordersredirect->setData(array('action' => 'get-order-tracking', 'ordn' => $ordn, 'page' => $input->pageNum));
-			if ($order['havetrk'] == 'Y') {
+			if ($order['hastracking'] == 'Y') {
 				$tracklink = '
 							<a href="'.$trackhref.'" class="h3 load-detail" '.$ajax->data.'>
 									<span class="sr-only">View Tracking</span><span class="glyphicon glyphicon-plane hover" title="Click to view Tracking"></span>
@@ -36,7 +36,7 @@
 			}
 		
 			$noteurl = $config->pages->notes.'redir/?action=get-order-notes&ordn='.$ordn.'&linenbr=0&modal=modal';
-			if ($order['hasnote'] != 'Y') {
+			if ($order['hasnotes'] != 'Y') {
 				$headnoteicon = '<a class="load-notes text-muted" href="'.$noteurl.'" data-modal="#notes-modal"><i class="material-icons md-36" title="View order notes">&#xE0B9;</i></a>';
 			} else {
 				$headnoteicon = '<a class="load-notes" href="'.$noteurl.'" data-modal="#notes-modal"> <i class="material-icons md-36" title="View order notes">&#xE0B9;</i></a>';

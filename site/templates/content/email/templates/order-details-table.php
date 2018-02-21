@@ -11,9 +11,9 @@
         foreach($orderdetails as $detail) {
             $tb->tr();
             $tb->td('', $detail['itemid']);
-            $tb->td('', $detail['qtyordered']);
+            $tb->td('', $detail['qty']);
             $tb->td('', formatmoney($detail['price']). ' / '. $detail['uom']);
-            $tb->td('class="text-right"', formatmoney($detail['extamt']));
+            $tb->td('class="text-right"', formatmoney($detail['totalprice']));
         }
         $tb->tr();
         $tb->td('colspan=2', 'Tax');

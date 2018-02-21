@@ -19,7 +19,7 @@
             <?php if (strlen($detail->vendoritemid)) { echo ' '.$detail->vendoritemid."<br>";} ?>
             <?= $detail->desc1. ' ' . $detail->desc2 ; ?>
         </td>
-        <td class="text-right"><?= intval($detail->qtyordered); ?></td>
+        <td class="text-right"><?= intval($detail->qty); ?></td>
         <td class="text-right">$ <?= formatmoney($detail->price); ?></td>
         <td class="text-right"><?= intval($detail->qtybackord); ?></td> 
         <td class="text-right"><?= intval($detail->qtyshipped); ?></td>

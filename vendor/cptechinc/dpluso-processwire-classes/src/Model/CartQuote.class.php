@@ -1,13 +1,11 @@
 <?php 
-	class SalesOrder extends Order implements OrderInterface {
+	class CartQuote extends Order implements OrderInterface {
 		use CreateFromObjectArrayTraits;
 		use CreateClassArrayTraits;
 		
-		protected $type;
 		protected $custname;
 		protected $orderno;
 		protected $orderdate;
-		protected $careof;
 		protected $invdate;
 		protected $shipdate;
 		protected $revdate;
@@ -55,16 +53,11 @@
 		}
 
 		public function can_edit() {
-			$config = Processwire\wire('pages')->get('/config/')->child("name=sales-orders");
-			$allowed = $config->allow_edit;
-			if ($config->allow_edit) {
-				$allowed = has_dpluspermission(wire('user')->loginid, 'eso');
-			}
-			return $allowed ? ($this->editord == 'Y' ? true : false) : false;
+			return true;
 		}
 
 		public function is_phoneintl() {
-			return $this->phintl == 'Y' ? true : false;
+			return false;
 		}
 		
 		/* =============================================================
@@ -80,24 +73,20 @@
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
-		public static function load($sessionID, $ordn, $debug = false) {
-			return get_orderhead($sessionID, $ordn, true, $debug);
+		public static function load($sessionID, $debug = false) {
+			return get_carthead($sessionID, true, $debug);
 		}
 		
 		public function update($debug = false) {
-			return edit_orderhead($this->sessionid, $this->orderno, $this, $debug);
-		}
-		
-		public function update_payment($debug = false) {
-			return edit_orderhead_credit($sessionID, $this->orderno, $this->paytype, $this->cardnumber, $this->cardexpire, $this->cardcode, $debug) ;
+		//	return edit_orderhead($this->sessionid, $this->orderno, $this, $debug); TODO
 		}
 		
 		public function has_changes() {
 			$properties = array_keys(get_object_vars($this));
-			$order = SalesOrder::load($this->sessionid, $this->orderno);
+			$cart = self::load($this->sessionid);
 			
 			foreach ($properties as $property) {
-				if ($this->$property != $order->$property) {
+				if ($this->$property != $carthead->$property) {
 					return true;
 				}
 			}

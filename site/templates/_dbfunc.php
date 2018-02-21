@@ -1593,13 +1593,30 @@
 		}
 	}
 
-	function getcarthead($sessionID, $debug) {
+	function getcarthead($sessionID, $debug) { // DEPRECATED 02/22/2018
 		$sql = Processwire\wire('database')->prepare("SELECT * FROM carthed WHERE sessionid = :sessionID");
 		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
 		} else {
 			$sql->execute($switching);
+			return $sql->fetch(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_carthead($sessionID, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('carthed');
+		$q->where('sessionid', $sessionID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'CartQuote'); // CAN BE SalesOrder|SalesOrderEdit
+				return $sql->fetch();
+			}
 			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}
@@ -1628,7 +1645,38 @@
 		} else {
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
-
+	}
+	
+	function get_cartdetails($sessionID, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('cartdet');
+		$q->where('sessionid', $sessionID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'CartDetail'); // CAN BE SalesOrder|SalesOrderEdit
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_cartdetail($sessionID, $linenbr, $debug = false) {
+		$q = (new QueryBuilder())->table('cartdet');
+		$q->where('sessionid', $sessionID);
+		$q->where('linenbr', $linenbr);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'CartDetail');
+			return $sql->fetch();
+		}
 	}
 
 	function insertcarthead($sessionID, $custID, $shipID, $debug) {
@@ -1682,6 +1730,30 @@
 				$sql->execute($query['switching']);
 			}
 			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
+		}
+	}
+	
+	function update_cartdetail($sessionID, $detail, $debug = false) {
+		$originaldetail = CartDetail::load($sessionID, $detail->linenbr);
+		$properties = array_keys($order->_toArray());
+		$q = (new QueryBuilder())->table('cartdet');
+		$q->mode('update');
+		foreach ($properties as $property) {
+			if ($order->$property != $originaldetail->$property) {
+				$q->set($property, $detail->$property);
+			}
+		}
+		$q->where('orderno', $detail->orderno);
+		$q->where('sessionid', $detail->sessionid);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery();
+		} else {
+			if ($detail->has_changes()) {
+				$sql->execute($q->params);
+			}
+			return $q->generate_sqlquery($q->params);
 		}
 	}
 
@@ -1757,6 +1829,22 @@
 		} else {
 			$sql->execute($switching);
 			return $sql->fetch(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_orderdetail($sessionID, $ordn, $linenbr, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrdet');
+		$q->where('sessionid', $sessionID);
+		$q->where('orderno', $ordn);
+		$q->where('linenbr', $linenbr);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderDetail');
+			return $sql->fetch();
 		}
 	}
 

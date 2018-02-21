@@ -363,7 +363,7 @@
 			$orderdetail = getorderlinedetail(session_id(), $ordn, $linenbr, false);
 			$orderdetail['price'] = $input->post->text('price');
 			$orderdetail['discpct'] =  $input->post->text('discount');
-			$orderdetail['qtyordered'] = $input->post->text('qty');
+			$orderdetail['qty'] = $input->post->text('qty');
 			$orderdetail['rshipdate'] = $input->post->text('rqstdate');
 			$orderdetail['whse'] = $input->post->text('whse');
 			$orderdetail['linenbr'] = $input->post->text('linenbr');
@@ -396,7 +396,7 @@
 			$ordn = $input->post->text('ordn');
 			$linenbr = $input->post->text('linenbr');
 			$orderdetail = getorderlinedetail(session_id(), $ordn, $linenbr, false);
-			$orderdetail['qtyordered'] = '0';
+			$orderdetail['qty'] = '0';
 			$orderdetail['linenbr'] = $input->post->text('linenbr');
 			$session->sql = edit_orderline(session_id(), $ordn, $orderdetail, false);
 			$session->editdetail = true;

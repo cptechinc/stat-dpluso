@@ -15,6 +15,11 @@
 		protected $cost_total;
 		protected $margin_amt;
 		protected $margin_pct;
+		
+		//FOR SQL
+		protected $quotedate;
+		protected $reviewdate;
+		protected $expiredate;
 				
 		/* =============================================================
 			GETTER FUNCTIONS

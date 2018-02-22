@@ -741,7 +741,7 @@
 		$q->field($q->expr("STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate"));
 		$q->where('sessionid', $sessionID);
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order('quotedate', $sortrule, $limiting);
+		$q->order('quotedate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -762,7 +762,7 @@
 		$q->field($q->expr("STR_TO_DATE(revdate, '%m/%d/%Y') as reviewdate"));
 		$q->where('sessionid', $sessionID);
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order('reviewdate', $sortrule, $limiting);
+		$q->order('reviewdate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -783,7 +783,7 @@
 		$q->field($q->expr("STR_TO_DATE(expdate, '%m/%d/%Y') as expiredate"));
 		$q->where('custid', $custID);
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order('expiredate', $sortrule, $limiting);
+		$q->order('expiredate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {

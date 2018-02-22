@@ -38,6 +38,9 @@
 		protected $prntfmt;
 		protected $prntfmtdisp;
 		
+		// Properties needed by MYSQL to sort
+		protected $dateoforder;
+		
 		
 		/* =============================================================
 			GETTER FUNCTIONS 

@@ -14,6 +14,7 @@
         protected $cc = false; // Key Value array that is Recipient => Email Name
         protected $body;
         protected $file = false;
+        protected $selfbcc = false;
         
         function __construct($loginID) {
             $this->user = LogmUser::load($loginID);
@@ -85,6 +86,10 @@
             $this->bcc = array($name => $email);
         }
         
+        public function set_selfbcc($val = true) {
+            $this->selfbcc = $val;
+        }
+        
         public function set_filedirectory($dir) {
             $this->filedirectory = $dir;
         }
@@ -108,8 +113,15 @@
             foreach ($this->replyto as $email => $name) {
                 $emailer->setReplyTo($email, $name);
             }
+            
+            if ($this->selfbcc) {
+                $this->set_bcc($this->user->email, $this->user->name);
+            }
+            
             // setBcc allows setting from Array
-            $emailer->setBcc($this->bcc);
+            if (!empty($this->bcc)) {
+                $emailer->setBcc($this->bcc);
+            }
             
             if ($this->hasfile) {
                 if (strpos($this->filedirectory, $this->file) !== false) {
@@ -119,9 +131,9 @@
                 }
             }
             
-            if ($this->hashtml) {
-                $emailer->setHtml();
-            }
+            /* if ($this->hashtml) {
+                //$emailer->setHtml();
+            } */
             return $emailer->send();
         }
     }

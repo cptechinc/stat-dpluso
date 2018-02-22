@@ -2,6 +2,12 @@
     <input type="hidden" name="action" value="email-file-form">
     <div class="row">
         <div class="col-sm-6 form-group">
+            <label for="self-bcc">Send Bcc to you?</label>
+            <input type="checkbox" name="self-bcc" id="self-bcc" class="check-toggle" data-size="small" data-width="73px" value="Y">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group">
             <label for="email-recipient">Recipient Name</label>
             <div class="input-group">
                 <input type="text" class="form-control" name="name" id="email-recipient">
@@ -16,6 +22,7 @@
             </div>
         </div>
     </div>
+    
     <div class="form-group">
         <label for="email-subject">Subject</label>
         <input type="text" class="form-control" name="subject" id="email-subject" value="<?= urldecode($input->get->text('subject')); ?>">
@@ -33,3 +40,8 @@
         <h4></h4>
     </div>
 </div>
+<script>
+	$(function() {
+		$('.check-toggle').bootstrapToggle({on: 'Yes', off: 'No', onstyle: 'info' });
+	});
+</script>

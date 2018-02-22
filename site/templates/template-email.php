@@ -7,7 +7,7 @@
         $emailer->set_subject($input->post->text('subject'));
         $emailer->set_emailto($input->post->text('email'), $input->post->text('emailname'));
         $emailer->set_body($input->post->text('message'));
-        $emailer->set_bcc('paul@cptechinc.com', 'Paul Gomez');
+        $emailer->set_selfbcc(true);
     }
     
     switch ($page->name) { //$page->name is what we are printing
@@ -15,7 +15,7 @@
             $ordn = $input->get->text('ordn');
             $orderdisplay = new SalesOrderDisplay($sessionID, $page->fullURL, '#ajax-modal', $ordn);
             $order = $orderdisplay->get_order(); 
-            $printurl = new \Purl\Url($orderdisplay->generate_viewprintpageurl($order));
+            $printurl = new \Purl\Url($orderdisplay->generate_viewprintpage($order));
             $printurl->query->set('referenceID', $sessionID);
             $pdfmaker = new PDFMaker($sessionID, $printurl->getUrl());
             $file = $pdfmaker->process();
@@ -24,7 +24,7 @@
             $qnbr = $input->get->text('qnbr');
             $quotedisplay = new QuoteDisplay($sessionID, $page->fullURL, '#ajax-modal', $qnbr);
             $quote = $quotedisplay->get_quote();
-            $printurl = new \Purl\Url($quotedisplay->generate_viewprintpageurl($quote));
+            $printurl = new \Purl\Url($quotedisplay->generate_viewprintpage($quote));
             $printurl->query->set('referenceID', $sessionID);
             $pdfmaker = new PDFMaker($sessionID, $printurl->getUrl());
             $file = $pdfmaker->process();

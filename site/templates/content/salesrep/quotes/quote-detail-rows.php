@@ -21,8 +21,8 @@
             <?= $detail->desc1; ?>
         </td>
         <td class="text-right">$ <?= formatmoney($detail->quotprice); ?></td>
-        <td class="text-right"><?= intval($detail->quotunit); ?></td>
-        <td class="text-right">$ <?= formatmoney($detail->quotprice * $detail->quotunit); ?></td>
+        <td class="text-right"><?= intval($detail->quotqty); ?></td>
+        <td class="text-right">$ <?= formatmoney($detail->quotprice * $detail->quotqty); ?></td>
         <td></td>
         <td><?= $quotepanel->generate_loaddplusnoteslink($quote, $detail->linenbr); ?></td>
         <td></td>

@@ -20,7 +20,7 @@
 		protected $leaddays;
 		protected $costuom;
 		protected $quotind;
-		protected $quotunit;
+		protected $quotqty;
 		protected $quotprice;
 		protected $quotcost;
 		protected $quotmkupmarg;

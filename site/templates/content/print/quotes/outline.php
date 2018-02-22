@@ -65,9 +65,9 @@
 				<br>
 				<small><?= $detail->desc1. ' ' . $detail->desc2; ?></small>
 			</td>
-			<td class="text-right"> <?= intval($detail->quotunit); ?> </td>
+			<td class="text-right"> <?= intval($detail->quotqty); ?> </td>
 			<td class="text-right">$ <?= formatmoney($detail->quotprice); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->quotprice * intval($detail->quotunit)) ?> </td>
+			<td class="text-right">$ <?= formatmoney($detail->quotprice * intval($detail->quotqty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>

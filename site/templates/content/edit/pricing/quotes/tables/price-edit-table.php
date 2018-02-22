@@ -1,8 +1,8 @@
 <table class="table table-bordered table-striped table-condensed">
     <tr> <td>Price </td> <td class="text-right">$ <?= formatmoney($linedetail['quotprice']); ?></td> </tr>
     <tr> <td>Unit of Measurement</td> <td> <?= $linedetail['uom'] ?></td> </tr>
-    <tr> <td>Qty</td> <td class="text-right"><?= $linedetail['quotunit']+0; ?></td> </tr>
-    <tr> <td>Original Ext. Amt.</td> <td class="text-right">$ <?= formatmoney($linedetail['quotprice'] * $linedetail['quotunit']); ?></td> </tr>
+    <tr> <td>Qty</td> <td class="text-right"><?= $linedetail['quotqty']+0; ?></td> </tr>
+    <tr> <td>Original Ext. Amt.</td> <td class="text-right">$ <?= formatmoney($linedetail['quotprice'] * $linedetail['quotqty']); ?></td> </tr>
     <?php if ($appconfig->child('name=sales-orders')->show_originalprice) : ?>
         <tr> <td>Original Price</td> <td class="text-right">$ <?= formatmoney($linedetail['quotprice']); ?></td> </tr>
     <?php endif; ?>
@@ -17,7 +17,7 @@
 
 <h4>Edit Price</h4>
 <table class="table table-bordered table-striped table-condensed">
-    <tr> <td class="control-label">Qty</td> <td><input type="text" class="form-control pull-right input-sm text-right qty" name="qty" value="<?= $linedetail['quotunit']+0; ?>"></td> </tr>
+    <tr> <td class="control-label">Qty</td> <td><input type="text" class="form-control pull-right input-sm text-right qty" name="qty" value="<?= $linedetail['quotqty']+0; ?>"></td> </tr>
     <tr>
         <td class="control-label">Price</td>
         <td>
@@ -53,7 +53,7 @@
         <td>
             <div class="input-group">
                 <div class="input-group-addon input-sm">$</div>
-                <input type="text" class="form-control input-sm text-right totalquotprice" value="<?= formatmoney($linedetail['quotprice'] * $linedetail['quotunit']); ?>" disabled>
+                <input type="text" class="form-control input-sm text-right totalquotprice" value="<?= formatmoney($linedetail['quotprice'] * $linedetail['quotqty']); ?>" disabled>
             </div>
         </td>
     </tr>

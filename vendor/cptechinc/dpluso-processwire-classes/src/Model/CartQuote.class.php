@@ -20,6 +20,7 @@
 		protected $pricedisp;
 		protected $taxcodedisp;
 		protected $termtype;
+		protected $termdesc;
 		protected $rqstdate;
 		protected $shipcom;
 		protected $fob;

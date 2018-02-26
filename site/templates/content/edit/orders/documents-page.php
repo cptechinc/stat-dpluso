@@ -5,7 +5,7 @@
             <tr> <th>ItemID</th> <th>Document</th> <th>Date</th> <th>Time</th> </tr>
         </thead>
         <tbody>
-        	<?php $documents = getallorderdocs(session_id(), $ordn, false); ?>
+        	<?php $documents = get_allorderdocs(session_id(), $ordn); ?>
             <?php foreach ($documents as $document) : ?>
             	<td><?php echo $document['itemnbr']; ?></td>
             	<td><a href="<?= $config->documentstorage.$document['pathname']; ?>" target="_blank"><?php echo $document['title']; ?></a></td>

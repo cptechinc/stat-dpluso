@@ -5,5 +5,5 @@
 
 
     */
-
+    throw new Wire404Exception();
 ?>

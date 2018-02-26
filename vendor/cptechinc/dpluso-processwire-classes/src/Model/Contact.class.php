@@ -100,13 +100,31 @@
             return $url->getUrl();
         }
 
-		function generate_ciloadurl() {
+	    public function generate_ciloadurl() {
+            $url = $this->generate_redirurl();
+            $url->query->set('action', 'ci-customer');
+            $url->query->set('custID', $this->custid);
+            
 			if ($this->has_shipto()) {
-                return Processwire\wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($this->custid)."&shipID=".urlencode($this->shiptoid);
-            } else {
-                return Processwire\wire('config')->pages->customer."redir/?action=ci-customer&custID=".urlencode($this->custid);
+                $url->query->set('shipID', $this->shiptoid);
             }
+            return $url->getUrl();
 		}
+        
+        public function generate_setcartcustomerurl() {
+            $url = $this->generate_redirurl();
+            $url->query->set('action', 'shop-as-customer');
+            $url->query->set('custID', $this->custid);
+            
+			if ($this->has_shipto()) {
+                $url->query->set('shipID', $this->shiptoid);
+            }
+            return $url->getUrl();
+        }
+        
+        public function generate_redirurl() {
+            return new \Purl\Url(Processwire\wire('config')->pages->customer."redir/");
+        }
         
         /**
          * Outputs the javascript function name with parameter

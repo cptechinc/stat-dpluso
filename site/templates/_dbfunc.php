@@ -669,15 +669,21 @@
 		return (intval($sql->fetchColumn()) + 1);
 	}
 
-	function get_order_docs($sessionID, $ordn, $debug) { // FIXME USE PARAMATERS
-		$sql = "SELECT * FROM orddocs WHERE sessionid = '$sessionID' AND orderno = '$ordn' AND itemnbr = '' ";
+	function get_orderdocs($sessionID, $ordn, $debug = false) {
+		$q = (new QueryBuilder())->table('orddocs');
+		$q->where('sessionid', $sessionID);
+		$q->where('orderno', $ordn);
+		$q->where('itemnbr', '');
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return $sql;
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$results = Processwire\wire('database')->query($sql);
-			return $results;
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
+	
 /* =============================================================
 	QUOTES FUNCTIONS
 ============================================================ */
@@ -1568,13 +1574,16 @@
 /* =============================================================
 	CART FUNCTIONS
 ============================================================ */
-	function getcartheadcount($sessionID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM carthed WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
+	function count_carthead($sessionID, $debug = false) {
+		$q = (new QueryBuilder())->table('carthed');
+		$q->field("COUNT(*)");
+		$q->where('sessionid', $sessionID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
@@ -1590,17 +1599,6 @@
 		} else {
 			$sql->execute($q->params);
 			return $sql->fetchColumn();
-		}
-	}
-
-	function getcarthead($sessionID, $debug) { // DEPRECATED 02/22/2018
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM carthed WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}
 	
@@ -1633,17 +1631,6 @@
 				$sql->execute($query['switching']);
 			}
 			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		}
-	}
-
-	function getcart($sessionID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM cartdet WHERE sessionid = :sessionID");
-		$switching = array(':sessionID' => $sessionID); $withquotes = array(true);
-		$sql->execute($switching);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
 	
@@ -1679,15 +1666,21 @@
 		}
 	}
 
-	function insertcarthead($sessionID, $custID, $shipID, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO carthed (sessionid, custid, shiptoid, date, time) VALUES (:sessionID, :custID, :shipID, :date, :time)");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID, ':shipID' => $shipID, ':date' => date('Ymd'), ':time' =>date('His')); $withquotes = array(true, true, true, false, false);
-
+	function insert_carthead($sessionID, $custID, $shipID, $debug) {
+		$q = (new QueryBuilder())->table('carthed');
+		$q->mode('insert');
+		$q->set('sessionid', $sessionID);
+		$q->set('custid', $custID);
+		$q->set('shiptoid', $shipID);
+		$q->set('date', date('Ymd'));
+		$q->set('time', date('His'));
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			$sql->execute($q->params);
+			return $q->generate_sqlquery($q->params);
 		}
 	}
 
@@ -1775,8 +1768,6 @@
 		}
 	}
 
-
-
 /* =============================================================
 	EDIT ORDER FUNCTIONS
 ============================================================ */
@@ -1848,24 +1839,30 @@
 		}
 	}
 
-	function getallorderdocs($sessionID, $ordn, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM orddocs WHERE sessionid = :sessionID AND orderno = :ordn ORDER BY itemnbr ASC");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
+	function get_allorderdocs($sessionID, $ordn, $debug = false) {
+		$q = (new QueryBuilder())->table('orddocs');
+		$q->where('sessionid', $sessionID);
+		$q->where('orderno', $ordn);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
 
-	function getordertracking($sessionID, $ordn, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM ordrtrk WHERE sessionid = :sessionID AND orderno = :ordn");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
-		$sql->execute($switching);
+	function get_ordertracking($sessionID, $ordn, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrtrk');
+		$q->where('sessionid', $sessionID);
+		$q->where('orderno', $ordn);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
+			$sql->execute($q->params);
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
@@ -1903,7 +1900,6 @@
 		$q->set('ccvalidcode', $q->expr('AES_ENCRYPT([], HEX([]))', [$ccv, $sessionID]));
 		$q->where('orderno', $ordn);
 		$q->where('sessionid', $sessionID);
-		
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {

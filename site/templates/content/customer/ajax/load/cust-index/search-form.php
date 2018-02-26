@@ -14,6 +14,9 @@
         <?php
             if (!empty($input->get->q) || !empty($input->get->function)) {
                 switch ($dplusfunction) {
+                    case 'ca':
+                        include $config->paths->content."customer/ajax/load/cust-index/cart-cust-list.php";
+                        break;
                     case 'ci':
                         include $config->paths->content."customer/ajax/load/cust-index/ci-cust-list.php";
                         break;

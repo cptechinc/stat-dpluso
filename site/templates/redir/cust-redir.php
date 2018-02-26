@@ -233,8 +233,14 @@
 			$data = array('DBNAME' => $config->dbName, 'CARTCUST' => false, 'CUSTID' => $custID);
 			$session->{'new-shopping-customer'} = get_customername($custID);
             if (!empty($shipID)) {$data['SHIPID'] = $shipID; $session->shipID = $shipID; }
-			if (!getcartheadcount(session_id(), false)) { $session->sql = insertcarthead(session_id(), $custID, $shipID, false);}
-			$session->loc = ($input->post->page ? $input->post->page : $input->get->text('page'));
+			if (!count_carthead(session_id(), false)) { $session->sql = insertcarthead(session_id(), $custID, $shipID, false);}
+			if ($input->post->page) {
+				$session->loc = $input->post->text('page');
+			} elseif ($input->get->page) {
+				$session->loc = $input->get->text('page');
+			} else {
+				$session->loc = $config->pages->cart;
+			}
 			break;
 		case 'edit-contact':
 			$custID = $input->post->text('custID');

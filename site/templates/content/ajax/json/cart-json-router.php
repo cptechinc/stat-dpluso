@@ -32,6 +32,6 @@
             }
 			break;
         default: {
-            echo json_encode(getcart(session_id(), false));
+            echo json_encode(get_cartdetails(session_id(), false));
         }
 	}

@@ -1,4 +1,4 @@
-<?php $carthead = getcarthead(session_id(), false); ?>
+<?php $carthead = get_carthead(session_id(), false); ?>
 <?php include $config->paths->content."/cart/cart-details.php"; ?>
 <br>
 <?php if (has_dpluspermission($user->loginid, 'eso')) : ?>

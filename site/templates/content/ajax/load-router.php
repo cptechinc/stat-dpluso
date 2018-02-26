@@ -46,4 +46,3 @@
             throw new Wire404Exception();
             break;
     }
-?>

@@ -5,7 +5,7 @@
             <tr> <th>Tracking</th> <th>Tracking Information</th> <th>Weight</th> <th>Ship Date</th> </tr>
         </thead>
         <tbody>
-            <?php $trackings = getordertracking(session_id(), $ordn, false); ?>
+            <?php $trackings = get_ordertracking(session_id(), $ordn); ?>
             <?php foreach($trackings as $tracking) : ?>
             	<?php $carrier = $tracking['servtype']; $link = ""; $link = gettracklink($tracking['servtype'], $tracking['tracknbr']); ?>
                 <tr class="tracking">

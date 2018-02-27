@@ -44,6 +44,15 @@
         public function generate_title() {
             return $this->get_name() . (($this->has_shipto()) ? ' Ship-to: ' . $this->shiptoid : '');
         }
+		
+		public function generate_piesalesdata($value) {
+			return array(
+				'label' => $this->get_name(),
+				'value' => $value,
+				'custid' => $this->custid,
+				'shiptoid' => $this->shiptoid
+			);
+		}
         
         /* =============================================================
 			OTHER CONSTRUCTOR FUNCTIONS 

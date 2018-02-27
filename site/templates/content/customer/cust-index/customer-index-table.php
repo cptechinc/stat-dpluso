@@ -18,7 +18,7 @@
 				<?php foreach ($customer_records as $cust) : ?>
 					<tr>
 						<td>
-							<a href="<?= $cust->generatecustloadurl(); ?>">
+							<a href="<?= $cust->generate_ciloadurl(); ?>">
 								<?= $page->stringerbell->highlight($cust->custid, $input->get->q);?>
 							</a> &nbsp; <span class="glyphicon glyphicon-share"></span>
 						</td>

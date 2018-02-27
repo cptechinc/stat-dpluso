@@ -27,6 +27,7 @@ wire
 .ftpconfig
 .ftpignore
 site/config.php
+project.cson
 site/templates/config/customer/
 composer.json
 composer.lock

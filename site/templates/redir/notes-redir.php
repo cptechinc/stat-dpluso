@@ -145,7 +145,7 @@
 			$note->form3 = $input->post->form3 ? "Y" : "N"; $note->form4 = $input->post->form4 ? "Y" : "N";  
 			$note->form5 = ($note->rectype == Qnote::get_qnotetype('sales-order')) ? '' : ($input->post->form5 ? "Y" : "N");
 			$note->notefld = addslashes($input->post->text('note'));
-			$session->sql = $note->add();
+			$session->sql = $note->create();
 			
 			$data = array(
 				'DBNAME' => $config->dbName, 

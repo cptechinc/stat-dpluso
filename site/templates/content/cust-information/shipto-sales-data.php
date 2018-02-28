@@ -1,13 +1,6 @@
 <?php 
 	$topshiptos = get_topxsellingshiptos(session_id(), $customer->custid, 25);
 	$data = array();
-	foreach ($topshiptos as $shipto) {
-		$data[] = array(
-			'label' => get_shiptoname($customer->custid, $shipto['shiptoid']),
-			'value' => $shipto['amountsold'],
-			'shiptoid' => $shipto['shiptoid']
-		); 
-	}
 ?>
 <div class="panel panel-primary not-round" id="shipto-sales-panel">
 	<div class="panel-heading not-round">
@@ -36,7 +29,7 @@
 									<td><?= $location->get_name(); ?></td>
 									<td class="text-right"><?= $shipto['timesold']; ?></td>
 									<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
-									<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::formatdate($shipto['lastsaledate']); ?></td>
+									<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>
@@ -52,14 +45,17 @@
 		var pie = Morris.Donut({
 			element: 'shipto-sales-graph',
 			data: <?= json_encode($data); ?>,
+			colors: <?= json_encode(array_rand(array_flip($config->allowedcolors), 25)); ?>
 		});
 		
 		pie.options.data.forEach(function(label, i) {
 			var index = i;
-			if (index >= 10) {
-				var multiply = parseInt(i / 10);
-				var subtract = 10 * multiply;
-				index = i - subtract;
+			if (pie.options.colors.length < 11) {
+				if (index >= 10) {
+					var multiply = parseInt(i / 10);
+					var subtract = 10 * multiply;
+					index = i - subtract;
+				}
 			}
 			$('#legend-table').find('#'+label['shiptoid']+'-shipto').css('backgroundColor', pie.options.colors[index]);
 		});

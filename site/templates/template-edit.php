@@ -57,6 +57,7 @@
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-quotes.js'));
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-quote-to-order.js'));
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
+				$formconfig = new FormFieldsConfig('quote');
 			} else {
 				throw new Wire404Exception();
 			}

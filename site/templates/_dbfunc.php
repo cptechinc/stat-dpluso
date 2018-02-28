@@ -1018,6 +1018,22 @@
 			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}
+	
+	function get_quotedetail($sessionID, $qnbr, $linenbr, $debug = false) {
+		$q = (new QueryBuilder())->table('quotdet');
+		$q->where('sessionid', $sessionID);
+		$q->where('quotenbr', $qnbr);
+		$q->where('linenbr', $linenbr);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'QuoteDetail');
+			return $sql->fetch();
+		}
+	}
 
 	function getquotelinedetail($sessionID, $qnbr, $line, $debug) {
 		$sql = Processwire\wire('database')->prepare("SELECT * FROM quotdet WHERE sessionid = :sessionID AND quotenbr = :qnbr AND linenbr = :linenbr");
@@ -1087,6 +1103,30 @@
 				$sql->execute($query['switching']);
 			}
 			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
+		}
+	}
+
+	function update_quotedetail($sessionID, $detail, $debug = false) {
+		$originaldetail = QuoteDetail::load($sessionID, $detail->quotenbr, $detail->linenbr);
+		$properties = array_keys($detail->_toArray());
+		$q = (new QueryBuilder())->table('quotdet');
+		$q->mode('update');
+		foreach ($properties as $property) {
+			if ($detail != $originaldetail->$property) {
+				$q->set($property, $detail->$property);
+			}
+		}
+		$q->where('quotenbr', $detail->quotenbr);
+		$q->where('sessionid', $detail->sessionid);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery();
+		} else {
+			if ($detail->has_changes()) {
+				$sql->execute($q->params);
+			}
+			return $q->generate_sqlquery($q->params);
 		}
 	}
 
@@ -1728,11 +1768,11 @@
 	
 	function update_cartdetail($sessionID, $detail, $debug = false) {
 		$originaldetail = CartDetail::load($sessionID, $detail->linenbr);
-		$properties = array_keys($order->_toArray());
+		$properties = array_keys($detail->_toArray());
 		$q = (new QueryBuilder())->table('cartdet');
 		$q->mode('update');
 		foreach ($properties as $property) {
-			if ($order->$property != $originaldetail->$property) {
+			if ($detail != $originaldetail->$property) {
 				$q->set($property, $detail->$property);
 			}
 		}
@@ -1864,6 +1904,30 @@
 		} else {
 			$sql->execute($q->params);
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function update_orderdetail($sessionID, $detail, $debug = false) {
+		$originaldetail = SalesOrderDetail::load($sessionID, $detail->orderno, $detail->linenbr);
+		$properties = array_keys($detail->_toArray());
+		$q = (new QueryBuilder())->table('ordrdet');
+		$q->mode('update');
+		foreach ($properties as $property) {
+			if ($detail != $originaldetail->$property) {
+				$q->set($property, $detail->$property);
+			}
+		}
+		$q->where('orderno', $detail->orderno);
+		$q->where('sessionid', $detail->sessionid);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery();
+		} else {
+			if ($detail->has_changes()) {
+				$sql->execute($q->params);
+			}
+			return $q->generate_sqlquery($q->params);
 		}
 	}
 

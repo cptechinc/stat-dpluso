@@ -42,6 +42,23 @@
 		}
 		
 		/* =============================================================
+			GENERATE ARRAY FUNCTIONS 
+			The following are defined CreateClassArrayTraits
+			public static function generate_classarray()
+			public function _toArray()
+		============================================================ */
+		public static function remove_nondbkeys($array) {
+			unset($array['sublinenbr']);
+			unset($array['status']);
+			unset($array['custid']);
+			unset($array['ordrtotalcost']);
+			unset($array['lostreason']);
+			unset($array['lostdate']);
+			unset($array['stancost']);
+			return $array;
+		}
+		
+		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
 		public static function load($sessionID, $linenbr, $debug = false) {
@@ -54,7 +71,7 @@
 		
 		public function has_changes() {
 			$properties = array_keys(get_object_vars($this));
-			$detail = self::load($sessionID, $linenbr, $debug);
+			$detail = self::load($this->sessionid, $this->linenbr, false);
 			
 			foreach ($properties as $property) {
 				if ($this->$property != $detail->$property) {

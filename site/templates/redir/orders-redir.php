@@ -360,29 +360,29 @@
 		case 'update-line':
 			$ordn = $input->post->text('ordn');
 			$linenbr = $input->post->text('linenbr');
-			$orderdetail = getorderlinedetail(session_id(), $ordn, $linenbr, false);
-			$orderdetail['price'] = $input->post->text('price');
-			$orderdetail['discpct'] =  $input->post->text('discount');
-			$orderdetail['qty'] = $input->post->text('qty');
-			$orderdetail['rshipdate'] = $input->post->text('rqstdate');
-			$orderdetail['whse'] = $input->post->text('whse');
-			$orderdetail['linenbr'] = $input->post->text('linenbr');
+			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
+			$orderdetail->price = $input->post->text('price');
+			$orderdetail->discpct =  $input->post->text('discount');
+			$orderdetail->qty = $input->post->text('qty');
+			$orderdetail->rshipdate = $input->post->text('rqstdate');
+			$orderdetail->whse = $input->post->text('whse');
+			$orderdetail->linenbr = $input->post->text('linenbr');
 
-			$orderdetail['spcord'] = $input->post->text('specialorder');
-			$orderdetail['vendorid'] = $input->post->text('vendorID');
-			$orderdetail['shipfromid'] = $input->post->text('shipfromid');
-			$orderdetail['vendoritemid'] = $input->post->text('itemID');
-			$orderdetail['nsitemgroup'] = $input->post->text('group');
-			$orderdetail['ponbr'] = $input->post->text('ponbr');
-			$orderdetail['poref'] = $input->post->text('poref');
-			$orderdetail['uom'] = $input->post->text('uofm');
+			$orderdetail->spcord = $input->post->text('specialorder');
+			$orderdetail->vendorid = $input->post->text('vendorID');
+			$orderdetail->shipfromid = $input->post->text('shipfromid');
+			$orderdetail->vendoritemid = $input->post->text('itemID');
+			$orderdetail->nsitemgroup = $input->post->text('group');
+			$orderdetail->ponbr = $input->post->text('ponbr');
+			$orderdetail->poref = $input->post->text('poref');
+			$orderdetail->uom = $input->post->text('uofm');
 
-			if ($orderdetail['spcord'] != 'N') {
-				$orderdetail['desc1'] = $input->post->text('desc1');
-				$orderdetail['desc2'] = $input->post->text('desc2');
+			if ($orderdetail->spcord != 'N') {
+				$orderdetail->desc1 = $input->post->text('desc1');
+				$orderdetail->desc2 = $input->post->text('desc2');
 			}
 			$custID = get_custidfromorder(session_id(), $ordn);
-			$session->sql = edit_orderline(session_id(), $ordn, $orderdetail, false);
+			$session->sql = $orderdetail->update();
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => $linenbr, 'CUSTID' => $custID);
 			
 			if ($input->post->page) {

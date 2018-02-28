@@ -233,7 +233,7 @@
 			$data = array('DBNAME' => $config->dbName, 'CARTCUST' => false, 'CUSTID' => $custID);
 			$session->{'new-shopping-customer'} = get_customername($custID);
             if (!empty($shipID)) {$data['SHIPID'] = $shipID; $session->shipID = $shipID; }
-			if (!count_carthead(session_id(), false)) { $session->sql = insertcarthead(session_id(), $custID, $shipID, false);}
+			if (!count_carthead(session_id(), false)) { $session->sql = insert_carthead(session_id(), $custID, $shipID, false);}
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} elseif ($input->get->page) {

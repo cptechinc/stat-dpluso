@@ -30,7 +30,7 @@
 					<td data-title="Ordered" class="text-right"><?= $detail->qty + 0; ?></td>
 					<td data-title="Total" class="text-right">$ <?= formatMoney($detail->totalprice); ?></td>
 					<td data-title="Requested Ship Date" class="text-right"><?= $detail->rshipdate; ?></td>
-					<td data-title="Warehouse">MN</td>
+					<td data-title="Warehouse"><?= $detail->whse; ?></td>
 					<td class="action">
 						<div class="row">
 							<div class="col-xs-3"> <span class="visible-xs-block action-label">Details</span>

@@ -252,32 +252,30 @@
 				$linenbr = $input->get->text('linenbr');
 			}
 
-			$quotedetail = getquotelinedetail(session_id(), $qnbr, $linenbr, false);
-			$quotedetail['quotprice'] = $input->post->text('price');
-			$quotedetail['discpct'] =  $input->post->text('discount');
-			$quotedetail['quotunit'] = $input->post->text('qty');
-			$quotedetail['ordrqty'] = $input->post->text('qty');
-			$quotedetail['rshipdate'] = $input->post->text('rqstdate');
-			$quotedetail['whse'] = $input->post->text('whse');
-			$quotedetail['linenbr'] = $input->post->text('linenbr');
+			$quotedetail = QuoteDetail::load(session_id(), $qnbr, $linenbr);
+			$quotedetail->quotprice = $input->post->text('price');
+			$quotedetail->discpct =  $input->post->text('discount');
+			$quotedetail->quotqty = $input->post->text('qty');
+			$quotedetail->ordrqty = $input->post->text('qty');
+			$quotedetail->rshipdate = $input->post->text('rqstdate');
+			$quotedetail->whse = $input->post->text('whse');
+			$quotedetail->linenbr = $input->post->text('linenbr');
 			
-			$quotedetail['spcord'] = $input->post->text('specialorder');
-			$quotedetail['vendorid'] = $input->post->text('vendorID');
-			$quotedetail['shipfromid'] = $input->post->text('shipfromid');
-			$quotedetail['vendoritemid'] = $input->post->text('itemID');
-			$quotedetail['nsitemgroup'] = $input->post->text('group');
-			$quotedetail['ponbr'] = $input->post->text('ponbr');
-			$quotedetail['poref'] = $input->post->text('poref');
-			$quotedetail['uom'] = $input->post->text('uofm');
+			$quotedetail->spcord = $input->post->text('specialorder');
+			$quotedetail->vendorid = $input->post->text('vendorID');
+			$quotedetail->shipfromid = $input->post->text('shipfromid');
+			$quotedetail->vendoritemid = $input->post->text('itemID');
+			$quotedetail->nsitemgroup = $input->post->text('group');
+			$quotedetail->uom = $input->post->text('uofm');
 
-			if ($quotedetail['spcord'] != 'N') {
-				$quotedetail['desc1'] = $input->post->text('desc1');
-				$quotedetail['desc2'] = $input->post->text('desc2');
+			if ($quotedetail->spcord != 'N') {
+				$quotedetail->desc1 = $input->post->text('desc1');
+				$quotedetail->desc2 = $input->post->text('desc2');
 			}
 
-			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
-			$session->detail = $quotedetail;
-			$custID = get_custidfromquote(session_id(), $qnbr, false);
+			$custID = get_custidfromquote(session_id(), $qnbr);
+			$session->sql = $quotedetail->update();
+			// $session->detail = $quotedetail;
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'CUSTID' => $custID);
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');

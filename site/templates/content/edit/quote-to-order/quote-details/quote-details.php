@@ -31,7 +31,7 @@
                 <td data-title="Price" class="text-right">$ <?= formatMoney($detail->quotprice); ?></td>
                 <td data-title="Ordered" class="text-right"><?= $detail->quotqty + 0; ?></td>
                 <td data-title="Total" class="text-right">$ <?= formatMoney($detail->quotprice * $detail->quotqty); ?></td>
-                <td data-title="Warehouse">MN</td>
+                <td data-title="Warehouse"><?= $detail->whse; ?></td>
                 <td class="action">
                     <div class="row">
                         <div class="col-xs-3">

@@ -140,24 +140,24 @@
 			break;
 		case 'update-line':
 			$linenbr = $input->post->text('linenbr');
-			$cartdetail = getcartline(session_id(), $linenbr, false);
-			$cartdetail['price'] = $input->post->text('price');
-			$cartdetail['discpct'] =  $input->post->text('discount');
-			$cartdetail['qty'] = $qty;
-			$cartdetail['rshipdate'] = $input->post->text('rqst-date');
-			$cartdetail['whse'] = $input->post->text('whse');
-			$cartdetail['spcord'] = $input->post->text('specialorder');
-			$cartdetail['linenbr'] = $input->post->text('linenbr');
-			$cartdetail['spcord'] = $input->post->text('specialorder');
-			$cartdetail['vendorid'] = $input->post->text('vendorID');
-			$cartdetail['shipfromid'] = $input->post->text('shipfromid');
-			$cartdetail['vendoritemid'] = $input->post->text('itemID');
-			$cartdetail['nsitemgroup'] = $input->post->text('group');
-			$cartdetail['ponbr'] = $input->post->text('ponbr');
-			$cartdetail['poref'] = $input->post->text('poref');
-			$cartdetail['uom'] = $input->post->text('uofm');
+			$cartdetail = CartDetail::load(session_id(), $linenbr);
+			$cartdetail->price = $input->post->text('price');
+			$cartdetail->discpct =  $input->post->text('discount');
+			$cartdetail->qty = $input->post->text('qty');
+			$cartdetail->rshipdate = $input->post->text('rqstdate');
+			$cartdetail->whse = $input->post->text('whse');
+			$cartdetail->spcord = $input->post->text('specialorder');
+			$cartdetail->linenbr = $input->post->text('linenbr');
+			$cartdetail->spcord = $input->post->text('specialorder');
+			$cartdetail->vendorid = $input->post->text('vendorID');
+			$cartdetail->shipfromid = $input->post->text('shipfromid');
+			$cartdetail->vendoritemid = $input->post->text('itemID');
+			$cartdetail->nsitemgroup = $input->post->text('group');
+			$cartdetail->ponbr = $input->post->text('ponbr');
+			$cartdetail->poref = $input->post->text('poref');
+			$cartdetail->uom = $input->post->text('uofm');
 
-			$session->sql = edit_cartline(session_id(), $cartdetail, false);
+			$session->sql = $cartdetail->update();
 			$session->loc = $input->post->text('page');
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $input->post->linenbr);
 

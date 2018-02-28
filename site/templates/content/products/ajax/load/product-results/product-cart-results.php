@@ -29,7 +29,7 @@
 							<tr><th colspan="3"><?= $custID."'s " .$item->itemid; ?> History</th></tr>
 						</thead>
 						<tr>
-							<td>Last Sold: <?= DplusDateTime::formatdate($item->history('lastsold')); ?></td>
+							<td>Last Sold: <?= DplusDateTime::format_date($item->history('lastsold')); ?></td>
 							<td>Price: $ <?= $item->history('lastprice'); ?></td>
 							<td>Qty Sold: <?= $item->history('lastqty'); ?></td>
 						</tr>

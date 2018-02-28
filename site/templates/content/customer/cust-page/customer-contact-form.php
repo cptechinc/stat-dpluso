@@ -43,7 +43,7 @@
 		<td>
 	    	<div class="input-group" style="width: 180px;">
 	        	<div class="input-group-addon input-sm"><span class="glyphicon glyphicon-calendar"></span></div>
-	        	<input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm text-right" value="<?= DplusDateTime::formatdate($customer['lastsaledate']); ?>">
+	        	<input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm text-right" value="<?= DplusDateTime::format_date($customer['lastsaledate']); ?>">
 	        </div>
 	    </td>
 	 </tr>

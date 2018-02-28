@@ -1,5 +1,15 @@
 <?php 
+	/**
+	 * Functions that throw, show, or log errors
+	 */
     trait ThrowErrorTrait {
+		/**
+		 * Throws an error to be logged
+		 * @param  string $error Description of Error
+		 * @param  int $level What PHP Error Level
+		 * Error constants can be found at
+		 * http://php.net/manual/en/errorfunc.constants.php
+		 */
         protected function error($error, $level = E_USER_ERROR) {
             $trace = debug_backtrace();
             $caller = next($trace); 

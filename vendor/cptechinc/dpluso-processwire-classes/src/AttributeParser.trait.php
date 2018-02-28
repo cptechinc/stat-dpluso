@@ -1,9 +1,12 @@
-<?php 
+<?php
+	/**
+	 * Functions that parse attributes for html
+	 */
     trait AttributeParser {
         /**
          * Takes a string of attributes and parses it out by a delimiter (|)
-         * @param  [type] $vars string of attributes separated by | 
-         * @return [type]       string of atrributes and values like class=""
+         * @param  string $vars string of attributes separated by | 
+         * @return string      string of atrributes and values like class=""
          */
         private function attributes($vars) {
             $attributesarray = array();

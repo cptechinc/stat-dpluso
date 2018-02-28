@@ -55,11 +55,18 @@
 		}
         
         /* =============================================================
-			OTHER CONSTRUCTOR FUNCTIONS 
-            Inherits some from CreateFromObjectArrayTraits
+			CRUD FUNCTIONS
 		============================================================ */
+		/**
+		 * Loads an object with this class using the parameters as provided
+		 * @param  string $custID    CustomerID
+		 * @param  string $shiptoID  Shipto ID (can be blank)
+		 * @param  string $contactID Contact ID (can be blank)
+		 * @param  bool   $debug Determines if Query Runs and if Customer Object is returned or SQL Query
+		 * @return Customer
+		 */
         public static function load($custID, $shiptoID = '', $contactID = '', $debug = false) {
-            return self::create_fromobject(get_customercontact($custID, $shiptoID, $contactID));
+            return self::create_fromobject(parent::load($custID, $shiptoID, $contactID, $debug));
         } 
         
     }

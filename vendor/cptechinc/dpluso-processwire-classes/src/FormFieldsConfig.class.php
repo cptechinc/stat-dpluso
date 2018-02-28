@@ -1,20 +1,22 @@
 <?php 
 
     class FormFieldsConfig {
+		use ThrowErrorTrait;
+		
         protected $formtype;
         protected $fields = false;
         protected $allowedtypes = array('sales-order', 'quote');
         public static $filedir = false;
         
-        /* =============================================================
-    		CONSTRUCTOR, GETTERS
-    	============================================================ */
         
-        function __construct($formtype) {
+        public function __construct($formtype) {
             $this->formtype = $formtype;
             $this->init($formtype);
         }
-        
+		
+		/* =============================================================
+    		GETTER FUNCTIONS
+    	============================================================ */
         public function __get($property) {
 			if (property_exists($this, $property) !== true) {
 				$this->error("This property ($property) does not exist");
@@ -31,10 +33,14 @@
         /* =============================================================
     		CLASS FUNCTIONS
     	============================================================ */
-        
+		/**
+		 * Loads the fields from the config whether from the database or the 
+		 * default file
+		 * @param  string $formtype type of form ex sales-order | quote
+		 */
         protected function init($formtype) {
             if (!in_array($formtype, $this->allowedtypes)) {
-                $this->error("$formtype is not a valid form config.");
+                $this->error("$formtype is not a valid form config");
                 return false;
             } else {
                 if (does_customerconfigexist($formtype)) {
@@ -45,18 +51,16 @@
             }
         }
         
+		/**
+		 * 
+		 * @return [type] [description]
+		 */
         public function load_file() {
             if (file_exists(self::$filedir.$this->formtype."-form-fields.json")) {
                 $this->fields = json_decode(file_get_contents(self::$filedir.$this->formtype."-form-fields.json"), true);
             } else {
                 $this->error("Can't find default config for this formtype.");
             }
-		}
-        
-        protected function error($error, $level = E_USER_ERROR) {
-			$error = (strpos($error, 'DPLUSO[FORMFIELDS-FORMATTER]: ') !== 0 ? 'DPLUSO[FORMFIELDS-FORMATTER]: ' . $error : $error);
-			trigger_error($error, $level);
-			return;
 		}
 		
 		public static function set_defaultconfigdirectory($dir) {
@@ -75,9 +79,6 @@
             return $this->fields['fields'][$key]['required'] ? '&nbsp;<b class="text-danger">*</b>' : '';
         }
         
-        /* =============================================================
-    		CRUD FUNCTIONS
-    	============================================================ */
         
         public function generate_configfrominput(WireInput $input) {
             foreach ($this->fields['fields'] as $key => $field) {
@@ -87,7 +88,10 @@
                 $this->fields['fields'][$key]['required'] = strlen($input->post->text("$key-required")) ? true : false;
             }
         }
-        
+		
+		/* =============================================================
+    		CRUD FUNCTIONS
+    	============================================================ */
         public function save() {
             if (does_customerconfigexist($this->formtype)) {
                 return update_customerconfig($this->formtype, json_encode($this->fields), $debug = false);

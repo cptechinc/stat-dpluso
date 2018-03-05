@@ -8,6 +8,9 @@
 		<div class="col-md-7 col-sm-6 print-col-sm-10">
 			<h4><a href="<?= $config->pages->products.'redir/?action=ii-select&itemID='.urlencode($item->itemid); ?>" target="_blank"><?= $item->itemid; ?></a></h4>
 			<h5><?= $item->name1; ?></h5>
+			<?php if (!empty($item->supercedes)) : ?>
+				<div class="alert alert-warning" role="alert"><b>Supercedes</b> <?= $item->supercedes; ?></div>
+			<?php endif; ?>
 			<div class="product-info">
 				<ul class="nav nav-tabs nav_tab hidden-print">
 					<li class="active"><a href="#<?= cleanforjs($item->itemid); ?>-desc-tab" data-toggle="tab" aria-expanded="true">Description</a></li>

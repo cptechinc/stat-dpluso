@@ -68,6 +68,7 @@
 		protected $shipfromid;
 		protected $nsitemgroup;
 		protected $itemtype;
+		protected $supercedes;
         protected $fieldaliases = array(
             'itemID' => 'itemid',
             'shipfromID' => 'shipfromid',

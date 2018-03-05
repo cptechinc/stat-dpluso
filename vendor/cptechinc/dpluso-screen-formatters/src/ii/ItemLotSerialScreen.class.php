@@ -25,7 +25,7 @@
 			$tb->tablesection('thead');
 				$tb->tr();
 				foreach($this->json['columns'] as $column) {
-					$class = wire('config')->textjustify[$column['headingjustify']];
+					$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
 					$tb->th("class=$class", $column['heading']);
 				}
 			$tb->closetablesection('thead');
@@ -33,7 +33,7 @@
 				foreach ($this->json['data']['lots'] as $lot) {
 					$tb->tr();
 					foreach($columns as $column) {
-						$class = wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+						$class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
 						$tb->td("class=$class", $lot[$column]);
 					}
 				}

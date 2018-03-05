@@ -29,7 +29,7 @@
                 foreach (array_keys($this->json['columns']['misc info']) as $column) {
                     $tb->tr();
                     $tb->td('', $this->json['columns']['misc info'][$column]['heading']);
-                    $class = wire('config')->textjustify[$this->json['columns']['misc info'][$column]['datajustify']];
+                    $class = Processwire\wire('config')->textjustify[$this->json['columns']['misc info'][$column]['datajustify']];
                     $tb->td("class=$class", $misc[$column]);
                 }
             }

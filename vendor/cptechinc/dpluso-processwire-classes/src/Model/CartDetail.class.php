@@ -34,7 +34,7 @@
 		}
 		
 		public function has_notes() {
-			return has_dplusnote($this->sessionid, $this->sessionid, $this->linenbr, wire('config')->dplusnotes['cart']['type']) == 'Y' ? true : false;
+			return has_dplusnote($this->sessionid, $this->sessionid, $this->linenbr, Processwire\wire('config')->dplusnotes['cart']['type']) == 'Y' ? true : false;
 		}
 		
 		public function can_edit() {

@@ -35,7 +35,7 @@
             $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($this->json['columns']['inspection notes'] as $column) {
-                    $class = wire('config')->textjustify[$column['headingjustify']];
+                    $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
                     $tb->td("class=$class", $column['heading']);
                 }
             $tb->closetablesection('thead');
@@ -43,7 +43,7 @@
                 foreach ($this->json['data']['inspection notes'] as $note) {
                     $tb->tr();
                     foreach (array_keys($this->json['columns']['inspection notes']) as $column) {
-                        $class = wire('config')->textjustify[$this->json['columns']['inspection notes'][$column]['datajustify']];
+                        $class = Processwire\wire('config')->textjustify[$this->json['columns']['inspection notes'][$column]['datajustify']];
                         $tb->td("class=$class", $note[$column]);
                     }
                 }
@@ -56,7 +56,7 @@
             $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($this->json['columns']['internal notes'] as $column) {
-                    $class = wire('config')->textjustify[$column['headingjustify']];
+                    $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
                     $tb->td("class=$class", $column['heading']);
                 }
             $tb->closetablesection('thead');
@@ -64,7 +64,7 @@
                 foreach ($this->json['data']['internal notes'] as $note) {
                     $tb->tr();
                     foreach ($this->json['columns']['internal notes'] as $column) {
-                        $class = wire('config')->textjustify[$column['datajustify']];
+                        $class = Processwire\wire('config')->textjustify[$column['datajustify']];
                         $tb->td("class=$class", $note[$column]);
                     }
                 }
@@ -77,7 +77,7 @@
             $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($this->json['columns']['order notes'] as $column) {
-                    $class = wire('config')->textjustify[$column['headingjustify']];
+                    $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
                     $tb->td("class=$class", $column['heading']);
                 }
             $tb->closetablesection('thead');
@@ -85,7 +85,7 @@
                 foreach ($this->json['data']['order notes'] as $note) {
                     $tb->tr();
                     foreach ($this->json['columns']['order notes'] as $column) {
-                        $class = wire('config')->textjustify[$column['datajustify']];
+                        $class = Processwire\wire('config')->textjustify[$column['datajustify']];
                         $tb->td("class=$class", $note[$column]);
                     }
                 }

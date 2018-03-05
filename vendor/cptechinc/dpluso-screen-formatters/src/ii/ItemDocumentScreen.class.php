@@ -20,7 +20,7 @@
             $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($columns as $column) {
-                    $class = wire('config')->textjustify[$this->json['columns'][$column]['headingjustify']];
+                    $class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['headingjustify']];
                     $tb->th("class=$class", $this->json['columns'][$column]['heading']);
                 }
                 $tb->th('', "Load Document");
@@ -30,7 +30,7 @@
                     $class = $doc;
                     $tb->tr("class=$class");
                     foreach ($columns as $column) {
-                        $class = wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+                        $class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
                         $tb->td("class=$class", $this->json['data'][$doc][$column]);
                     }
                     $button = $bootstrap->openandclose('button', "type=button|class=btn btn-sm btn-primary load-doc|data-doc=$doc", '<i class="fa fa-file-o" aria-hidden="true"></i> Load');

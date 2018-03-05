@@ -114,7 +114,7 @@
 		
 		public function generate_viewprintpageurl(Order $quote) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = wire('config')->pages->print."quote/";
+			$url->path = Processwire\wire('config')->pages->print."quote/";
 			$url->query->set('qnbr', $quote->quotnbr);
 			$url->query->set('print', 'true');
 			return $url->getUrl();

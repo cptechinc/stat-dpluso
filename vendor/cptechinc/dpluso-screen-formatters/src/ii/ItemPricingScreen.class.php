@@ -39,7 +39,7 @@
         	$tb->tablesection('thead');
         		$tb->tr();
         		foreach($this->json['columns']['pricing derived from'] as $column) {
-        			$class = wire('config')->textjustify[$column['headingjustify']];
+        			$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
         			$tb->th("class=$class", $column['heading']);
         		}
         	$tb->closetablesection('thead');
@@ -47,7 +47,7 @@
         		foreach ($this->json['data']['pricing derived from'] as $derivedpricing) {
         			$tb->tr();
         			foreach(array_keys($this->json['columns']['pricing derived from']) as $column) {
-        				$class = wire('config')->textjustify[$this->json['columns']['pricing derived from'][$column]['datajustify']];
+        				$class = Processwire\wire('config')->textjustify[$this->json['columns']['pricing derived from'][$column]['datajustify']];
         				$tb->td("class=$class", $derivedpricing[$column]);
         			}
         		}
@@ -60,7 +60,7 @@
         	$tb->tablesection('thead');
         		$tb->tr();
         		foreach($this->json['columns']['customer pricing'] as $column) {
-        			$class = wire('config')->textjustify[$column['headingjustify']];
+        			$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
         			$tb->th("class=$class", $column['heading']);
         		}
         	$tb->closetablesection('thead');
@@ -68,7 +68,7 @@
         		foreach ($this->json['data']['customer pricing']['cust breaks'] as $customerpricing) {
         			$tb->tr();
         			foreach(array_keys($this->json['columns']['customer pricing']) as $column) {
-        				$class = wire('config')->textjustify[$this->json['columns']['customer pricing'][$column]['datajustify']];
+        				$class = Processwire\wire('config')->textjustify[$this->json['columns']['customer pricing'][$column]['datajustify']];
         				$tb->td("class=$class", $customerpricing[$column]);
         			}
         		}
@@ -82,7 +82,7 @@
         	$tb->tablesection('thead');
         		$tb->tr();
         		foreach($this->json['columns']['standard pricing'] as $column) {
-        			$class = wire('config')->textjustify[$column['headingjustify']];
+        			$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
         			$tb->th("class=$class", $column['heading']);
         		}
         	$tb->closetablesection('thead');
@@ -93,7 +93,7 @@
         		foreach ($this->json['data']['standard pricing']['standard breaks'] as $standardpricing) {
         			$tb->tr();
         			foreach(array_keys($this->json['columns']['standard pricing']) as $column) {
-        				$class = wire('config')->textjustify[$this->json['columns']['standard pricing'][$column]['datajustify']];
+        				$class = Processwire\wire('config')->textjustify[$this->json['columns']['standard pricing'][$column]['datajustify']];
         				$tb->td("class=$class", $standardpricing[$column]);
         			}
         		}

@@ -62,7 +62,7 @@
         	$tb->tablesection('thead');
         		$tb->tr();
         		foreach ($this->json['columns'] as $column) {
-        			$class = wire('config')->textjustify[$column['headingjustify']];
+        			$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
         			$tb->td("class=$class", $column['heading']);
         		}
         	$tb->closetablesection('thead');
@@ -70,7 +70,7 @@
         	$tb->tablesection('tbody');
         		foreach ($this->json['data']['sub items'] as $item) {
         			$tb->tr();
-        			$class = wire('config')->textjustify[$this->json['columns']["sub item"]['datajustify']];
+        			$class = Processwire\wire('config')->textjustify[$this->json['columns']["sub item"]['datajustify']];
         			$tb->td("colspan=2|class=$class", $item["sub item"]);
         			$tb->td('', $item['same/like']);
         			$colspan = sizeof($this->json['columns']) - 3;
@@ -88,7 +88,7 @@
         					if ($column == 'sub item') {
         						$tb->td();
         					} else {
-        						$class = wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+        						$class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
         						$tb->td("class=$class", $whse[$column]);
         					}
         				}

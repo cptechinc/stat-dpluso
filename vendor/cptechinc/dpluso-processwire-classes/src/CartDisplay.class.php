@@ -23,7 +23,7 @@
 		public function load_dplusnoteslinkheader($linenbr = '0') {
 			$bootstrap = new Contento();
 			$href = $this->generate_dplusnotesrequesturl($this->cart, $linenbr);
-			$has_notes = has_dplusnote($this->sessionid, $this->sessionid, '0', wire('config')->dplusnotes['cart']['type']) == 'Y' ? true : false;
+			$has_notes = has_dplusnote($this->sessionid, $this->sessionid, '0', Processwire\wire('config')->dplusnotes['cart']['type']) == 'Y' ? true : false;
 			$title = ($has_notes) ? "View and Create Quote Notes" : "Create Quote Notes";
 			$addclass = ($has_notes) ? '' : 'text-muted';
 			$content = $bootstrap->createicon('material-icons md-36', '&#xE0B9;');

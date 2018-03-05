@@ -109,7 +109,7 @@
 		
 		public function generate_viewprintpageurl(Order $order) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = wire('config')->pages->print."order/";
+			$url->path = Processwire\wire('config')->pages->print."order/";
 			$url->query->set('ordn', $order->orderno);
 			$url->query->set('print', 'true');
 			return $url->getUrl();

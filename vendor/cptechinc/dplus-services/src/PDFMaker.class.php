@@ -25,7 +25,7 @@
         }
         
         public function process() {
-            $file = wire('config')->documentstoragedirectory.$this->sessionID.".pdf";
+            $file = Processwire\wire('config')->documentstoragedirectory.$this->sessionID.".pdf";
             
             if (file_exists($file)) {
                 unlink($file);

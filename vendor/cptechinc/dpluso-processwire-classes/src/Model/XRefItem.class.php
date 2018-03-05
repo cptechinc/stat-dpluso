@@ -30,9 +30,9 @@
         
         public function generate_imagesrc() {
             if (file_exists(wire('config')->imagefiledirectory.$this->image)) {
-                return wire('config')->imagedirectory.$this->image;
+                return Processwire\wire('config')->imagedirectory.$this->image;
             } else {
-                return wire('config')->imagedirectory.wire('config')->imagenotfound;
+                return Processwire\wire('config')->imagedirectory.wire('config')->imagenotfound;
             }
         }
         

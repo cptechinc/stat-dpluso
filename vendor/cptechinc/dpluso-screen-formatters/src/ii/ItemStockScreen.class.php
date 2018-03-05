@@ -22,7 +22,7 @@
 			$tb->tablesection('thead');
 				$tb->tr();
 				foreach ($this->json['columns'] as $column) {
-					$class = wire('config')->textjustify[$column['headingjustify']];
+					$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
 					$tb->th("class=$class", $column['heading']);
 				}
 			$tb->closetablesection('thead');
@@ -30,7 +30,7 @@
 				foreach ($this->json['data'] as $warehouse) {
 					$tb->tr();
 					foreach ($columns as $column) {
-						$class = wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+						$class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
 						if ($column == "Item ID") {
 							$itemlink->query->setData(array("action" => "ii-select", "custID" => $this->custID, 'itemID' => $warehouse[$column]));;
 							$content = $bootstrap->openandclose('a', "href=".$itemlink->getUrl(), $warehouse[$column]);

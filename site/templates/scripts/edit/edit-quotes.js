@@ -29,7 +29,7 @@ $(function() {
 			var shipto = json.response.shipto;
 			$('.shipto-select').val(shiptoid); $('.shipto-name').val(shipto.name); $('.shipto-address').val(shipto.addr1);
 			$('.shipto-address2').val(shipto.addr2);
-			$('.shipto-city').val(shipto.ccity); $('.shipto-state').val(shipto.cst); $('.shipto-zip').val(shipto.czip);
+			$('.shipto-city').val(shipto.city); $('.shipto-state').val(shipto.state); $('.shipto-zip').val(shipto.zip);
 		});
 	});
 

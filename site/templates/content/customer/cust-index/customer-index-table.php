@@ -26,8 +26,8 @@
 						<td><?= $page->stringerbell->highlight($cust->shiptoid, $input->get->q); ?></td>
 						<td><?= $page->stringerbell->highlight($cust->generate_address(), $input->get->q); ?></td>
 						<td><a href="<?= $cust->generate_contacturl(); ?>"><?= $page->stringerbell->highlight($cust->contact, $input->get->q); ?></a></td>
-						<td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->cphone, $input->get->q); ?></a></td>
-						<td class="text-right">$ <?= formatmoney($cust->amountsold); ?></td>
+						<td><a href="tel:<?= $cust->phone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->phone, $input->get->q); ?></a></td>
+						<td class="text-right">$ <?= $page->stringerbell->format_money($cust->amountsold); ?></td>
 						<td class="text-right"> <?= $cust->timesold; ?></td>
 						<td> <?= DplusDateTime::format_date($cust->lastsaledate); ?></td>
 					</tr>
@@ -45,6 +45,6 @@
 	</table>
 </div>
 <?php $total_pages = ceil($resultscount / $config->showonpage); $pagination_link = $config->pages->customer.'page'; ?>
-<?php if (isset($input->get->q)) { $linkaddon = '?q='.$input->get->q; } else { $linkaddon = ''; } ?>
+<?php $linkaddon = (isset($input->get->q)) ? '?q='.$input->get->q : ''; ?>
 <?php $insertafter = '/customers'; ?>
 <?php include $config->paths->content.'pagination/pw/pagination-links.php'; ?>

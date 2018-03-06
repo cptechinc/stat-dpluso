@@ -146,79 +146,99 @@
 
 	switch ($action) {
 		case 'add-customer':
-			$customer = get_firstcustindexrecord(false);
-			$custkeys = array_keys($customer);
-			$newcustomer = array_fill_keys($custkeys, ' ');
-			$newcustomer['custid'] = session_id();
-			$newcustomer['splogin1'] = $input->post->text('salesperson1');
-			$newcustomer['splogin2'] = $input->post->text('salesperson2');
-			$newcustomer['splogin3'] = $input->post->text('salesperson3');
-			$newcustomer['date'] = date('Ymd');
-			$newcustomer['time'] = date('His');
-			$newcustomershipto = $newcustomer;
+			$customer = new Contact();
+			$customer->set('custid', session_id());
+			$customer->set('splogin1', $input->post->text('salesperson1'));
+			$customer->set('splogin2',  $input->post->text('salesperson2'));
+			$customer->set('splogin3', $input->post->text('salesperson3'));
+			$customer->set('date', date('Ymd'));
+			$customer->set('time', date('His'));
+			$customer->set('source', 'C');
+			$customer->set('name',  $input->post->text('billto-name'));
+			$customer->set('addr1', $input->post->text('billto-address'));
+			$customer->set('addr2', $input->post->text('billto-address2'));
+			$customer->set('city', $input->post->text('billto-city'));
+			$customer->set('state', $input->post->text('billto-state'));
+			$customer->set('zip', $input->post->text('billto-zip'));
+			$customer->set('contact', $input->post->text('contact-name'));
+			$customer->set('phone', $input->post->text('contact-phone'));
+			$customer->set('extension', $input->post->text('contact-ext'));
+			$customer->set('faxnbr', $input->post->text('contact-fax'));
+			$customer->set('email', $input->post->text('contact-email'));
+			$customer->set('recno', get_maxcustindexrecnbr() + 1);
+			$customer->set('arcontact', $input->post->text('arcontact') == 'Y' ? "Y" : "N");
+			$customer->set('dunningcontact', $input->post->text('dunningcontact') == 'Y' ? "Y" : "N");
+			$customer->set('buyingcontact', $input->post->text('buycontact'));
+			$customer->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
+			$customer->set('ackcontact', $input->post->text('ackcontact') == 'Y' ? "Y" : "N");
+			$customer->create();
+			
+			$shipto = Contact::create_fromobject($customer);
+			$shipto->set('shiptoid', '1');
+			$shipto->set('source', 'CS');
+			$shipto->set('name', $input->post->text('shipto-name'));
+			$shipto->set('addr1', $input->post->text('shipto-address'));
+			$shipto->set('addr2', $input->post->text('shipto-address2'));
+			$shipto->set('city', $input->post->text('shipto-city'));
+			$shipto->set('state', $input->post->text('shipto-state'));
+			$shipto->set('zip', $input->post->text('shipto-zip'));
+			$shipto->set('contact', $input->post->text('contact-name'));
+			$shipto->set('phone', $input->post->text('contact-phone'));
+			$shipto->set('extension', $input->post->text('contact-ext'));
+			$shipto->set('faxnbr', $input->post->text('contact-fax'));
+			$shipto->set('email', $input->post->text('contact-email'));
+			$shipto->set('recno', get_maxcustindexrecnbr() + 1);
+			$customer->set('arcontact', "N");
+			$customer->set('dunningcontact', "N");
+			$customer->set('buyingcontact', $input->post->text('buycontact'));
+			$customer->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
+			$customer->set('ackcontact', "N");
+			$shipto->create();
+			
 			$data = array(
 				'DBNAME' => $config->dbName,
 				'NEWCUSTOMER' => false,
-				'BILLTONAME' => $input->post->text('billto-name'),
-				'BILLTOADDRESS1' => $input->post->text('billto-address'),
-				'BILLTOADDRESS2' => $input->post->text('billto-address2'),
+				'BILLTONAME' => $customer->name,
+				'BILLTOADDRESS1' => $customer->addr1,
+				'BILLTOADDRESS2' => $customer->addr2,
 				'BILLTOADDRESS3' => $input->post->text('billto-address3'),
-				'BILLTOCITY' => $input->post->text('billto-city'),
-				'BILLTOSTATE' => $input->post->text('billto-state'),
-				'BILLTOZIP' => $input->post->text('billto-zip'),
+				'BILLTOCITY' => $customer->city,
+				'BILLTOSTATE' => $customer->state,
+				'BILLTOZIP' => $customer->zip,
 				'BILLTOCOUNTRY' => $input->post->text('billto-country'),
-				'BILLTOPHONE' => str_replace('-', '', $input->post->text('billto-phone').$input->post->text('billto-ext')),
-				'BILLTOFAX' => str_replace('-', '',$input->post->text('billto-fax')),
-				'BILLTOEMAIL' => $input->post->text('billto-email'),
-				'SHIPTOID' => '1',
-				'SHIPTONAME' => $input->post->text('shipto-name'),
-				'SHIPTOADDRESS1' => $input->post->text('shipto-address'),
-				'SHIPTOADDRESS2' => $input->post->text('shipto-address2'),
+				'BILLTOPHONE' => str_replace('-', '', $customer->phone),
+				'BILLTOFAX' => str_replace('-', '', $customer->faxnbr),
+				'BILLTOEMAIL' => $customer->email,
+				'SHIPTOID' => $shipto->shiptoid,
+				'SHIPTONAME' => $shipto->name,
+				'SHIPTOADDRESS1' => $shipto->addr1,
+				'SHIPTOADDRESS2' => $shipto->addr2,
 				'SHIPTOADDRESS3' => $input->post->text('shipto-address3'),
-				'SHIPTOCITY' => $input->post->text('shipto-city'),
-				'SHIPTOSTATE' => $input->post->text('shipto-state'),
-				'SHIPTOZIP' => $input->post->text('shipto-zip'),
+				'SHIPTOCITY' => $shipto->city,
+				'SHIPTOSTATE' => $shipto->state,
+				'SHIPTOZIP' => $shipto->zip,
 				'SHIPTOCOUNTRY' => $input->post->text('shipto-country'),
-				'SHIPTOPHONE' => str_replace('-', '', $input->post->text('shipto-phone').$input->post->text('shipto-ext')),
-				'SHIPTOFAX' => str_replace('-', '',$input->post->text('shipto-fax')),
-				'SHIPTOEMAIL' => $input->post->text('shipto-email'),
+				'SHIPTOPHONE' => str_replace('-', '', $shipto->phone),
+				'SHIPTOFAX' => str_replace('-', '', $shipto->faxnbr),
+				'SHIPTOEMAIL' => $shipto->email,
 				'SALESPERSON1' => $input->post->text('salesperson1'),
 				'SALESPERSON2' => $input->post->text('salesperson2'),
 				'SALESPERSON3' => $input->post->text('salesperson3'),
 				'PRICECODE' => $input->post->text('pricecode'),
+				'CONTACT' => $customer->contact,
+				'ARCONTACT' => $input->post->text('arcontact') == 'Y' ? "Y" : "N",
+				'DUNCONTACT' => $input->post->text('duncontact') == 'Y' ? "Y" : "N",
+				'BUYCONTACT' => $input->post->text('buycontact'),
+				'CERCONTACT' => $input->post->text('cercontact') == 'Y' ? "Y" : "N",
+				'ACKCONTACT' => $input->post->text('ackcontact') == 'Y' ? "Y" : "N",
+				'EXTENSION' => $input->post->text('contact-ext'),
+				'TITLE' => $input->post->text('contact-title'),
 				'NOTES' => ''
 			);
-			$newcustomer['shiptoid'] = '';
-			$newcustomer['source'] = 'C';
-			$newcustomer['name'] = $data['BILLTONAME'];
-			$newcustomer['addr1'] = $data['BILLTOADDRESS1'];
-			$newcustomer['addr2'] = $data['BILLTOADDRESS2'];
-			$newcustomer['ccity'] = $data['BILLTOCITY'];
-			$newcustomer['cst'] = $data['BILLTOSTATE'];
-			$newcustomer['czip'] = $data['BILLTOZIP'];
-			$newcustomer['cphone'] = $input->post->text('billto-phone');
-			$newcustomer['cphext'] = $input->post->text('billto-ext');
-			$newcustomer['email'] = $data['BILLTOEMAIL'];
-			$newcustomer['recno'] = getmax_custindexrecnbr() + 1;
-			$session->sql = insert_newcustindexrecord($newcustomer, false);
-
-			$newcustomershipto['shiptoid'] = '1';
-			$newcustomershipto['source'] = 'CS';
-			$newcustomershipto['name'] = $data['SHIPTONAME'];
-			$newcustomershipto['addr1'] = $data['SHIPTOADDRESS1'];
-			$newcustomershipto['addr2'] = $data['SHIPTOADDRESS2'];
-			$newcustomershipto['ccity'] = $data['SHIPTOCITY'];
-			$newcustomershipto['cst'] = $data['SHIPTOSTATE'];
-			$newcustomershipto['czip'] = $data['SHIPTOZIP'];
-			$newcustomershipto['cphone'] = $input->post->text('shipto-phone');
-			$newcustomershipto['cphext'] = $input->post->text('shipto-ext');
-			$newcustomershipto['email'] = $data['SHIPTOEMAIL'];
-			$newcustomershipto['recno'] = getmax_custindexrecnbr() + 1;
-			$session->sql = insert_newcustindexrecord($newcustomershipto, false);
 			$session->loc = $config->pages->customer.'redir/?action=load-new-customer';
 			break;
 		case 'load-new-customer':
-			$custID = getcreatedordn(session_id(), false);
+			$custID = get_createdordn(session_id());
 			edit_custindexcustid(session_id(), $custID);
 			$session->loc = $config->pages->customer . urlencode($custID)."/shipto-1/";
 			$data = array('DBNAME' => $config->dbName, 'CUSTID' => $custID);
@@ -248,12 +268,12 @@
 			$contactID = $input->post->text('contactID');
 			$contact = get_customercontact($custID, $shipID, $contactID, false);
 			$contact->contact = $input->post->text('name');
-			$contact->cphone = str_replace('-', '', $input->post->text('phone'));
-			$contact->cphext = $input->post->text('extension');
-			$contact->ccellphone = str_replace('-', '', $input->post->text('cellphone'));
+			$contact->phone = str_replace('-', '', $input->post->text('phone'));
+			$contact->extension = $input->post->text('extension');
+			$contact->cellphone = str_replace('-', '', $input->post->text('cellphone'));
 			$contact->email = $input->post->text('email');
-			$response = edit_customercontact($custID, $shipID, $contactID, $contact, false);
-			$session->sql = $response['sql'];
+			$session->sql = $contact->update();
+			
 			$data = array(
 				'DBNAME' => $config->dbName, 
 				'EDITCONTACT' => false, 
@@ -261,9 +281,9 @@
 				'SHIPID' => $shipID, 
 				'CONTACT' => $contactID, 
 				'NAME' => $contact->contact, 
-				'PHONE' => $contact->cphone, 
-				'EXTENSION' => $contact->cphext, 
-				'CELLPHONE' => $contact->ccellphone, 
+				'PHONE' => $contact->phone, 
+				'EXTENSION' => $contact->extension, 
+				'CELLPHONE' => $contact->cellphone, 
 				'EMAIL' => $contact->email
 			);
 			$returnpage = new \Purl\Url($input->post->text('page'));

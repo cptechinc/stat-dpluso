@@ -1,5 +1,5 @@
 <address>
-	<?php echo $contact->addr1; ?><br>
-    <?php if (strlen($contact->addr2) > 0) { echo $contact->addr2.'<br>'; } ?>
-    <?php echo $contact->ccity . ', ' . $contact->cst . ' ' . $contact->czip; ?>
+	<?= $contact->addr1; ?><br>
+    <?= (strlen($contact->addr2) > 0) ? $contact->addr2.'<br>' : ''; ?>
+    <?= $contact->city . ', ' . $contact->state . ' ' . $contact->zip; ?>
 </address>

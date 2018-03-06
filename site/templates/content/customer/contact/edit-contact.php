@@ -23,15 +23,15 @@
                         </tr>
                         <tr>
                             <td class="control-label">Phone</td>
-                            <td><input class="form-control input-sm phone-input required" name="phone" value="<?= formatphone($contact->cphone); ?>"></td>
+                            <td><input class="form-control input-sm phone-input required" name="phone" value="<?= $page->stringerbell->format_phone($contact->phone); ?>"></td>
                         </tr>
                         <tr>
                             <td class="control-label">Ext.</td>
-                            <td><input class="form-control input-sm" name="extension" value="<?= $contact->cphext; ?>"></td>
+                            <td><input class="form-control input-sm" name="extension" value="<?= $contact->extension; ?>"></td>
                         </tr>
                         <tr>
                             <td class="control-label">Cell</td>
-                            <td><input class="form-control input-sm phone-input " name="cellphone" value="<?= formatphone($contact->ccellphone); ?>"></td>
+                            <td><input class="form-control input-sm phone-input " name="cellphone" value="<?= $page->stringerbell->format_phone($contact->cellphone); ?>"></td>
                         </tr>
                         <tr>
                             <td class="control-label">Email</td>

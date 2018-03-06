@@ -2,7 +2,6 @@
     $q = '';
     $custresults = get_distinctcustindexpaged($user->loginid, $limit = 10, $page = 1, $user->hascontactrestrictions, $q, false)
 ?>
-
 <div id="cust-results">
     <table id="cust-index" class="table table-striped table-bordered">
         <thead>
@@ -21,7 +20,7 @@
                     <td><?= $cust->name; ?></td>
                     <td><?= $cust->shiptoid; ?></td>
                     <td><?= $cust->generate_address(); ?></td>
-                    <td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= $cust->cphone; ?></a></td>
+                    <td><a href="tel:<?= $cust->phone; ?>" title="Click To Call"><?= $cust->phone; ?></a></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

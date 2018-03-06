@@ -8,6 +8,9 @@
 ?>
 
 <div id="cust-results">
+	<div class="form-group">
+		<a href="<?= $config->pages->customer.'add/'; ?>" class="btn btn-primary"><i class="fa fa-user-plus" aria-hidden="true"></i> Add Customer</a>
+	</div>
     <table id="cust-index" class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -26,7 +29,7 @@
                         <td><?= $page->stringerbell->highlight($cust->name, $input->get->q); ?></td>
                         <td><?= $page->stringerbell->highlight($cust->shiptoid, $input->get->q); ?></td>
                         <td><?= $page->stringerbell->highlight($cust->generate_address(), $input->get->q); ?></td>
-                        <td><a href="tel:<?= $cust->cphone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->cphone, $input->get->q); ?></a></td>
+                        <td><a href="tel:<?= $cust->phone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->phone, $input->get->q); ?></a></td>
                     </tr>
                 <?php endforeach; ?>
             <?php else : ?>

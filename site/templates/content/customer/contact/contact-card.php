@@ -32,12 +32,12 @@
                         <tr>
                             <td>Office Phone:</td>
                             <td>
-                                <a href="tel:<?php echo $contact->cphone; ?>"><?= formatphone($contact->cphone); ?></a><b> &nbsp;
-                                <?php if (strlen($contact->cphext) > 0) { echo 'Ext. ' . $contact->cphext;} ?></b>
+                                <a href="tel:<?= $contact->phone; ?>"><?= $page->stringerbell->format_phone($contact->phone); ?></a><b> &nbsp;
+                                <?php if ($contact->has_extension()) { echo 'Ext. ' . $contact->extension;} ?></b>
                             </td>
                         </tr>
                         <tr>
-                            <td>Cell Phone:</td> <td><a href="tel:<?= $contact->ccellphone; ?>"> <?= formatphone($contact->ccellphone); ?></a></td>
+                            <td>Cell Phone:</td> <td><a href="tel:<?= $contact->cellphone; ?>"> <?= $page->stringerbell->format_phone($contact->cellphone); ?></a></td>
                         </tr>
                         <!--<tr> <td>Fax:</td> <td><?php //echo $contact->faxnumber; ?></td> </tr>     -->
                     </tbody>

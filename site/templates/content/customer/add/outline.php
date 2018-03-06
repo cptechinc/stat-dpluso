@@ -7,6 +7,8 @@
 ?>
 <form action="<?= $config->pages->customer.'redir/'; ?>" method="post">
     <input type="hidden" name="action" value="add-customer">
+	<input type="hidden" name="salesperson2" value="">
+	<input type="hidden" name="salesperson3" value="">
     <div class="row">
         <div class="col-xs-6">
            <legend>Bill-To</legend>
@@ -56,22 +58,6 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="control-label">Phone</td>
-                        <td><input type="tel" class="form-control input-sm phone-input" name="billto-phone" value=""></td>
-                    </tr>
-                    <tr>
-                        <td class="control-label">Ext.</td>
-                        <td><input type="tel" class="form-control input-sm qty pull-right" name="billto-ext" value=""></td>
-                    </tr>
-                    <tr>
-                        <td class="control-label">Fax</td>
-                        <td><input type="tel" class="form-control input-sm phone-input" name="billto-fax" value=""></td>
-                    </tr>
-                    <tr>
-                        <td class="control-label">E-mail</td>
-                        <td><input type="email" class="form-control input-sm" name="billto-email" value=""></td>
-                    </tr>
                 </tbody>
            </table>
         </div> <!-- end bill to column -->
@@ -120,34 +106,78 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="control-label">Phone</td>
-                        <td><input type="tel" class="form-control input-sm phone-input" name="shipto-phone" value=""></td>
-                    </tr>
-                    <tr>
-                        <td class="control-label">Ext.</td>
-                        <td><input type="tel" class="form-control input-sm qty pull-right" name="shipto-ext" value=""></td>
-                    </tr>
-                    <tr>
-                        <td class="control-label">Fax</td>
-                        <td><input type="tel" class="form-control input-sm phone-input" name="shipto-fax" value=""></td>
-                    </tr>
-                    <tr>
-                        <td class="control-label">E-mail</td>
-                        <td><input type="email" class="form-control input-sm" name="shipto-email" value=""></td>
-                    </tr>
                 </tbody>
            </table>
         </div> <!-- end shit to column -->
     </div> <!-- end top row-->
     <br>
     <div class="row">
+		<div class="col-xs-6">
+			<legend>Contact Information</legend>
+			<table class="table table-striped table-bordered table-condensed">
+				<tr>
+					<td class="control-label">Contact</td>
+					<td><input type="text" class="form-control input-sm" name="contact-name" value=""></td>
+				</tr>
+				<tr>
+					<td class="control-label">Contact Title</td>
+					<td><input type="text" class="form-control input-sm" name="contact-title" value=""></td>
+				</tr>
+				<tr>
+					<td class="control-label">Phone</td>
+					<td><input type="tel" class="form-control input-sm phone-input" name="contact-phone" value=""></td>
+				</tr>
+				<tr>
+					<td class="control-label">Ext.</td>
+					<td><input type="tel" class="form-control input-sm qty pull-right" name="contact-ext" value=""></td>
+				</tr>
+				<tr>
+					<td class="control-label">Fax</td>
+					<td><input type="tel" class="form-control input-sm phone-input" name="contact-fax" value=""></td>
+				</tr>
+				<tr>
+					<td class="control-label">E-mail</td>
+					<td><input type="email" class="form-control input-sm" name="contact-email" value=""></td>
+				</tr>
+				<tr>
+					<td class="control-label">AR Contact</td>
+					<td>
+						<?= $page->bootstrap->select('class=form-control input-sm|name=arcontact', array_flip($config->yesnoarray), 'N'); ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="control-label">Dunning Contact</td>
+					<td>
+						<?= $page->bootstrap->select('class=form-control input-sm|name=dunningcontact', array_flip($config->yesnoarray), 'N'); ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="control-label">Buying Contact</td>
+					<td>
+						<?= $page->bootstrap->select('class=form-control input-sm|name=buycontact', $config->buyertypes, 'N'); ?>
+					</td>
+				</tr>
+				<tr>
+					<?php if ($config->cptechcustomer == 'stat') : ?>
+						<td class="control-label">End User</td>
+					<?php else : ?>
+						<td class="control-label">Certificate Contact</td>
+					<?php endif; ?>
+					
+					<td>
+						<?= $page->bootstrap->select('class=form-control input-sm|name=certcontact', array_flip($config->yesnoarray), 'N'); ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="control-label">Acknowledgement Contact</td>
+					<td>
+						<?= $page->bootstrap->select('class=form-control input-sm|name=ackcontact', array_flip($config->yesnoarray), 'N'); ?>
+					</td>
+				</tr>
+			</table>
+		</div>
         <div class="col-xs-6">
-           <legend>Salesperson Information</legend>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-6">
+			<legend>Salesperson Information</legend>
             <table class="table table-striped table-bordered table-condensed">
                 <tbody>
                     <tr>
@@ -160,26 +190,28 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="control-label">Salesperson2</td>
-                        <td>
-                            <select name="salesperson2" class="form-control input-sm">
-                                <?php foreach ($salespersoncodes as $salespersoncode) : ?>
-                                    <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>"><?= $salespersoncode.' - '.$salespersonjson['data'][$salespersoncode]['spname']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="control-label">Salesperson3</td>
-                        <td>
-                            <select name="salesperson3" class="form-control input-sm">
-                                <?php foreach ($salespersoncodes as $salespersoncode) : ?>
-                                    <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>"><?= $salespersoncode.' - '.$salespersonjson['data'][$salespersoncode]['spname']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                    </tr>
+					<?php if (100 == 1) : ?>
+	                    <tr>
+	                        <td class="control-label">Salesperson2</td>
+	                        <td>
+	                            <select name="salesperson2" class="form-control input-sm">
+	                                <?php foreach ($salespersoncodes as $salespersoncode) : ?>
+	                                    <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>"><?= $salespersoncode.' - '.$salespersonjson['data'][$salespersoncode]['spname']; ?></option>
+	                                <?php endforeach; ?>
+	                            </select>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td class="control-label">Salesperson3</td>
+	                        <td>
+	                            <select name="salesperson3" class="form-control input-sm">
+	                                <?php foreach ($salespersoncodes as $salespersoncode) : ?>
+	                                    <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>"><?= $salespersoncode.' - '.$salespersonjson['data'][$salespersoncode]['spname']; ?></option>
+	                                <?php endforeach; ?>
+	                            </select>
+	                        </td>
+	                    </tr>
+					<?php endif; ?>
                     <tr>
                         <td class="control-label">Price Code</td>
                         <td>

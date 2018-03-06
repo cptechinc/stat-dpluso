@@ -76,24 +76,24 @@
 				<?= $quotedisplay->generate_detailvieweditlink($quote, $detail, $page->bootstrap->createicon('glyphicon glyphicon-eye-open')); ?>
             </td>
 			<td class="text-right"> <?= intval($detail->quotqty); ?> </td>
-			<td class="text-right">$ <?= formatmoney($detail->ordrprice); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->ordrprice * intval($detail->quotqty)) ?> </td>
+			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->ordrprice); ?></td>
+			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->ordrprice * intval($detail->quotqty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>
-		<td></td> <td><b>Subtotal</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->subtotal); ?></td>
+		<td></td> <td><b>Subtotal</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($quote->subtotal); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Tax</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->salestax); ?></td>
+		<td></td><td><b>Tax</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($quote->salestax); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Freight</b></td> <td colspan="3" class="text-right">$ <?=formatmoney($quote->freight); ?></td>
+		<td></td><td><b>Freight</b></td> <td colspan="3" class="text-right">$ <?=$page->stringerbell->format_money($quote->freight); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Misc.</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->misccost); ?></td>
+		<td></td><td><b>Misc.</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($quote->misccost); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($quote->ordertotal); ?></td>
+		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($quote->ordertotal); ?></td>
 	</tr>
 </table>
 

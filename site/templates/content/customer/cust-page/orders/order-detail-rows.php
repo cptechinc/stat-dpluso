@@ -1,4 +1,4 @@
- <tr class="detail item-header">
+<tr class="detail item-header">
     <th colspan="2" class="text-center">Item ID/Cust Item ID</th>
     <th colspan="2">Description</th>
     <th class="text-right">Ordered</th>
@@ -20,7 +20,7 @@
             <?= $detail->desc1. ' ' . $detail->desc2 ; ?>
         </td>
         <td class="text-right"><?= intval($detail->qty); ?></td>
-        <td class="text-right">$ <?= formatmoney($detail->price);?></td>
+        <td class="text-right">$ <?= $page->stringerbell->format_money($detail->price);?></td>
         <td class="text-right"><?= intval($detail->qtybackord); ?></td>
         <td class="text-right"><?= intval($detail->qtyshipped); ?></td>
         <td><?= $orderpanel->generate_loaddplusnoteslink($order, $detail->linenbr); ?></td>
@@ -28,10 +28,10 @@
         <td><div><?= $orderpanel->generate_loaddocumentslink($order, $detail); ?></div></td>
     </tr>
     <?php if ($input->get->text('item-document')) : ?>
-    	<?php if ($input->get->text('item-document') == $detail->itemid) : ?>
-        	<?php $itemdocs = get_item_docs(session_id(), $order->orderno, $detail->itemid, false); ?>
+        <?php if ($input->get->text('item-document') == $detail->itemid) : ?>
+            <?php $itemdocs = get_item_docs(session_id(), $order->orderno, $detail->itemid, false); ?>
             <?php foreach ($itemdocs->fetchAll() as $itemdoc) : ?>
-            	<tr class="docs">
+                <tr class="docs">
                     <td colspan="2"></td>
                     <td>
                         <b><a href="<?= $config->pathtofiles.$itemdoc['pathname'];; ?>" title="Click to View Document" target="_blank" ><?php echo $itemdoc['title']; ?></a></b>

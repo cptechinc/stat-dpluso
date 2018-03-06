@@ -18,7 +18,7 @@
                     <a href="<?= $orderpanel->generate_customershiptourl($order); ?>"><?= $order->shiptoid; ?></a>
                     <?= $orderpanel->generate_shiptopopover($order); ?>
                 </td>
-                <td align="right">$ <?= formatmoney($order->ordertotal); ?></td> <td align="right" ><?= $order->orderdate; ?></td>
+                <td align="right">$ <?= $page->stringerbell->format_money($order->ordertotal); ?></td> <td align="right" ><?= $order->orderdate; ?></td>
                 <td align="right"><?=  $order->status; ?></td>
                 <td colspan="4">
                     <span class="col-xs-3"><?= $orderpanel->generate_loaddocumentslink($order); ?></span>
@@ -61,7 +61,8 @@
                     	<span class="glyphicon glyphicon-shopping-cart" title="re-order"></span> Reorder Order
                     </a>
                 </td>
-                <td></td>  <td></td>
+                <td></td>
+				<td></td>
                 <td colspan="2">
                     <div class="pull-right"> <a class="btn btn-danger btn-sm load-link" href="<?= $orderpanel->generate_closedetailsurl($order); ?>" <?php echo $orderpanel->ajaxdata; ?>>Close</a> </div>
                 </td>

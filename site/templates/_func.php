@@ -88,7 +88,7 @@
 /* =============================================================
    STRING FUNCTIONS
  ============================================================ */
-     function latin_to_utf($string) {
+     function latin_to_utf($string) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
     	$encode = array("â€¢" => '&bull;', "â„¢" => '&trade;', "â€" => '&prime;');
     	foreach ($encode as $key => $value) {
     		if (strpos($string, $key) !== false) {
@@ -98,7 +98,7 @@
     	return $string;
      }
  
-     function ordinal($number) {
+     function ordinal($number) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
 		if ((($number % 100) >= 11) && (($number%100) <= 13))
 			return $number. 'th';
@@ -106,7 +106,7 @@
 			return $number. $ends[$number % 10];
 	}
 
-    function ordinalword($number) {
+    function ordinalword($number) { // DEPRECATED 3/5/18
         switch ($number) {
             case '1':
                 return 'first';
@@ -123,7 +123,7 @@
         }
     }
 	
-	function strToHex($string){
+	function strToHex($string){ // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		$hex = '';
 		for ($i=0; $i<strlen($string); $i++){
 			$ord = ord($string[$i]);
@@ -133,35 +133,35 @@
 		return strToUpper($hex);
 	}
 
-	function hexToStr($hex){
-		$string='';
-		for ($i=0; $i < strlen($hex)-1; $i+=2){
+	function hexToStr($hex){ // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
+		$string = '';
+		for ($i = 0; $i < strlen($hex)-1; $i+=2){
 			$string .= chr(hexdec($hex[$i].$hex[$i+1]));
 		}
 		return $string;
 	}
 	
-	function formatmoney($amt) {
+	function formatmoney($amt) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		return number_format($amt, 2, '.', ',');
 	}
 
-	function formatnumber($number, $beforedecimal, $afterdecimal) {
+	function formatnumber($number, $beforedecimal, $afterdecimal) { // DEPRECATED 3/5/2018
 		$array = explode('.', $number);
 		return str_pad($array[0], $beforedecimal, '0', STR_PAD_LEFT) . '.' . str_pad($array[1], $afterdecimal, '0', STR_PAD_RIGHT);
 	}
 
-	function formatphone($number) {
+	function formatphone($number) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		return preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '$1-$2-$3', $number);
 	}
 	
-	function cleanforjs($str) {
+	function cleanforjs($str) {// DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		return urlencode(str_replace(' ', '-', str_replace('#', '', $str)));
 	}
 	
 /* =============================================================
    URL FUNCTIONS
  ============================================================ */
-	function paginate($url, $page, $insertafter, $hash) {
+	function paginate($url, $page, $insertafter, $hash) { // DEPRECATED 3/5/2018 MOVED TO Paginator
 		if (strpos($url, 'page') !== false) {
 			$regex = "((page)\d{1,3})";
 			if ($page > 1) { $replace = "page".$page; } else {$replace = ""; }
@@ -176,45 +176,13 @@
 	 }
 
 /* =============================================================
-   ORDERBY / SORT FUNCTIONS
- ============================================================ */
-	function get_symbols($orderby, $match, $page_orderby) { // DEPRECATED 10/6/2017 REPLACED BY TABLEPAGESORTCLASS
-		$symbol = "";
-		if ($orderby == $match) {
-			if ($page_orderby == "ASC") {
-				$symbol = "&#x25B2;";
-				$symbol = "<span class='glyphicon glyphicon-arrow-up'></span>";
-			} else {
-				$symbol = "&#x25BC;";
-				$symbol = "<span class='glyphicon glyphicon-arrow-down'></span>";
-			}
-		}
-		return $symbol;
-	}
-
-	function get_sorting_rule($orderingby, $sort, $orderby) { // DEPRECATED 10/6/2017 REPLACED BY TABLEPAGESORTCLASS
-		if ($orderingby != $orderby || $sort == false) {
-			$sortrule = "ASC";
-		} else {
-			switch ($sort) {
-				case 'ASC':
-					$sortrule = 'DESC';
-					break;
-				case 'DESC':
-					$sortrule = 'ASC';
-					break;
-			}
-		}
-		return $sortrule;
-	}
-
-/* =============================================================
    ORDERS FUNCTIONS
  ============================================================ */
 	function returntracklink($carrier, $tracknbr, $on) {
 		$link = '';
 		if (strpos(strtolower($carrier), 'fed') !== false) {
 			$link = "https://www.fedex.com/fedextrack/WTRK/index.html?action=track&trackingnumber=".$tracknbr."&cntry_code=us&fdx=1490";
+			$link = "https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=$tracknbr&cntry_code=us";
 		} elseif (strpos(strtolower($carrier), 'ups') !== false) {
 			$link = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=".$tracknbr."&loc=en_us";
 		} elseif (strpos(strtolower($carrier), 'gro') !== false) {
@@ -226,44 +194,7 @@
 		}
 		return $link;
 	}
-
-/* =============================================================
-   HTML CONTENT FUNCTIONS
- ============================================================ */
-	function highlight($haystack, $needle, $element) { //\b(\w*".$needle."\w*)\b //DEPRECATED now use vend/StringerBell
-		$regex = "/(".$needle.")/i";
-		$contains = preg_match($regex, $haystack, $matches);
-		if ($contains) {
-			$replace =  str_replace('{ele}', $matches[0], $element);
-			return preg_replace($regex, $replace, $haystack);
-		} else {
-			return $haystack;
-		}
-	}
 	
-	function createshopasform($custID, $shipID) {
-		$form = '<form action="'.Processwire\wire(config)->pages->customer.'redir/" method="post">';
-		$form .= '<input type="hidden" name="action" value="shop-as-customer">';
-		$form .= '<input type="hidden" name="page" value="'.Processwire\wire(config)->filename.'">';
-		$form .= '<input type="hidden" name="custID" value="'.$custID.'">';
-		if ($shipID) {
-			$form .= '<input type="hidden" name="shipID" value="'.$shipID.'">';
-			$form .= '<button type="submit" class="btn btn-sm btn-primary">Shop as '.get_customername($custID).' - '. $shipID.'</button>';
-		} else {
-			$form .= '<button type="submit" class="btn btn-sm btn-primary">Shop as '.get_customername($custID).'</button>';
-		}
-		$form .= '</form>';
-		return $form;
-	}
-	
-	function createalert($alerttype, $msg) { // DEPRECATED 10/2/2017
-		return '<div class="alert alert-'.$alerttype.'" role="alert">' . $msg . '</div>';
-	}
-
-	function makeprintlink($link, $msg) { // DEPRECATED 10/2/2017
-		return '<a href="'.$link.'" class="h4" target="_blank"><i class="glyphicon glyphicon-print" aria-hidden="true"></i> '.$msg.'.</a>';
-	}
-
  /* =============================================================
    DB FUNCTIONS
  ============================================================ */
@@ -401,14 +332,6 @@
 
 		$time = strval($hr) . $colon . $time[1].' '.$partofDay;
 		return $time;
-	}
-
-	function dplusdate($date) { // DEPRECATED 8/23/2017 DELETE IN A MONTH
-		if (date('m/d/Y', strtotime($date)) == "12/31/1969") {
-			return '';
-		} else {
-			return date('m/d/Y', strtotime($date));
-		}
 	}
 	
 /* =============================================================

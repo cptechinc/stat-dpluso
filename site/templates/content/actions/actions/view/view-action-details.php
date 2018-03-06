@@ -45,14 +45,14 @@
     <tr>
         <td>Phone:</td>
         <td>
-            <a href="tel:<?= $contactinfo->cphone; ?>"><?= $contactinfo->cphone; ?></a> &nbsp; <?php if ($contactinfo->cphext != '') {echo ' Ext. '.$contactinfo->cphext;} ?>
+            <a href="tel:<?= $contactinfo->phone; ?>"><?= $contactinfo->phone; ?></a> &nbsp; <?php if ($contactinfo->has_extension()) {echo ' Ext. '.$contactinfo->extension;} ?>
         </td>
     </tr>
-    <?php if ($contactinfo->ccellphone != '') : ?>
+    <?php if ($contactinfo->cellphone != '') : ?>
         <tr>
             <td>Cell Phone:</td>
             <td>
-                <a href="tel:<?= $contactinfo->ccellphone; ?>"><?= $contactinfo->ccellphone; ?></a>
+                <a href="tel:<?= $contactinfo->cellphone; ?>"><?= $contactinfo->cellphone; ?></a>
             </td>
         </tr>
     <?php endif; ?>

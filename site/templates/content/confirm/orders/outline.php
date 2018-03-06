@@ -67,24 +67,24 @@
 				<?= $orderdisplay->generate_detailvieweditlink($order, $detail); ?>
 			</td>
 			<td class="text-right"> <?= intval($detail->qty) ; ?> </td>
-			<td class="text-right">$ <?= formatmoney($detail->price); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->price * intval($detail->qty)) ?> </td>
+			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->price); ?></td>
+			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->price * intval($detail->qty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>
-		<td></td> <td><b>Subtotal</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->subtotal); ?></td>
+		<td></td> <td><b>Subtotal</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($order->subtotal); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Tax</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->salestax); ?></td>
+		<td></td><td><b>Tax</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($order->salestax); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Freight</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->freight); ?></td>
+		<td></td><td><b>Freight</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($order->freight); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Misc.</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->misccost); ?></td>
+		<td></td><td><b>Misc.</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($order->misccost); ?></td>
 	</tr>
 	<tr>
-		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= formatmoney($order->ordertotal); ?></td>
+		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($order->ordertotal); ?></td>
 	</tr>
 </table>
 <hr>

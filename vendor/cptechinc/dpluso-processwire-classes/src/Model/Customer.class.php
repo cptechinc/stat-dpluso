@@ -58,7 +58,7 @@
 			OTHER CONSTRUCTOR FUNCTIONS 
             Inherits some from CreateFromObjectArrayTraits
 		============================================================ */
-        public static function load($custID, $shiptoID = '', $contactID = '') {
+        public static function load($custID, $shiptoID = '', $contactID = '', $debug = false) {
             return self::create_fromobject(get_customercontact($custID, $shiptoID, $contactID));
         } 
         

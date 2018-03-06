@@ -15,18 +15,27 @@
 		public $name;
 		public $addr1;
 		public $addr2;
-		public $ccity;
-		public $cst;
-		public $czip;
-		public $cphone;
-		public $ccellphone;
+		public $city;
+		public $state;
+		public $zip;
+		public $phone;
+		public $cellphone;
 		public $contact;
 		public $source;
-		public $cphext;
+		public $extension;
 		public $amountsold;
 		public $timesold;
 		public $lastsaledate;
 		public $email;
+		public $typecode;
+		public $faxnbr;
+		public $title;
+		public $arcontact;
+		public $dunningcontact;
+		public $buyingcontact;
+		public $certcontact;
+		public $ackcontact;
+		public $dummy;
         public $fieldaliases = array(
             'custID' => 'custid',
             'shipID' => 'shiptoid',
@@ -71,12 +80,40 @@
          * Returns if contact has phone extension 
          * @return bool [description]
          */
-        protected function has_extension() {
-            return ($this->cphext != '') ? true : false;
+        public function has_extension() {
+            return (!empty($this->extension)) ? true : false;
         }
+		
+		/**
+         * Returns if contact has cell phone
+         * @return bool [description]
+         */
+        public function has_cellphone() {
+            return (!empty($this->cellphone)) ? true : false;
+        }
+		
+		/* =============================================================
+			SETTER FUNCTIONS 
+		============================================================ */
+		/**
+		 * Checks for property and if it exists it sets the value of that property
+		 * @param string $property Property name / key
+		 * @param mixed $value    Value of the property
+		 */
+		public function set($property, $value) {
+			if (property_exists($this, $property)) {
+                $this->$property = $value;
+            } elseif (array_key_exists($property, $this->fieldaliases)) {
+                $realproperty = $this->fieldaliases[$property];
+                $this->$realproperty = $value;
+            } else {
+                $this->error("This property ($property) does not exist");
+                return false;
+            }
+		}
         
         /* =============================================================
-			CLASS FUNCTIONS 
+			CLASS FUNCTIONS
 		============================================================ */
 		/**
 		 * Generates the URL to the customer page which currently
@@ -154,7 +191,7 @@
          * @param string $function which II function
          * @return string          Function name with parameter for the call
          */
-        function generate_iifunction($function) {
+        public function generate_iifunction($function) {
             switch ($function) {
                 case 'ii':
                     return "ii_customer('".$this->custid."')";
@@ -175,9 +212,9 @@
 		 */
 		public function generate_phonedisplay() {
 			if ($this->has_extension()) {
-				return $this->cphone . ' &nbsp; ' . $this->cphext;
+				return $this->phone . ' &nbsp; ' . $this->extension;
 			} else {
-				return $this->cphone;
+				return $this->phone;
 			}
 		}
 		
@@ -189,16 +226,16 @@
 		public function generate_contactmethodurl($method) {
 			switch ($method) {
 				case 'cell':
-					return "tel:".$this->ccellphone;
+					return "tel:".$this->cellphone;
 					break;
 				case 'phone':
-					return "tel:".$this->cphone;
+					return "tel:".$this->phone;
 					break;
 				case 'email':
 					return "mailto:".$this->email;
 					break;
 				default:
-					return "tel:".$this->cphone;
+					return "tel:".$this->phone;
 					break;
 			}
 		}
@@ -208,23 +245,56 @@
 		 * @return string
 		 */
 		public function generate_address() {
-			return $this->addr1 . ' ' . $this->addr2. ' ' . $this->ccity . ', ' . $this->cst . ' ' . $this->czip;
+			return $this->addr1 . ' ' . $this->addr2. ' ' . $this->city . ', ' . $this->state . ' ' . $this->zip;
 		}
         
-        /* =============================================================
-			OTHER CONSTRUCTOR FUNCTIONS 
-            Inherits some from CreateFromObjectArrayTraits
+		/* =============================================================
+			CRUD FUNCTIONS
 		============================================================ */
 		/**
+		 * Creates a new contact in the database
+		 * @param  boolean $debug Determines if query will execute and if sQL is returned or Contact object
+		 * @return Contact         OR SQL QUERY
+		 */
+		public function create($debug = false) {
+			return insert_customerindexrecord($this, $debug);
+		}
+		/**
 		 * Loads an object with this class using the parameters as provided
-		 * @param  string $custID    CustomerID
-		 * @param  string $shiptoID  Shipto ID (can be blank)
-		 * @param  string $contactID Contact ID (can be blank)
-		 * @return Contact
+		 * @param  string  $custID    CustomerID
+		 * @param  string  $shiptoID  Shipto ID (can be blank)
+		 * @param  string  $contactID Contact ID (can be blank)
+		 * @param  bool $debug     Determines if query will execute and if sQL is returned or Contact object
+		 * @return Contact            SQL query string
 		 */
         public static function load($custID, $shiptoID = '', $contactID = '') {
             return get_customercontact($custID, $shiptoID, $contactID);
         }
+		
+		/**
+		 * Updates the Contact in the database
+		 * @param  boolean $debug Determines if query will execute and if sQL is returned or Contact object
+		 * @return Contact         SQL query string
+		 */
+		public function update($debug = false) {
+			return update_contact($this, $debug);
+		}
+		
+		/**
+		 * Checks if there are changes between this contact and the database record
+		 * @return boolean Whether contact has changes from database
+		 */
+		public function has_changes() {
+			$properties = array_keys($this->_toArray());
+			$contact = self::load($this->custid, $this->shiptoid, $this->contact);
+			
+			foreach ($properties as $property) {
+				if ($this->$property != $contact->$property) {
+					return true;
+				}
+			}
+			return false;
+		}
         
         /* =============================================================
 			GENERATE ARRAY FUNCTIONS 
@@ -240,8 +310,8 @@
 		 * @param  array $array array of the class properties
 		 * @return array]        with certain keys removed
 		 */
- 		public static function remove_nondbkeys($array) {
+		public static function remove_nondbkeys($array) {
 			unset($array['fieldaliases']);
- 			return $array;
- 		}
+			return $array;
+		}
     }

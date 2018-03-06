@@ -155,7 +155,7 @@
 			$session->loc= $config->pages->editquote."?qnbr=".$qnbr;
 			break;
 		case 'edit-new-quote':
-			$qnbr = getcreatedordn(session_id(), false);
+			$qnbr = get_createdordn(session_id());
 			$date = date('Ymd');
 			$time = date('Hi');
 			$data = array('DBNAME' => $config->dbName, 'EDITQUOTE' => $qnbr, 'QUOTENO' => $qnbr);

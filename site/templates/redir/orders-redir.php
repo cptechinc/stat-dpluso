@@ -135,9 +135,9 @@
 			} elseif ($input->get->print) {
 				$session->loc = $config->pages->print."order/?ordn=".$ordn;
 			} elseif($input->get->custID) {
-				$session->loc = paginate($config->pages->ajax."load/orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon, $pagenumber, $custID, '');
+				$session->loc = Paginator::paginateurl($config->pages->ajax."load/orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon, $pagenumber, $custID, '');
 			} else {
-				$session->loc = paginate($config->pages->ajax."load/orders/salesrep/?ordn=".$ordn.$linkaddon, $pagenumber, "salesrep", '');
+				$session->loc = Paginator::paginateurl($config->pages->ajax."load/orders/salesrep/?ordn=".$ordn.$linkaddon, $pagenumber, "salesrep", '');
 				if ($input->get->readonly) {$session->loc = $config->pages->editorder."?ordn=".$ordn; }
 			}
 			break;
@@ -148,11 +148,11 @@
 			if ($input->get->ajax) {
 				$session->loc = $config->pages->ajax."load/order/tracking/?ordn=".$ordn;
 			} elseif($input->get->custID) {
-				$session->loc = paginate($config->pages->ajax."load/orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, $custID, '');
+				$session->loc = Paginator::paginateurl($config->pages->ajax."load/orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, $custID, '');
 			} elseif ($input->get->page == 'edit') {
 				$session->loc = $config->pages->ajax.'load/order/tracking/?ordn='.$ordn;
 			} else {
-				$session->loc = paginate($config->pages->ajax."load/orders/salesrep/".urlencode($custID)."/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, $custID, '');
+				$session->loc = Paginator::paginateurl($config->pages->ajax."load/orders/salesrep/".urlencode($custID)."/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, $custID, '');
 			}
 			break;
 		case 'get-order-documents':
@@ -161,20 +161,20 @@
 
 			if ($input->get->itemdoc) {
 				if ($input->get->custID) {
-					$session->loc = paginate($config->pages->ajax."load/orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon."&show=documents&itemdoc=".$input->get->text('itemdoc'), $pagenumber, $custID, '');
+					$session->loc = Paginator::paginateurl($config->pages->ajax."load/orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon."&show=documents&itemdoc=".$input->get->text('itemdoc'), $pagenumber, $custID, '');
 				} elseif ($input->get->page == 'edit') {
 					$session->loc = $config->pages->ajax.'load/order/documents/?ordn='.$ordn;
 				} else {
-					$session->loc = paginate($config->pages->ajax."load/orders/salesrep/?ordn=".$ordn.$linkaddon."&show=documents&itemdoc=".$input->get->text('itemdoc'), $pagenumber, "salesrep", '');
+					$session->loc = Paginator::paginateurl($config->pages->ajax."load/orders/salesrep/?ordn=".$ordn.$linkaddon."&show=documents&itemdoc=".$input->get->text('itemdoc'), $pagenumber, "salesrep", '');
 				}
 			} else {
 				if ($input->get->custID) {
 					$custID = $input->get->text('custID');
-					$session->loc = paginate($config->pages->ajax."load/orders/cust/".urlencode($custID)."/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, $custID, '');
+					$session->loc = Paginator::paginateurl($config->pages->ajax."load/orders/cust/".urlencode($custID)."/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, $custID, '');
 				} elseif ($input->get->page == 'edit') {
 					$session->loc = $config->pages->ajax.'load/order/documents/?ordn='.$ordn;
 				} else {
-					$session->loc = paginate($config->pages->ajax."load/orders/salesrep/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, "salesrep", '');
+					$session->loc = Paginator::paginateurl($config->pages->ajax."load/orders/salesrep/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, "salesrep", '');
 				}
 
 			}
@@ -249,7 +249,7 @@
 			break;
 		case 'edit-new-order':
 			if ($session->custID) { $custID = $session->custID; } else { $custID = $config->defaultweb; }
-			$ordn = getcreatedordn(session_id(), false);
+			$ordn = get_createdordn(session_id());
 			$data = array('DBNAME' => $config->dbName, 'ORDRDET' => $ordn, 'CUSTID' => $custID, 'LOCK' => false);
 			$session->loc = $config->pages->edit.'order/?ordn=' . $ordn;
 			break;

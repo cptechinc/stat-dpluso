@@ -41,23 +41,26 @@
 </div>
 <script>
 	$(function() {
-		$('#legend-table').DataTable();
-		var pie = Morris.Donut({
-			element: 'shipto-sales-graph',
-			data: <?= json_encode($data); ?>,
-			colors: <?= json_encode(array_rand(array_flip($config->allowedcolors), 25)); ?>
-		});
-		
-		pie.options.data.forEach(function(label, i) {
-			var index = i;
-			if (pie.options.colors.length < 11) {
-				if (index >= 10) {
-					var multiply = parseInt(i / 10);
-					var subtract = 10 * multiply;
-					index = i - subtract;
+		<?php if (!(empty($data))) : ?>
+			$('#legend-table').DataTable();
+			var pie = Morris.Donut({
+				element: 'shipto-sales-graph',
+				data: <?= json_encode($data); ?>,
+				colors: <?= json_encode(array_rand(array_flip($config->allowedcolors), 25)); ?>
+			});
+			
+			pie.options.data.forEach(function(label, i) {
+				var index = i;
+				if (pie.options.colors.length < 11) {
+					if (index >= 10) {
+						var multiply = parseInt(i / 10);
+						var subtract = 10 * multiply;
+						index = i - subtract;
+					}
 				}
-			}
-			$('#legend-table').find('#'+label['shiptoid']+'-shipto').css('backgroundColor', pie.options.colors[index]);
-		});
+				$('#legend-table').find('#'+label['shiptoid']+'-shipto').css('backgroundColor', pie.options.colors[index]);
+			});
+		<?php endif; ?>
+		
 	});
 </script>

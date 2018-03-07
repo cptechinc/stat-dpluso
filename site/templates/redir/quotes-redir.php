@@ -328,6 +328,7 @@
 				$quotedetail = QuoteDetail::load(session_id(), $qnbr, $i);
 				if (in_array($i, $linenbrs)) {
 					$quotedetail->set('ordrqty', $quotedetail->quotqty);
+					$quotedetail->set('ordrprice', $quotedetail->quotprice);
 				} else {
 					$quotedetail->set('ordrqty', '0');
 				}

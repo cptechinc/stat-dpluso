@@ -1108,8 +1108,8 @@
 	function count_quotedetails($sessionID, $qnbr, $debug = false) {
 		$q = (new QueryBuilder())->table('quotdet');
 		$q->field($q->expr('COUNT(*)'));
-		$q->where('quotnbr', $quote->quotnbr);
-		$q->where('sessionid', $quote->sessionid);
+		$q->where('quotenbr', $qnbr);
+		$q->where('sessionid', $sessionID);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {

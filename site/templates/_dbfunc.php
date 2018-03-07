@@ -585,6 +585,7 @@
 
 	function get_customerorders($sessionID, $custID, $limit = 10, $page = 1, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$q->where('type', 'O');
@@ -859,7 +860,7 @@
 		$q = (new QueryBuilder())->table('quothed');
 		$q->where('sessionid', $sessionID);
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order($orderby, $sortrule, $limiting);
+		$q->order($orderby, $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -1097,22 +1098,26 @@
 		}
 	}
 
-	function insertquoteline($sessionID, $qnbr, $linenbr, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO quotdet (sessionid, quotenbr, linenbr) VALUES (:sessionID, :qnbr, :linenbr)");
-		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr, ':linenbr' => $linenbr); $withquotes = array(true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => Processwire\wire('database')->lastInsertId());
-		}
-	}
-
 	function nextquotelinenbr($sessionID, $qnbr) {
 		$sql = Processwire\wire('database')->prepare("SELECT MAX(linenbr) FROM quotdet WHERE sessionid = :sessionID AND quotenbr = :qnbr ");
 		$switching = array(':sessionID' => $sessionID, ':qnbr' => $qnbr); $withquotes = array(true, true);
 		$sql->execute($switching);
 		return intval($sql->fetchColumn()) + 1;
+	}
+	
+	function count_quotedetails($sessionID, $qnbr, $debug = false) {
+		$q = (new QueryBuilder())->table('quotdet');
+		$q->field($q->expr('COUNT(*)'));
+		$q->where('quotnbr', $quote->quotnbr);
+		$q->where('sessionid', $quote->sessionid);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery();
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
 	}
 
 	function edit_quotehead($sessionID, $qnbr, Quote $quote, $debug = false) {
@@ -1140,35 +1145,43 @@
 		}
 	}
 
-	function edit_quoteline($sessionID, $qnbr, $newdetails, $debug) {
-		$originaldetail = getquotelinedetail($sessionID, $qnbr, $newdetails['linenbr'], false);
-		$query = returnpreppedquery($originaldetail, $newdetails);
-		$sql = Processwire\wire('database')->prepare("UPDATE quotdet SET ".$query['setstatement']." WHERE sessionid = :sessionID AND quotenbr = :qnbr AND linenbr = :linenbr");
-		$query['switching'][':sessionID'] = $sessionID; $query['switching'][':qnbr'] = $qnbr; $query['switching'][':linenbr'] = $newdetails['linenbr'];
-		$query['withquotes'][] = true; $query['withquotes'][]= true; $query['withquotes'][] = true;
-		
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
-			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		}
-	}
-
-	function update_quotedetail($sessionID, $detail, $debug = false) {
+	function update_quotedetail($sessionID, QuoteDetail $detail, $debug = false) {
 		$originaldetail = QuoteDetail::load($sessionID, $detail->quotenbr, $detail->linenbr);
 		$properties = array_keys($detail->_toArray());
 		$q = (new QueryBuilder())->table('quotdet');
 		$q->mode('update');
 		foreach ($properties as $property) {
-			if ($detail != $originaldetail->$property) {
+			if ($detail->$property != $originaldetail->$property) {
 				$q->set($property, $detail->$property);
 			}
 		}
 		$q->where('quotenbr', $detail->quotenbr);
 		$q->where('sessionid', $detail->sessionid);
+		$q->where('recno', $detail->recno);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery();
+		} else {
+			if ($detail->has_changes()) {
+				$sql->execute($q->params);
+			}
+			return $q->generate_sqlquery($q->params);
+		}
+	}
+	
+	function insert_quotedetail($sessionID, QuoteDetail $detail, $debug = false) {
+		$properties = array_keys($detail->_toArray());
+		$q = (new QueryBuilder())->table('quotdet');
+		$q->mode('insert');
+		foreach ($properties as $property) {
+			if (!empty($detail->$property) || strlen($detail->$property)) {
+				$q->set($property, $detail->$property);
+			}
+		}
+		$q->where('quotenbr', $detail->quotenbr);
+		$q->where('sessionid', $detail->sessionid);
+		$q->where('recno', $detail->recno);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -1786,7 +1799,7 @@
 		}
 	}
 
-	function insertcartline($sessionID, $linenbr, $debug) {
+	function insertcartline($sessionID, $linenbr, $debug) { // DEPRECATED 3/6/2018
 		$sql = Processwire\wire('database')->prepare("INSERT INTO cartdet (sessionid, linenbr) VALUES (:sessionID, :linenbr)");
 		$switching = array(':sessionID' => $sessionID, ':linenbr' => $linenbr); $withquotes = array(true, true);
 		if ($debug) {
@@ -1823,9 +1836,30 @@
 		$q = (new QueryBuilder())->table('cartdet');
 		$q->mode('update');
 		foreach ($properties as $property) {
-			if ($detail != $originaldetail->$property) {
+			if ($detail->$property != $originaldetail->$property) {
 				$q->set($property, $detail->$property);
 			}
+		}
+		$q->where('orderno', $detail->orderno);
+		$q->where('sessionid', $detail->sessionid);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery();
+		} else {
+			if ($detail->has_changes()) {
+				$sql->execute($q->params);
+			}
+			return $q->generate_sqlquery($q->params);
+		}
+	}
+	
+	function insert_cartdetail($sessionID, CartDetail $detail, $debug = false) {
+		$properties = array_keys($detail->_toArray());
+		$q = (new QueryBuilder())->table('cartdet');
+		$q->mode('insert');
+		foreach ($properties as $property) {
+			$q->set($property, $detail->$property);
 		}
 		$q->where('orderno', $detail->orderno);
 		$q->where('sessionid', $detail->sessionid);
@@ -1888,7 +1922,7 @@
 		}
 	}
 	
-	function get_orderhead($sessionID, $ordn, $useclass = false, $debug) {
+	function get_orderhead($sessionID, $ordn, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->where('sessionid', $sessionID);
 		$q->where('orderno', $ordn);
@@ -1984,6 +2018,7 @@
 		}
 		$q->where('orderno', $detail->orderno);
 		$q->where('sessionid', $detail->sessionid);
+		$q->where('linenbr', $detail->linenbr);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -2023,10 +2058,10 @@
 	function edit_orderhead_credit($sessionID, $ordn, $paytype, $ccno, $expdate, $ccv, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->mode('update');
-		$q->set('paytype', $paytype);
-		$q->set('ccno', $q->expr('AES_ENCRYPT([], HEX([]))', [$ccno, $sessionID]));
-		$q->set('xpdate', $q->expr('AES_ENCRYPT([], HEX([]))', [$expdate, $sessionID]));
-		$q->set('ccvalidcode', $q->expr('AES_ENCRYPT([], HEX([]))', [$ccv, $sessionID]));
+		$q->set('paymenttype', $paytype);
+		$q->set('cardnumber', $q->expr('AES_ENCRYPT([], HEX([]))', [$ccno, $sessionID]));
+		$q->set('cardexpire', $q->expr('AES_ENCRYPT([], HEX([]))', [$expdate, $sessionID]));
+		$q->set('cardcode', $q->expr('AES_ENCRYPT([], HEX([]))', [$ccv, $sessionID]));
 		$q->where('orderno', $ordn);
 		$q->where('sessionid', $sessionID);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -2067,7 +2102,7 @@
 	}
 
 	function get_ordercreditcard($sessionID, $ordn, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT sessionid, AES_DECRYPT(ccno , HEX(sessionid)) AS cardnumber, AES_DECRYPT(ccvalidcode , HEX(sessionid)) AS cardcode, AES_DECRYPT(xpdate, HEX(sessionid)) AS expiredate FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn AND type = 'O'");
+		$sql = Processwire\wire('database')->prepare("SELECT sessionid, AES_DECRYPT(cardnumber, HEX(sessionid)) AS cardnumber, AES_DECRYPT(cardnumber , HEX(sessionid)) AS cardcode, AES_DECRYPT(cardexpire, HEX(sessionid)) AS expiredate FROM ordrhed WHERE sessionid = :sessionID AND orderno = :ordn AND type = 'O'");
 		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn); $withquotes = array(true, true);
 		$sql->execute($switching);
 		if ($debug) {

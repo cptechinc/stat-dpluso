@@ -255,51 +255,52 @@
 			break;
 		case 'update-orderhead':
 			$ordn = $input->post->text("ordn");
-			$order = SalesOrder::load(session_id(), $ordn);
-			//$order = get_orderhead(session_id(), $ordn, false, false);
 			$intl = $input->post->text("intl");
-			$order->shiptoid = $input->post->text('shiptoid');
-			$order->custname = $input->post->text('cust-name');
-			$order->custpo = $input->post->text("custpo");
-			$order->shipname = $input->post->text("shiptoname");
-			$order->shipaddress = $input->post->text("shipto-address");
-			$order->shipaddress2 = $input->post->text("shipto-address2");
-			$order->shipcity = $input->post->text("shipto-city");
-			$order->shipstate = $input->post->text("shipto-state");
-			$order->shipzip = $input->post->text("shipto-zip");
-			$order->contact = $input->post->text('contact');
-			$order->phone = $input->post->text("contact-phone");
-			$order->extension = $input->post->text("contact-extension");
-			$order->faxnbr = $fax = $input->post->text("contact-fax");
-			$order->email = $input->post->text("contact-email");
-			$order->releasenbr = $input->post->text("release-number");
-			$order->shipviacd = $input->post->text('shipvia');
-			$order->rqstdate = $input->post->text("rqstdate");
-			$order->shipcom = $input->post->text("shipcomplete");
-			$order->billname = $input->post->text('cust-name');
-			// $order->billaddress = $input->post->text('cust-address');
-			// $order->billaddress2 = $input->post->text('cust-address2');
-			// $order->billcity = $input->post->text('cust-city');
-			// $order->billstate = $input->post->text('cust-state');
-			// $order->billzip = $input->post->text('cust-zip');
+			
+			$order = SalesOrder::load(session_id(), $ordn);
+			$order->set('shiptoid', $input->post->text('shiptoid'));
+			$order->set('custpo', $input->post->text("custpo"));
+			$order->set('shipname', $input->post->text("shiptoname"));
+			$order->set('shipaddress', $input->post->text("shipto-address"));
+			$order->set('shipaddress2', $input->post->text("shipto-address2"));
+			$order->set('shipcity', $input->post->text("shipto-city"));
+			$order->set('shipstate', $input->post->text("shipto-state"));
+			$order->set('shipzip', $input->post->text("shipto-zip"));
+			$order->set('contact', $input->post->text('contact'));
+			$order->set('phone', $input->post->text("contact-phone"));
+			$order->set('extension', $input->post->text("contact-extension"));
+			$order->set('faxnbr', $input->post->text("contact-fax"));
+			$order->set('email', $input->post->text("contact-email"));
+			$order->set('releasenbr', $input->post->text("release-number"));
+			$order->set('shipviacd', $input->post->text('shipvia'));
+			$order->set('rqstdate', $input->post->text("rqstdate"));
+			$order->set('shipcom', $input->post->text("shipcomplete"));
+			// $order->set('billname', $input->post->text('cust-name'));
+			// $order->set('custname', $input->post->text('cust-name'));
+			// $order->set('billaddress', $input->post->text('cust-address'));
+			// $order->set('billaddress2', $input->post->text('cust-address2'));
+			// $order->set('billcity', $input->post->text('cust-city'));
+			// $order->set('billstate', $input->post->text('cust-state'));
+			// $order->set('billzip', $input->post->text('cust-zip'));
 
 			if ($intl == 'Y') {
-				$order->phone = $input->post->text("office-accesscode") . $input->post->text("office-countrycode") . $input->post->text("intl-office");
-				$order->extension = $input->post->text("intl-ofice-ext");
-				$order->faxnbr = $input->post->text("fax-accesscode") . $input->post->text("fax-countrycode") . $input->post->text("intl-fax");
+				$order->set('phone', $input->post->text("office-accesscode") . $input->post->text("office-countrycode") . $input->post->text("intl-office"));
+				$order->set('extension', $input->post->text("intl-ofice-ext"));
+				$order->set('faxnbr', $input->post->text("fax-accesscode") . $input->post->text("fax-countrycode") . $input->post->text("intl-fax"));
 			} else {
-				$order->phone = $input->post->text("contact-phone");
-				$order->extension = $input->post->text("contact-extension");
-				$order->faxnbr = $input->post->text("contact-fax");
+				$order->set('phone', $input->post->text("contact-phone"));
+				$order->set('extension', $input->post->text("contact-extension"));
+				$order->set('faxnbr', $input->post->text("contact-fax"));
 			}
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$session->sql = $order->update();
-			$order->paymenttype = addslashes($input->post->text("paytype"));
 			
-			if ($paymenttype == 'cc') {
-				$order->cardnumber = $input->post->text("ccno");
-				$order->cardexpire = $input->post->text("xpd");
-				$order->cardcode = $input->post->text("ccv");
+			$order->set('paymenttype', $input->post->text("paytype"));
+			
+			if ($order->paymenttype == 'cc') {
+				$order->set('cardnumber', $input->post->text("ccno"));
+				$order->set('cardexpire', $input->post->text("xpd"));
+				$order->set('cardcode', $input->post->text("ccv"));
 			}
 			
 			$session->sql .= '<br>'. $order->update_payment();
@@ -361,25 +362,24 @@
 			$ordn = $input->post->text('ordn');
 			$linenbr = $input->post->text('linenbr');
 			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
-			$orderdetail->price = $input->post->text('price');
-			$orderdetail->discpct =  $input->post->text('discount');
-			$orderdetail->qty = $input->post->text('qty');
-			$orderdetail->rshipdate = $input->post->text('rqstdate');
-			$orderdetail->whse = $input->post->text('whse');
-			$orderdetail->linenbr = $input->post->text('linenbr');
-
-			$orderdetail->spcord = $input->post->text('specialorder');
-			$orderdetail->vendorid = $input->post->text('vendorID');
-			$orderdetail->shipfromid = $input->post->text('shipfromid');
-			$orderdetail->vendoritemid = $input->post->text('itemID');
-			$orderdetail->nsitemgroup = $input->post->text('group');
-			$orderdetail->ponbr = $input->post->text('ponbr');
-			$orderdetail->poref = $input->post->text('poref');
-			$orderdetail->uom = $input->post->text('uofm');
+			$orderdetail->set('price', $input->post->text('price'));
+			$orderdetail->set('discpct', $input->post->text('discount'));
+			$orderdetail->set('qty', $input->post->text('qty'));
+			$orderdetail->set('rshipdate', $input->post->text('rqstdate'));
+			$orderdetail->set('whse', $input->post->text('whse'));
+			$orderdetail->set('linenbr', $input->post->text('linenbr'));
+			$orderdetail->set('spcord', $input->post->text('specialorder'));
+			$orderdetail->set('vendorid', $input->post->text('vendorID'));
+			$orderdetail->set('shipfromid', $input->post->text('shipfromid'));
+			$orderdetail->set('vendoritemid', $input->post->text('itemID'));
+			$orderdetail->set('nsitemgroup', $input->post->text('group'));
+			$orderdetail->set('ponbr', $input->post->text('ponbr'));
+			$orderdetail->set('poref', $input->post->text('poref'));
+			$orderdetail->set('uom', $input->post->text('uofm'));
 
 			if ($orderdetail->spcord != 'N') {
-				$orderdetail->desc1 = $input->post->text('desc1');
-				$orderdetail->desc2 = $input->post->text('desc2');
+				$orderdetail->set('desc1', $input->post->text('desc1'));
+				$orderdetail->set('desc2', $input->post->text('desc2'));
 			}
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$session->sql = $orderdetail->update();
@@ -395,10 +395,9 @@
 		case 'remove-line':
 			$ordn = $input->post->text('ordn');
 			$linenbr = $input->post->text('linenbr');
-			$orderdetail = getorderlinedetail(session_id(), $ordn, $linenbr, false);
-			$orderdetail['qty'] = '0';
-			$orderdetail['linenbr'] = $input->post->text('linenbr');
-			$session->sql = edit_orderline(session_id(), $ordn, $orderdetail, false);
+			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
+			$orderdetail->set('qty', '0');
+			$session->sql = $orderdetail->update();
 			$session->editdetail = true;
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);

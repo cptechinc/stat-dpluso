@@ -27,63 +27,79 @@
 	*	case 'vi-vendor': 759p  //AUTO CALLS vi-buttons and vi-shipfromlist
 	*		DBNAME=$config->DBNAME
 	*		VIVENDOR
-	*		VENDID=$custID
+	*		VENDID=$vendorID
 	* 		break;
 	* 	case 'vi-shipfrom-list'
 	* 		DBNAME=$config->DBNAME
-	*		VISHIPFROMLIST
-	*		VENDID=$custID
+	*		VISHIPFROMLIST 
+	*		VENDID=$vendorID
 	* 		break;
 	*	case 'vi-payments'
 	* 		DBNAME=$config->DBNAME
-	*		VIPAYMENT
-	*		VENDID=$custID
+	*		VIPAYMENT n2zz764p
+	*		VENDID=$vendorID
 	* 		break;
 	*	case 'vi-shipfrom'
 	* 		DBNAME=$config->DBNAME
-	*		VISHIPFROMINFO
-	*		VENDID=$custID
+	*		VISHIPFROMINFO n2zz761p
+	*		VENDID=$vendorID
 	*		SHIPID=
 	* 		break;
 	*	case 'vi-purchase-history'
 	* 		DBNAME=$config->DBNAME
-	*		VIPURCHHIST
-	*		VENDID=$custID
+	*		VIPURCHHIST n2zz766p
+	*		VENDID=$vendorID
 	*		SHIPID=
 	*		DATE=
 	* 		break;
 	*	case 'vi-purchaseorder'
 	* 		DBNAME=$config->DBNAME
-	*		VIPURCHORDR
-	*		VENDID=$custID
+	*		VIPURCHORDR n2zz767p
+	*		VENDID=$vendorID
 	*		SHIPID=
 	* 		break;
 	*	case 'vi-contact'
 	* 		DBNAME=$config->DBNAME
-	*		VICONTACT
-	*		VENDID=$custID
+	*		VICONTACT n2zz768p
+	*		VENDID=$vendorID
 	*		SHIPID=
 	* 		break;
 	*	case 'vi-costing'
 	* 		DBNAME=$config->DBNAME
-	*		VICOST
-	*		VENDID=$custID
+	*		VICOST n2zz770p
+	*		VENDID=$vendorID
 	*		ITEMID=
 	* 		break;
 	*	case 'vi-unreleased'
 	* 		DBNAME=$config->DBNAME
-	*		VIUNRELEASED
-	*		VENDID=$custID
+	*		VIUNRELEASED n2zz772p
+	*		VENDID=$vendorID
 	*		SHIPID=
 	* 		break;
 	*	case 'vi-uninvoiced'
 	* 		DBNAME=$config->DBNAME
-	*		VIUNINVOICED
-	*		VENDID=$custID
+	*		VIUNINVOICED n2zz773p
+	*		VENDID=$vendorID
+	* 		break;
+	* 	case 'vi-open-invoices'
+	* 		DBNAME=$config->DBNAME
+	*		VIOPENINV n2zz765p
+	*		VENDID=$vendorID
+	* 		break;
+	* 	case 'vi-24monthsummary'
+	* 		DBNAME=$config->DBNAME
+	*		VIMONTHSUM n2zz774p
+	*		VENDID=$vendorID
+	* 		break;
+	* 	case 'vi-notes'
+	* 		DBNAME=$config->DBNAME
+	*		VINOTES 
+	*		VENDID=$vendorID
+	*		SHIPID=
 	* 		break;
 	* 	case 'vi-docview'
 	* 		DBNAME=$config->DBNAME
-	*		DOCVIEW
+	*		DOCVIEW n2zz735p
 	*		FLD1CO=VI
 	*		FLD1DATA=$vendorID
 	* 		break;

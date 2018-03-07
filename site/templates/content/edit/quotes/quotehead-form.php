@@ -1,6 +1,6 @@
 <?php include $config->paths->content.'edit/quotes/quote-attachments.php'; ?>
 <form id="quotehead-form" action="<?= $config->pages->quotes."redir/";  ?>" class="form-group" method="post">
-	<input type="hidden" name="action" value="save-quotehead">
+	<input type="hidden" name="action" value="update-quotehead">
 	<input type="hidden" name="qnbr" id="qnbr" value="<?= $quote->quotnbr; ?>">
     <input type="hidden" name="custID" id="custID" value="<?= $quote->custid; ?>">
     <div class="row"> <div class="col-xs-10 col-xs-offset-1"> <div class="response"></div> </div> </div>

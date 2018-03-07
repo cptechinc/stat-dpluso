@@ -49,6 +49,10 @@
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
+		public function create($debug = false) {
+			return insert_quotedetail($this->sessionid, $this, $debug);
+		}
+		
 		public static function load($sessionID, $qnbr, $linenbr, $debug = false) {
 			return get_quotedetail($sessionID, $qnbr, $linenbr, $debug);
 		}

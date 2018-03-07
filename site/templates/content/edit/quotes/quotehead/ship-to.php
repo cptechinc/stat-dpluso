@@ -56,7 +56,7 @@
 	<tr>
 		<td class="control-label">Country</td>
 		<td>
-			<?php $countries = getcountries(); if (empty($quote->shipcountry)) {$quote->shipcountry = 'USA';}?>
+			<?php $countries = getcountries(); if (empty($quote->shipcountry)) {$quote->set('shipcountry', 'USA');}?>
 			<select name="shipto-country" class="form-control input-sm">
 				<?php foreach ($countries as $country) : ?>
 					<?php $selected = ($country['ccode'] == $quote->shipcountry) ? 'selected' : ''; ?>

@@ -57,13 +57,14 @@
 		}
 		
 		public function generate_deletedetailform(Order $order, OrderDetail $detail) {
+			$bootstrap = new Contento();
 			$url = $this->generate_ordersredirurl();
 			$action = $url->getUrl();
 			$form = new FormMaker("class=inline-block|action=$action|method=post");
 			$form->input("class=hidden|name=action|value=remove-line");
 			$form->input("class=hidden|name=ordn|value=$order->orderno");
 			$form->input("class=hidden|name=linenbr|value=$detail->linenbr");
-			$icon = $form->bootstrap->createicon('fa fa-trash fa-1-5x') . $form->bootstrap->openandclose('span', 'class=sr-only', 'Delete Line');
+			$icon = $bootstrap->createicon('fa fa-trash fa-1-5x') . $bootstrap->openandclose('span', 'class=sr-only', 'Delete Line');
 			$form->button('type=submit|class=btn btn-sm btn-danger', $icon);
 			return $form->finish();
 		}

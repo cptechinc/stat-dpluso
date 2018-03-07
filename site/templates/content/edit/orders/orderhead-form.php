@@ -1,6 +1,7 @@
 <?php include $config->paths->content.'edit/orders/order-attachments.php'; ?>
-<form id="orderhead-form" action="<?= $config->pages->orders."redir/"; ?>" class="form-group" data-ordn="<?= $order->orderno; ?>">
+<form id="orderhead-form" action="<?= $config->pages->orders."redir/"; ?>" method="post" class="form-group" data-ordn="<?= $order->orderno; ?>">
 	<input type="hidden" name="action" value="update-orderhead">
+	<input type="hidden" name="exitorder" value="true">
 	<input type="hidden" name="ordn" id="ordn" value="<?= $ordn; ?>">
     <input type="hidden" name="custID" id="custID" value="<?= $order->custid; ?>">
     <div class="row"> <div class="col-xs-10 col-xs-offset-1"> <div class="response"></div> </div> </div>

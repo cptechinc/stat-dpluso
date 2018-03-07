@@ -8,9 +8,8 @@
 	$custID = $shipID = '';
     $action = ($input->post->action ? $input->post->text('action') : $input->get->text('action'));
 	$itemID = ($input->post->itemID ? $input->post->text('itemID') : $input->get->text('itemID'));
-
 	$filename = session_id();
-
+	
 	/**
 	* PRODUCT REDIRECT
 	*
@@ -43,39 +42,39 @@
 	*		break;
 	*	case 'ii-pricing':
 	*		DBNAME=$config->DBNAME
-	*		IIPRICE
+	*		IIPRICE n2zz725p
 	*		ITEMID=$itemID
 	*		CUSTID=$custID **OPTIONAL
 	*		SHIPID=$shipID **OPTIONAL
 	*		break;
 	*	case 'ii-costing':
 	*		DBNAME=$config->DBNAME
-	*		IICOST
+	*		IICOST n2zz721p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-purchase-order':
 	*		DBNAME=$config->DBNAME
-	*		IIPURCHORDR
+	*		IIPURCHORDR n2zz708p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-quotes':
 	*		DBNAME=$config->DBNAME
-	*		IIQUOTE
+	*		IIQUOTE n2zz716p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-purchase-history':
 	*		DBNAME=$config->DBNAME
-	*		IIPURCHHIST
+	*		IIPURCHHIST n2zz709p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-where-used':
 	*		DBNAME=$config->DBNAME
-	*		IIWHEREUSED
+	*		IIWHEREUSED n2zz717p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-kit':
 	*		DBNAME=$config->DBNAME
-	*		IIKIT
+	*		IIKIT n2zz718p
 	*		ITEMID=$itemID
 	*		QTYNEEDED=$qty
 	*		break;
@@ -105,30 +104,30 @@
 	*		break;
 	*	case 'ii-activity':
 	*		DBNAME=$config->DBNAME
-	*		IIACTIVITY
+	*		IIACTIVITY n2zz711p
 	*		ITEMID=$itemID
 	*		DATE=$date
 	*		break;
 	*	case 'ii-requirements':
 	*		DBNAME=$config->DBNAME
-	*		IIREQUIRE
+	*		IIREQUIRE n2zz714p
 	*		ITEMID=$itemID
 	*		WHSE=$whse
 	*		REQAVL=REQ|AVL
 	*		break;
 	*	case 'ii-lot-serial':
 	*		DBNAME=$config->DBNAME
-	*		IILOTSER
+	*		IILOTSER n2zz712p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-sales-orders':
 	*		DBNAME=$config->DBNAME
-	*		IISALESORDR
+	*		IISALESORDR n2zz706p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-sales-history':
 	*		DBNAME=$config->DBNAME
-	*		IISALESHIST
+	*		IISALESHIST n2zz705p
 	*		ITEMID=$itemID
 	*		CUSTID=$custID **OPTIONAL
 	*		SHIPID=$shipID **OPTIONAL
@@ -136,17 +135,17 @@
 	*		break;
 	*	case 'ii-stock':
 	*		DBNAME=$config->DBNAME
-	*		IISTKBYWHSE
+	*		IISTKBYWHSE n2zz707p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-substitutes':
 	*		DBNAME=$config->DBNAME
-	*		IISUB
+	*		IISUB n2zz713p
 	*		ITEMID=$itemID
 	*		break;
 	*	case 'ii-documents':
 	*		DBNAME=$config->DBNAME
-	*		DOCVIEW
+	*		DOCVIEW n2zz735p
 	*		FLD1CD=IT
 	*		FLD1DATA=$itemID
 	*		FLD21DESC=$desc
@@ -162,6 +161,8 @@
 	* }
 	*
 	**/
+	
+	
     switch ($action) {
         case 'item-search':
             $q = ($input->post->q ? $input->post->text('q') : $input->get->text('q'));

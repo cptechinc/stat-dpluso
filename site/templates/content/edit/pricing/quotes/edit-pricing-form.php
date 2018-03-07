@@ -1,7 +1,7 @@
 <?php
 	if ($input->get->vendorID) {
-		$linedetail->vendorid = $vendorID;
-		$linedetail->shipfrom = '';
+		$linedetail->set('vendorid', $vendorID);
+		$linedetail->set('shipfrom', '');
 	}
 ?>
 

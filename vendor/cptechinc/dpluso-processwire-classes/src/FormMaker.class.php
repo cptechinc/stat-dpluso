@@ -58,12 +58,9 @@
         }
         
         public function finish() {
-            if (self::$count < 0) {
-                self::$count--;
-                if ($this->openform) {
-                    $this->formstring .= $this->bootstrap->close('form');
-                }
-            }
+			if ($this->openform) {
+				$this->formstring .= $this->bootstrap->close('form');
+			}
             return $this->formstring;
         }
         

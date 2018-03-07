@@ -61,12 +61,12 @@
 	* 		break;
 	* 	case 'ci-shiptos':
 	*		DBNAME=$config->DBNAME
-	*		CISHIPTOLIST
+	*		CISHIPTOLIST n2zz729p
 	*		CUSTID=$custID
 	* 		break;
 	* 	case 'ci-shipto-info':
 	*		DBNAME=$config->DBNAME
-	*		CISHIPTOINFO
+	*		CISHIPTOINFO n2zz730p
 	*		CUSTID=$custID
 	*		SHIPID=$shipID
 	* 		break;
@@ -76,57 +76,57 @@
 	* 		break;
 	* 	case 'ci-pricing':
 	*		DBNAME=$config->DBNAME
-	*		CIPRICE
+	*		CIPRICE n2zz725p
 	*		ITEMID=$itemID
 	*		CUSTID=$custID
 	* 		break;
 	* 	case 'ci-contacts':
 	*		DBNAME=$config->DBNAME
-	*		CICONTACT
+	*		CICONTACT n2zz732p
 	*		CUSTID=$custID
 	*		SHIPID=$shipID
 	*		break;
 	*	case 'ci-documents':
-	*		DOCVIEW
+	*		DOCVIEW 
 	*		FLD1CD=CU
 	*		FLD1DATA=$custID
 	*		FLD1DESC=$custname
 	* 		break;
 	* 	case 'ci-order-documents':
-	*		DOCVIEW
+	*		DOCVIEW n2zz735p
 	*		FLD1CD=SO
 	*		FLD1DATA=$ordn
 	* 		break;
 	* 	case 'ci-standing-orders':
-	*		CISTANDORDR
+	*		CISTANDORDR n2zz736p
 	*		CUSTID=$custID
 	*		SHIPID=$shipID
 	* 		break;
 	* 	case 'ci-credit':
-	*		CICREDIT
+	*		CICREDIT n2zz737p
 	*		CUSTID=$custID
 	* 		break;
 	* 	case 'ci-open-invoices':
-	*		CIOPENINV
+	*		CIOPENINV n2zz745p
 	*		CUSTID=$custID
 	* 		break;
 	* 	case 'ci-quotes':
-	*		CIQUOTE
+	*		CIQUOTE n2zz748p
 	*		CUSTID=$custID
 	* 		break;
 	* 	case 'ci-payments':
-	*		CIPAYMENT
+	*		CIPAYMENT n2zz746p
 	*		CUSTID=$custID
 	* 		break;
 	* 	case 'ci-sales-orders':
-	*		CISALESORDR
+	*		CISALESORDR n2zz733p
 	*		CUSTID=$custID
 	*		SHIPID=$shipID
 	*		SALESORDRNBR=''
 	*		ITEMID=''
 	* 		break;
 	* 	case 'ci-sales-history':
-	* 		CISALESHIST
+	* 		CISALESHIST n2zz751p
 	* 		CUSTID=$custID
 	*		SHIPID=$shipID
 	*		DATE=$startdate
@@ -134,7 +134,7 @@
 	*		ITEMID=$itemID
 	* 		break;
 	* 	case 'ci-custpo':
-	* 		CICUSTPO
+	* 		CICUSTPO n2zz751p
 	* 		CUSTID=$custID
 	*		SHIPID=$shipID
 	*		CUSTPO=$custpo

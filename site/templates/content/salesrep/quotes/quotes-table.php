@@ -19,7 +19,7 @@
 				<td><?= $quote->quotdate; ?></td>
 				<td><?= $quote->revdate; ?></td>
 				<td><?= $quote->expdate; ?></td>
-				<td class="text-right">$ <?= $quote->subtotal; ?></td>
+				<td class="text-right">$ <?= $page->stringerbell->format_money($quote->subtotal); ?></td>
 				<td><?= $quotepanel->generate_loaddplusnoteslink($quote, '0'); ?></td>
 				<td><?= $quotepanel->generate_editlink($quote); ?></td>
 			</tr>

@@ -53,7 +53,7 @@
 	*		EDITQUOTE=$qnbr
 	*		QUOTENO=$qnbr
 	*		break;
-	*	case 'save-quotehead':
+	*	case 'update-quotehead':
 	*		DBNAME=$config->DBNAME
 	*		UPDATEQUOTEHEAD
 	*		QUOTENO=$qnbr
@@ -161,28 +161,27 @@
 			$data = array('DBNAME' => $config->dbName, 'EDITQUOTE' => $qnbr, 'QUOTENO' => $qnbr);
 			$session->loc = $config->pages->editquote."?qnbr=".$qnbr;
 			break;
-		case 'save-quotehead':
+		case 'update-quotehead':
 			$qnbr = $input->post->text('qnbr');
-			$quote = get_quotehead(session_id(), $qnbr, false);
 			$quote = Quote::load(session_id(), $qnbr);
-			$quote->shiptoid = $input->post->text('shiptoid');
-			$quote->shipname = $input->post->text('shiptoname');
-			$quote->shipaddress = $input->post->text('shipto-address');
-			$quote->shipaddress2 = $input->post->text('shipto-address2');
-			$quote->shipcity = $input->post->text('shipto-city');
-			$quote->shipstate = $input->post->text('shipto-state');
-			$quote->shipzip = $input->post->text('shipto-zip');
-			$quote->contact = $input->post->text('contact');
-			$quote->email = $input->post->text('contact-email');
-			$quote->careof = $input->post->text('careof');
-			$quote->revdate = $input->post->text('reviewdate');
-			$quote->expdate = $input->post->text('expiredate');
-			$quote->shipviacd = $input->post->text('shipvia');
-			$quote->deliverydesc = $input->post->text('delivery');
-			$quote->custpo = $input->post->text('custpo');
-			$quote->custref = $input->post->text('reference');
-			$quote->phone = $input->post->text('contact-phone');
-			$quote->faxnbr = $input->post->text('contact-fax');
+			$quote->set('shiptoid', $input->post->text('shiptoid'));
+			$quote->set('shipname', $input->post->text('shiptoname'));
+			$quote->set('shipaddress', $input->post->text('shipto-address'));
+			$quote->set('shipaddress2', $input->post->text('shipto-address2'));
+			$quote->set('shipcity', $input->post->text('shipto-city'));
+			$quote->set('shipstate', $input->post->text('shipto-state'));
+			$quote->set('shipzip', $input->post->text('shipto-zip'));
+			$quote->set('contact', $input->post->text('contact'));
+			$quote->set('email', $input->post->text('contact-email'));
+			$quote->set('careof', $input->post->text('careof'));
+			$quote->set('revdate', $input->post->text('reviewdate'));
+			$quote->set('expdate', $input->post->text('expiredate'));
+			$quote->set('shipviacd', $input->post->text('shipvia'));
+			$quote->set('deliverydesc', $input->post->text('delivery'));
+			$quote->set('custpo', $input->post->text('custpo'));
+			$quote->set('custref', $input->post->text('reference'));
+			$quote->set('phone', $input->post->text('contact-phone'));
+			$quote->set('faxnbr', $input->post->text('contact-fax'));
 			$haschanges = $quote->has_changes();
 			$session->sql = $quote->update();
 		
@@ -190,7 +189,6 @@
 			
 			if ($input->post->exitquote) {
 				$session->loc = $config->pages->edit."quote/confirm/?qnbr=".$qnbr.$linkaddon;
-				
 				if (!$haschanges) {
 					$data = array('UNLOCKING QUOTE' => false);
 				}
@@ -216,24 +214,24 @@
 		case 'add-nonstock-item':
 			$qnbr = $input->post->text('qnbr');
 			$qty = $input->post->text('qty');
-			insertquoteline(session_id(), $qnbr, '0', false);
-			$quotedetail = getquotelinedetail(session_id(), $qnbr, '0', false);
-			$quotedetail['quotenbr'] = $qnbr;
-			$quotedetail['recno'] = '0';
-			$quotedetail['linenbr'] = '0';
-			$quotedetail['ordrprice'] = $input->post->text('price');
-			$quotedetail['qty'] = $qty;
-			$quotedetail['desc1'] = $input->post->text('desc1');
-			$quotedetail['desc2'] = $input->post->text('desc2');
-			$quotedetail['vendorid'] = $input->post->text('vendorID');
-			$quotedetail['shipfromid'] = $input->post->text('shipfromid');
-			$quotedetail['vendoritemid'] = $input->post->text('itemID');
-			$quotedetail['nsitemgroup'] = $input->post->text('itemgroup');
-			//$quotedetail['ponbr'] = $input->post->text('ponbr');
-			//$quotedetail['poref'] = $input->post->text('poref');
-			$quotedetail['uom'] = $input->post->text('uofm');
-			$quotedetail['spcord'] = 'S';
-			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
+			$quotedetail = new QuoteDetail();
+			$quotedetail->set('sessionid', session_id());
+			$quotedetail->set('quotenbr', $qnbr);
+			$quotedetail->set('recno', '0');
+			$quotedetail->set('linenbr', '0');
+			$quotedetail->set('ordrprice', $input->post->text('price'));
+			$quotedetail->set('quotqty', $qty);
+			$quotedetail->set('desc1', $input->post->text('desc1'));
+			$quotedetail->set('desc2', $input->post->text('desc2'));
+			$quotedetail->set('vendorid', $input->post->text('vendorID'));
+			$quotedetail->set('shipfromid', $input->post->text('shipfromid'));
+			$quotedetail->set('vendoritemid', $input->post->text('itemID'));
+			$quotedetail->set('nsitemgroup', $input->post->text('itemgroup'));
+			//$quotedetail->set('ponbr', $input->post->text('ponbr'));
+			//$quotedetail->set('poref', $input->post->text('poref'));
+			$quotedetail->set('uom', $input->post->text('uofm'));
+			$quotedetail->set('spcord', 'S');
+			$session->sql = $quotedetail->create();
 
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => '0', 'ITEMID' => 'N', 'QTY' => $qty);
 			if ($input->post->page) {
@@ -253,29 +251,28 @@
 			}
 
 			$quotedetail = QuoteDetail::load(session_id(), $qnbr, $linenbr);
-			$quotedetail->quotprice = $input->post->text('price');
-			$quotedetail->discpct =  $input->post->text('discount');
-			$quotedetail->quotqty = $input->post->text('qty');
-			$quotedetail->ordrqty = $input->post->text('qty');
-			$quotedetail->rshipdate = $input->post->text('rqstdate');
-			$quotedetail->whse = $input->post->text('whse');
-			$quotedetail->linenbr = $input->post->text('linenbr');
-			
-			$quotedetail->spcord = $input->post->text('specialorder');
-			$quotedetail->vendorid = $input->post->text('vendorID');
-			$quotedetail->shipfromid = $input->post->text('shipfromid');
-			$quotedetail->vendoritemid = $input->post->text('itemID');
-			$quotedetail->nsitemgroup = $input->post->text('group');
-			$quotedetail->uom = $input->post->text('uofm');
+			$quotedetail->set('quotprice', $input->post->text('price'));
+			$quotedetail->set('discpct', $input->post->text('discount'));
+			$quotedetail->set('quotqty', $input->post->text('qty'));
+			$quotedetail->set('ordrqty', $input->post->text('qty'));
+			$quotedetail->set('rshipdate', $input->post->text('rqstdate'));
+			$quotedetail->set('whse', $input->post->text('whse'));
+			$quotedetail->set('linenbr', $input->post->text('linenbr'));
+			$quotedetail->set('spcord', $input->post->text('specialorder'));
+			$quotedetail->set('vendorid', $input->post->text('vendorID'));
+			$quotedetail->set('shipfromid', $input->post->text('shipfromid'));
+			$quotedetail->set('vendoritemid', $input->post->text('itemID'));
+			$quotedetail->set('nsitemgroup', $input->post->text('group'));
+			$quotedetail->set('uom', $input->post->text('uofm'));
 
 			if ($quotedetail->spcord != 'N') {
-				$quotedetail->desc1 = $input->post->text('desc1');
-				$quotedetail->desc2 = $input->post->text('desc2');
+				$quotedetail->set('desc1', $input->post->text('desc1'));
+				$quotedetail->set('desc2', $input->post->text('desc2')) ;
 			}
 
 			$custID = get_custidfromquote(session_id(), $qnbr);
 			$session->sql = $quotedetail->update();
-			// $session->detail = $quotedetail;
+			
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'CUSTID' => $custID);
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
@@ -287,13 +284,13 @@
 		case 'remove-line':
 			$qnbr = $input->post->text('qnbr');
 			$linenbr = $input->post->text('linenbr');
-			$quotedetail = getquotelinedetail(session_id(), $qnbr, $linenbr, false);
-			$quotedetail['quotunit'] = '0';
-			$quotedetail['linenbr'] = $input->post->text('linenbr');
-			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
-			$session->detail = $quotedetail;
+			$quotedetail = QuoteDetail::load(session_id(), $qnbr, $linenbr);
+			$quotedetail->set('quotqty', '0');
+			$quotedetail->set('linenbr', $input->post->text('linenbr'));
+			$session->sql = $quotedetail->update();
 			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
+			
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} else {
@@ -304,13 +301,12 @@
 		case 'remove-line-get':
 			$qnbr = $input->get->text('qnbr');
 			$linenbr = $input->get->text('linenbr');
-			$quotedetail = getquotelinedetail(session_id(), $qnbr, $linenbr, false);
-			$quotedetail['quotunit'] = '0';
-			$quotedetail['linenbr'] = $input->post->text('linenbr');
-			$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
-			$session->detail = $quotedetail;
+			$quotedetail = QuoteDetail::load(session_id(), $qnbr, $linenbr);
+			$quotedetail->set('quotunit', '0');
+			$session->sql = $quotedetail->update();
 			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
+			
 			if ($input->get->page) {
 				$session->loc = $input->get->text('page');
 			} else {
@@ -327,15 +323,15 @@
 		case 'send-quote-to-order':
 			$qnbr = $input->post->text('qnbr');
 			$linenbrs = $input->post->linenbr;
-			$linecount = nextquotelinenbr(session_id(), $qnbr);
+			$linecount = count_quotedetails(session_id(), $qnbr) + 1;
 			for ($i = 1; $i < $linecount; $i++) {
-				$quotedetail = getquotelinedetail(session_id(), $qnbr, $i, false);
+				$quotedetail = QuoteDetail::load(session_id(), $qnbr, $i);
 				if (in_array($i, $linenbrs)) {
-					$quotedetail['ordrqty'] = $quotedetail['quotunit'];
+					$quotedetail->set('ordrqty', $quotedetail->quotqty);
 				} else {
-					$quotedetail['ordrqty'] = '0';
+					$quotedetail->set('ordrqty', '0');
 				}
-				$session->sql = edit_quoteline(session_id(), $qnbr, $quotedetail, false);
+				$session->sql = $quotedetail->update();
 			}
 			$session->custID = $custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'QUOTETOORDER' => false, 'QUOTENO' => $qnbr, 'LINENO' => 'ALL');

@@ -1041,7 +1041,6 @@ $(document).ready(function() {
             var custID = $(this).find('input[name="custID"]').val();
             var valid = true;
 			var form = $(this);
-			
 			form.postform({formdata: false, jsoncallback: true, action: config.urls.json.validateitems}, function(json) {
 				form.attr('data-invaliditems', json.invalid);
 				form.find('.itemid').each(function() {
@@ -1054,9 +1053,12 @@ $(document).ready(function() {
 				form.attr('data-checked', 'true');
 				if (json.invalid) {
 	                form.find('.response').createalertpanel('Double Check your itemIDs', '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>', 'warning');
-	            }
-				callback();
+	            } else {
+					form.find('.response').createalertpanel('All your items are valid, verify and submit', '', 'success');
+	            } 
+				
 			});
+			callback();
         }
 	});
 

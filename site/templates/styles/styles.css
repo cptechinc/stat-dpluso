@@ -83,6 +83,13 @@
 		background-color: #2c3e50;
 		color: #ecf0f1;
 	}
+	
+	.fuelux .datepicker-calendar-days td.current-day span {
+		background: #2c3e50;
+	}
+	.fuelux .datepicker-calendar-days td.current-day button {
+		color: #fff;
+	}
 /*==============================================================
    PRINT STYLES
  =============================================================*/

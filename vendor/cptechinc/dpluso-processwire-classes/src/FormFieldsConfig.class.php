@@ -79,7 +79,7 @@
             return $this->fields['fields'][$key]['required'] ? '&nbsp;<b class="text-danger">*</b>' : '';
         }
         
-        
+		
         public function generate_configfrominput(WireInput $input) {
             foreach ($this->fields['fields'] as $key => $field) {
                 $this->fields['fields'][$key]['label'] = $input->post->text("$key-label");

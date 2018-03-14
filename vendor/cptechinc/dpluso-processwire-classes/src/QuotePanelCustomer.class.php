@@ -2,27 +2,56 @@
 	class CustomerQuotePanel extends QuotePanel implements OrderPanelCustomerInterface {
 		use OrderPanelCustomerTraits;
 		
+		public $quotes = array();
+		public $filterable = array(
+			'quotnbr' => array(
+				'querytype' => 'between',
+				'datatype' => 'char',
+				'label' => 'Quote #'
+			),
+			'quotdate' => array(
+				'querytype' => 'between',
+				'datatype' => 'date',
+				'label' => 'Quote Date'
+			),
+			'revdate' => array(
+				'querytype' => 'between',
+				'datatype' => 'date',
+				'label' => 'Review Date'
+			),
+			'expdate' => array(
+				'querytype' => 'between',
+				'datatype' => 'date',
+				'label' => 'Expire Date'
+			),
+			'ordertotal' => array(
+				'querytype' => 'between',
+				'datatype' => 'numeric',
+				'label' => 'Order Total'
+			)
+		);
+		
 		/* =============================================================
 			QuotePanelInterface Functions
 		============================================================ */
 		public function get_quotecount() {
-			$this->count = count_customerquotes($this->sessionID, $this->custID, false);
+			$this->count = count_customerquotes($this->sessionID, $this->custID, $this->filters, $this->filterable, false);
 		}
 		
 		public function get_quotes($debug = false) {
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'quotdate') {
-					$quotes = get_customerquotesquotedate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
+					$quotes = get_customerquotesquotedate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'revdate') {
-					$quotes = get_customerquotesrevdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
+					$quotes = get_customerquotesrevdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'expdate') {
-					$quotes = get_customerquotesexpdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug); 
+					$quotes = get_customerquotesexpdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug); 
 				} else {
-					$quotes = get_customerquotesorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
+					$quotes = get_customerquotesorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
-				$quotes = get_customerquotes($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $useclass, $debug);
+				$quotes = get_customerquotes($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $quotes: $this->quotes = $quotes;
 		}
@@ -59,8 +88,19 @@
 				if (Processwire\wire('session')->{'quotes-loaded-for'} == $this->custID) {
 					return 'Last Updated : ' . Processwire\wire('session')->{'quotes-updated'};
 				}
+				return '';
 			}
 			return '';
+		}
+		
+		public function generate_filter(WireInput $input) {
+			parent::generate_filter($input);
+			
+			if (isset($this->filters['ordertotal'])) {
+				if (!strlen($this->filters['ordertotal'][1])) {
+					$this->filters['ordertotal'][1] = get_maxquotetotal($this->sessionID, $this->custID);
+				}
+			}
 		}
 		
 		/* =============================================================

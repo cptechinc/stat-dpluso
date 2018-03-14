@@ -3,7 +3,7 @@
        <?php include $config->paths->content.'customer/cust-page/orders/orders-thead-rows.php'; ?>
     </thead>
     <tbody>
-    	<?php if ($input->get->ordn) : ?>
+		<?php if (isset($input->get->ordn)) : ?>
 			<?php if ($orderpanel->count == 0 && $input->get->text('ordn') == '') : ?>
                 <tr> <td colspan="12" class="text-center">No Orders found! Try using a date range to find the order(s) you are looking for.</td> </tr>
             <?php endif; ?>

@@ -10,7 +10,7 @@
 	<input type="hidden" name="salesperson2" value="">
 	<input type="hidden" name="salesperson3" value="">
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col-sm-6">
            <legend>Bill-To</legend>
             <table class="table table-striped table-bordered table-condensed">
                 <tbody>
@@ -62,7 +62,7 @@
            </table>
         </div> <!-- end bill to column -->
 
-        <div class="col-xs-6">
+        <div class="col-sm-6">
            <legend>Ship-To</legend>
             <table class="table table-striped table-bordered table-condensed">
                 <tbody>

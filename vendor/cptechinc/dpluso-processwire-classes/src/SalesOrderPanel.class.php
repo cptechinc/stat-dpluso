@@ -3,6 +3,39 @@
 		use SalesOrderDisplayTraits;
 		
 		public $orders = array();
+		public $paneltype = 'sales-order';
+		public $filterable = array(
+			'custpo' => array(
+				'querytype' => 'between',
+				'datatype' => 'char',
+				'label' => 'Cust PO'
+			),
+			'custid' => array(
+				'querytype' => 'between',
+				'datatype' => 'char',
+				'label' => 'CustID'
+			),
+			'orderno' => array(
+				'querytype' => 'between',
+				'datatype' => 'char',
+				'label' => 'Order #'
+			),
+			'ordertotal' => array(
+				'querytype' => 'between',
+				'datatype' => 'numeric',
+				'label' => 'Order Total'
+			),
+			'orderdate' => array(
+				'querytype' => 'between',
+				'datatype' => 'date',
+				'label' => 'Order Date'
+			),
+			'status' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Status'
+			)
+		);
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
@@ -13,7 +46,7 @@
 			SalesOrderPanelInterface Functions
 		============================================================ */
 		public function get_ordercount($debug = false) {
-			$count = count_userorders($this->sessionID, $debug);
+			$count = count_userorders($this->sessionID, $this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
 		
@@ -21,16 +54,16 @@
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
-					$orders = get_userordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
+					$orders = get_userordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
-					$orders = get_userordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
+					$orders = get_userordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
 				// DEFAULT BY ORDER DATE SINCE SALES ORDER # CAN BE ROLLED OVER
 				$this->tablesorter->sortrule = 'DESC'; 
 				//$this->tablesorter->orderby = 'orderno';
 				//$orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
-				$orders = get_userordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $useclass, $debug);
+				$orders = get_userordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $orders : $this->orders = $orders;
 		}
@@ -120,6 +153,13 @@
 			$url = new \Purl\Url($this->generate_loaddetailsurltrait($order));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
+			
+			if (!empty($this->filters)) {
+				$url->query->set('filter', 'filter');
+				foreach ($this->filters as $filter => $value) {
+					$url->query->set($filter, implode('|', $value));
+				}
+			}
 			return $url->getUrl();
 		}
 		
@@ -148,6 +188,30 @@
 			$form->input("type=hidden|name=desc|value=$detail->desc1");
 			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->createicon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->openandclose('span', 'class=sr-only', 'Submit Reorder'));
 			return $form->finish();
+		}
+		
+		public function generate_filter(WireInput $input) {
+			parent::generate_filter($input);
+			
+			if (isset($this->filters['orderdate'])) {
+				if (empty($this->filters['orderdate'][0])) {
+					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minorderdate($this->sessionID, 'orderdate')));
+				}
+				
+				if (empty($this->filters['orderdate'][1])) {
+					$this->filters['orderdate'][1] = date('m/d/Y');
+				}
+			}
+			
+			if (isset($this->filters['ordertotal'])) {
+				if (!strlen($this->filters['ordertotal'][0])) {
+					$this->filters['ordertotal'][0] = '0.00';
+				}
+				
+				if (!strlen($this->filters['ordertotal'][1])) {
+					$this->filters['ordertotal'][1] = get_maxordertotal($this->sessionID);
+				}
+			}
 		}
 		
 		/* =============================================================

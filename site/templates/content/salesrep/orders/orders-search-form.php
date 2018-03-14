@@ -1,4 +1,4 @@
-<form action="<?= $orderpanel->pageurl->getUrl(); ?>"  method="get" data-ordertype="sales-orders" data-loadinto="#orders-panel" data-focus="#orders-panel" data-modal="#ajax-modal" class="orders-search-form">
+<form action="<?= $orderpanel->pageurl->getUrl(); ?>" method="get" data-ordertype="sales-orders" data-loadinto="#orders-panel" data-focus="#orders-panel" data-modal="#ajax-modal" class="orders-search-form">
 	<input type="hidden" name="filter" value="filter">
 	
 	<div class="row">
@@ -16,10 +16,25 @@
 			<label>Verify</label>
 			<input class="pull-right" type="checkbox" name="status[]" value="Verify" <?= ($orderpanel->has_filtervalue('status', 'Verify')) ? 'checked' : ''; ?>>
 		</div>
-        <div class="col-sm-2">
+		<div class="col-sm-2">
 			<h4>Order #</h4>
 			<input class="form-control form-group inline input-sm" type="text" name="orderno[]" value="<?= $orderpanel->get_filtervalue('orderno'); ?>" placeholder="From Order #">
 			<input class="form-control form-group inline input-sm" type="text" name="orderno[]" value="<?= $orderpanel->get_filtervalue('orderno', 1); ?>" placeholder="Through Order #">
+		</div>
+		<div class="col-sm-2">
+			<h4>Cust ID</h4>
+			<div class="input-group form-group">
+	            <input class="form-control form-group inline input-sm" type="text" name="custid[]" id="sales-order-cust-from" value="<?= $orderpanel->get_filtervalue('custid'); ?>" placeholder="From CustID">
+	            <span class="input-group-btn">
+	            	<button type="button" class="btn btn-default input-sm not-round get-custid-search" data-field="#sales-order-cust-from"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+	            </span>
+	        </div>
+			<div class="input-group form-group">
+	            <input class="form-control form-group inline input-sm" type="text" name="custid[]" id="sales-order-cust-to" value="<?= $orderpanel->get_filtervalue('custid', 1); ?>" placeholder="Through CustID">
+	            <span class="input-group-btn">
+	            	<button type="button" class="btn btn-default input-sm not-round get-custid-search" data-field="#sales-order-cust-to"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+	            </span>
+	        </div>
 		</div>
 		<div class="col-sm-2">
 			<h4>Cust PO</h4>
@@ -41,9 +56,9 @@
         </div>
 	</div>
 	</br>
-    <div class="form-group">
-    	<button class="btn btn-success btn-block" type="submit">Search <i class="fa fa-search" aria-hidden="true"></i></button>
-    </div>
+	<div class="form-group">
+		<button class="btn btn-success btn-block" type="submit">Search <i class="fa fa-search" aria-hidden="true"></i></button>
+	</div>
 	<?php if ($input->get->filter) : ?>
         <div>
             <?= $orderpanel->generate_clearsearchlink(); ?>

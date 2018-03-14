@@ -11,7 +11,7 @@
 			$url->path = Processwire\wire('config')->pages->ajax."load/quotes/salesrep/";
 			$url->query->remove('display');
 			$url->query->remove('ajax');
-			$this->paginationinsertafter = 'quotes';
+			$this->paginationinsertafter = 'salesrep';
 			return $url;
 		}
 		

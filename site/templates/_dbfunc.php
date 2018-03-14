@@ -494,9 +494,18 @@
 /* =============================================================
 	ORDERS FUNCTIONS
 ============================================================ */
-	function count_userorders($sessionID, $debug = false) {
+	function count_userorders($sessionID, $filter = false, $filtertypes = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
-		$q->field($q->expr('IF (COUNT(*) = 1, 1, IF(COUNT(DISTINCT(custid)) > 1, COUNT(*), 0)) as count'));
+		$expression = $q->expr('IF (COUNT(*) = 1, 1, IF(COUNT(DISTINCT(custid)) > 1, COUNT(*), 0)) as count');
+		if (!empty($filter)) {
+			if (isset($filter['custid'])) {
+				if (sizeof(array_values(array_filter($filter['custid'], 'strlen'))) == 1) {
+					$expression = $q->expr('COUNT(*)');
+				}
+			}
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->field($expression);
 		$q->where('sessionid', $sessionID);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
@@ -508,12 +517,17 @@
 		}
 	}
 
-	function get_userordersorderdate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+	function get_userordersorderdate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field('ordrhed.*');
 		$q->field($q->expr("STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder"));
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
+		$q->field($q->expr("CAST(ordertotal AS DECIMAL(8,2)) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('type', 'O');
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('dateoforder ' . $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -530,12 +544,16 @@
 		}
 	}
 
-	function get_userordersorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = false, $debug = false) {
+	function get_userordersorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field('ordrhed.*');
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
+		$q->field($q->expr("CAST(ordertotal AS DECIMAL(8,2)) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('type', 'O');
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order($orderby .' '. $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -552,11 +570,16 @@
 		}
 	}
 
-	function get_salesreporders($sessionID, $limit = 10, $page = 1, $useclass = false, $debug = false) {
+	function get_userorders($sessionID, $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
-		$q->field('*');
+		$q->field('ordrhed.*');
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
+		$q->field($q->expr("CAST(ordertotal AS DECIMAL(8,2)) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('type', 'O');
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
@@ -572,23 +595,36 @@
 		}
 	}
 
-	function count_customerorders($sessionID, $custID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) as count FROM ordrhed WHERE sessionid = :sessionID AND custid = :custID AND type = 'O'");
-		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
+	function count_customerorders($sessionID, $custID, $filter = false, $filtertypes = false, $debug) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field($q->expr('COUNT(*) as count'));
+		$q->where('sessionid', $sessionID);
+		$q->where('custid', $custID);
+		$q->where('type', 'O');
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
-	function get_customerorders($sessionID, $custID, $limit = 10, $page = 1, $useclass = false, $debug = false) {
+	function get_customerorders($sessionID, $custID, $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field('ordrhed.*');
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
+		$q->field($q->expr("CAST(ordertotal AS DECIMAL(8,2)) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$q->where('type', 'O');
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
@@ -600,17 +636,23 @@
 				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrder');
 				return $sql->fetchAll();
 			}
-			return $sql->fetchAll();
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
 
-	function get_customerordersorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = false, $debug = false) {
+	function get_customerordersorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field('ordrhed.*');
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
+		$q->field($q->expr("CAST(ordertotal AS DECIMAL(8,2)) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$q->where('type', 'O');
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$q->order($orderby . ' ' . $sortrule);
+		$q->order($orderby .' '. $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -625,13 +667,18 @@
 		}
 	}
 
-	function get_customerordersorderdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug) {
+	function get_customerordersorderdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field('ordrhed.*');
 		$q->field($q->expr("STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder"));
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
+		$q->field($q->expr("CAST(ordertotal AS DECIMAL(8,2)) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
 		$q->where('type', 'O');
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('dateoforder ' . $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -668,6 +715,40 @@
 		$q->field('shiptoid');
 		$q->where('sessionid', $sessionID);
 		$q->where('orderno', $ordn);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+
+	function get_maxordertotal($sessionID, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field('MAX(DECIMAL(ordertotal))');
+		$q->where('sessionid', $sessionID);
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+
+	function get_minorderdate($sessionID, $field, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field($q->expr("MIN(STR_TO_DATE($field, '%m/%d/%Y'))"));
+		$q->where('sessionid', $sessionID);
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -760,11 +841,22 @@
 		return $sql->fetchColumn();
 	}
 	
-	function count_userquotes($sessionID, $debug = false) {
+	function count_userquotes($sessionID, $filter = false, $filtertypes = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
-		$q->field('COUNT(*)');
+		$expression = $q->expr('IF (COUNT(*) = 1, 1, IF(COUNT(DISTINCT(custid)) > 1, COUNT(*), 0)) as count');
+		if (!empty($filter)) {
+			if (isset($filter['custid'])) {
+				if (sizeof(array_values(array_filter($filter['custid'], 'strlen'))) == 1) {
+					$expression = $q->expr('COUNT(*)');
+				}
+			}
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->field($expression);
 		$q->where('sessionid', $sessionID);
-		
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -775,9 +867,48 @@
 		}
 	}
 	
-	function get_userquotes($sessionID, $limit, $page, $useclass = false, $debug = false) {
+	function get_maxquotetotal($sessionID, $custID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
+		$q->field('MAX(DECIMAL(ordertotal))');
 		$q->where('sessionid', $sessionID);
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_minquotedate($sessionID, $field, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field($q->expr("MIN(STR_TO_DATE($field, '%m/%d/%Y'))"));
+		$q->where('sessionid', $sessionID);
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_userquotes($sessionID, $limit, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
+		$q->where('sessionid', $sessionID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
@@ -793,11 +924,15 @@
 		}
 	}
 	
-	function get_userquotesquotedate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+	function get_userquotesquotedate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate"));
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('quotedate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -814,11 +949,15 @@
 		}
 	}
 	
-	function get_userquotesrevdate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+	function get_userquotesrevdate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("STR_TO_DATE(revdate, '%m/%d/%Y') as reviewdate"));
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('reviewdate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -835,11 +974,15 @@
 		}
 	}
 		
-	function get_userquotesexpdate($sessionID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+	function get_userquotesexpdate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("STR_TO_DATE(expdate, '%m/%d/%Y') as expiredate"));
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('custid', $custID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('expiredate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -856,9 +999,14 @@
 		}
 	}
 	
-	function get_userquotesorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = true, $debug = false) {
+	function get_userquotesorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = true, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order($orderby, $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -875,11 +1023,14 @@
 		}
 	}
 
-	function count_customerquotes($sessionID, $custID, $debug = false) {
+	function count_customerquotes($sessionID, $custID, $filter = false, $filtertypes = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('COUNT(*)');
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -890,10 +1041,15 @@
 		}
 	}
 
-	function get_customerquotes($sessionID, $custID, $limit, $page, $useclass = false, $debug = false) {
+	function get_customerquotes($sessionID, $custID, $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$sql = Processwire\wire('database')->prepare($q->render());
 		
@@ -909,12 +1065,16 @@
 		}
 	}
 	
-	function get_customerquotesquotedate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+	function get_customerquotesquotedate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate"));
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('quotedate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -931,13 +1091,16 @@
 		}
 	}
 	
-	function get_customerquotesrevdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+	function get_customerquotesrevdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
-		$q->field('revdate');
 		$q->field($q->expr("STR_TO_DATE(revdate, '%m/%d/%Y') as reviewdate"));
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('reviewdate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -954,13 +1117,16 @@
 		}
 	}
 		
-	function get_customerquotesexpdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $useclass = false, $debug = false) {
+	function get_customerquotesexpdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
-		$q->field('expdate');
 		$q->field($q->expr("STR_TO_DATE(expdate, '%m/%d/%Y') as expiredate"));
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('expiredate', $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());
@@ -977,10 +1143,15 @@
 		}
 	}
 	
-	function get_customerquotesorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $useclass = true, $debug = false) {
+	function get_customerquotesorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = true, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
+		$q->field('quothed.*');
+		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order($orderby, $sortrule);
 		$sql = Processwire\wire('database')->prepare($q->render());

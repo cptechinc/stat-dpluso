@@ -3,8 +3,10 @@
        <?php include $config->paths->content.'salesrep/quotes/quotes-thead-rows.php'; ?>
     </thead>
 	<tbody>
-		<?php if ($quotepanel->count == 0 && $input->get->text('qnbr') == '') : ?>
-			<tr> <td colspan="9" class="text-center">No Quotes found! Try using a date range to find the quotes(s) you are looking for.</td> </tr>
+		<?php if (isset($input->get->qnbr)) : ?>
+			<?php if ($quotepanel->count == 0 && $input->get->text('qnbr') == '') : ?>
+				<tr> <td colspan="9" class="text-center">No Quotes found! Try using a date range to find the quotes(s) you are looking for.</td> </tr>
+			<?php endif; ?>
 		<?php endif; ?>
 
 		<?php $quotepanel->get_quotes(); ?>

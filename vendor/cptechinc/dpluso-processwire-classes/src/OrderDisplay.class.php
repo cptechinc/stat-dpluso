@@ -1,5 +1,7 @@
 <?php 
 	abstract class OrderDisplay {
+		use ThrowErrorTrait;
+		
 		protected $pageurl;
 		protected $sessionID;
 		protected $modal;

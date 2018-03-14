@@ -3,16 +3,18 @@
 	$quotepanel->set_customer($custID, $shipID);
 	$quotepanel->pagenbr = $input->pageNum;
 	$quotepanel->activeID = !empty($input->get->qnbr) ? $input->get->text('qnbr') : false;
+	$quotepanel->generate_filter($input);
 	$quotepanel->get_quotecount();
 	
 	$paginator = new Paginator($quotepanel->pagenbr, $quotepanel->count, $quotepanel->pageurl->getUrl(), $quotepanel->paginationinsertafter, $quotepanel->ajaxdata);
 ?>
 <div class="panel panel-primary not-round" id="quotes-panel">
     <div class="panel-heading not-round" id="quotes-panel-heading">
-    	<?php if ($session->{'quote-search'}) : ?>
+    	<?php if ($input->get->filter) : ?>
         	<a href="#quotes-div" data-parent="#quotes-panel" data-toggle="collapse">
-				Searching for <?= $session->{'quote-search'}; ?> <span class="caret"></span> <span class="badge"><?= $quotepanel->count; ?></span>
+				<?= $quotepanel->generate_filterdescription(); ?> <span class="caret"></span> <span class="badge"><?= $quotepanel->count; ?></span> &nbsp; | &nbsp;
             </a>
+			<?= $quotepanel->generate_refreshlink(); ?>
     	<?php elseif ($quotepanel->count > 0) : ?>
             <a href="#quotes-div" data-parent="#quotes-panel" data-toggle="collapse">Customer Quotes <span class="caret"></span></a> <span class="badge"><?= $quotepanel->count; ?></span> &nbsp; | &nbsp;
             <?= $quotepanel->generate_refreshlink(); ?>
@@ -29,15 +31,13 @@
                 <div class="col-sm-6">
                     <?= $paginator->generate_showonpage(); ?>
                 </div>
-                <div class="col-sm-4">
-					<?php if (100 == 1) : // TODO Add quotesearch link ?>
-						<?= $quotepanel->generate_searchlink(); ?>
-	                    <?php if ($session->quotessearch) : ?>
-		                    <?= $quotepanel->generate_clearsearchlink(); ?>
-	                    <?php endif; ?>
-					<?php endif; ?>
+				<div class="col-sm-6">
+					<button class="btn btn-primary toggle-order-search pull-right" type="button" data-toggle="collapse" data-target="#cust-quotes-search-div" aria-expanded="false" aria-controls="orders-search-div">Toggle Search <i class="fa fa-search" aria-hidden="true"></i></button>
                 </div>
             </div>
+			<div id="cust-quotes-search-div" class="<?= (empty($quotepanel->filters)) ? 'collapse' : ''; ?>">
+				<?php include $config->paths->content.'customer/cust-page/quotes/quote-search-form.php'; ?>
+			</div>
         </div>
         <div class="table-responsive">
             <?php include $config->paths->content.'customer/cust-page/quotes/quotes-table.php'; ?>

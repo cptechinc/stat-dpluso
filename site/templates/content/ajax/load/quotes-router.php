@@ -1,5 +1,6 @@
 <?php
 	$filteron = $input->urlSegment(2);
+	if ($input->get->qnbr) { $qnbr = $input->get->text('qnbr'); } else { $qnbr = NULL; }
 	switch ($filteron) {
 		case 'cust':
 			$custID = $sanitizer->text($input->urlSegment(3));
@@ -28,8 +29,6 @@
 			break;
 
 	}
-
-	if ($input->get->qnbr) { $qnbr = $input->get->text('qnbr'); } else { $qnbr = NULL; }
 
 	if ($config->ajax) {
 		if ($config->modal) {

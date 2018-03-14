@@ -308,7 +308,7 @@ $(document).ready(function() {
 			});
 		});
 
-		$("body").on("submit", "#order-search-form", function(e)  { //FIXME
+		$("body").on("submit", "#order-filter-form", function(e)  { //FIXME Barbara - changed from order-search-form
 			e.preventDefault();
 			var form = "#"+$(this).attr('id');
 			var loadinto = $(this).data('loadinto');
@@ -325,6 +325,41 @@ $(document).ready(function() {
 						});
 					 });
 				});
+			});
+		});
+		
+		$("body").on("submit", ".orders-search-form", function(e)  { //FIXME Barbara - changed from order-search-form
+			e.preventDefault();
+			var form = $(this);
+			var loadinto = form.data('loadinto');
+			var focuson = form.data('focus');
+			var action = URI(form.attr('action'));
+			var ordertype = form.data('ordertype'); // sales-orders | quotes
+			var queries = URI.parseQuery(URI(action).search())
+			var orderby = queries.orderby; // Keep the orderby param value before clearing it
+
+			var href = action.query('').query(form.serialize()).query(cleanparams).query(remove_emptyparams);
+			
+			if (Object.keys(href.query(true)).length == 1) {
+				href.query('');
+			}
+			
+			if (ordertype == 'sales-orders') {
+				href.addQuery('ordn', queries.ordn);
+			} else if (ordertype == 'quotes') {
+				href.addQuery('qnbr', queries.qnbr);
+			}
+
+			if (orderby) {
+				href = href.addQuery('orderby', orderby);
+			}
+			
+			href = href.toString(); // Add orderby param
+			
+			$(loadinto).loadin(href, function() {
+				if (focuson.length > 0) {
+					$('html, body').animate({scrollTop: $(focuson).offset().top - 60}, 1000);
+				}
 			});
 		});
 
@@ -364,6 +399,19 @@ $(document).ready(function() {
 					$(ajaxloader.modal).resizemodal('lg').modal();
 				});
 			}
+		});
+		
+		$("body").on("click", ".get-custid-search", function(e) {
+			var field = $(this).data('field');
+			var modal = config.modals.ajax;
+			var loadinto = modal+" .modal-content";
+			var href = URI(config.urls.customer.load.loadindex).addQuery('function', 'os-order-cust-search').addQuery('modal', 'modal').addQuery('field', field).normalizeQuery().toString();
+			$('.modal').modal('hide');
+			$(loadinto).loadin(href, function() {
+				$(modal).find('.modal-body').addClass('modal-results');
+				$(modal).resizemodal('lg').modal();
+				setTimeout(function (){ $(modal).find('.query').focus();}, 500);
+			});
 		});
 
 	/*==============================================================
@@ -558,9 +606,12 @@ $(document).ready(function() {
 			var q = form.find('[name=q]').val();
 			var pagefunction = form.find('[name=function]').val();
 			var loadinto = '#cust-results';
-			var href = URI(form.attr('action')).addQuery('q', q)
-			 										.addQuery('function', pagefunction)
-			 										.toString();
+			var href = URI(form.attr('action')).addQuery('q', q).addQuery('function', pagefunction);
+			if (form.find('[name=field]').length) {
+				var field = form.find('[name=field]').val();
+				href.addQuery('field', field);
+			}
+			href = href.toString();	
 			$(loadinto).loadin(href+' '+loadinto, function() {
 				
 			});
@@ -1100,6 +1151,18 @@ $(document).ready(function() {
 		});
 		return result;
 	};
+	
+	var remove_emptyparams = function(data) {
+		var result = {};
+		Object.keys(data).filter(function(key) {
+			return Boolean(data[key]) && data[key].length;
+		}).forEach(function(key) {
+			if (data[key] != '') {
+				result[key] = data[key];
+			}
+		});
+		return result;
+	}
 
 
 /*==============================================================
@@ -1338,4 +1401,11 @@ $(document).ready(function() {
                           .find("input:text").val("").end()
                           .appendTo(list);
 		$('.duplicable-item:last input:first').focus();
+	}
+	
+	function fill_frommodal(field, value) {
+		var modal = config.modals.ajax;
+		$(field).val(value);
+		$(modal).modal('hide');
+		$('html, body').animate({scrollTop: $(field).offset().top - 80}, 1000);
 	}

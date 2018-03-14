@@ -1,4 +1,6 @@
 <?php 
+	use ProcessWire\Wire;
+	
 	abstract class OrderPanel extends OrderDisplay {
 		public $focus;
 		public $loadinto;
@@ -10,7 +12,9 @@
 		public $pagenbr;
 		public $activeID = false;
 		public $count;
-		public $filter = false; // Will be instance of array
+		public $filters = false; // Will be instance of array
+		public $filterable;
+		public $paneltype;
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal);
@@ -48,8 +52,9 @@
 		public function generate_clearsearchlink() {
 			$bootstrap = new Contento();
 			$href = $this->generate_loadurl();
+			$icon = $bootstrap->createicon('fa fa-search-minus');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-warning generate-load-link|$ajaxdata", "Clear Search");
+			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link btn btn-warning btn-block|$ajaxdata", "Clear Search $icon");
 		}
 		
 		public function generate_clearsortlink() {
@@ -80,5 +85,60 @@
 		
 		public function generate_ajaxdataforcontento() {
 			return str_replace(' ', '|', str_replace("'", "", str_replace('"', '', $this->ajaxdata)));
+		}
+		
+		/**
+		 * Looks through the $input->get for properties that have the same name
+		 * as filterable properties, then we populate $this->filter with the key and value
+		 * @param  ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 */
+		public function generate_filter(ProcessWire\WireInput $input) {
+			if (!$input->get->filter) {
+				$this->filters = false;
+				return;
+			} else {
+				$this->filters = array();
+				foreach ($this->filterable as $filter => $type) {
+					if (!empty($input->get->$filter)) {
+						if (!is_array($input->get->$filter)) {
+							$value = $input->get->text($filter);
+							$this->filters[$filter] = explode('|', $value);
+						} else {
+							$this->filters[$filter] = $input->get->$filter;
+						}
+					} elseif (is_array($input->get->$filter)) {
+						if (strlen($input->get->$filter[0])) {
+							$this->filters[$filter] = $input->get->$filter;
+						}
+					}
+				}
+			}
+		}
+		
+		public function get_filtervalue($filtername, $index = 0) {
+			if (empty($this->filters)) return '';
+			if (isset($this->filters[$filtername])) {
+				return (isset($this->filters[$filtername][$index])) ? $this->filters[$filtername][$index] : '';
+			}
+			return '';
+		}
+		
+		public function has_filtervalue($filtername, $value) {
+			if (empty($this->filters)) return false;
+			return (isset($this->filters[$filtername])) ? in_array($value, $this->filters[$filtername]) : false;
+		}
+		
+		public function generate_filterdescription() {
+			if (empty($this->filters)) return '';
+			$desc = 'Searching '.$this->generate_paneltypedescription().' with';
+			
+			foreach ($this->filters as $filter => $value) {
+				$desc .= " " . QueryBuilder::generate_filterdescription($filter, $value, $this->filterable);
+			}
+			return $desc;
+		}
+		
+		public function generate_paneltypedescription() {
+			return ucwords(str_replace('-', ' ', $this->paneltype.'s'));
 		}
 	}

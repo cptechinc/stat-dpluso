@@ -21,7 +21,7 @@
 				case 'cust':
 					$custID = $input->get->text('custID');
 					$shipID = $input->get->text('shipID');
-					$page->body = $config->paths->content.'customer/cust-page/orders/order-search-form.php';
+					$page->body = $config->paths->content.'customer/cust-page/orders/order-filter-form.php'; // Barbara - changed from order-search-form 
 					$page->title = "Searching through ".get_customername($custID)." orders";
 					break;
 				case 'salesrep':

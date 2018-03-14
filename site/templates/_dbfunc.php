@@ -627,11 +627,7 @@
 		$q = (new QueryBuilder())->table('ordrhed');
 		$expression = $q->expr('IF (COUNT(*) = 1, 1, IF(COUNT(DISTINCT(custid)) > 1, COUNT(*), 0)) as count');
 		if (!empty($filter)) {
-			if (isset($filter['custid'])) {
-				if (sizeof(array_values(array_filter($filter['custid'], 'strlen'))) == 1) {
-					$expression = $q->expr('COUNT(*)');
-				}
-			}
+			$expression = $q->expr('COUNT(*)');
 			$q->generate_filters($filter, $filtertypes);
 		}
 		$q->field($expression);
@@ -974,11 +970,7 @@
 		$q = (new QueryBuilder())->table('quothed');
 		$expression = $q->expr('IF (COUNT(*) = 1, 1, IF(COUNT(DISTINCT(custid)) > 1, COUNT(*), 0)) as count');
 		if (!empty($filter)) {
-			if (isset($filter['custid'])) {
-				if (sizeof(array_values(array_filter($filter['custid'], 'strlen'))) == 1) {
-					$expression = $q->expr('COUNT(*)');
-				}
-			}
+			$expression = $q->expr('COUNT(*)');
 			$q->generate_filters($filter, $filtertypes);
 		}
 		$q->field($expression);

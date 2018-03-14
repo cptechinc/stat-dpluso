@@ -1,6 +1,7 @@
 <?php 
     class Customer extends Contact {
         use CreateFromObjectArrayTraits;
+		
         /* =============================================================
 			GETTER FUNCTIONS 
 		============================================================ */
@@ -86,7 +87,7 @@
 		 * @return Customer
 		 */
         public static function load($custID, $shiptoID = '', $contactID = '', $debug = false) {
-            return self::create_fromobject(get_customercontact($custID, $shiptoID, $contactID));
+            return get_customer($custID, $shiptoID, $contactID, $debug);
         }
 		
 		/* =============================================================

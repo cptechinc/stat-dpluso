@@ -1,4 +1,4 @@
-<?php 	
+<?php
 	class QuotePanel extends OrderPanel implements OrderDisplayInterface, QuoteDisplayInterface, QuotePanelInterface {
 		use QuoteDisplayTraits;
 		
@@ -264,7 +264,7 @@
 			return '';
 		}
 		
-		public function generate_filter(WireInput $input) {
+		public function generate_filter(ProcessWire\WireInput $input) {
 			parent::generate_filter($input);
 			
 			if (isset($this->filters['quotdate'])) {

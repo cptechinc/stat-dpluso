@@ -68,6 +68,13 @@
             'shipID' => 'shiptoid',
         );
         
+		public static $types = array(
+			'customer' => 'C',
+			'customer-contact' => 'CC',
+			'customer-shipto' => 'CS',
+			'shipto-contact' => 'SC'
+		);
+		
         /* =============================================================
 			GETTER FUNCTIONS 
 		============================================================ */
@@ -247,7 +254,7 @@
 		 */
 		public function generate_phonedisplay() {
 			if ($this->has_extension()) {
-				return $this->phone . ' &nbsp; ' . $this->extension;
+				return $this->phone . ' Ext. ' . $this->extension;
 			} else {
 				return $this->phone;
 			}
@@ -258,19 +265,19 @@
 		 * @param  string $method two main groups : phone / email
 		 * @return string         url with with the protocol defined
 		 */
-		public function generate_contactmethodurl($method) {
+		public function generate_contactmethodurl($method = false) {
 			switch ($method) {
 				case 'cell':
-					return "tel:".$this->cellphone;
+					return "tel:".str_replace('-', '', $this->cellphone);
 					break;
 				case 'phone':
-					return "tel:".$this->phone;
+					return "tel:".str_replace('-', '', $this->phone);
 					break;
 				case 'email':
 					return "mailto:".$this->email;
 					break;
 				default:
-					return "tel:".$this->phone;
+					return "tel:".str_replace('-', '', $this->phone);
 					break;
 			}
 		}
@@ -332,6 +339,12 @@
 			return update_contact($this, $debug);
 		}
 		
+		/**
+		 * Updates the Contact ID
+		 * @param  string  $contactID Contact ID
+		 * @param  bool $debug     Determines if query will execute and if sQL is returned or Contact object
+		 * @return string            SQL Query
+		 */
 		public function change_contactid($contactID, $debug = false) {
 			return change_contactid($this, $contactID, $debug);
 		}

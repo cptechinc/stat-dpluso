@@ -99,7 +99,7 @@
 			return '';
 		}
 		
-		public function generate_filter(WireInput $input) {
+		public function generate_filter(Processwire\WireInput $input) {
 			parent::generate_filter($input);
 			
 			if (isset($this->filters['orderdate'])) {

@@ -119,7 +119,27 @@
 			return 1;
 		}
 	}
-
+	function get_customer($custID, $shiptoID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('custindex');	
+		$q->where('custid', $custID);
+		
+		if ($shiptoID) {
+			$q->where('shiptoid', $shiptoID);
+			$q->where('source', Contact::$types['customer-shipto']);
+		} else {
+			$q->where('source', Contact::$types['customer']);
+		}
+		
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
+			return $sql->fetch();
+		}
+	}
 	function get_customername($custID) {
 		$sql = Processwire\wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID LIMIT 1");
 		$switching = array(':custID' => $custID);
@@ -138,7 +158,7 @@
 		}
 	}
 
-	function get_customerinfo($sessionID, $custID, $debug) {
+	function get_customerinfo($sessionID, $custID, $debug) { // DEPRECATE 
 		$sql = Processwire\wire('database')->prepare("SELECT custindex.*, customer.dateentered FROM custindex JOIN customer ON custindex.custid = customer.custid WHERE custindex.custid = :custID AND customer.sessionid = :sessionID LIMIT 1");
 		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
 		if ($debug) {
@@ -225,22 +245,52 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
+	
+	function count_customercontacts($loginID, $restrictions, $custID, $debug = false) {
+		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
+		$q = (new QueryBuilder())->table('custindex');
+		$q->field('COUNT(*)');
+		
+		if ($restrictions) {
+			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
+			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust');
+			$permquery->field('custid, shiptoid');
+			$permquery->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
+			$q->where('(custid, shiptoid)','in', $permquery);
+		} else {
+			$q->where('custid', $custID);
+		}
+		
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
 
 	function get_customercontacts($loginID, $restrictions, $custID, $debug = false) {
 		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
+		$q = (new QueryBuilder())->table('custindex');
+		
 		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM (SELECT * FROM custperm WHERE custid = :custID) t WHERE loginid = :loginID OR loginid = :shared)");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true);
+			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
+			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust');
+			$permquery->field('custid, shiptoid');
+			$permquery->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
+			$q->where('(custid, shiptoid)','in', $permquery);
 		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID");
-			$switching = array(':custID' => $custID); $withquotes = array(true);
+			$q->where('custid', $custID);
 		}
-
+		
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
 			return $sql->fetchAll();
 		}

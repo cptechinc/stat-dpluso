@@ -1,3 +1,8 @@
+<?= $quotedisplay->generate_viewprintlink($quote); ?>
+<?php $customer = Customer::load($quote->custid, $quote->shiptoid); ?>
+<div class="form-group hidden-print">
+	<?= $quotedisplay->generate_viewprintlink($quote); ?>
+</div>
 <div class="row">
 	<div class="col-sm-6">
 		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
@@ -9,12 +14,21 @@
 <div class="row">
 	<div class="col-sm-6">
 		<table class="table table-bordered table-striped table-condensed">
-			<tr> <td>CustID</td> <td><?= $quote->custid; ?></td> </tr>
-			<tr> <td>Quote Date</td> <td><?= $quote->quotdate; ?></td> </tr>
-			<tr> <td>Review Date</td> <td><?= $quote->revdate; ?></td> </tr>
-			<tr> <td>Expire Date</td> <td><?= $quote->expdate; ?></td> </tr>
-			<tr> <td>Terms Code</td> <td><?= $quote->termcode; ?></td> </tr>
-			<tr> <td>Tax</td> <td><?= $quote->taxcode; ?></td> </tr>
+			<tr> 
+				<td>CustID</td> 
+				<td>
+					<?= $quote->custid; ?> - <a href="<?= $customer->generate_customerurl(); ?>"><?= $customer->get_customername(); ?></a> 
+					<span class="glyphicon glyphicon-share"></span>
+				</td> 
+			</tr>
+			<tr>
+				<td>ShiptoID</td> <td><?= $quote->shiptoid; ?></td>
+			</tr>
+			<tr> <td>Quote Date</td> <td class="text-right"><?= $quote->quotdate; ?></td> </tr>
+			<tr> <td>Review Date</td> <td class="text-right"><?= $quote->revdate; ?></td> </tr>
+			<tr> <td>Expire Date</td> <td class="text-right"><?= $quote->expdate; ?></td> </tr>
+			<tr> <td>Terms Code</td> <td><?= $quote->termcodedesc; ?></td> </tr>
+			<tr> <td>Tax</td> <td><?= $quote->taxcodedesc; ?></td> </tr>
             <tr> <td>Sales Person</td> <td><?= $quote->sp1; ?></td> </tr>
 		</table>
 	</div>
@@ -24,10 +38,6 @@
 			<tr> <td>Customer PO</td> <td><?= $quote->custpo; ?></td> </tr>
             <tr> <td>Cust Ref</td> <td><?= $quote->custref; ?></td> </tr>
             <tr> <td>Ship Via</td> <td><?= $quote->shipviacd.' - '.$quote->shipviadesc; ?></td> </tr>
-            <tr> <td>FOB</td> <td><?= $quote->fob; ?></td> </tr>
-            <tr> <td>Delivery</td> <td><?= $quote->deliverydesc; ?></td> </tr>
-            <tr> <td>Whse</td> <td><?= $quote->whse; ?></td> </tr>
-            <tr> <td>Care Of</td> <td><?= $quote->careof; ?></td> </tr>
 		</table>
 	</div>
 </div>
@@ -76,8 +86,8 @@
 				<?= $quotedisplay->generate_detailvieweditlink($quote, $detail, $page->bootstrap->createicon('glyphicon glyphicon-eye-open')); ?>
             </td>
 			<td class="text-right"> <?= intval($detail->quotqty); ?> </td>
-			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->ordrprice); ?></td>
-			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->ordrprice * intval($detail->quotqty)) ?> </td>
+			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->quotprice); ?></td>
+			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->quotprice * intval($detail->quotqty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 	<tr>
@@ -96,7 +106,6 @@
 		<td></td><td><b>Total</b></td> <td colspan="3" class="text-right">$ <?= $page->stringerbell->format_money($quote->ordertotal); ?></td>
 	</tr>
 </table>
-
 <div class="row">
 	<div class="col-sm-6">
 		<?= $quotedisplay->generate_customershiptolink($quote); ?>

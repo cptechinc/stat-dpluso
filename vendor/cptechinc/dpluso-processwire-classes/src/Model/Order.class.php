@@ -86,6 +86,10 @@
 			return $this->error == 'Y' ? true : false;
 		}
 		
+		public function has_shipto() {
+			return (!empty($this->shiptoid));
+		}
+		
 		/* =============================================================
 			SETTER FUNCTIONS
 		============================================================ */

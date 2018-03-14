@@ -369,7 +369,7 @@
 			$contact->set('arcontact', $input->post->text('arcontact') == 'Y' ? "Y" : "N");
 			$contact->set('dunningcontact', $input->post->text('duncontact') == 'Y' ? "Y" : "N");
 			$contact->set('buyingcontact', $input->post->text('buycontact'));
-			$contact->set('certcontact', $input->post->text('cercontact') == 'Y' ? "Y" : "N");
+			$contact->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
 			$contact->set('ackcontact', $input->post->text('ackcontact') == 'Y' ? "Y" : "N");
 			
 			$session->sql = $contact->update();

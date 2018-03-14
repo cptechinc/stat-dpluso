@@ -32,8 +32,8 @@
 		protected function generate_itemformsection() {
 			$bootstrap = new Contento();
 			$itemID = $this->json['itemid'];
-			$custID = $this->json['custid'];
-			$shipID = $this->json['shipid'];
+			$custID = Processwire\wire('input')->get->text('custID');
+			$shipID = Processwire\wire('input')->get->text('shipID');
 			$tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
 			
 			foreach ($this->tableblueprint['header']['sections']['1'] as $column) {

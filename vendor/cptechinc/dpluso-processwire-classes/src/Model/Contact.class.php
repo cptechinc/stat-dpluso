@@ -247,16 +247,9 @@
 		public function generate_address() {
 			return $this->addr1 . ' ' . $this->addr2. ' ' . $this->city . ', ' . $this->state . ' ' . $this->zip;
 		}
-        
-<<<<<<< HEAD
-		/* =============================================================
-			CRUD FUNCTIONS
-		============================================================ */
-=======
         /* =============================================================
 			CRUD FUNCTIONS
-		============================================================ */	
->>>>>>> 6b205cc... Documentation and Crud behaviors
+		============================================================ */
 		/**
 		 * Creates a new contact in the database
 		 * @param  boolean $debug Determines if query will execute and if sQL is returned or Contact object

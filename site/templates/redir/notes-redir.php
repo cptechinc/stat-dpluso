@@ -10,7 +10,16 @@
 	$action = ($input->post->action ? $input->post->text('action') : $input->get->text('action'));
 
 	$session->{'from-redirect'} = $page->url;
-	$filename = session_id();
+	if ($input->post->sessionID) {
+		$filename = $input->post->text('sessionID');
+		$sessionID = $input->post->text('sessionID');
+	} elseif ($input->get->sessionID) {
+		$filename = $input->get->text('sessionID');
+		$sessionID = $input->get->text('sessionID');
+	} else {
+		$filename = session_id();
+		$sessionID = session_id();
+	}
 	$session->action = $action;
 
 	/**
@@ -137,7 +146,7 @@
 			break;
 		case 'add-note':
 			$note = new QNote();
-			$note->sessionid = session_id();
+			$note->sessionid = $sessionID;
 			$note->rectype = $input->post->text('type');
 			$note->key1 = $input->post->text('key1');
 			$note->key2 = $input->post->text('key2');

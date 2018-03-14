@@ -138,9 +138,8 @@
         }
         
         /* =============================================================
- 		   CLASS FUNCTIONS 
- 	   ============================================================ */
-        
+			CLASS FUNCTIONS 
+		============================================================ */
         /* = GENERATE LINKS - LINKS ARE THE HTML MARKUP FOR LINKS */
          public function generate_refreshlink() {
              $bootstrap = new Contento();
@@ -215,7 +214,7 @@
              $tb = new Table('class=table table-bordered table-condensed table-striped');
              $tb->tablesection('thead');
                  $tb->tr();
-                 $tb->th('', 'Due')->th('', 'Type')->th('', 'Subtype')->th('', 'CustID')->th('', 'Regarding / Title')->th('', 'View action');
+                 $tb->th('', 'Due')->th('', 'Type')->th('', 'Subtype')->th('', 'Customer')->th('', 'Regarding / Title')->th('', 'View');
              $tb->closetablesection('thead');
              $tb->tablesection('tbody');
                  if (!sizeof($this->count)) {
@@ -229,7 +228,7 @@
                      $tb->td('', $action->generate_duedatedisplay('m/d/Y'));
                      $tb->td('', $action->actiontype);
                      $tb->td('', $action->generate_actionsubtypedescription());
-                     $tb->td('', $action->customerlink);
+                     $tb->td('', $action->customerlink.' - '.Customer::get_customernamefromid($action->customerlink, '', false));
                      $tb->td('', $action->generate_regardingdescription());
                      $tb->td('', $this->generate_viewactionlink($action));
                  }
@@ -255,7 +254,7 @@
                      $tb->tr("class=$class");
                      $tb->td('', date('m/d/Y g:i A', strtotime($action->datecreated)));
                      $tb->td('', ucfirst($action->generate_actionsubtypedescription()));
-                     $tb->td('', $action->customerlink);
+                     $tb->td('', $action->customerlink.' - '.Customer::get_customernamefromid($action->customerlink, '', false));
                      $tb->td('', $action->generate_regardingdescription());
                      $tb->td('', $this->generate_viewactionlink($action));
                  }
@@ -279,7 +278,7 @@
                      
                      $tb->tr("class=$class");
                      $tb->td('', ucfirst($note->generate_actionsubtypedescription()));
-                     $tb->td('', $note->customerlink);
+                     $tb->td('', $note->customerlink.' - '.Customer::get_customernamefromid($note>customerlink, '', false));
                      $tb->td('', $note->generate_regardingdescription());
                      $tb->td('', $this->generate_viewactionlink($note));
                  }
@@ -304,7 +303,7 @@
                      $tb->tr("class=$class");
                      $tb->td('', $task->generate_duedatedisplay('m/d/Y'));
                      $tb->td('', $task->generate_actionsubtypedescription());
-                     $tb->td('', $task->customerlink);
+                     $tb->td('', $task->customerlink.' - '.Customer::get_customernamefromid($task->customerlink, '', false));
                      $tb->td('', $task->generate_regardingdescription());
                      $tb->td('', $this->generate_viewactionlink($task));
                      $complete = ($task->is_completed()) ? '' : $this->generate_completetasklink($task);
@@ -342,7 +341,7 @@
  			return $bootstrap->openandclose('a', $attr, 'Icon Definitions');
  		}
          
-         public function generate_completetasklink($task) {
+         public function generate_completetasklink(UserAction $task) {
              $bootstrap = new Contento();
              $href = $this->generate_viewactionjsonurl($task);
              $icon = $bootstrap->createicon('fa fa-check-circle');
@@ -361,7 +360,7 @@
         /**
          * Checks if USER and the and $this->assigneduserID are equal
          * and if not return true
-         * @return boolean true or false
+         * @return bool
          */
         public function should_haveremoveuserIDlink() {
             return ($this->userID != $this->assigneduserID) ? true : false;
@@ -379,7 +378,7 @@
         /**
          * Returns if the panel should have the add link
          * Will be overwritten by children
-         * @return boolean true or false
+         * @return bool
          */
         public function should_haveaddlink() {
             return true;
@@ -409,6 +408,4 @@
         public function generate_ajaxdataforcontento() {
             return str_replace(' ', '|', str_replace("'", "", str_replace('"', '', $this->ajaxdata)));
         }
-    
     }
-    

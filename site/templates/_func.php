@@ -391,7 +391,18 @@
 			CURLOPT_URL => $url,
 			CURLOPT_FOLLOWLOCATION => true
 		));
-		sleep(2);
+		return curl_exec($curl);
+	}
+	
+	function curl_post($url, $fields) {
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_RETURNTRANSFER => 1,
+			CURLOPT_URL => $url,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_POST => count($fields),
+			CURLOPT_POSTFIELDS => http_build_query($fields)
+		));
 		return curl_exec($curl);
 	}
 

@@ -2,15 +2,14 @@
 	$custID = $input->get->text('custID');
 	$shipID = $input->get->text('shipID');
 	$contactID = $input->get->text('id');
-	$page->body = $config->paths->content.'customer/contact/contact-page.php';
-	$contact = get_customercontact($custID, $shipID, $contactID, false);
-    
-    if ($contact) {
+	$contact = Contact::load($custID, $shipID, $contactID);
+	$primarycontact = Contact::load_primarycontact($custID, $shipID);
+	
+	if ($contact) {
         if (can_accesscustomercontact($user->loginid, $user->hasrestrictions, $custID, $shipID, $contactID, false)) {
-			$page->useractionpanelfactory = new UserActionPanelFactory($user->loginid, $page->fullURL);
-            $page->title = $contact->contact . ", ".$contact->get_customername(); 
-            $page->body = $config->paths->content.'customer/contact/contact-page.php';
-			
+			$page->title = "Editing " .$contact->contact . ", ".$contact->get_customername(); 
+			$page->body = $config->paths->content.'customer/contact/edit-contact.php';
+			$config->scripts->append(hashtemplatefile('scripts/pages/contact-page.js'));
             if ($config->ajax) {
         		if ($config->modal) {
         			include $config->paths->content."common/modals/include-ajax-modal.php";
@@ -30,4 +29,3 @@
         $page->body = "Contact $custID $shipID $contactID Not Found";
         include $config->paths->templates."basic-page.php";
     }
-	

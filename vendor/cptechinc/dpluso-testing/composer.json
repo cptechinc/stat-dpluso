@@ -1,0 +1,13 @@
+{
+	"name": "cptechinc/dpluso-testing",
+    "type": "library",
+    "description": "Classes for Dpluso Testing",
+    "keywords": ["crm"],
+    "homepage": "http://github.com/cptechinc/dpluso-testing",
+	"autoload": {
+		"files": [
+            "src/CartTest.class.php",
+			"src/CartTest.class.php"
+		]
+	}
+}

@@ -289,12 +289,8 @@
 		public function generate_address() {
 			return $this->addr1 . ' ' . $this->addr2. ' ' . $this->city . ', ' . $this->state . ' ' . $this->zip;
 		}
-<<<<<<< HEAD
-        /* =============================================================
-=======
-		
+
 		/* =============================================================
->>>>>>> 2e3f99b... Merge pull request #150 from cptechinc/testing
 			CRUD FUNCTIONS
 		============================================================ */
 		/**

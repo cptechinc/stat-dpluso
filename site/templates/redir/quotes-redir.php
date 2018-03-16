@@ -186,7 +186,6 @@
 			$quote->set('shipzip', $input->post->text('shipto-zip'));
 			$quote->set('contact', $input->post->text('contact'));
 			$quote->set('email', $input->post->text('contact-email'));
-			$quote->set('careof', $input->post->text('careof'));
 			$quote->set('revdate', $input->post->text('reviewdate'));
 			$quote->set('expdate', $input->post->text('expiredate'));
 			$quote->set('shipviacd', $input->post->text('shipvia'));
@@ -237,9 +236,9 @@
 			$quotedetail->set('desc1', $input->post->text('desc1'));
 			$quotedetail->set('desc2', $input->post->text('desc2'));
 			$quotedetail->set('vendorid', $input->post->text('vendorID'));
-			$quotedetail->set('shipfromid', $input->post->text('shipfromid'));
-			$quotedetail->set('vendoritemid', $input->post->text('itemID'));
-			$quotedetail->set('nsitemgroup', $input->post->text('itemgroup'));
+			$quotedetail->set('shipfromid', $input->post->text('shipfromID'));
+			$quotedetail->set('vendoritemid', $input->post->text('vendoritemID'));
+			$quotedetail->set('nsitemgroup', $input->post->text('nsitemgroup'));
 			//$quotedetail->set('ponbr', $input->post->text('ponbr'));
 			//$quotedetail->set('poref', $input->post->text('poref'));
 			$quotedetail->set('uom', $input->post->text('uofm'));

@@ -293,14 +293,24 @@
 			break;
 		case 'load-new-customer':
 			$custID = get_createdordn(session_id());
-			edit_custindexcustid(session_id(), $custID);
-			$session->loc = $config->pages->customer . urlencode($custID)."/shipto-1/";
-			$data = array('DBNAME' => $config->dbName, 'CUSTID' => $custID);
+			$session->sql = Customer::change_custidfrom(session_id(), $custID);
+			$session->loc = $config->pages->custinfo."$custID/";
+			
+			if (!empty($shipID)) { 
+				$session->loc = $config->pages->custinfo."$custID/shipto-$shipID/";
+				$data = array('DBNAME' => $config->dbName, 'CISHIPTOINFO' => false, 'CUSTID' => $custID, 'SHIPID' => $shipID);
+			} else {
+				$data = array('DBNAME' => $config->dbName, 'CICUSTOMER' => false, 'CUSTID' => $custID);
+			}
 			break;
-		case 'load-customer': // START DEPRECATING 1/25/2018
-			$session->loc = $config->pages->customer . urlencode($custID)."/";
-			if (!empty($shipID)) { $session->loc .= "shipto-".$input->get->shipID."/"; }
-			$data = array('DBNAME' => $config->dbName, 'CUSTID' => $custID);
+		case 'load-customer':
+			$session->loc = $config->pages->custinfo."$custID/";
+			if (!empty($shipID)) { 
+				$session->loc = $config->pages->custinfo."$custID/shipto-$shipID/";
+				$data = array('DBNAME' => $config->dbName, 'CISHIPTOINFO' => false, 'CUSTID' => $custID, 'SHIPID' => $shipID);
+			} else {
+				$data = array('DBNAME' => $config->dbName, 'CICUSTOMER' => false, 'CUSTID' => $custID);
+			}
 			break;
 		case 'shop-as-customer':
 			$session->custID = $custID;

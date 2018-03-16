@@ -611,14 +611,18 @@
 		}
 	}
 
-	function edit_custindexcustid($originalcustID, $newcustID) {
+	function change_custindexcustid($originalcustID, $newcustID, $debug = false) {
 		$q = (new QueryBuilder())->table('custindex');
 		$q->mode('update');
 		$q->set('custid', $newcustID);
-		$q->where('custid', $originalcustID);
+		$q->where('custid', substr($originalcustID, 0, 6));
 		$sql = Processwire\wire('database')->prepare($q->render());
-		$sql->execute($q->params);
-		return $q->generate_sqlquery();
+		if ($debug) {
+			return $q->generate_sqlquery();
+		} else {
+			$sql->execute($q->params);
+			return $q->generate_sqlquery();
+		}
 	}
 
 /* =============================================================
@@ -2376,33 +2380,6 @@
 		} else {
 			$sql->execute($q->params);
 			return $q->generate_sqlquery($q->params);
-		}
-	}
-
-	function edit_orderline($sessionID, $ordn, $newdetails, $debug) {
-		$originaldetail = getorderlinedetail($sessionID, $ordn, $newdetails['linenbr'], false);
-		$query = returnpreppedquery($originaldetail, $newdetails);
-		$sql = Processwire\wire('database')->prepare("UPDATE ordrdet SET ".$query['setstatement']." WHERE sessionid = :sessionID AND orderno = :ordn AND linenbr = :linenbr");
-		$query['switching'][':sessionID'] = $sessionID; $query['switching'][':ordn'] = $ordn; $query['switching'][':linenbr'] = $newdetails['linenbr'];
-		$query['withquotes'][] = true; $query['withquotes'][]= true; $query['withquotes'][] = true;
-		if ($debug) {
-			return	returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		} else {
-			if ($query['changecount'] > 0) {
-				$sql->execute($query['switching']);
-			}
-			return returnsqlquery($sql->queryString, $query['switching'], $query['withquotes']);
-		}
-	}
-
-	function insertorderline($sessionID, $ordn, $linenbr, $debug) {
-		$sql = Processwire\wire('database')->prepare("INSERT INTO ordrdet (sessionid, orderno, linenbr) VALUES (:sessionID, :ordn, :linenbr)");
-		$switching = array(':sessionID' => $sessionID, ':ordn' => $ordn, ':linenbr' => $linenbr); $withquotes = array(true, true, true);
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return array('sql' => returnsqlquery($sql->queryString, $switching, $withquotes), 'insertedid' => Processwire\wire('database')->lastInsertId());
 		}
 	}
 

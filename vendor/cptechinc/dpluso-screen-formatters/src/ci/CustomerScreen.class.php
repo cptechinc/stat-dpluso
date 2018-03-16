@@ -34,7 +34,7 @@
 					}
 				}
 			}
-			if (has_dpluspermission(Processwire\wire('user')->loginid, 'eso') || has_dpluspermission(Processwire\wire('user')->loginid, 'eqo')) {
+			if (has_dpluspermission(Dpluswire::wire('user')->loginid, 'eso') || has_dpluspermission(Dpluswire::wire('user')->loginid, 'eqo')) {
 				$button = $bootstrap->button('type=button|class=btn btn-primary|data-toggle=modal|data-target=#item-lookup-modal', $bootstrap->createicon('glyphicon glyphicon-plus'). ' Add Item');
 				$tb->tr()->td('colspan=2', $bootstrap->p('class=text-center', $button));
 			}
@@ -49,18 +49,20 @@
 					
 				} else {
 					$tb->tr();
-					$tb->td('', $this->json['columns']['top'][$column]['heading']);
+					
 					if ($column == 'customerid') {
 						$attr = (!$customer->has_shipto()) ? 'value= |selected' : 'value= ';
 						$options = $bootstrap->option($attr, 'No Shipto Selected');
-						$shiptos = get_customershiptos($customer->custID, Processwire\wire('user')->loginid, Processwire\wire('user')->hascontactrestrictions);
+						$shiptos = get_customershiptos($customer->custID, Dpluswire::wire('user')->loginid, Dpluswire::wire('user')->hascontactrestrictions);
 						foreach ($shiptos as $shipto) {
 							$show = $shipto->shiptoid.' '.$shipto->name.' - '.$shipto->city.', '.$shipto->state;
 							$options .= $bootstrap->option("value=$shipto->shiptoid", $show);
 						}
 						$select = $bootstrap->openandclose('select', "class=form-control input-sm|onchange=refreshshipto(this.value, '$customer->custID')", $options);
+						$tb->td('', 'Ship-to ID');
 						$tb->td('', $select);
 					} else {
+						$tb->td('', $this->json['columns']['top'][$column]['heading']);
 						$tb->td('', $this->json['data']['top'][$column]);
 					}
 				}
@@ -69,7 +71,7 @@
 		}
 		
 		public function generate_pageform(Customer $customer) {
-			$action = Processwire\wire('config')->pages->ajax."load/customers/cust-index/";
+			$action = Dpluswire::wire('config')->pages->ajax."load/customers/cust-index/";
 			$form = new FormMaker("action=$action|method=POST|id=ci-cust-lookup");
 			$form->input("type=hidden|name=action|value=ci-item-lookup");
 			$form->input("type=hidden|name=shipID|class=shipID|value=$customer->shipID");
@@ -88,7 +90,7 @@
 					
 				} else {
 					$tb->tr();
-					$class = Processwire\wire('config')->textjustify[$this->json['columns']['left'][$column]['headingjustify']];
+					$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['left'][$column]['headingjustify']];
 					$tb->td("class=$class", $this->json['columns']['left'][$column]['heading']);
 					$tb->td('', TableScreenMaker::generate_celldata($this->json['data']['left'], $column));
 				}
@@ -103,14 +105,14 @@
 					$tb->tablesection('thead');
 					$tb->tr();
 					foreach ($this->json['columns']['right'][$section] as $column) {
-						$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+						$class = Dpluswire::wire('config')->textjustify[$column['headingjustify']];
 						$tb->th("class=$class", $column['heading']);
 					}
 					$tb->closetablesection('thead');
 					foreach (array_keys($this->json['data']['right'][$section]) as $row) {
 						$tb->tr();
 						foreach (array_keys($this->json['data']['right'][$section][$row]) as $column) {
-							$class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
+							$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
 							$tb->td("class=$class", $this->json['data']['right'][$section][$row][$column]);
 						}
 					}
@@ -121,9 +123,9 @@
 			foreach(array_keys($this->json['data']['right']['misc']) as $misc) {
 				if ($misc != 'rfml') {
 					$tb->tr();
-					$class = Processwire\wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['headingjustify']];
+					$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['headingjustify']];
 					$tb->td("class=$class", $this->json['columns']['right']['misc'][$misc]['heading']);
-					$class = Processwire\wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['datajustify']];
+					$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['datajustify']];
 					$tb->td("class=$class", $this->json['data']['right']['misc'][$misc])->td();
 				}
 			}

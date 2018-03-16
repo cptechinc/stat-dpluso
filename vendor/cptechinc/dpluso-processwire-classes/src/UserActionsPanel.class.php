@@ -157,10 +157,11 @@
          }
          
          function generate_addlink() {
+			 if (get_class($this) == 'UserActionsPanel') return '';
              $bootstrap = new Contento();
              $href = $this->generate_addactionurl();
              $icon = $bootstrap->createicon('material-icons md-18', '&#xE146;');
-             if (Processwire\wire('config')->cptechcustomer == 'stempf') {
+             if (Dpluswire::wire('config')->cptechcustomer == 'stempf') {
                  return $bootstrap->openandclose('a', "href=$href|class=btn btn-info btn-xs load-into-modal pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
              }
              return $bootstrap->openandclose('a', "href=$href|class=btn btn-info btn-xs add-action pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);

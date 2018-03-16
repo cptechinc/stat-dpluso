@@ -1,9 +1,17 @@
 <?php
     $custpricejson = json_decode(file_get_contents($config->companyfiles."json/custpricecodetbl.json"), true);
-    $custpricecodes = array_keys($custpricejson['data']);
+	$pricecodes = array();
+	foreach ($custpricejson['data'] as $key => $code) {
+		$pricecodes[$key] = $code['custpricecodedesc'];
+	}
 
     $salespersonjson = json_decode(file_get_contents($config->companyfiles."json/salespersontbl.json"), true);
-    $salespersoncodes = array_keys($salespersonjson['data']);
+	$salespeople = array();
+	foreach ($salespersonjson['data'] as $salesperson) {
+		$salespeople[$salesperson['splogin']] = $salesperson['spname'];
+	}
+	
+	$changesalesrep = $users->find("name=$user->loginid")->count ? ($users->get("name=$user->loginid")->hasRole('manager')) : false;
 ?>
 <form action="<?= $config->pages->customer.'redir/'; ?>" method="post">
     <input type="hidden" name="action" value="add-customer">
@@ -163,7 +171,6 @@
 					<?php else : ?>
 						<td class="control-label">Certificate Contact</td>
 					<?php endif; ?>
-					
 					<td>
 						<?= $page->bootstrap->select('class=form-control input-sm|name=certcontact', array_flip($config->yesnoarray), 'N'); ?>
 					</td>
@@ -182,44 +189,23 @@
                 <tbody>
                     <tr>
                         <td class="control-label">Salesperson1</td>
-                        <td>
-                            <select name="salesperson1" class="form-control input-sm">
-                                <?php foreach ($salespersoncodes as $salespersoncode) : ?>
-                                    <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>"><?= $salespersoncode.' - '.$salespersonjson['data'][$salespersoncode]['spname']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
+						<?php if ($config->cptechcustomer == 'stat' && $changesalesrep === false) : ?>
+							<td>
+								<?= $salespeople[$user->loginid]; ?>
+								<?= $page->bootstrap->input("name=salesperson1|type=hidden|value=$user->loginid"); ?>
+							</td>
+						<?php else : ?>
+							<td>
+								<?= $page->bootstrap->select('name=salesperson1|class=form-control input-sm', $salespeople, $user->loginid); ?>
+	                        </td>
+						<?php endif; ?>
                     </tr>
-					<?php if (100 == 1) : ?>
-	                    <tr>
-	                        <td class="control-label">Salesperson2</td>
-	                        <td>
-	                            <select name="salesperson2" class="form-control input-sm">
-	                                <?php foreach ($salespersoncodes as $salespersoncode) : ?>
-	                                    <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>"><?= $salespersoncode.' - '.$salespersonjson['data'][$salespersoncode]['spname']; ?></option>
-	                                <?php endforeach; ?>
-	                            </select>
-	                        </td>
-	                    </tr>
-	                    <tr>
-	                        <td class="control-label">Salesperson3</td>
-	                        <td>
-	                            <select name="salesperson3" class="form-control input-sm">
-	                                <?php foreach ($salespersoncodes as $salespersoncode) : ?>
-	                                    <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>"><?= $salespersoncode.' - '.$salespersonjson['data'][$salespersoncode]['spname']; ?></option>
-	                                <?php endforeach; ?>
-	                            </select>
-	                        </td>
-	                    </tr>
-					<?php endif; ?>
                     <tr>
                         <td class="control-label">Price Code</td>
                         <td>
-                            <select name="pricecode" class="form-control input-sm">
-                                <?php foreach ($custpricecodes as $pricecode) : ?>
-                                    <option value="<?= $pricecode; ?>"><?= $custpricejson['data'][$pricecode]['custpricecodedesc']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
+							<?php $defaultcode = $pages->get('/config/')->default_pricecode; ?>
+							<?= $pricecodes[$defaultcode]; ?>
+							<?= $page->bootstrap->input("name=pricecode|type=hidden|value=$defaultcode"); ?>
                         </td>
                     </tr>
                     <tr>

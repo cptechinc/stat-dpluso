@@ -87,7 +87,4 @@
     <tr>
     	<td class="control-label"><?= $formconfig->fields['fields']['whse']['label']; ?><?= $formconfig->generate_asterisk('whse'); ?></td> <td class="value text-right"><?= $quote->whse; ?></td> <?php //TODO ?>
     </tr>
-    <tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['careof']['label']; ?><?= $formconfig->generate_asterisk('careof'); ?></td> <td> <input type="text" name="careof" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('careof'); ?>" value="<?= $quote->careof; ?>"> </td>
-    </tr>
 </table>

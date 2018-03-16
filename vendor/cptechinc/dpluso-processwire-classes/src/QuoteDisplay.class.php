@@ -33,7 +33,7 @@
 		}
 		
 		public function generate_loaddetailsurl(Order $quote) {
-			$url = new \Purl\Url($this->generate_loaddetailsurltrait());
+			$url = new \Purl\Url($this->generate_loaddetailsurltrait($quote));
 			return $url->getUrl();
 		}
 		

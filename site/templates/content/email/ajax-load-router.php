@@ -4,6 +4,20 @@
             $page->title = "Emailing";
             $sessionID = $input->get->referenceID ? $input->get->text('referenceID') : session_id();
             $printurl = $input->get->text('printurl');
+			$email = $contact = '';
+			$order = $quote = false;
+			$queryurl = new Purl\Url($printurl);
+			$queryarray = $queryurl->query->getData();
+			
+			if (isset($queryarray['ordn'])) {
+				$order = SalesOrder::load($sessionID, $queryarray['ordn']);
+				$email = $order->email;
+				$contact = $order->contact;
+			} elseif(isset($queryarray['qnbr'])) {
+				$quote = Quote::load($sessionID, $queryarray['qnbr']);
+				$email = $quote->email;
+				$contact = $quote->contact;
+			}
             $page->body = $config->paths->content."email/forms/email-file-form.php";
             break;
         default:

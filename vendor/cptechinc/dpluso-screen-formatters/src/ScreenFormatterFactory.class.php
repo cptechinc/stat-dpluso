@@ -37,6 +37,7 @@
             'ii-usage' => 'II_ItemUsageScreen',
             'ii-notes' => 'II_ItemNotesScreen',
             'ii-misc' => 'II_ItemMiscScreen',
+			'ii-costing' => 'II_ItemCostingScreen',
             
             'ci-customer-page' => 'CI_CustomerScreen',
             'ci-customer-shipto-page' => 'CI_CustomerShiptoScreen',

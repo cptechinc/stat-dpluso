@@ -347,23 +347,26 @@
 		case 'add-nonstock-item': // FIX
 			$ordn = $input->post->text('ordn');
 			$qty = $input->post->text('qty');
-			insertorderline(session_id(), $ordn, '0', false);
-			$orderdetail = getorderlinedetail(session_id(), $ordn, '0', false);
-			$orderdetail['orderno'] = $ordn;
-			$orderdetail['recno'] = '0';
-			$orderdetail['price'] = $input->post->text('price');
-			$orderdetail['qty'] = $qty;
-			$orderdetail['desc1'] = $input->post->text('desc1');
-			$orderdetail['desc2'] = $input->post->text('desc2');
-			$orderdetail['vendorid'] = $input->post->text('vendorID');
-			$orderdetail['shipfromid'] = $input->post->text('shipfromID');
-			$orderdetail['vendoritemid'] = $input->post->text('itemID');
-			$orderdetail['nsitemgroup'] = $input->post->text('nsitemgroup');
-			$orderdetail['ponbr'] = $input->post->text('ponbr');
-			$orderdetail['poref'] = $input->post->text('poref');
-			$orderdetail['uom'] = $input->post->text('uofm');
-			$orderdetail['spcord'] = 'S';
-			$session->sql = edit_orderline(session_id(), $ordn, $orderdetail, false);
+			$orderdetail = new SalesOrderDetail();
+			$orderdetail->set('sessionid', session_id());
+			$orderdetail->set('linenbr', '0');
+			$orderdetail->set('recno', '0');
+			$orderdetail->set('orderno', session_id());
+			$orderdetail->set('vendorid', $input->post->text('vendorID'));
+			$orderdetail->set('shipfromid', $input->post->text('shipfromID'));
+			$orderdetail->set('vendoritemid', $input->post->text('itemID'));
+			$orderdetail->set('desc1', $input->post->text('desc1'));
+			$orderdetail->set('desc2', $input->post->text('desc2'));
+			$orderdetail->set('qty', $input->post->text('qty'));
+			$orderdetail->set('price', $input->post->text('price'));
+			$orderdetail->set('cost', $input->post->text('cost'));
+			$orderdetail->set('uom', $input->post->text('uofm'));
+			$orderdetail->set('nsitemgroup', $input->post->text('nsitemgroup'));
+			$orderdetail->set('ponbr', $input->post->text('ponbr'));
+			$orderdetail->set('poref', $input->post->text('poref'));
+			$orderdetail->set('spcord', 'S');
+			$orderdetail->update();
+			
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => '0', 'ITEMID' => 'N', 'QTY' => $qty, 'CUSTID' => $custID);
 		
 			if ($input->post->page) {

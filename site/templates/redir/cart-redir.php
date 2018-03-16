@@ -170,7 +170,11 @@
 			$cartdetail->set('ponbr', $input->post->text('ponbr'));
 			$cartdetail->set('poref', $input->post->text('poref'));
 			$cartdetail->set('uom', $input->post->text('uofm'));
-
+			
+			if ($cartdetail->spcord != 'N') {
+				$cartdetail->set('desc1', $input->post->text('desc1'));
+				$cartdetail->set('desc2', $input->post->text('desc2'));
+			}
 			$session->sql = $cartdetail->update();
 			$session->loc = $input->post->text('page');
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $input->post->linenbr);

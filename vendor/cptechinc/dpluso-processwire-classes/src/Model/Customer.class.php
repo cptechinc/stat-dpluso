@@ -66,7 +66,7 @@
 		 * @return string  Add Contact URL
 		 */
 		public function generate_addcontacturl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->contact.'add/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->contact.'add/');
             $url->query->set('custID', $this->custid);
             
             if ($this->has_shipto()) {
@@ -75,7 +75,7 @@
             return $url->getUrl();
 		}
         
-        /* =============================================================
+		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
 		/**
@@ -89,6 +89,10 @@
         public static function load($custID, $shiptoID = '', $contactID = '', $debug = false) {
             return get_customer($custID, $shiptoID, $contactID, $debug);
         }
+		
+		public static function change_custidfrom($currentID, $newcustID, $debug = false) {
+			return change_custindexcustid($currentID, $newcustID);
+		}
 		
 		/* =============================================================
 			STATIC FUNCTIONS

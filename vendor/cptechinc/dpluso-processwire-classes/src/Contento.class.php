@@ -81,7 +81,7 @@
         
         /**
          * returns a closing element tag
-         * @param  boolean $element element type
+         * @param  bool $element element type
          * @return string element tag
          */
         public function close($element = false) {
@@ -155,7 +155,7 @@
             foreach ($keyvalues as $key => $value) {
                 $optionattr = "value=$key";
                 $optionattr .= ($key == $selectvalue) ? "|selected=noparam" : '';
-                $str .= $this->openandclose('option', $optionattr, $value);
+                $str .= $this->option($optionattr, $value);
             }
             $str .= $this->close('select');
             return $str;
@@ -165,7 +165,7 @@
          * Creates Bootstrap Alert Panel
          * @param  string  $type      alert type Ex. info|warning|danger|success
          * @param  string  $msg       Message to display in the body
-         * @param  boolean $showclose To display the close button
+         * @param  bool $showclose To display the close button
          * @return string             
          */
         public function createalert($type, $msg, $showclose = true) {

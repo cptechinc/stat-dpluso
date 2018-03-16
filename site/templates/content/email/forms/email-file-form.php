@@ -10,7 +10,7 @@
         <div class="col-sm-6 form-group">
             <label for="email-recipient">Recipient Name</label>
             <div class="input-group">
-                <input type="text" class="form-control" name="name" id="email-recipient">
+                <input type="text" class="form-control" name="name" id="email-recipient" value="<?= $contact; ?>">
                 <div class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></div>
             </div>
         </div>
@@ -18,7 +18,7 @@
             <label for="email-email">Email Address</label>
             <div class="input-group">
                 <div class="input-group-addon">@</div>
-                <input type="text" class="form-control" name="email" id="email-email" value="">
+                <input type="text" class="form-control" name="email" id="email-email" value="<?= $email; ?>">
             </div>
         </div>
     </div>

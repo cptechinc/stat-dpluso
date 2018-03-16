@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInitf9c34235226de117fa23ba132ae64d6f
 {
     public static $files = array (
+        'f76ccf83e6c40aac2fdaadc64a641690' => __DIR__ . '/../..' . '/src/helpers/DplusWire.class.php',
         '0db1bf76fb4af1e86d7c48ac93a7e789' => __DIR__ . '/../..' . '/src/CreateFromObjectArray.trait.php',
         '2b2419678dcad2ec3305a65b69d493c2' => __DIR__ . '/../..' . '/src/CreateClassArray.trait.php',
         '69ed03ba55021f05bdee38ec8cd64ccb' => __DIR__ . '/../..' . '/src/AttributeParser.trait.php',

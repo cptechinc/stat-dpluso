@@ -56,7 +56,7 @@
         "ponbr": "0",
         "poref": "",
         "nsitemgroup": "999",
-        "shipfromid": "N/A",
+        "shipfromID": "N/A",
         "itemtype": "",
         "dummy": "X"
     },
@@ -117,7 +117,7 @@
         "ponbr": "0",
         "poref": "",
         "nsitemgroup": "",
-        "shipfromid": "N/A",
+        "shipfromID": "N/A",
         "itemtype": "N",
         "dummy": "X"
     },
@@ -178,7 +178,7 @@
         "ponbr": "0",
         "poref": "",
         "nsitemgroup": "999",
-        "shipfromid": "N/A",
+        "shipfromID": "N/A",
         "itemtype": "N",
         "dummy": "X"
     },
@@ -239,7 +239,7 @@
         "ponbr": "0",
         "poref": "",
         "nsitemgroup": "999",
-        "shipfromid": "N/A",
+        "shipfromID": "N/A",
         "itemtype": "N",
         "dummy": "X"
     },
@@ -300,7 +300,7 @@
         "ponbr": "0",
         "poref": "",
         "nsitemgroup": "999",
-        "shipfromid": "N/A",
+        "shipfromID": "N/A",
         "itemtype": "N",
         "dummy": "X"
     },
@@ -361,7 +361,7 @@
         "ponbr": "0",
         "poref": "",
         "nsitemgroup": "110",
-        "shipfromid": "",
+        "shipfromID": "",
         "itemtype": "",
         "dummy": "X"
     }

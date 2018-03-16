@@ -344,7 +344,7 @@
 			$data = writedataformultitems($data, $itemids, $qtys);
             $session->loc = $config->pages->edit."order/?ordn=".$ordn;
 			break;
-		case 'add-nonstock-item':
+		case 'add-nonstock-item': // FIX
 			$ordn = $input->post->text('ordn');
 			$qty = $input->post->text('qty');
 			insertorderline(session_id(), $ordn, '0', false);
@@ -356,9 +356,9 @@
 			$orderdetail['desc1'] = $input->post->text('desc1');
 			$orderdetail['desc2'] = $input->post->text('desc2');
 			$orderdetail['vendorid'] = $input->post->text('vendorID');
-			$orderdetail['shipfromid'] = $input->post->text('shipfromid');
+			$orderdetail['shipfromid'] = $input->post->text('shipfromID');
 			$orderdetail['vendoritemid'] = $input->post->text('itemID');
-			$orderdetail['nsitemgroup'] = $input->post->text('itemgroup');
+			$orderdetail['nsitemgroup'] = $input->post->text('nsitemgroup');
 			$orderdetail['ponbr'] = $input->post->text('ponbr');
 			$orderdetail['poref'] = $input->post->text('poref');
 			$orderdetail['uom'] = $input->post->text('uofm');
@@ -385,9 +385,9 @@
 			$orderdetail->set('linenbr', $input->post->text('linenbr'));
 			$orderdetail->set('spcord', $input->post->text('specialorder'));
 			$orderdetail->set('vendorid', $input->post->text('vendorID'));
-			$orderdetail->set('shipfromid', $input->post->text('shipfromid'));
-			$orderdetail->set('vendoritemid', $input->post->text('itemID'));
-			$orderdetail->set('nsitemgroup', $input->post->text('group'));
+			$orderdetail->set('shipfromid', $input->post->text('shipfromID'));
+			$orderdetail->set('vendoritemid', $input->post->text('vendoritemID'));
+			$orderdetail->set('nsitemgroup', $input->post->text('nsgroup'));
 			$orderdetail->set('ponbr', $input->post->text('ponbr'));
 			$orderdetail->set('poref', $input->post->text('poref'));
 			$orderdetail->set('uom', $input->post->text('uofm'));

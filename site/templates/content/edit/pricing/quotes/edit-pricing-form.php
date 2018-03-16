@@ -103,7 +103,7 @@
 					<tr>
 						<td>Ship-from</td>
 						<td>
-							<select name="shipfromid" class="form-control input-sm" id="">
+							<select name="shipfromID" class="form-control input-sm" id="">
 								<?php $shipfroms = getvendorshipfroms($linedetail->vendorid, false); ?>
 								<?php foreach ($shipfroms as $shipfrom) : ?>
 									<option value="<?= $shipfrom['shipfrom']; ?>" <?php if ($shipfrom['shipfrom'] == $linedetail->shipfromid) {echo 'selected';} ?>><?= $shipfrom['shipfrom'].' - '.$shipfrom['name']; ?></option>
@@ -113,13 +113,13 @@
 					</tr>
 					<tr>
 						<td>Vendor ItemID</td>
-						<td><input type="text" name="itemID" class="form-control input-sm" value="<?= $linedetail->vendoritemid; ?>"></td>
+						<td><input type="text" name="vendoritemID" class="form-control input-sm" value="<?= $linedetail->vendoritemid; ?>"></td>
 					</tr>
 					<tr>
 						<td>Group</td>
 						<td>
 							<?php $groups = getitemgroups(false); ?>
-                            <select name="group" class="form-control input-sm">
+                            <select name="nsitemgroup" class="form-control input-sm">
                                 <option value="">None</option>
                                 <?php foreach ($groups as $group) : ?>
 									<?php if ($group['code'] == $linedetail->nsitemgroup) : ?>

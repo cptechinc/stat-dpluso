@@ -26,8 +26,8 @@
 					}
 				$tb->closetablesection('thead');
 				$tb->tablesection('tbody');
+					$tb->tr();
 					foreach (array_keys($this->json['columns']['component']) as $column) {
-						$tb->tr();
 						$class = Processwire\wire('config')->textjustify[$this->json['columns']['component'][$column]['datajustify']];
 						$tb->td("class=$class", $component[$column]);
 					}

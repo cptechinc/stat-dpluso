@@ -181,12 +181,15 @@
 	function returntracklink($carrier, $tracknbr, $on) {
 		$link = '';
 		if (strpos(strtolower($carrier), 'fed') !== false) {
-			$link = "https://www.fedex.com/fedextrack/WTRK/index.html?action=track&trackingnumber=".$tracknbr."&cntry_code=us&fdx=1490";
 			$link = "https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=$tracknbr&cntry_code=us";
 		} elseif (strpos(strtolower($carrier), 'ups') !== false) {
-			$link = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=".$tracknbr."&loc=en_us";
+			$link = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=$tracknbr&loc=en_us";
 		} elseif (strpos(strtolower($carrier), 'gro') !== false) {
-			$link = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=".$tracknbr."&loc=en_us";
+			$link = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=$tracknbr&loc=en_us";
+		} elseif (strpos(strtolower($carrier), 'usps') !== false) {
+			$link = "https://tools.usps.com/go/TrackConfirmAction?tLabels=$tracknbr";
+		} elseif (strpos(strtolower($carrier), 'spe') !== false) {
+			$link = "http://packages.speedeedelivery.com/index.php?barcodes=[$tracknbr";
 		} elseif ((strpos(strtolower($carrier), 'will') !== false)) {
 			$link = "#$on";
 		} else {

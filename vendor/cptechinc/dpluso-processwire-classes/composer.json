@@ -6,6 +6,7 @@
     "homepage": "http://github.com/cptechinc/dpluso-processwire-classes",
 	"autoload": {
 		"files": [
+			"src/helpers/DplusWire.class.php",
 			"src/CreateFromObjectArray.trait.php",
 			"src/CreateClassArray.trait.php",
 			"src/AttributeParser.trait.php",

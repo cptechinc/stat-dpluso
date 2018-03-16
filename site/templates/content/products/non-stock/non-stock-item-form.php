@@ -46,7 +46,7 @@
                     </tr>
                     <tr>
                         <td class="control-label">Ship From</td>
-                        <td> <select class="form-control input-sm" name="shipfromid" id="shipfrom"> <option value="n/a">Choose a Vendor</option> </select> </td>
+                        <td> <select class="form-control input-sm" name="shipfromID" id="shipfrom"> <option value="n/a">Choose a Vendor</option> </select> </td>
                     </tr>
                     <tr>
                         <td class="control-label">Item ID</td>

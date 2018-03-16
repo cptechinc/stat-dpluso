@@ -140,6 +140,7 @@
 			return $sql->fetch();
 		}
 	}
+	
 	function get_customername($custID) {
 		$sql = Processwire\wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID LIMIT 1");
 		$switching = array(':custID' => $custID);
@@ -2146,7 +2147,7 @@
 			}
 		}
 		$q->where('sessionid', $detail->sessionid);
-		$q->where('orderno', $detail->orderno);
+	//	$q->where('orderno', $detail->orderno);
 		$q->where('linenbr', $detail->linenbr);
 		$sql = Processwire\wire('database')->prepare($q->render());
 		

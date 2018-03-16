@@ -159,14 +159,18 @@
             }
         }
         
-        static public function generate_trackingurl($servicetype, $tracknbr) {
+        public static function generate_trackingurl($servicetype, $tracknbr) {
             $href = false;
             if (strpos(strtolower($servicetype), 'fed') !== false) {
                 $href = "https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=$tracknbr&cntry_code=us";
-            } else if (strpos(strtolower($servicetype), 'ups') !== false) {
+            } elseif (strpos(strtolower($servicetype), 'ups') !== false) {
                 $href = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=$tracknbr&loc=en_us";
-            } else if (strpos(strtolower($servicetype), 'gro') !== false) {
+            } elseif (strpos(strtolower($servicetype), 'gro') !== false) {
                 $href = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=$tracknbr&loc=en_us";
+            } elseif (strpos(strtolower($servicetype), 'usps') !== false) {
+                $href = "https://tools.usps.com/go/TrackConfirmAction?tLabels=$tracknbr";
+            } elseif (strpos(strtolower($servicetype), 'spee') !== false) {
+                $href = "http://packages.speedeedelivery.com/index.php?barcodes=$tracknbr";
             }
             return $href;
         }

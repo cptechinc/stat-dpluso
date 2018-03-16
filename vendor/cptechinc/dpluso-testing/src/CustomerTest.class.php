@@ -15,5 +15,4 @@
 			$userID = $withuser ? $config['userID'] : false;
 			return count_custperm($userID, $debug);
 		}
-		
 	}

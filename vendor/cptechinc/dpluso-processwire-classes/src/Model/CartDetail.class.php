@@ -58,6 +58,16 @@
 		}
 		
 		/* =============================================================
+			GENERATE DPLUS DATA FUNCTIONS 
+		============================================================ */
+			
+			function generate_editdetaildata($custID, $shipID = false) {
+				$data = array('DBNAME' => Processwire\wire('config')->dbName, 'CARTDET' => false, 'LINENO' => $this->linenbr);
+				$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
+				if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
+				return $data;
+			}
+		/* =============================================================
 			GENERATE ARRAY FUNCTIONS 
 			The following are defined CreateClassArrayTraits
 			public static function generate_classarray()

@@ -22,7 +22,8 @@
             'values',
             'into',
             'set',
-            'is'
+            'is', 
+			'in'
         );
         
         /**
@@ -179,7 +180,8 @@
         public function generate_sqlquery() {
             $sql = $this->render();
             $sql = str_replace(',', ', ', $sql);
-            $sql = str_replace('=', ' = ', $sql);
+			$sql = str_replace('!=', ' != ', $sql);
+            $sql = str_replace('`=``', '` = `', $sql);
        		foreach ($this->params as $param => $value) {
        			$sql = str_replace($param, "'".$value."'", $sql);
        		}

@@ -6,7 +6,7 @@
     "homepage": "http://github.com/cptechinc/dpluso-testing",
 	"autoload": {
 		"files": [
-            "src/CartTest.class.php",
+            "src/CustomerTest.class.php",
 			"src/CartTest.class.php"
 		]
 	}

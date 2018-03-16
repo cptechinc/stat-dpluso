@@ -4,7 +4,7 @@
 	*  @param string $action
 	*
 	*/
-
+	
 	$custID = $shipID = '';
 	if ($input->post->action) {
 		$action = $input->post->text('action');
@@ -111,7 +111,7 @@
 			$cartdetail->set('recno', '0');
 			$cartdetail->set('orderno', $sessionID);
 			$cartdetail->set('vendorid', $input->post->text('vendorID'));
-			$cartdetail->set('shipfromid', $input->post->text('shipfromid'));
+			$cartdetail->set('shipfromid', $input->post->text('shipfromID'));
 			$cartdetail->set('vendoritemid', $input->post->text('itemID'));
 			$cartdetail->set('desc1', $input->post->text('desc1'));
 			$cartdetail->set('desc2', $input->post->text('desc2'));
@@ -119,7 +119,7 @@
 			$cartdetail->set('price', $input->post->text('price'));
 			$cartdetail->set('cost', $input->post->text('cost'));
 			$cartdetail->set('uom', $input->post->text('uofm'));
-			$cartdetail->set('nsitemgroup', $input->post->text('group'));
+			$cartdetail->set('nsitemgroup', $input->post->text('nsitemgroup'));
 			$cartdetail->set('ponbr', $input->post->text('ponbr'));
 			$cartdetail->set('poref', $input->post->text('poref'));
 			$cartdetail->set('spcord', 'S');
@@ -163,12 +163,10 @@
 			$cartdetail->set('rshipdate', $input->post->text('rqstdate'));
 			$cartdetail->set('whse', $input->post->text('whse'));
 			$cartdetail->set('spcord', $input->post->text('specialorder'));
-			$cartdetail->set('linenbr', $input->post->text('linenbr'));
-			$cartdetail->set('spcord', $input->post->text('specialorder'));
 			$cartdetail->set('vendorid', $input->post->text('vendorID'));
-			$cartdetail->set('shipfromid', $input->post->text('shipfromid'));
-			$cartdetail->set('vendoritemid', $input->post->text('itemID'));
-			$cartdetail->set('nsitemgroup', $input->post->text('group'));
+			$cartdetail->set('shipfromid', $input->post->text('shipfromID'));
+			$cartdetail->set('vendoritemid', $input->post->text('vendoritemID'));
+			$cartdetail->set('nsitemgroup', $input->post->text('nsitemgroup'));
 			$cartdetail->set('ponbr', $input->post->text('ponbr'));
 			$cartdetail->set('poref', $input->post->text('poref'));
 			$cartdetail->set('uom', $input->post->text('uofm'));
@@ -178,6 +176,8 @@
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $input->post->linenbr);
 			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
 			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
+			$data2 = $cartdetail->_toArray();
+			writedplusfile($data2, $cartdetail->itemid);
 			$session->loc = $config->pages->cart;
 			break;
 		case 'remove-line':

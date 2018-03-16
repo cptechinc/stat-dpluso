@@ -190,7 +190,8 @@
 			return $form->finish();
 		}
 		
-		public function generate_filter(Processwire\WireInput $input) {
+		public function generate_filter(WireInput $input) {
+			$stringerbell = new StringerBell();
 			parent::generate_filter($input);
 			
 			if (isset($this->filters['orderdate'])) {
@@ -208,8 +209,21 @@
 					$this->filters['ordertotal'][0] = '0.00';
 				}
 				
-				if (!strlen($this->filters['ordertotal'][1])) {
-					$this->filters['ordertotal'][1] = get_maxordertotal($this->sessionID);
+<<<<<<< HEAD
+				for ($i = 0; $i < (sizeof($this->filters['ordertotal']) + 1); $i++) {
+					if (isset($this->filters['ordertotal'][$i])) {
+						if (strlen($this->filters['ordertotal'][$i])) {
+							$this->filters['ordertotal'][$i] = number_format($this->filters['ordertotal'][$i], 2, '.', '');
+						}
+					}
+=======
+				if (isset($this->filters['ordertotal'][1])) {
+					if (!strlen($this->filters['ordertotal'][1])) {
+						$this->filters['ordertotal'][1] = get_maxordertotal($this->sessionID);
+					}
+				} else {
+					$this->filters['ordertotal'][1] = $this->filters['ordertotal'][0];
+>>>>>>> 6c5f8d0d04c99ce077e18fcaf5b9ccb8b463c347
 				}
 			}
 		}

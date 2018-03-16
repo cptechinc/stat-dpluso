@@ -337,9 +337,7 @@ $(document).ready(function() {
 			var ordertype = form.data('ordertype'); // sales-orders | quotes
 			var queries = URI.parseQuery(URI(action).search())
 			var orderby = queries.orderby; // Keep the orderby param value before clearing it
-
 			var href = action.query('').query(form.serialize()).query(cleanparams).query(remove_emptyparams);
-			
 			if (Object.keys(href.query(true)).length == 1) {
 				href.query('');
 			}

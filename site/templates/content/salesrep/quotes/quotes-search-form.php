@@ -24,8 +24,18 @@
 		</div>
 		<div class="col-sm-2">
 			<h4>Quote Total :</h4>
-		    <input class="form-control form-group inline input-sm" type="text" name="ordertotal[]" value="<?= $quotepanel->get_filtervalue('ordertotal'); ?>" placeholder="From Quote Total">
-		    <input class="form-control form-group inline input-sm" type="text" name="ordertotal[]" value="<?= $quotepanel->get_filtervalue('ordertotal', 1); ?>" placeholder="Through Quote Total">
+			<div class="input-group form-group">
+	            <input class="form-control form-group inline input-sm" type="text" name="subtotal[]" id="quote-total-min" value="<?= $quotepanel->get_filtervalue('subtotal'); ?>" placeholder="From Quote Total">
+	            <span class="input-group-btn">
+	            	<button type="button" class="btn btn-default input-sm not-round"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+	            </span>
+	        </div>
+			<div class="input-group form-group">
+	            <input class="form-control form-group inline input-sm" type="text" name="subtotal[]" id="quote-total-max" value="<?= $quotepanel->get_filtervalue('subtotal', 1); ?>" placeholder="Through Quote Total">
+	            <span class="input-group-btn">
+	            	<button type="button" class="btn btn-default input-sm not-round"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+	            </span>
+	        </div>
 		</div>
 		<div class="col-sm-2">
 			<h4>Quote Date :</h4>

@@ -13,27 +13,29 @@
 					<div id="shipto-sales-graph"></div>
 				</div>
 				<div class="col-sm-7">
-					<table class="table table-striped table-bordered table-condensed table-excel" id="legend-table">
-						<thead>
-							<tr>
-								<th>Color</th> <th>Shiptoid</th> <th>Name</th> <th>Times Sold</th> <th>Amount</th> <th>Last Sale Date</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ($topshiptos as $shipto) : ?>
-								<?php $location = Customer::load($customer->custid, $shipto['shiptoid']); ?>
-								<?php $data[] = $location->generate_piesalesdata($shipto['amountsold']); ?>
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-condensed table-excel" id="legend-table">
+							<thead>
 								<tr>
-									<td id="<?= $shipto['shiptoid'].'-shipto'; ?>"></td>
-									<td><?= $shipto['shiptoid']; ?></td>
-									<td><?= $location->get_name(); ?></td>
-									<td class="text-right"><?= $shipto['timesold']; ?></td>
-									<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
-									<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
+									<th>Color</th> <th>Shiptoid</th> <th>Name</th> <th>Times Sold</th> <th>Amount</th> <th>Last Sale Date</th>
 								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								<?php foreach ($topshiptos as $shipto) : ?>
+									<?php $location = Customer::load($customer->custid, $shipto['shiptoid']); ?>
+									<?php $data[] = $location->generate_piesalesdata($shipto['amountsold']); ?>
+									<tr>
+										<td id="<?= $shipto['shiptoid'].'-shipto'; ?>"></td>
+										<td><?= $shipto['shiptoid']; ?></td>
+										<td><?= $location->get_name(); ?></td>
+										<td class="text-right"><?= $shipto['timesold']; ?></td>
+										<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
+										<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

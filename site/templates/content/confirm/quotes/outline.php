@@ -1,4 +1,3 @@
-<?= $quotedisplay->generate_viewprintlink($quote); ?>
 <?php $customer = Customer::load($quote->custid, $quote->shiptoid); ?>
 <div class="form-group hidden-print">
 	<?= $quotedisplay->generate_viewprintlink($quote); ?>

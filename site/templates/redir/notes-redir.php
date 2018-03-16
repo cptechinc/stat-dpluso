@@ -167,9 +167,6 @@
 				'FORM4' => $note->form4,
 				'FORM5' => $note->form5
 			);
-			if ($note->rectype != Qnote::get_qnotetype('sales-order')) {
-				$data['FORM5'] = $note->form5;
-			}
 			break;
 		case 'write-quote-note':
 			$form1 = $input->post->form1 ? "Y": "N";  $form2 = $input->post->form2 ? "Y": "N";

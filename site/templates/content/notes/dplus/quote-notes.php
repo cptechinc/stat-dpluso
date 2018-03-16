@@ -1,7 +1,8 @@
 <?php
 	//$qnbr = is defined in notes router
 	//$linenbr is defined in notes-router
-	$notes = get_qnotes(session_id(), $qnbr, $linenbr, Qnote::get_qnotetype('quote'), true); // TRUE is USE CLASS 
+	$notes = get_qnotes(session_id(), $qnbr, $linenbr, Qnote::get_qnotetype('quotes'), true); // TRUE is USE CLASS 
+	
 ?>
 
 <div class="panel panel-primary">
@@ -29,19 +30,24 @@
 		<div class="response"></div>
 		<div class="row">
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Quote</label><br><input type="checkbox" name="form1" id="note1" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Quote</label><br>
+				<input type="checkbox" name="form1" id="note1" class="check-toggle" data-size="small" data-width="73px" value="Y" <?= Qnote::generate_showchecked('quote', 'quote'); ?>>
 			</div>
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Pick Ticket</label><br><input type="checkbox" name="form2" id="note2" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Pick Ticket</label><br>
+				<input type="checkbox" name="form2" id="note2" class="check-toggle" data-size="small" data-width="73px" value="Y" <?= Qnote::generate_showchecked('quote', 'pickticket'); ?>>
 			</div>
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Pack Ticket</label><br><input type="checkbox" name="form3" id="note3" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Pack Ticket</label><br>
+				<input type="checkbox" name="form3" id="note3" class="check-toggle" data-size="small" data-width="73px" value="Y" <?= Qnote::generate_showchecked('quote', 'packticket'); ?>>
 			</div>
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Invoice</label><br><input type="checkbox" name="form4" id="note4" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Invoice</label><br>
+				<input type="checkbox" name="form4" id="note4" class="check-toggle" data-size="small" data-width="73px" value="Y" <?= Qnote::generate_showchecked('quote', 'invoice'); ?>>
 			</div>
 			<div class="form-group col-xs-6 col-sm-2">
-				<label class="control-label">Acknowledgement</label><input type="checkbox" name="form5" id="note5" class="check-toggle" data-size="small" data-width="73px" value="Y">
+				<label class="control-label">Acknowledgement</label>
+				<input type="checkbox" name="form5" id="note5" class="check-toggle" data-size="small" data-width="73px" value="Y" <?= Qnote::generate_showchecked('quote', 'acknowledgement'); ?>>
 			</div>
 		</div>
 

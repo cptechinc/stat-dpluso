@@ -116,11 +116,33 @@
 		
 		/**
 		 * Returns the Qnote Type for the Ordertype
-		 * @param  string $type cart|sales-order|quote
+		 * @param  string $type cart|sales-orders|quotes
 		 * @return string       CART|SORD|QUOT
 		 */
 		public static function get_qnotetype($type) {
-			return Processwire\wire('config')->dplusnotes[strtolower($type)]['type'];
+			return DplusWire::wire('pages')->get("/config/$type/qnotes/")->qnote_type;
+		}
+		
+		/**
+		 * Gets the Default Value from the config for each order type
+		 * @param  string $type      cart|sales-orders|quotes
+		 * @param  string $formfield quote|pickticket|packticket|invoice|acknowledgement
+		 * @return bool            defaulf value
+		 */
+		public static function get_qnotedefaultvalue($type, $formfield) {
+			$qnotetypeconfig = DplusWire::wire('pages')->get("/config/$type/qnotes/");
+			$field = 'qnote_'.$formfield;
+			return $qnotetypeconfig->$field;
+		}
+		
+		/**
+		 * Returns if the string to show if checkbox should be checked
+		 * @param  string $type      cart|sales-orders|quotes
+		 * @param  string $formfield quote|pickticket|packticket|invoice|acknowledgement
+		 * @return string            checked or (blank)
+		 */
+		public static function generate_showchecked($type, $formfield) {
+			return self::get_qnotedefaultvalue($type, $formfield) ? 'checked' : '';
 		}
 		
 		/* =============================================================

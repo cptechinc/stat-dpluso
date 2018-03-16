@@ -448,7 +448,7 @@
             "after-decimal": false,
             "date-format": false
         },
-        "termdesc": {
+        "termcodedesc": {
             "label": "Term Desc",
             "required": false,
             "datatype": "C",

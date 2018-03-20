@@ -36,7 +36,4 @@
         $page->title = '';
     }
     
-    
-    
-    
-    include $config->paths->content.'common/include-blank-page.php';
+    include $config->paths->content.'common/include-print-page.php';

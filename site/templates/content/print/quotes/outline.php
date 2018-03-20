@@ -4,39 +4,36 @@
 	</div>
 	<div class="col-xs-6 text-right">
 		<h1>Quote # <?= $quote->quotnbr; ?></h1>
+		</br>
 	</div>
 </div>
 <div class="row">
 	<div class="col-xs-6">
+		<?= $pages->get('/config/')->print_address; ?>
 		<?php if (!$input->get->print) : ?>
 			<a href="<?= $emailurl->getUrl(); ?>" class="btn btn-primary load-into-modal hidden-print" data-modal="#ajax-modal"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> Send as Email</a>
 		<?php endif; ?>
 	</div>
 
 	<div class="col-xs-6">
-		<table class="table table-bordered table-striped table-condensed">
-			<tr> <td>Quote Date</td> <td><?= $quote->quotdate; ?></td> </tr>
-			<tr> <td>Review Date</td> <td><?= $quote->revdate; ?></td> </tr>
-			<tr> <td>Expire Date</td> <td><?= $quote->expdate; ?></td> </tr>
-			<tr> <td>CustID</td> <td><?= $quote->custid; ?></td> </tr>
-			<tr> <td>Customer PO</td> <td><?= $quote->custpo; ?></td> </tr>
-		</table>
+		<div class="row">
+			<table class="pull-right">
+				<tr> <td class="col-xs-6"><label>Quote Date:</label></td> <td class="col-xs-6 text-right"><?= $quote->quotdate; ?></td> </tr>
+				<tr> <td class="col-xs-6"><label>Expire Date:</label></td> <td class="col-xs-6 text-right"><?= $quote->expdate; ?></td> </tr>
+				<tr> <td class="col-xs-6"><label>Customer ID:</label></td> <td class="col-xs-6 text-right"><?= $quote->custid; ?></td></tr>
+				<tr> <td class="col-xs-6"><label>Customer PO:</label></td> <td class="col-xs-6 text-right"><?= $quote->custpo; ?></td> </tr>
+				<tr> <td class="col-xs-6"><label>Shipping Method:</label></td> <td class="col-xs-6 text-right"><?= $quote->shipviadesc; ?></td></tr>
+				<tr> <td class="col-xs-6"><label>Payment Terms:</label></td> <td class="col-xs-6 text-right"><?= $quote->termcodedesc; ?></td></tr>
+				<tr> <td class="col-xs-6"><label>Salesperson:</label></td> <td class="col-xs-6 text-right"><?= $quote->sp1name; ?></td></tr>
+			</table>
+		</div>
 	</div>
 </div>
+</br>
+
 <div class="row">
-	<div class="col-xs-6">
-		<div class="page-header"><h3>Bill-to</h3></div>
-		<address>
-			<?= $quote->billname; ?><br>
-			<?= $quote->billaddress; ?><br>
-			<?php if (strlen($quote->billaddress2) > 0) : ?>
-				<?= $quote->billaddress2; ?><br>
-			<?php endif; ?>
-			<?= $quote->billcity.", ".$quote->billstate." ".$quote->billzip; ?>
-		</address>
-	</div>
-	<div class="col-xs-6">
-		<div class="page-header"><h3>Ship-to</h3></div>
+	<div class="col-xs-4">
+		<div class="address-header"><h4>Ship To </h4></div>
 		<address>
 			<?php if (strlen($quote->shipname) > 0) : ?>
 				<?= $quote->shipname; ?><br>
@@ -48,41 +45,53 @@
 			<?= $quote->shipcity.", ".$quote->shipstate." ".$quote->shipzip; ?>
 		</address>
 	</div>
+	<div class="col-xs-4">
+		<div class="address-header"><h4>Bill To </h4></div>
+		<address>
+			<?= $quote->billname; ?><br>
+			<?= $quote->billaddress; ?><br>
+			<?php if (strlen($quote->billaddress2) > 0) : ?>
+				<?= $quote->billaddress2; ?><br>
+			<?php endif; ?>
+			<?= $quote->billcity.", ".$quote->billstate." ".$quote->billzip; ?>
+		</address>
+	</div>
 </div>
-<table class="table table-bordered table-striped">
-	 <tr class="detail item-header">
-		<th class="text-center">Item ID/Cust Item ID</th>
+</br>
+</br>
+
+<table class="table table-bordered table-condensed">
+	 <tr class="detail item-header active">
 		<th class="text-right">Qty</th>
+		<th class="text-center">Item</th>
+		<th>Description</th>
+		<th>U/M</th>
 		<th class="text-right" width="100">Price</th>
 		<th class="text-right">Line Total</th>
 	</tr>
 	<?php $details = $quotedisplay->get_quotedetails($quote); ?>
 	<?php foreach ($details as $detail) : ?>
-		<tr class="detail">
-			<td>
-				<?= $detail->itemid; ?>
-				<?php if (strlen($detail->vendoritemid)) { echo ' '.$detail->vendoritemid;} ?>
-				<br>
-				<small><?= $detail->desc1. ' ' . $detail->desc2; ?></small>
-			</td>
+		<tr class="detail table-bordered">
 			<td class="text-right"> <?= intval($detail->quotqty); ?> </td>
+			<td class="text-center"><?= $detail->itemid; ?></td>
+			<td><?= $detail->desc1; ?></td>
+			<td><?=$detail->uom; ?></td>
 			<td class="text-right">$ <?= formatmoney($detail->quotprice); ?></td>
 			<td class="text-right">$ <?= formatmoney($detail->quotprice * intval($detail->quotqty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
-	<tr>
-		<td></td> <td>Subtotal</td> <td></td> <td class="text-right">$ <?= formatmoney($quote->subtotal); ?></td>
-	</tr>
-	<tr>
-		<td></td><td>Tax</td> <td></td> <td colspan="2" class="text-right">$ <?= formatmoney($quote->salestax); ?></td>
-	</tr>
-	<tr>
-		<td></td><td>Freight</td> <td></td> <td class="text-right">$ <?= formatmoney($quote->freight); ?></td>
-	</tr>
-	<tr>
-		<td></td><td>Misc.</td> <td></td><td class="text-right">$ <?= formatmoney($quote->misccost); ?></td>
-	</tr>
-	<tr>
-		<td></td><td>Total</td> <td></td> <td class="text-right">$ <?= formatmoney($quote->ordertotal); ?></td>
-	</tr>
 </table>
+
+<div class="row">
+	<div class="col-xs-9"></div>
+	<div class="col-xs-3">
+		<table class="table table-condensed pull-right">
+			<tr><td class="col-xs-6"><label>Subtotal</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->subtotal); ?></td></tr>
+			<tr><td class="col-xs-6"><label>Tax</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->salestax); ?></td></tr>
+			<tr><td class="col-xs-6"><label>Freight</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->freight); ?></td></tr>
+			<tr><td class="col-xs-6"><label>Misc.</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->misccost); ?></td></tr>
+			<tr class="active"><td class="col-xs-6"><label>Total</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->ordertotal); ?></td></tr>
+		</table>
+	</div>
+</div>
+	

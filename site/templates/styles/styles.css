@@ -94,7 +94,7 @@
    PRINT STYLES
  =============================================================*/
 	@media print {
-		body {height: auto;}
+		body {height: auto; font-size: 12px;}
 		a[href]:after {
 			content: none !important;
 		}
@@ -110,7 +110,17 @@
 		.tab-pane.fade {opacity: 1; display:block;}
 
 		.alert {margin-bottom: 0px;}
-
+		
+		.container.page {
+			    padding-bottom: 50px;
+		}
+		.table > tr.active > th, .table > tr.active > td {
+				background-color: #ecf0f1 !important;
+		}
+	}
+	.address-header {
+		margin: 21px 0 10px;
+		border-bottom: 2px solid #2c3e50;
 	}
 /*==============================================================
    NAVIGATION
@@ -360,6 +370,9 @@
 	hr.dark {border-top: 1px solid #242F40;}
 	a.h1, a.h2, a.h3, a.h4, a.h5, a.h6 {color: #18bc9c;}
 
+.table-data {
+	font-family: 'PT Mono';
+}
 /*==============================================================
    lIGHTBOX STYLES
  =============================================================*/

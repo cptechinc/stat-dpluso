@@ -1383,7 +1383,7 @@ $(document).ready(function() {
 		$(container).height(height);
 	}
 
-	function setchildheightequaltoparent(parent, child) {
+	function c(parent, child) {
 		$(parent).each(function() {
 			var parentheight = $(this).actual('height');
 			$(this).find(child).height(parentheight);

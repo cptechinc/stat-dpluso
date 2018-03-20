@@ -39,7 +39,7 @@
                 </div>
             </div>
 			<div id="cust-orders-search-div" class="<?= (empty($orderpanel->filters)) ? 'collapse' : ''; ?>">
-				<?php include $config->paths->content.'customer/cust-page/orders/order-search-form.php'; ?>
+				<?php include $config->paths->content.'customer/cust-page/orders/orders-search-form.php'; ?>
 			</div>
         </div>
         <div class="table-responsive">

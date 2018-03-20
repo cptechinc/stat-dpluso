@@ -36,7 +36,7 @@
                 </div>
             </div>
 			<div id="cust-quotes-search-div" class="<?= (empty($quotepanel->filters)) ? 'collapse' : ''; ?>">
-				<?php include $config->paths->content.'customer/cust-page/quotes/quote-search-form.php'; ?>
+				<?php include $config->paths->content.'customer/cust-page/quotes/quotes-search-form.php'; ?>
 			</div>
         </div>
         <div class="table-responsive">

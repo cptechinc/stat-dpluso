@@ -1,8 +1,8 @@
 <?php 
+	/**
+	 * Class to handle Quotes 
+	 */
 	class CartQuote extends Order implements OrderInterface {
-		use CreateFromObjectArrayTraits;
-		use CreateClassArrayTraits;
-		
 		protected $custname;
 		protected $orderno;
 		protected $orderdate;
@@ -67,6 +67,14 @@
 			public static function generate_classarray()
 			public function _toArray()
 		============================================================ */
+		/**
+		 * Mainly called by the _toArray() function which makes an array
+		 * based of the properties of the class, but this function filters the array
+		 * to remove keys that are not in the database
+		 * This is used by database classes for update
+		 * @param  array $array array of the class properties
+		 * @return array        with certain keys removed
+		 */
 		public static function remove_nondbkeys($array) {
 			return $array;
 		}
@@ -74,20 +82,33 @@
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
+		/**
+		 * returns CartQuote from carthed table
+		 * @param  string $sessionID Session
+		 * @param  bool   $debug     Whether or not to Return Cart Quote or SQL QUERY
+		 * @return CartQuote         Or SQL Query
+		 * @uses Read (CRUD)
+		 * @source _dbfunc.php
+		 */
 		public static function load($sessionID, $debug = false) {
 			return get_carthead($sessionID, true, $debug);
 		}
 		
 		public function update($debug = false) {
-		//	return edit_orderhead($this->sessionid, $this->orderno, $this, $debug); TODO
+			// TODO
 		}
 		
+		/**
+		 * Returns if Cart Header has any changes by comparing it to the original
+		 * @return bool 
+		 * @uses CartQuote::load
+		 */
 		public function has_changes() {
 			$properties = array_keys(get_object_vars($this));
 			$cart = self::load($this->sessionid);
 			
 			foreach ($properties as $property) {
-				if ($this->$property != $carthead->$property) {
+				if ($this->$property != $cart->$property) {
 					return true;
 				}
 			}

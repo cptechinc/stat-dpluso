@@ -8,10 +8,11 @@ class ComposerStaticInitf9c34235226de117fa23ba132ae64d6f
 {
     public static $files = array (
         'f76ccf83e6c40aac2fdaadc64a641690' => __DIR__ . '/../..' . '/src/helpers/DplusWire.class.php',
-        '0db1bf76fb4af1e86d7c48ac93a7e789' => __DIR__ . '/../..' . '/src/CreateFromObjectArray.trait.php',
-        '2b2419678dcad2ec3305a65b69d493c2' => __DIR__ . '/../..' . '/src/CreateClassArray.trait.php',
-        '69ed03ba55021f05bdee38ec8cd64ccb' => __DIR__ . '/../..' . '/src/AttributeParser.trait.php',
-        'e558580c04f727bbe6f5b647b5c16c3e' => __DIR__ . '/../..' . '/src/ThrowError.trait.php',
+        '56345177f5f7f787cb6c9ae1480ca922' => __DIR__ . '/../..' . '/src/traits/CreateFromObjectArray.trait.php',
+        'ca14a402528efd4be81afb313b854d0b' => __DIR__ . '/../..' . '/src/traits/CreateClassArray.trait.php',
+        '664f3baa9d36eeebdcf11afd6014920b' => __DIR__ . '/../..' . '/src/traits/AttributeParser.trait.php',
+        '37f14f34aaba400ed3b1f27dc8c22515' => __DIR__ . '/../..' . '/src/traits/ThrowError.trait.php',
+        'b863590895f481ceb8285e38fd229ee7' => __DIR__ . '/../..' . '/src/traits/MagicMethods.trait.php',
         '7b7bc955fba3a7e831daa452678417b2' => __DIR__ . '/../..' . '/src/Model/Vendor.class.php',
         '16549aec784a66a31e2f46525b4e1d36' => __DIR__ . '/../..' . '/src/Model/Contact.class.php',
         '34090432ba33ef4a6717b80199aa69f2' => __DIR__ . '/../..' . '/src/Model/Customer.class.php',

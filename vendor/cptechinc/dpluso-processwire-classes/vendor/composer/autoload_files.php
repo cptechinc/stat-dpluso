@@ -7,10 +7,11 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'f76ccf83e6c40aac2fdaadc64a641690' => $baseDir . '/src/helpers/DplusWire.class.php',
-    '0db1bf76fb4af1e86d7c48ac93a7e789' => $baseDir . '/src/CreateFromObjectArray.trait.php',
-    '2b2419678dcad2ec3305a65b69d493c2' => $baseDir . '/src/CreateClassArray.trait.php',
-    '69ed03ba55021f05bdee38ec8cd64ccb' => $baseDir . '/src/AttributeParser.trait.php',
-    'e558580c04f727bbe6f5b647b5c16c3e' => $baseDir . '/src/ThrowError.trait.php',
+    '56345177f5f7f787cb6c9ae1480ca922' => $baseDir . '/src/traits/CreateFromObjectArray.trait.php',
+    'ca14a402528efd4be81afb313b854d0b' => $baseDir . '/src/traits/CreateClassArray.trait.php',
+    '664f3baa9d36eeebdcf11afd6014920b' => $baseDir . '/src/traits/AttributeParser.trait.php',
+    '37f14f34aaba400ed3b1f27dc8c22515' => $baseDir . '/src/traits/ThrowError.trait.php',
+    'b863590895f481ceb8285e38fd229ee7' => $baseDir . '/src/traits/MagicMethods.trait.php',
     '7b7bc955fba3a7e831daa452678417b2' => $baseDir . '/src/Model/Vendor.class.php',
     '16549aec784a66a31e2f46525b4e1d36' => $baseDir . '/src/Model/Contact.class.php',
     '34090432ba33ef4a6717b80199aa69f2' => $baseDir . '/src/Model/Customer.class.php',

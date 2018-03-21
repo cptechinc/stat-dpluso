@@ -69,4 +69,20 @@
 			unset($array['fieldaliases']);
  			return $array;
  		}
+		
+		/* ============================================================
+			CRUD FUNCTIONS
+		============================================================ */
+		/**
+		 * Returns an object with XrefItem Class after
+		 * inputing the crossreferences as needed
+		 * @param  string  $itemID   Item ID / Part #
+		 * @param  mixed $custID   Customer ID to use Cross-reference or false
+		 * @param  mixed $vendorID Vendor ID to use Cross-reference or false
+		 * @param  bool $debug    Whether XrefItem object is returned or the SQL for retreiving it
+		 * @return XrefItem            Or SQL Query for it
+		 */
+		public static function load($itemID, $custID = false, $vendorID = false, $debug = false) {
+			return get_xrefitem($itemID, $custID, $vendorID, $debug);
+		}
     }

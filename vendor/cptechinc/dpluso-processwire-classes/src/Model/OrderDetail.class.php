@@ -1,6 +1,13 @@
 <?php 
-	class OrderDetail {
+	/**
+	 * Class to Set up and define what Quote, Cart, and Sales Order Details Need to do and provide them
+	 * with shared functions and properties that they can extend
+	 */
+	abstract class OrderDetail {
 		use ThrowErrorTrait;
+		use MagicMethodTraits;
+		use CreateFromObjectArrayTraits;
+		use CreateClassArrayTraits;
 		
 		protected $sessionid;
 		protected $recno;
@@ -38,35 +45,9 @@
 		protected $dummy;
 		
 		/* =============================================================
-			GETTER FUNCTIONS 
+			GETTER FUNCTIONS
+			Some functions provided by MagicMethodTraits
 		============================================================ */
-		/**
-		 * Properties are protected from modification without function, but
-		 * We want to allow the property values to be accessed
-		 * @param  string $property Property Name
-		 * @return mixed          Property or Error
-		 */
-		public function __get($property) {
-			$method = "get_{$property}";
-			if (method_exists($this, $method)) {
-				return $this->$method();
-			} elseif (property_exists($this, $property)) {
-				return $this->$property;
-			} else {
-				$this->error("This property ($property) does not exist");
-				return false;
-			}
-		}
-		
-		/**
-		 * Is used to PHP functions like isset() and empty() get access and see
-		 * if variable is set
-		 * @param  string  $property Property Name
-		 * @return bool           Whether Property is set
-		 */
-		public function __isset($property){
-		    return isset($this->$property);
-		} 
 		
 		/**
 		 * Checks if Detail is a kit by checking if the flag is 'Y'
@@ -85,19 +66,6 @@
 		}
 		
 		/* =============================================================
-			SETTER FUNCTIONS
+			Some functions provided by MagicMethodTraits
 		============================================================ */
-		/**
-		 * We don't want to allow direct modification of properties so we have this function
-		 * look for if property exists then if it does it will set the value for the property
-		 * @param string $property Property Name
-		 * @param mixed $value    Value for Property
-		 */
-		public function set($property, $value) {
-			if (property_exists($this, $property) !== true) {
-				$this->error("This property ($property) does not exist ");
-				return false;
-			}
-			$this->$property = $value;
-		}
 	}

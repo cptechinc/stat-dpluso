@@ -4,39 +4,134 @@
 	 * needed to update the notes on them
 	 */
 	class QNote {
+		use ThrowErrorTrait;
+		use MagicMethodTraits;
 		use CreateFromObjectArrayTraits;
 		use CreateClassArrayTraits;
-		use ThrowErrorTrait;
 		
 		protected $sessionid;
 		protected $recno;
 		protected $date;
 		protected $time;
+		/**
+		 * Record Type
+		 * SORD = Sales Order | QUOT Quote | CART Cart
+		 * @var string
+		 */
 		protected $rectype; // SORD|QUOT|CART
-		protected $key1; // ORDER # | QUOTE # | SESSIONID
-		protected $key2; // LINE #
+		
+		/**
+		 * Key 1
+		 * Sales Order # | Quote # | Session ID
+		 * @var string
+		 */
+		protected $key1;
+		
+		/**
+		 * Key 2 is Line #
+		 * @var int
+		 */
+		protected $key2;
+		
+		/**
+		 * Not Yet Used
+		 * @var string
+		 */
 		protected $key3;
+		
+		/**
+		 * Not Yet Used
+		 * @var string
+		 */
 		protected $key4;
+		/**
+		 * Not Yet Used
+		 * @var string
+		 */
 		protected $key5;
+		
+		/**
+		 * FORM 1 
+		 * QUOTE = Quote
+		 * CART = Quote
+		 * SALES ORDER = Pick Ticket
+		 * @var string Y | N
+		 */
 		protected $form1;
+		
+		/**
+		 * FORM 2 
+		 * QUOTE = Pick Ticket
+		 * CART = Pick Ticket
+		 * SALES ORDER = Pack Ticket
+		 * @var string Y | N
+		 */
 		protected $form2;
+		
+		/**
+		 * FORM 3 
+		 * QUOTE = Pack Ticket
+		 * CART = Pack Ticket
+		 * SALES ORDER = Invoice
+		 * @var string Y | N
+		 */
 		protected $form3;
+		
+		/**
+		 * FORM 3 
+		 * QUOTE = Invoice
+		 * CART = Invoice
+		 * SALES ORDER = Acknowledgement
+		 * @var string Y | N
+		 */
 		protected $form4;
+		
+		/**
+		 * FORM 3 
+		 * QUOTE = Acknowledgement
+		 * CART = Acknowledgement
+		 * SALES ORDER = NOT USED
+		 * @var string Y | N
+		 */
 		protected $form5;
+		
+		/**
+		 * Not Used
+		 * @var string Y | N
+		 */
 		protected $form6;
+		/**
+		 * Not Used
+		 * @var string Y | N
+		 */
 		protected $form7;
+		/**
+		 * Not Used
+		 * @var string Y | N
+		 */
 		protected $form8;
-		protected $colwidth;
-		protected $notefld = '35';
+		
+		/**
+		 * Character Width for Textarea
+		 * @var string
+		 */
+		protected $colwidth = '35';
+		
+		/**
+		 * Note
+		 * @var string
+		 */
+		protected $notefld;
+		
+		/**
+		 * Dummy
+		 * @var string X
+		 */
 		protected $dummy;
 		
 		/* =============================================================
 			SETTER FUNCTIONS 
 		============================================================ */
-		public function __set($property, $value) {
-			return $this->set($property, $value);
-		}
-		
 		public function set($property, $value) {
 			if (property_exists($this, $property) !== true) {
 				$this->error("This property ($property) does not exist ");

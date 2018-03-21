@@ -3,6 +3,7 @@
         use CreateFromObjectArrayTraits;
 		use CreateClassArrayTraits;
 		use ThrowErrorTrait;
+		use MagicMethodTraits;
 		
 		public $recno;
 		public $date;
@@ -78,21 +79,6 @@
         /* =============================================================
 			GETTER FUNCTIONS 
 		============================================================ */
-        public function __get($property) {
-            $method = "get_{$property}";
-            if (method_exists($this, $method)) {
-                return $this->$method();
-            } elseif (property_exists($this, $property)) {
-                return $this->$property;
-            } elseif (array_key_exists($property, $this->fieldaliases)) {
-                $realproperty = $this->fieldaliases[$property];
-                return $this->$realproperty;
-            } else {
-                $this->error("This property ($property) does not exist");
-                return false;
-            }
-        }
-        
 		/**
 		 * Grabs the name of the customer off the contact object, and if blank, 
 		 * it will just return custid
@@ -130,23 +116,6 @@
 			SETTER FUNCTIONS 
 		============================================================ */
 		/**
-		 * Checks for property and if it exists it sets the value of that property
-		 * @param string $property Property name / key
-		 * @param mixed $value    Value of the property
-		 */
-		public function set($property, $value) {
-			if (property_exists($this, $property)) {
-                $this->$property = $value;
-            } elseif (array_key_exists($property, $this->fieldaliases)) {
-                $realproperty = $this->fieldaliases[$property];
-                $this->$realproperty = $value;
-            } else {
-                $this->error("This property ($property) does not exist");
-                return false;
-            }
-		}
-		
-		/**
 		 * Determines the Source of the Contact 
 		 * CS means shipto CC is Contact Customer
 		 */
@@ -179,7 +148,7 @@
 		 * @return string Contact Page URL
 		 */
         public function generate_contacturl() {
-            $url = new \Purl\Url(Processwire\wire('config')->pages->contact);
+            $url = new \Purl\Url(Dpluswire::wire('config')->pages->contact);
             $url->query->set('custID', $this->custid);
             
             if ($this->has_shipto()) {
@@ -225,7 +194,7 @@
 		 * @return [type] [description]
 		 */
         public function generate_redirurl() {
-            return new \Purl\Url(Processwire\wire('config')->pages->customer."redir/");
+            return new \Purl\Url(Dpluswire::wire('config')->pages->customer."redir/");
         }
         
         /**

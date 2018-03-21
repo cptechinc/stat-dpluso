@@ -1,9 +1,13 @@
 <?php 
-    class PricingItem {
-        use CreateFromObjectArrayTraits;
-        use CreateClassArrayTraits;
-        use ThrowErrorTrait;
-        
+	/**
+	 * Class for Items from the Pricing table
+	 */
+	class PricingItem {
+		use ThrowErrorTrait;
+		use MagicMethodTraits;
+		use CreateFromObjectArrayTraits;
+		use CreateClassArrayTraits;
+		
 		protected $sessionid;
 		protected $recno;
 		protected $date;
@@ -69,86 +73,86 @@
 		protected $nsitemgroup;
 		protected $itemtype;
 		protected $supercedes;
-        protected $fieldaliases = array(
-            'itemID' => 'itemid',
-            'shipfromID' => 'shipfromid',
-            'vendorID' => 'vendorid'
-        );
-        protected $historyfields = array('lastsold', 'lastqty', 'lastprice');
-        
-        /* =============================================================
- 		   CONSTRUCTOR FUNCTIONS 
- 	   ============================================================ */
-        public function __construct() {
-            $this->image = (file_exists(Processwire\wire('config')->imagefiledirectory.$this->image)) ? $this->image : 'notavailable.png';
-        }
-        
-        /* =============================================================
- 		   GETTER FUNCTIONS 
- 	   ============================================================ */
-       /**
-        * Returns properties that may not be publically accessible by calling a function that could exist or by
-        * directly returning the property
-        * @param  string $property The property trying to be accessed
-        * @return string           returns the property or the value returned by the method call
-        */
-        public function __get($property) {
-            $method = "get_{$property}";
-            if (method_exists($this, $method)) {
-                return $this->$method();
-            } elseif (property_exists($this, $property)) {
-                return $this->$property;
-            } elseif (array_key_exists($property, $this->fieldaliases)) {
-                $realproperty = $this->fieldaliases[$property];
-                return $this->$realproperty;
+		protected $fieldaliases = array(
+			'itemID' => 'itemid',
+			'shipfromID' => 'shipfromid',
+			'vendorID' => 'vendorid'
+		);
+		protected $historyfields = array('lastsold', 'lastqty', 'lastprice');
+		
+		/* =============================================================
+			CONSTRUCTOR FUNCTIONS 
+		============================================================ */
+		/**
+		 * When item is loaded,
+		 */
+		public function __construct() {
+			$this->image = (file_exists(Dpluswire::wire('config')->imagefiledirectory.$this->image)) ? $this->image : 'notavailable.png';
+		}
+		
+		/* =============================================================
+			GETTER FUNCTIONS
+			Some are Handled by MagicMethodTraits
+		============================================================ */
+		/**
+		 * Checks if there's sales history for the Pricing Item from the database
+		 * @param  bool $debug if true it will return the SQL statement used, 
+		 * if not it will return the result from the query execution
+		 */
+		public function has_saleshistory($debug = false) {
+			return count_itemhistory($this->sessionid, $this->itemid, $debug);
+		}
+		
+		/**
+		* Returns an array of item availability records
+		* @param  bool $debug if true it will return the SQL statement used, 
+		* if not it will return the result from the query execution
+		*/
+		public function get_availability($debug = false) {
+			return get_itemavailability($this->sessionid, $this->itemid, $debug);
+		}
+		
+		/**
+		 * Returns the customer history $field value
+		 * @param  string  $field [description]
+		 * @param  bool $debug if true it will return the SQL statement used, 
+		 * if not it will return the field value from the query execution
+		 */
+		public function history($field, $debug = false) {
+			if (in_array($field, $this->historyfields)) {
+				return get_itemhistoryfield($this->sessionid, $this->itemid, $field, $debug);
+			}
+		}
+		
+		/**
+		 * Checks if Item image exists if not use the image not found
+		 * @return string path/to/image
+		 */
+        public function generate_imagesrc() {
+            if (file_exists(Dpluswire::wire('config')->imagefiledirectory.$this->image)) {
+                return Dpluswire::wire('config')->imagedirectory.$this->image;
             } else {
-                $this->error("This property ($property) does not exist");
-                return false;
+                return Dpluswire::wire('config')->imagedirectory.Dpluswire::wire('config')->imagenotfound;
             }
         }
-        
-        /**
-         * Checks if there's sales history for the Pricing Item from the database
-         * @param  boolean $debug if true it will return the SQL statement used, 
-         * if not it will return the result from the query execution
-         */
-        public function has_saleshistory($debug = false) {
-            return count_itemhistory($this->sessionid, $this->itemid, $debug);
-        }
-        
-        /* =============================================================
- 		   CLASS FUNCTIONS 
- 	   ============================================================ */
-       /**
-        * Returns an array of item availability records
-        * @param  boolean $debug if true it will return the SQL statement used, 
-        * if not it will return the result from the query execution
-        */
-        public function get_availability($debug = false) {
-            return get_itemavailability($this->sessionid, $this->itemid, $debug);
-        }
-        
-        /**
-         * Returns the customer history $field value
-         * @param  string  $field [description]
-         * @param  boolean $debug if true it will return the SQL statement used, 
-         * if not it will return the field value from the query execution
-         */
-        public function history($field, $debug = false) {
-            if (in_array($field, $this->historyfields)) {
-                return get_itemhistoryfield($this->sessionid, $this->itemid, $field, $debug);
-            }
-        }
-        
-        /* =============================================================
- 		   GENERATE ARRAY FUNCTIONS 
-           The following are defined CreateClassArrayTraits
-           public static function generate_classarray()
-           public function _toArray()
- 	   ============================================================ */
- 		public static function remove_nondbkeys($array) {
+		
+		/* =============================================================
+			GENERATE ARRAY FUNCTIONS 
+			The following are defined CreateClassArrayTraits
+			public static function generate_classarray()
+			public function _toArray()
+		============================================================ */
+		/**
+		 * Mainly called by the _toArray() function which makes an array
+		 * based of the properties of the class, but this function filters the array
+		 * to remove keys that are not in the database
+		 * This is used by database classes for update
+		 * @param  array $array array of the class properties
+		 * @return array        with certain keys removed
+		 */
+		public static function remove_nondbkeys($array) {
 			unset($array['fieldaliases']);
 			unset($array['historyfields']);
- 			return $array;
- 		}
-    }
+			return $array;
+		}
+	}

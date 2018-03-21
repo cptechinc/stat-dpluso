@@ -4,27 +4,62 @@
 	 */
 	class LogmUser {
 		use ThrowErrorTrait;
+		use MagicMethodTraits;
 		
+		/**
+		 * Login ID
+		 * @var string
+		 */
 		protected $loginid;
+		
+		/**
+		 * User's Name
+		 * @var string
+		 */
 		protected $name;
+		
+		/**
+		 * Warehouse ID
+		 * @var string
+		 */
 		protected $whseid;
+		
+		/**
+		 * Role in the Company
+		 * @var string
+		 */
 		protected $role;
+		
+		/**
+		 * Company Name
+		 * @var string
+		 */
 		protected $company;
+		
+		/** 
+		 * Fax #
+		 * @var string
+		 */
 		protected $fax;
+		
+		/**
+		 * Phone #
+		 * @var string
+		 */
 		protected $phone;
+		
+		/**
+		 * User Email
+		 * @var string
+		 */
 		protected $email;
+		
+		/**
+		 * Dummy 
+		 * @var string X
+		 */
 		protected $dummy;
 		
-		public function __get($property) {
-			$method = "get_{$property}";
-			if (method_exists($this, $method)) {
-				return $this->$method();
-			} elseif (property_exists($this, $property)) {
-				return $this->$property;
-			} else {
-				$this->error("This property ($property) does not exist");
-			}
-		}
 		
 		/* =============================================================
 			CRUD FUNCTIONS

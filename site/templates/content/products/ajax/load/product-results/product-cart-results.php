@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-2 col-sm-3 print-col-sm-2">
 			<a href="#" data-toggle="modal" data-target="#lightbox-modal">
-				<img src="<?= $config->imagedirectory.$item->image; ?>" data-desc="<?= $item->itemid.' image'; ?>">
+				<img src="<?= $item->generate_imagesrc(); ?>" data-desc="<?= $item->itemid.' image'; ?>">
 			</a>
 		</div>
 		<div class="col-md-7 col-sm-6 print-col-sm-10">

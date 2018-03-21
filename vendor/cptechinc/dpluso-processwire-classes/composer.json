@@ -7,10 +7,11 @@
 	"autoload": {
 		"files": [
 			"src/helpers/DplusWire.class.php",
-			"src/CreateFromObjectArray.trait.php",
-			"src/CreateClassArray.trait.php",
-			"src/AttributeParser.trait.php",
-			"src/ThrowError.trait.php",
+			"src/traits/CreateFromObjectArray.trait.php",
+			"src/traits/CreateClassArray.trait.php",
+			"src/traits/AttributeParser.trait.php",
+			"src/traits/ThrowError.trait.php",
+			"src/traits/MagicMethods.trait.php",
 			"src/Model/Vendor.class.php",
 			"src/Model/Contact.class.php",
 			"src/Model/Customer.class.php",

@@ -1,6 +1,9 @@
 <?php 
 	class Order {
 		use ThrowErrorTrait;
+		use MagicMethodTraits;
+		use CreateFromObjectArrayTraits;
+		use CreateClassArrayTraits;
 		
 		protected $sessionid;
 		protected $recno;
@@ -92,6 +95,7 @@
 		
 		/* =============================================================
 			SETTER FUNCTIONS
+			MagicMethodTraits has set()
 		============================================================ */
 		public function set($property, $value) {
 			if (property_exists($this, $property) !== true) {

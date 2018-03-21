@@ -1,6 +1,5 @@
 <?php 
     class Customer extends Contact {
-        use CreateFromObjectArrayTraits;
 		
         /* =============================================================
 			GETTER FUNCTIONS 

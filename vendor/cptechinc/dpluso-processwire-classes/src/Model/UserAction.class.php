@@ -1,8 +1,12 @@
 <?php
+	/**
+	 * Class for Notes and Tasks
+	 */
 	class UserAction {
+		use ThrowErrorTrait;
+		use MagicMethodTraits;
 		use CreateFromObjectArrayTraits;
 		use CreateClassArrayTraits;
-		use ThrowErrorTrait;
 		
 		public $id;
 		public $datecreated;
@@ -34,13 +38,6 @@
 		/* =============================================================
 			SETTER FUNCTIONS 
 		============================================================ */
-		public function set($property, $value) {
-			if (property_exists($this, $property) !== true) {
-                $this->error("This property ($property) does not exist");
-                return false;
-            }
-			$this->$property = $value;
-		}
 		
 		/* =============================================================
 			GETTER FUNCTIONS 
@@ -132,8 +129,8 @@
 				if (empty($this->assignedto)) {
 					$replace = 'Yourself ';
 				} else {
-					if ($this->assignedto != Processwire\wire('user')->loginid) {
-						$replace = 'User: ' . Processwire\wire('user')->loginid;
+					if ($this->assignedto != Dpluswire::wire('user')->loginid) {
+						$replace = 'User: ' . Dpluswire::wire('user')->loginid;
 					} else {
 						$replace = 'Yourself ';
 					}
@@ -167,15 +164,15 @@
 		public function generate_actionsubtypedescription() {
 			switch ($this->actiontype) {
 				case 'tasks':
-					$subpage = Processwire\wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
+					$subpage = Dpluswire::wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
 					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
 					break;
 				case 'notes':
-					$subpage = Processwire\wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
+					$subpage = Dpluswire::wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
 					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
 					break;
 				/* case 'actions': // DEPRECATED 02/21/2018
-					$subpage = Processwire\wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
+					$subpage = Dpluswire::wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
 					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
 					break; */
 				default:

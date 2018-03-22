@@ -856,11 +856,23 @@
 
 	function get_maxordertotal($sessionID, $custID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
-<<<<<<< HEAD
 		$q->field($q->expr("MAX(CAST(ordertotal AS DECIMAL(8,2))) AS ordertotal"));
-=======
-		$q->field($q->expr('MAX(CAST(ordertotal AS DECIMAL(8,2)))'));
->>>>>>> 6c5f8d0d04c99ce077e18fcaf5b9ccb8b463c347
+		$q->where('sessionid', $sessionID);
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = Processwire\wire('database')->prepare($q->render());
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+
+	function get_minordertotal($sessionID, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('ordrhed');
+		$q->field($q->expr("MIN(CAST(ordertotal AS DECIMAL(8,2))) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		if ($custID) {
 			$q->where('custid', $custID);

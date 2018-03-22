@@ -41,6 +41,10 @@ class ComposerStaticInit60d0ce33873e823796c7fb8b01b9c750
         '9b8fb6cafadd3412ffb1301f745cc2b0' => __DIR__ . '/../..' . '/src/vi/PaymentHistoryFormatter.class.php',
         'aa172771f22e06bae0ae1834345436fc' => __DIR__ . '/../..' . '/src/vi/OpenInvoicesFormatter.class.php',
         'b8c41420942ec039732f6f661c877f4a' => __DIR__ . '/../..' . '/src/vi/UnreleasedPurchaseOrdersFormatted.class.php',
+        '3f772ca7967e984e022274b4c5e752a2' => __DIR__ . '/../..' . '/src/item/ItemPricing.class.php',
+        '742ee8cc426f1c808c6b37cc9c339ecc' => __DIR__ . '/../..' . '/src/item/ItemStock.class.php',
+        '520b651a965a1ef39ba5443af830c5ee' => __DIR__ . '/../..' . '/src/item/ItemPurchaseHistory.class.php',
+        'a475b07044d786f9be1e9df067cd3f02' => __DIR__ . '/../..' . '/src/item/ItemKitComponents.class.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

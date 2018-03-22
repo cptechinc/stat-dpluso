@@ -41,7 +41,12 @@
             
             'ci-customer-page' => 'CI_CustomerScreen',
             'ci-customer-shipto-page' => 'CI_CustomerShiptoScreen',
-            'ci-contacts' => 'CI_ContactsScreen'
+            'ci-contacts' => 'CI_ContactsScreen',
+			
+			'item-pricing' => 'Item_ItemPricing',
+			'item-stock' => 'Item_ItemStock',
+			'item-purchasehistory' => 'Item_ItemPurchaseHistory',
+			'item-kitcomponents' => 'Item_ItemKitComponents'
         );
         
         public function __construct($sessionID) {

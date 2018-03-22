@@ -17,6 +17,9 @@
 					<li><a href="#<?= cleanforjs($item->itemid); ?>-specs-tab" data-toggle="tab" aria-expanded="false">Specifications</a></li>
 					<li><a href="#<?= cleanforjs($item->itemid); ?>-pricing-tab" data-toggle="tab" aria-expanded="false">Price Breaks</a></li>
 					<li><a href="#<?= cleanforjs($item->itemid); ?>-stock-tab" data-toggle="tab" aria-expanded="false">Item Stock</a></li>
+					<?php if ($config->cptechcustomer == 'stat') : ?>
+						<li><a href="#<?= cleanforjs($item->itemid); ?>-commission-tab" data-toggle="tab" aria-expanded="false">Comission Pricing</a></li>
+					<?php endif; ?>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade active in" id="<?= cleanforjs($item->itemid); ?>-desc-tab">
@@ -25,6 +28,9 @@
 					<div class="tab-pane fade" id="<?= cleanforjs($item->itemid); ?>-specs-tab"><br><?php include $config->paths->content."products/product-results/product-features.php"; ?></div>
 					<div class="tab-pane fade" id="<?= cleanforjs($item->itemid); ?>-pricing-tab"><br><?php include $config->paths->content."products/product-results/price-structure.php"; ?></div>
 					<div class="tab-pane fade" id="<?= cleanforjs($item->itemid); ?>-stock-tab"><br><?php include $config->paths->content."products/product-results/stock-table.php"; ?></div>
+					<?php if ($config->cptechcustomer == 'stat') : ?>
+						<div class="tab-pane fade" id="<?= cleanforjs($item->itemid); ?>-commission-tab"><br><?php include $config->paths->content."products/product-results/item-commission.php"; ?></div>
+					<?php endif; ?>
 				</div>
 				<?php if (!empty($item->has_saleshistory()) && !empty($item->history('lastqty'))) : ?>
 					<table class="table table-condensed">

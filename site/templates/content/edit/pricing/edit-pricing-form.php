@@ -39,16 +39,21 @@
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="jumbotron item-detail-heading"> <div> <h4>Item Pricing</h4> </div> </div>
-					<?php include $config->paths->content."edit/pricing/item-price-breaks.php"; ?>
+					<div style="height: 150px; overflow-y: auto;">
+						<?php $tableformatter= $page->screenformatterfactory->generate_screenformatter('item-pricing'); ?>
+						<?php include $config->paths->content.'common/include-tableformatter-display.php'; ?>
+					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="jumbotron item-detail-heading"> <div class=""> <h4><?= get_customername($custID); ?> History</h4> </div> </div>
-					<?php include $config->paths->content."edit/pricing/item-history.php"; ?>
+					<?php $tableformatter= $page->screenformatterfactory->generate_screenformatter('item-purchasehistory'); ?>
+					<?php include $config->paths->content.'common/include-tableformatter-display.php'; ?>
 				</div>
 			</div>
 
 			<div class="jumbotron item-detail-heading"> <div class=""> <h4>Item Availability</h4> </div> </div>
-			<?php include $config->paths->content."edit/pricing/item-stock.php"; ?>
+			<?php $tableformatter= $page->screenformatterfactory->generate_screenformatter('item-stock'); ?>
+			<?php include $config->paths->content.'common/include-tableformatter-display.php'; ?>
 		</div>
 		<div class="col-sm-4 item-form">
 			<h4>Current Price</h4>

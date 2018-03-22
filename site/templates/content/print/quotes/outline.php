@@ -9,7 +9,6 @@
 </div>
 <div class="row">
 	<div class="col-xs-6">
-		<?= $pages->get('/config/')->print_address; ?>
 		<?php if (!$input->get->print) : ?>
 			<a href="<?= $emailurl->getUrl(); ?>" class="btn btn-primary load-into-modal hidden-print" data-modal="#ajax-modal"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> Send as Email</a>
 		<?php endif; ?>

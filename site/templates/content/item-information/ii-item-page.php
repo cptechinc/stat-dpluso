@@ -20,10 +20,15 @@
 			echo $tableformatter->generate_javascript();
 			if (!$input->post->action) {
 				echo $page->bootstrap->h3('', 'Pricing');
-				include $config->paths->content."item-information/item-price-breaks.php";
+				$tableformatter = $page->screenformatterfactory->generate_screenformatter('item-pricing');
+				include $config->paths->content."item-information/ii-formatted-screen.php";
 				echo $page->bootstrap->h3('', 'Stock');
 				$tableformatter = $page->screenformatterfactory->generate_screenformatter('ii-item-stock');
 				include $config->paths->content."item-information/ii-formatted-screen.php";
+				if ($config->cptechcustomer == 'stat') {
+					echo $page->bootstrap->h3('', 'Commission Pricing');
+					include $config->paths->content."item-information/item-commission-pricing.php";
+				}
 			}
 		}
 	} else {

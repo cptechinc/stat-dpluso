@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-2 col-sm-3 print-col-sm-2">
 			<a href="#" data-toggle="modal" data-target="#lightbox-modal">
-				<img src="<?= $item->generate_imagesrc(); ?>" data-desc="<?= $item->itemid.' image'; ?>">
+				<img src="<?= $config->imagedirectory.$item->image; ?>" data-desc="<?= $item->itemid.' image'; ?>">
 			</a>
 		</div>
 		<div class="col-md-7 col-sm-6 print-col-sm-10">
@@ -14,9 +14,12 @@
 			<div class="product-info">
 				<ul class="nav nav-tabs nav_tabs hidden-print">
 					<li class="active"><a href="#<?= cleanforjs($item->itemid); ?>-desc-tab" data-toggle="tab" aria-expanded="true">Description</a></li>
-					<li><a href="#<?= cleanforjs($item->itemid); ?>-specs-tab" data-toggle="tab" aria-expanded="false">Specifications</a></li>
-					<li><a href="#<?= cleanforjs($item->itemid); ?>-pricing-tab" data-toggle="tab" aria-expanded="false">Price Breaks</a></li>
-					<li><a href="#<?= cleanforjs($item->itemid); ?>-stock-tab" data-toggle="tab" aria-expanded="false">Item Stock</a></li>
+					<li><a href="#<?= cleanforjs($item->itemid); ?>-specs-tab" data-toggle="tab" aria-expanded="false">Specs</a></li>
+					<li><a href="#<?= cleanforjs($item->itemid); ?>-pricing-tab" data-toggle="tab" aria-expanded="false">Prices</a></li>
+					<li><a href="#<?= cleanforjs($item->itemid); ?>-stock-tab" data-toggle="tab" aria-expanded="false">Stock</a></li>
+					<?php if ($config->cptechcustomer == 'stat') : ?>
+						<li><a href="#<?= cleanforjs($item->itemid); ?>-commission-tab" data-toggle="tab" aria-expanded="false">Comission Pricing</a></li>
+					<?php endif; ?>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade active in" id="<?= cleanforjs($item->itemid); ?>-desc-tab">
@@ -25,6 +28,9 @@
 					<div class="tab-pane fade" id="<?= cleanforjs($item->itemid); ?>-specs-tab"><br><?php include $config->paths->content."products/product-results/product-features.php"; ?></div>
 					<div class="tab-pane fade" id="<?= cleanforjs($item->itemid); ?>-pricing-tab"><br><?php include $config->paths->content."products/product-results/price-structure.php"; ?></div>
 					<div class="tab-pane fade" id="<?= cleanforjs($item->itemid); ?>-stock-tab"><br><?php include $config->paths->content."products/product-results/stock-table.php"; ?></div>
+					<?php if ($config->cptechcustomer == 'stat') : ?>
+						<div class="tab-pane fade" id="<?= cleanforjs($item->itemid); ?>-commission-tab"><br><?php include $config->paths->content."products/product-results/item-commission.php"; ?></div>
+					<?php endif; ?>
 				</div>
 				<?php if (!empty($item->has_saleshistory()) && !empty($item->history('lastqty'))) : ?>
 					<table class="table table-condensed">

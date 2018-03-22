@@ -155,4 +155,18 @@
 			unset($array['historyfields']);
 			return $array;
 		}
+		
+		/* =============================================================
+			CRUD FUNCTIONS
+		============================================================ */
+		/**
+		 * Returns PricingItem from pricing table
+		 * @param  string $sessionID session ID
+		 * @param  string $itemID    Item / Part (ID/#)
+		 * @param  bool   $debug     Whether PricingItem is returned or SQL QUERY
+		 * @return PricingItem       or SQL QUERY
+		 */
+		public static function load($sessionID, $itemID, $debug = false) {
+			return get_pricingitem($sessionID, $itemID);
+		}
 	}

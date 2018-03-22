@@ -444,7 +444,7 @@ $(document).ready(function() {
 								$(loadinto).loadin(editurl, function() {
 									hideajaxloading();
 									$(config.modals.ajax).resizemodal('xl').modal();
-									setchildheightequaltoparent('.row.row-bordered', '.grid-item');
+									set_childheightequaltoparent('.row.row-bordered', '.grid-item');
 								});
 							});
 						});
@@ -933,7 +933,7 @@ $(document).ready(function() {
 					$(loadinto).loadin(url, function() {
 						hideajaxloading();
 						$(modal).resizemodal('xl').modal();
-						setchildheightequaltoparent('.row.row-bordered', '.grid-item');
+						set_childheightequaltoparent('.row.row-bordered', '.grid-item');
 						$('.item-form').height($('.item-information').actual('height'));
 					});
 				});
@@ -1383,7 +1383,7 @@ $(document).ready(function() {
 		$(container).height(height);
 	}
 
-	function c(parent, child) {
+	function set_childheightequaltoparent(parent, child) {
 		$(parent).each(function() {
 			var parentheight = $(this).actual('height');
 			$(this).find(child).height(parentheight);

@@ -12,7 +12,9 @@
 	</div>
 	<div class="col-sm-6">
 		<?php if ($linedetail['kititemflag'] == 'Y') : ?>
-			<?php include $config->paths->content."view/kit-item-table.php"; ?>
+			<h3>Kit Components</h3>
+			<?php $tableformatter= $page->screenformatterfactory->generate_screenformatter('item-kitcomponents'); ?>
+			<?php include $config->paths->content.'common/include-tableformatter-display.php'; ?>
 		<?php endif; ?>
 	</div>
 </div>

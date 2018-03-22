@@ -1772,7 +1772,7 @@
 		} else {
 			$sql->execute($q->params);
 			return $sql->fetchColumn();
-		}
+		}	
 	}
 	
 	function get_itemavailability($sessionID, $itemID, $debug = false) {
@@ -1786,6 +1786,35 @@
 		} else {
 			$sql->execute($q->params);
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_commissionprices($itemID, $debug = false) {
+		$q = (new QueryBuilder())->table('commprice');
+		$q->where('itemid', $itemID);
+		$q->order('percent DESC');
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_pricingitem($sessionID, $itemID, $debug = false) {
+		$q = (new QueryBuilder())->table('pricing');
+		$q->where('sessionid', $sessionID);
+		$q->where('itemid', $itemID);
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'PricingItem');
+			return $sql->fetch();
 		}
 	}
 

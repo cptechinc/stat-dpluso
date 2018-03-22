@@ -5,7 +5,7 @@
 		
         protected $formtype;
         protected $fields = false;
-        protected $allowedtypes = array('sales-order', 'quote');
+        protected $allowedtypes = array('sales-orders', 'quotes');
         public static $filedir = false;
         
         

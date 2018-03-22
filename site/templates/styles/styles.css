@@ -91,18 +91,18 @@
 		color: #fff;
 	}
 /*==============================================================
-   PRINT STYLES
- =============================================================*/
+	PRINT STYLES
+=============================================================*/
 	@media print {
 		body {height: auto; font-size: 12px;}
 		a[href]:after {
 			content: none !important;
 		}
 		.print.col-xs-12, .print.col-sm-10 {
-			width:100%;
+			width: 100%;
 		}
 		.print-col-sm-10 {
-			width:83.33333333%; display: inline-block;
+			width: 83.33333333%; display: inline-block;
 		}
 		.print-col-sm-2{width:16.66666667%; display: inline-block;}
 		.print-col-sm-4{width:33.33333333%; display: inline-block;}
@@ -112,7 +112,7 @@
 		.alert {margin-bottom: 0px;}
 		
 		.container.page {
-			    padding-bottom: 50px;
+			padding-bottom: 50px;
 		}
 		.table > tr.active > th, .table > tr.active > td {
 				background-color: #ecf0f1 !important;

@@ -241,6 +241,19 @@ $(function() {
 	function compinq() {
 		var itemID = $(itemlookupform + " .itemID").val();
 		var loadinto =  config.modals.ajax+" .modal-content";
+		
+		if (config.appconfig.ii.option_kitorbom == 'K') {
+			askkitqtyneeded(itemID);
+		} else if (config.appconfig.ii.option_kitorbom == 'B') {
+			askbomqtyneed(itemID);
+		} else {
+			ask_kitorbom();
+		}
+	}
+	
+	function ask_kitorbom() {
+		var itemID = $(itemlookupform + " .itemID").val();
+		var loadinto =  config.modals.ajax+" .modal-content";
 		swal({
 			title: "Component Inquiry Selection",
 			text: "Kit or BOM Inquiry Type in (K/B)",

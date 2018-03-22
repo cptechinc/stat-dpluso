@@ -15,7 +15,10 @@
     
     $config->js('pwconfig', [
         'appconfig' => [
-            'cptechcustomer' => $config->cptechcustomer
+            'cptechcustomer' => $config->cptechcustomer,
+			'ii' => [
+				'option_kitorbom' => $appconfig->child('name=item-information')->option_kitorbom->value,
+			]
         ],
         'edit' => [
             'pricing' => [

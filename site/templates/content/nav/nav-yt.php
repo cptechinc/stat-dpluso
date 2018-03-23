@@ -21,9 +21,10 @@
 			<?php if (!$config->debug) : ?>
             	<a class="navbar-brand" href="#">TESTING - DEBUG</a>
             <?php else : ?>
-				<img class="header-logo" id="header-logo" src="<?php echo $config->urls->files; ?>images/dplus.png" height="50">
+				<img class="header-logo hidden-xs" id="header-logo" src="<?php echo $config->urls->files; ?>images/dplus.png" height="50">
+				<img class="header-logo hidden-sm hidden-md hidden-lg" id="header-logo" src="<?php echo $config->urls->files; ?>images/dplus-short.png" height="50">
             <?php endif; ?>
-            <a href="#" class="navbar-brand open-site-search hidden-sm hidden-md hidden-lg pull-right"><i class="material-icons">&#xE8B6;</i></a>
+			<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>" height="60" class="hidden-sm hidden-md hidden-lg pull-right">
 		</div>
 
 
@@ -40,6 +41,7 @@
 				<?php endforeach; ?>
 			</ul>
             <ul class="nav navbar-nav navbar-right visible-sm-block">
+				<li><img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>" height="60"></li>
                 <li>
                 	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     	My Account <span class="caret"></span>
@@ -61,6 +63,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right hidden-sm">
+				<li><img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>" height="60"></li>
                 <?php //if($page->editable()) echo "<li class='edit'><a href='$page->editUrl'>Edit</a></li>"; ?>
                 <?php if ($user->loggedin) : ?>
                     <li><a>Welcome, <?php echo $user->fullname; ?></a> </li>

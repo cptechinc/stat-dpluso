@@ -4,8 +4,8 @@
         <div class="row">
             <div class="col-sm-6 col-md-offset-3">
                <div class="sign-in">
-               		<p class="text-center"><img src="<?php echo $config->urls->files."images/dplus.png"; ?>" alt="Distribution Plus logo"></p>
-               		<h2 class="text-center">Sign In</h2>
+               		<p class="text-center"><img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>"></p>
+               		<h2 class="text-center">DistPlus</h2>
                		<?php if (!$user->loggedin) : ?>
 						<?php $errormsg = get_loginerrormsg(session_id()); ?>
 						<?php if (strlen($errormsg) > 0 ) : ?>

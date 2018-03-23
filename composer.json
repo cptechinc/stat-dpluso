@@ -1,32 +1,38 @@
 {
-  "name": "processwire/processwire",
-  "type": "library",
-  "description": "ProcessWire CMS/CMF",
-  "keywords": [ "processwire", "cms","cmf", "content management system" ],
-  "license": "MPL-2.0",
-  "homepage": "https://processwire.com",
-  "minimum-stability": "dev",
-  "authors": [
-    {
-      "name": "Ryan Cramer",
-      "email": "ryan@processwire.com",
-      "homepage": "https://processwire.com",
-      "role": "Developer"
-    }
-  ],
-  "repositories": [{
+    "name": "cptechinc/soft-crm",
+    "type": "library",
+    "description": "ProcessWire CMS/CMF",
+    "keywords": [ "dpluso", "dplus-crm","crm" ],
+    "license": "MPL-2.0",
+    "homepage": "https://processwire.com",
+    "minimum-stability": "dev",
+    "repositories": [{
         "type": "git",
         "url": "https://github.com/cptechinc/purl.git"
-  }],
-  "require": {
-    "php": ">=5.3.8",
-    "ext-gd": "*",
-    "jwage/purl": "dev-cptechinc",
-    "atk4/dsql": "1.1",
-    "mikehaertl/phpwkhtmltopdf": "^2.3",
-    "eoghanobrien/php-simple-mail": "^1.7"
-  },
-  "autoload": {
-    "files": [ "wire/core/ProcessWire.php" ]
-  }
+    }],
+    "authors": [
+        {
+            "name": "Paul Gomez",
+            "email": "paul@cptechinc.com",
+            "homepage": "https://www.cptechinc.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Barbara Bullemer",
+            "email": "barbara@cptechinc.com",
+            "homepage": "https://www.cptechinc.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "ext-gd": "*",
+        "jwage/purl": "dev-cptechinc",
+        "atk4/dsql": "1.1",
+        "eoghanobrien/php-simple-mail": "^1.7",
+        "mikehaertl/phpwkhtmltopdf": "^2.3"
+    },
+    "autoload": {
+        "files": [ "wire/core/ProcessWire.php" ]
+    }
 }

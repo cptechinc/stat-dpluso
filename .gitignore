@@ -29,8 +29,6 @@ wire
 site/config.php
 project.cson
 site/templates/config/customer/
-composer.json
-composer.lock
 index.php
 vendor/composer
 

@@ -116,7 +116,7 @@
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = Processwire\wire('config')->pages->print."quote/";
 			$url->query->set('qnbr', $quote->quotnbr);
-			$url->query->set('print', 'true');
+			$url->query->set('view', 'pdf');
 			return $url->getUrl();
 		}
 		

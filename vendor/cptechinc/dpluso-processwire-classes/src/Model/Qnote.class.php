@@ -130,35 +130,14 @@
 		protected $dummy;
 		
 		/* =============================================================
-			SETTER FUNCTIONS 
+			SETTER FUNCTIONS
+			Inherits from MagicMethodTraits
 		============================================================ */
-		public function set($property, $value) {
-			if (property_exists($this, $property) !== true) {
-				$this->error("This property ($property) does not exist ");
-				return false;
-			}
-			$this->$property = $value;
-		}
 		
 		/* =============================================================
 			GETTER FUNCTIONS 
+			Inherits from MagicMethodTraits
 		============================================================ */
-		public function __get($property) {
-			if (property_exists($this, $property) !== true) {
-				$this->error("This property ($property) does not exist");
-				return false;
-			}
-			
-			$method = "get_{$property}";
-			if (method_exists($this, $method)) {
-				return $this->$method();
-			} elseif (property_exists($this, $property)) {
-				return $this->$property;
-			} else {
-				$this->error("This property ($property) is not accessible");
-				return false;
-			}
-		}
 		
 		/* =============================================================
 			CLASS FUNCTIONS 

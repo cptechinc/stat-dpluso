@@ -204,7 +204,7 @@
                         <td class="control-label">Price Code</td>
                         <td>
 							<?php $defaultcode = $pages->get('/config/')->default_pricecode; ?>
-							<?= $pricecodes[$defaultcode]; ?>
+							<?= isset($pricecodes[$defaultcode]) ? $pricecodes[$defaultcode] : 'No Default Code'; ?>
 							<?= $page->bootstrap->input("name=pricecode|type=hidden|value=$defaultcode"); ?>
                         </td>
                     </tr>

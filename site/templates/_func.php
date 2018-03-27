@@ -418,14 +418,7 @@
 		Processwire\wire('user')->loginid = $loginrecord['loginid'];
 		Processwire\wire('user')->hascontactrestrictions = $loginrecord['restrictcustomer'];
 		Processwire\wire('user')->hasrestrictions = $loginrecord['restrictuseraccess'];
-		Processwire\wire('user')->hasorderlocked = hasanorderlocked(session_id());
-		if (Processwire\wire('user')->hasorderlocked) {
-			Processwire\wire('user')->lockedordn = getlockedordn(session_id());
-		}
-		Processwire\wire('user')->hasquotelocked = hasaquotelocked(session_id());
-		if (Processwire\wire('user')->hasquotelocked) {
-			$user->lockedqnbr = getlockedquotenbr(session_id());
-		}
+		Processwire\wire('user')->salespersonid = $loginrecord['salespersonid'];
 	}
     
     /**

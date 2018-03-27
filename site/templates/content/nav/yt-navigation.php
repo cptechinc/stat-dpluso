@@ -17,7 +17,6 @@
 				<?php endif; ?>
 				
 				<li class="divider"></li>
-				
 				<?php if (has_dpluspermission($user->loginid, 'ci')) : ?>
 					<li> <a href="<?= $config->pages->custinfo; ?>"><i class="fa fa-users" aria-hidden="true"></i> Customers</a> </li>
 				<?php endif; ?>

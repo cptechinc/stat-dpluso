@@ -729,8 +729,7 @@ $(document).ready(function() {
 				inputClass: 'form-control',
 				inputOptions: {
 					'tasks': 'Task',
-					'notes': 'Note',
-					'actions': 'Action'
+					'notes': 'Note'
 				},
 				inputPlaceholder: 'Select Action Type',
 				showCancelButton: true,

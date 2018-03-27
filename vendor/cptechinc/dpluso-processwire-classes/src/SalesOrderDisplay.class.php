@@ -22,7 +22,7 @@
 		}
 		
 		public function showhide_creditcard(Order $order) {
-			return ($order->paytype == 'cc') ? '' : 'hidden';
+			return ($order->paymenttype == 'cc') ? '' : 'hidden';
 		}
 		
 		public function showhide_phoneintl(Order $order) {

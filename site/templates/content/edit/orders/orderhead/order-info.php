@@ -57,14 +57,11 @@
 		<td class="control-label">Terms Code</td> <td class="value text-right"><?= $order->termcode; ?> - <?= $order->termcodedesc; ?></td>
 	</tr>
 	<tr>
-    	<td class="control-label">Terms Code</td> <td class="value text-right"><?= $order->termcode; ?> - <?= $order->termdesc; ?></td>
-    </tr>
-    <tr>
-    	<td class="control-label">Order Date</td> <td class="value text-right"><?= $order->orderdate; ?></td>
-    </tr>
-    <tr>
-    	<td class="control-label">Request Date</td>
-        <td>
+		<td class="control-label">Order Date</td> <td class="value text-right"><?= $order->orderdate; ?></td>
+	</tr>
+	<tr>
+		<td class="control-label">Request Date</td>
+		<td>
 			<div class="input-group date">
 				<?php $name = 'rqstdate'; $value = $order->rqstdate; ?>
 				<?php include $config->paths->content."common/date-picker.php"; ?>
@@ -76,24 +73,24 @@
 		<td>
 			<select name="ship-complete" class="form-control input-sm">
 				<?php foreach ($config->yesnoarray as $key => $value) : ?>
-                    <?php if ($order->shipcom == $value) {$selected = 'selected'; } else {$selected = ''; } ?>
-                    <option value="<?= $value; ?>" <?= $selected; ?>><?= $key; ?></option>
-                <?php endforeach; ?>
-            </select>
-        </td>
-    </tr>
-    <?php if ($order->termtype == 'STD') : ?>
-        <tr>
-            <td class="control-label">Payment Type</td>
-            <td>
-                <select name="paytype" class="form-control input-sm required" onChange="showcredit(this.value)">
-                    <option value="<?= $order->paytype; ?>">-- Choose Payment Type -- </option>
-                    <option value="billacc" <?php if ($order->paytype == 'bill') echo 'selected'; ?> >Bill To Account</option>
-                    <option value="cc" <?php if ($order->paytype == 'cc') {echo 'selected';} ?>>Credit Card</option>
-                </select>
-            </td>
-        </tr>
-    <?php endif; ?>
+					<?php if ($order->shipcom == $value) {$selected = 'selected'; } else {$selected = ''; } ?>
+					<option value="<?= $value; ?>" <?= $selected; ?>><?= $key; ?></option>
+				<?php endforeach; ?>
+			</select>
+		</td>
+	</tr>
+	<?php if ($order->termtype == 'STD') : ?>
+		<tr>
+			<td class="control-label">Payment Type</td>
+			<td>
+				<select name="paytype" class="form-control input-sm required" onChange="showcredit(this.value)">
+					<option value="<?= $order->paymenttype; ?>">-- Choose Payment Type -- </option>
+					<option value="billacc" <?php if ($order->paymenttype == 'bill') echo 'selected'; ?> >Bill To Account</option>
+					<option value="cc" <?php if ($order->paymenttype == 'cc') {echo 'selected';} ?>>Credit Card</option>
+				</select>
+			</td>
+		</tr>
+	<?php endif; ?>
 </table>
 <?php $creditcard = $editorderdisplay->get_creditcard(); ?>
 <?php if ($order->termtype == 'STD') : ?>

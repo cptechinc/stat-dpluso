@@ -7,10 +7,16 @@ namespace Composer\Autoload;
 class ComposerStaticInit2a810780675e3506dcf842a48fb147fe
 {
     public static $files = array (
-        '4ba1167ff053aab3afcc2d28993cfca7' => __DIR__ . '/../..' . '/wire/core/ProcessWire.php',
+        'b93f8e0bf5a6db6e7242c0564af63532' => __DIR__ . '/../..' . '/wire/core/ProcessWire.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'm' => 
+        array (
+            'mikehaertl\\wkhtmlto\\' => 20,
+            'mikehaertl\\tmp\\' => 15,
+            'mikehaertl\\shellcommand\\' => 24,
+        ),
         'a' => 
         array (
             'atk4\\dsql\\' => 10,
@@ -19,6 +25,18 @@ class ComposerStaticInit2a810780675e3506dcf842a48fb147fe
     );
 
     public static $prefixDirsPsr4 = array (
+        'mikehaertl\\wkhtmlto\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mikehaertl/phpwkhtmltopdf/src',
+        ),
+        'mikehaertl\\tmp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mikehaertl/php-tmpfile/src',
+        ),
+        'mikehaertl\\shellcommand\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mikehaertl/php-shellcommand/src',
+        ),
         'atk4\\dsql\\' => 
         array (
             0 => __DIR__ . '/..' . '/atk4/dsql/src',
@@ -43,12 +61,17 @@ class ComposerStaticInit2a810780675e3506dcf842a48fb147fe
         ),
     );
 
+    public static $classMap = array (
+        'SimpleMail' => __DIR__ . '/..' . '/eoghanobrien/php-simple-mail/class.simple_mail.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit2a810780675e3506dcf842a48fb147fe::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit2a810780675e3506dcf842a48fb147fe::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit2a810780675e3506dcf842a48fb147fe::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit2a810780675e3506dcf842a48fb147fe::$classMap;
 
         }, null, ClassLoader::class);
     }

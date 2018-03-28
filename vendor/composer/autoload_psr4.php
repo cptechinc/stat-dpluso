@@ -6,6 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'mikehaertl\\wkhtmlto\\' => array($vendorDir . '/mikehaertl/phpwkhtmltopdf/src'),
+    'mikehaertl\\tmp\\' => array($vendorDir . '/mikehaertl/php-tmpfile/src'),
+    'mikehaertl\\shellcommand\\' => array($vendorDir . '/mikehaertl/php-shellcommand/src'),
     'atk4\\dsql\\' => array($vendorDir . '/atk4/dsql/src'),
     'atk4\\core\\' => array($vendorDir . '/atk4/core/src'),
 );

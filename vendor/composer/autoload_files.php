@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    '4ba1167ff053aab3afcc2d28993cfca7' => $baseDir . '/wire/core/ProcessWire.php',
+    'b93f8e0bf5a6db6e7242c0564af63532' => $baseDir . '/wire/core/ProcessWire.php',
 );

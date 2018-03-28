@@ -2843,3 +2843,28 @@
 			return $sql->fetch();
 		}
 	}
+	
+	/* =============================================================
+		LOGM FUNCTIONS
+	============================================================ */
+	function get_userbookings($days = 30, $debug = false) {
+		$salesrepID = (!empty(DplusWire::wire('user')->salespersonid)) ? DplusWire::wire('user')->salespersonid : 'admin';
+		$q = (new QueryBuilder())->table('bookingr');
+		$q->where('salesrep', $salesrepID);
+		$startdate = intval(date("Ymd", strtotime("-$days day")));
+		$q->where('bookdate', '>=', $startdate);
+		if ($days >= 90) {
+			$q->field($q->expr("CAST(CONCAT(YEAR(bookdate), LPAD(MONTH(bookdate), 2, '0'), '01') AS UNSIGNED) as bookdate"));
+			$q->field('SUM(amount) as amount');
+			$q->group('YEAR(bookdate), MONTH(bookdate)');
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		echo $q->generate_sqlquery($q->params);
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	

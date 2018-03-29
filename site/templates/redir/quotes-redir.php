@@ -350,6 +350,9 @@
 			$data = array('DBNAME' => $config->dbName, 'QUOTETOORDER' => false, 'QUOTENO' => $qnbr, 'LINENO' => 'ALL');
 			$session->loc = $config->pages->orders."redir/?action=edit-new-order";
 			break;
+		case 'send-dplus-file':
+			$qnbr = $input->get->text('qnbr');
+			break;
 	}
 
 	writedplusfile($data, $filename);

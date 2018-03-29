@@ -9,9 +9,10 @@
 </div>
 <div class="row">
 	<div class="col-xs-6">
-		<?= $pages->get('/config/')->print_address; ?>
-		<?php if (!$input->get->print) : ?>
+		<?php if ((!$input->get->text('view') == 'pdf')) : ?>
 			<a href="<?= $emailurl->getUrl(); ?>" class="btn btn-primary load-into-modal hidden-print" data-modal="#ajax-modal"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> Send as Email</a>
+			&nbsp;&nbsp;
+			<a href="<?= $config->documentstorage.$pdfmaker->filename; ?>" target="_blank" class="btn btn-primary hidden-print"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> View PDF</a>
 		<?php endif; ?>
 	</div>
 
@@ -25,6 +26,7 @@
 				<tr> <td class="col-xs-6"><label>Shipping Method:</label></td> <td class="col-xs-6 text-right"><?= $quote->shipviadesc; ?></td></tr>
 				<tr> <td class="col-xs-6"><label>Payment Terms:</label></td> <td class="col-xs-6 text-right"><?= $quote->termcodedesc; ?></td></tr>
 				<tr> <td class="col-xs-6"><label>Salesperson:</label></td> <td class="col-xs-6 text-right"><?= $quote->sp1name; ?></td></tr>
+				<tr> <td class="col-xs-6"><label>Salesperson Email:</label></td> <td class="col-xs-6 text-right"><?= $salespersonjson['data'][$quote->sp1]['spemail']; ?></td></tr>
 			</table>
 		</div>
 	</div>
@@ -54,6 +56,14 @@
 				<?= $quote->billaddress2; ?><br>
 			<?php endif; ?>
 			<?= $quote->billcity.", ".$quote->billstate." ".$quote->billzip; ?>
+		</address>
+	</div>
+	<div class="col-xs-4">
+		<div class="address-header"><h4>Contact</h4></div>
+		<address>
+			<?= $quote->contact; ?><br>
+			<?= $quote->phone; ?><br>
+			<?= $quote->email; ?>
 		</address>
 	</div>
 </div>

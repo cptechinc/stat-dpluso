@@ -16,20 +16,17 @@
             $orderdisplay = new SalesOrderDisplay($sessionID, $page->fullURL, '#ajax-modal', $ordn);
             $order = $orderdisplay->get_order(); 
             $printurl = new \Purl\Url($orderdisplay->generate_viewprintpageurl($order));
-            $printurl->query->set('referenceID', $sessionID);
-            $pdfmaker = new PDFMaker($sessionID, $printurl->getUrl());
-            $file = $pdfmaker->process();
             break;
         case 'quote':
             $qnbr = $input->get->text('qnbr');
             $quotedisplay = new QuoteDisplay($sessionID, $page->fullURL, '#ajax-modal', $qnbr);
             $quote = $quotedisplay->get_quote();
             $printurl = new \Purl\Url($quotedisplay->generate_viewprintpageurl($quote));
-            $printurl->query->set('referenceID', $sessionID);
-            $pdfmaker = new PDFMaker($sessionID, $printurl->getUrl());
-            $file = $pdfmaker->process();
             break;
     }
+	$printurl->query->set('referenceID', $sessionID);
+	$pdfmaker = new PDFMaker($sessionID, $page->name, $printurl->getUrl());
+	$file = $pdfmaker->process();
     
     if ($file) {
         $error = false;

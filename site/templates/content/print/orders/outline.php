@@ -9,8 +9,10 @@
 </div>
 <div class="row">
 	<div class="col-xs-6">
-		<?php if (!$input->get->print) : ?>
+		<?php if ((!$input->get->text('view') == 'pdf')) : ?>
 			<a href="<?= $emailurl->getUrl(); ?>" class="btn btn-primary load-into-modal hidden-print" data-modal="#ajax-modal"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> Send as Email</a>
+			&nbsp;&nbsp;
+			<a href="<?= $config->documentstorage.$pdfmaker->filename; ?>" target="_blank" class="btn btn-primary hidden-print"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> View PDF</a>
 		<?php endif; ?>
 	</div>
 	
@@ -22,6 +24,10 @@
 				<tr> <td class="col-xs-6"><label>Status:</label></td> <td class="col-xs-6 text-right"><?= $order->status; ?></td> </tr>
 				<tr> <td class="col-xs-6"><label>Customer ID:</label></td> <td class="col-xs-6 text-right"><?= $order->custid; ?></td> </tr>
 				<tr> <td class="col-xs-6"><label>Customer PO:</label></td> <td class="col-xs-6 text-right"><?= $order->custpo; ?></td> </tr>
+				<tr> <td class="col-xs-6"><label>Shipping Method:</label></td> <td class="col-xs-6 text-right"><?= $order->shipviadesc; ?></td></tr>
+				<tr> <td class="col-xs-6"><label>Payment Terms:</label></td> <td class="col-xs-6 text-right"><?= $order->termcodedesc; ?></td></tr>
+				<tr> <td class="col-xs-6"><label>Salesperson:</label></td> <td class="col-xs-6 text-right"><?= $order->sp1name; ?></td></tr>
+				<tr> <td class="col-xs-6"><label>Salesperson Email:</label></td> <td class="col-xs-6 text-right"><?= $salespersonjson['data'][$order->sp1]['spemail']; ?></td></tr>
 			</table>
 		</div>
 	</div>
@@ -49,6 +55,14 @@
 				<?= $order->shipaddress2; ?><br>
 			<?php endif; ?>
 			<?= $order->shipcity.", ".$order->shipstate." ".$order->shipzip; ?>
+		</address>
+	</div>
+	<div class="col-xs-4">
+		<div class="address-header"><h4>Contact</h4></div>
+		<address>
+			<?= $order->contact; ?><br>
+			<?= $order->phone; ?><br>
+			<?= $order->email; ?>
 		</address>
 	</div>
 </div>

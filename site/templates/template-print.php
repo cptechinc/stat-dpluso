@@ -1,4 +1,5 @@
 <?php
+	$salespersonjson = json_decode(file_get_contents($config->companyfiles."json/salespersontbl.json"), true);
     $sessionID = $input->get->referenceID ? $input->get->text('referenceID') : session_id();
     $emailurl = new \Purl\Url($config->pages->ajaxload."email/email-file-form/");
     $emailurl->query->set('referenceID', $sessionID);
@@ -24,16 +25,29 @@
     
     $emailurl->query->set('subject', urlencode($page->title));
     
-    if ($input->get->print) {
-        $page->fullURL->query->remove('print');
+    if (!$input->get->text('view') == 'pdf') {
         $url = new Purl\Url($page->fullURL->getUrl());
-        $url->query->remove('print');
         $url->query->set('referenceID', $sessionID);
-    
-        $pdfmaker = new PDFMaker($sessionID, $url->getUrl());
+    	$url->query->set('view', 'pdf');
+		
+        $pdfmaker = new PDFMaker($sessionID, $page->name, $url->getUrl());
         $result = $pdfmaker->process();
-
-        $page->title = '';
+		
+		switch ($page->name) { //$page->name is what we are printing
+	        case 'quote':
+				$folders = PDFMaker::$folders;
+				$url = new Purl\Url($page->fullURL->getUrl());
+				$url->path = $config->pages->account."redir/";
+				$url->query->setData(array(
+					'action' => 'store-document',
+					'filetype' => $folders[$page->name],
+					'field1' => $qnbr,
+					'file' => $pdfmaker->filename,
+					'sessionID' => $sessionID
+				));
+				curl_redir($url->getUrl());
+	            break;
+	    }
     }
     
     include $config->paths->content.'common/include-print-page.php';

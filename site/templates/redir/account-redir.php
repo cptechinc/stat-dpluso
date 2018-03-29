@@ -6,7 +6,16 @@
 	*/
 	$action = ($input->post->action ? $input->post->text('action') : $input->get->text('action'));
 
-	$filename = session_id();
+	if ($input->post->sessionID) {
+		$filename = $input->post->text('sessionID');
+		$sessionID = $input->post->text('sessionID');
+	} elseif ($input->get->sessionID) {
+		$filename = $input->get->text('sessionID');
+		$sessionID = $input->get->text('sessionID');
+	} else {
+		$filename = session_id();
+		$sessionID = session_id();
+	}
 
 	/**
 	* ACCOUNT REDIRECT
@@ -49,7 +58,21 @@
 			$session->remove('custID');
 			$session->remove('locked-ordernumber');
 			break;
-		//DELETED CASES add-task get-order-notes write-recent-order-note
+		case 'store-document':
+			$folder = $input->get->text('filetype');
+			$file = $input->get->text('file');
+			$field1 = $input->get->text('field1');
+			$field2 = $input->get->text('field2');
+			$field3 = $input->get->text('field3');
+			$data = array(
+				'DBNAME' => $config->dbName, 
+				'DOCFILEFLDS' => $folder,
+				'DOCFILENAME' => $config->documentstoragedirectory.$file,
+				'DOCFLD1' => $field1,
+				'DOCFLD2' => $field2,
+				'DOCFLD3' => $field3
+			);
+			break;
 	}
 
 	writedplusfile($data, $filename);

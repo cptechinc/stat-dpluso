@@ -73,6 +73,12 @@
 		protected $nsitemgroup;
 		protected $itemtype;
 		protected $supercedes;
+		/**
+		 * If Item is Active
+		 * @var string 
+		 * (A)ctive | (D)elete when empty | (I)nactive
+		 */
+        protected $activestatus;
 		protected $fieldaliases = array(
 			'itemID' => 'itemid',
 			'shipfromID' => 'shipfromid',

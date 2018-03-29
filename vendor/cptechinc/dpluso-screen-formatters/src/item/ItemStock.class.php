@@ -33,7 +33,7 @@
 						if ($column == 'Warehouse ID') {
 							$itemid = $this->json['itemid'];
 							$whse = $warehouse[$column];
-							$onclick = "chooseitemwhse('$itemid ', '$whse')";
+							$onclick = "choose_itemwhse('$itemid ', '$whse')";
 							$button = $bootstrap->button("type=button|class=btn btn-primary btn-xs|onclick=$onclick", $warehouse[$column]);
 							$tb->td("", $button);
 						} else {

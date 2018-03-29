@@ -6,3 +6,6 @@
     <td class="control-label">Contact Fax</td>
     <td> <input type="text" name="contact-fax" class="form-control input-sm phone-input" value="<?= $quote->faxnbr; ?>"> </td>
 </tr>
+<?php 
+	// TODO add contact-extension
+?>

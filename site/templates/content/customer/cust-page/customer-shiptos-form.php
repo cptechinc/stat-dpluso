@@ -5,7 +5,7 @@
 		<td>
 			<select name="shipTo" class="form-control input-sm" onChange="refreshshipto(this.value,'<?php echo $custID; ?>')">
 				<option value=" " <?php if ($shipID == '') { echo 'selected'; } ?>>Company Totals</option>
-				<?php $shiptos = get_customershiptos($custID, $user->loginid, $user->hascontactrestrictions, false); ?>
+				<?php $shiptos = get_customershiptos($custID, $user->loginid); ?>
 				<?php foreach ($shiptos as $shipto) : ?>
 					<option value="<?php echo $shipto->shiptoid; ?>" <?php if ($shipto->shiptoid == $shipID) { echo 'selected'; } ?>><?= $shipto->generate_address(); ?> </option>
 				<?php endforeach; ?>

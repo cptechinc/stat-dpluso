@@ -3,6 +3,9 @@
         case 'cust-index':
             include $config->paths->content.'customer/ajax/load/cust-index/content-router.php';
             break;
+		case 'contacts':
+			include $config->paths->content.'customer/ajax/load/contacts/content-router.php';
+			break;
     }
 
 	if ($config->ajax) {

@@ -17,7 +17,7 @@ $(document).ready(function() {
 		init_bootstraptoggle();
 
 		$('.phone-input').keyup(function() {
-	    	$(this).val(formatphone($(this).val()));
+	    	$(this).val(format_phone($(this).val()));
 	    });
 
 		$('body').on('click', function (e) {
@@ -144,7 +144,7 @@ $(document).ready(function() {
 		$(".page").on("change", ".results-per-page-form .results-per-page", function() {
 			var form = $(this).closest("form");
 			var ajax = form.hasClass('ajax-load');
-			var href = getpaginationurl(form);
+			var href = get_paginationurl(form);
 			if (ajax) {
 				var loadinto = form.data('loadinto');
 				var focuson = form.data('focus');
@@ -276,7 +276,7 @@ $(document).ready(function() {
 		});
 
 	/*==============================================================
-	  ORDER LIST FUNCTIONS
+		ORDER LIST FUNCTIONS
 	=============================================================*/
 		$(".page").on("click", ".edit-order", function(e) {
 			e.preventDefault();
@@ -377,7 +377,24 @@ $(document).ready(function() {
 				});
 			});
 		});
-
+		
+		// USED FOR ORDER SEARCH FILTER
+		$("body").on("click", ".get-custid-search", function(e) {
+			var field = $(this).data('field');
+			var modal = config.modals.ajax;
+			var loadinto = modal+" .modal-content";
+			var href = URI(config.urls.customer.load.loadindex).addQuery('function', 'os-order-cust-search').addQuery('modal', 'modal').addQuery('field', field).normalizeQuery().toString();
+			$('.modal').modal('hide');
+			$(loadinto).loadin(href, function() {
+				$(modal).find('.modal-body').addClass('modal-results');
+				$(modal).resizemodal('lg').modal();
+				setTimeout(function (){ $(modal).find('.query').focus();}, 500);
+			});
+		});
+		
+	/*==============================================================
+		EDIT CART / QUOTES / SALES ORDER FUNCTIONS
+	=============================================================*/
 		$("body").on("click", ".view-item-details", function(e) {
 			e.preventDefault();
 			var button = $(this);
@@ -399,11 +416,16 @@ $(document).ready(function() {
 			}
 		});
 		
-		$("body").on("click", ".get-custid-search", function(e) {
-			var field = $(this).data('field');
+	/*==============================================================
+		SALES ORDER / QUOTES LIST FUNCTIONS
+	=============================================================*/
+		$("body").on("click", ".get-cust-contact-search", function(e) {
 			var modal = config.modals.ajax;
 			var loadinto = modal+" .modal-content";
-			var href = URI(config.urls.customer.load.loadindex).addQuery('function', 'os-order-cust-search').addQuery('modal', 'modal').addQuery('field', field).normalizeQuery().toString();
+			var custID = $(this).data('custid');
+			var shipID = $(this).data('shipid');
+			var uri = URI(config.urls.customer.load.searchcontacts).addQuery('function', 'eqo-contact').addQuery('modal', 'modal')
+			var href = uri.addQuery('custID', custID).addQuery('shipID', shipID).normalizeQuery().toString();
 			$('.modal').modal('hide');
 			$(loadinto).loadin(href, function() {
 				$(modal).find('.modal-body').addClass('modal-results');
@@ -411,9 +433,23 @@ $(document).ready(function() {
 				setTimeout(function (){ $(modal).find('.query').focus();}, 500);
 			});
 		});
+		
+		$("body").on("click", ".order-choose-contact", function(e) {
+			e.preventDefault();
+			var modal = config.modals.ajax;
+			var button = $(this);
+			var form = $('.order-form');
+			form.find('input[name=contact]').val(button.data('contact'));
+			form.find('input[name=contact-extension]').val(button.data('extension'));
+			form.find('input[name=contact-fax]').val(button.data('fax'));
+			form.find('input[name=contact-phone]').val(button.data('phone'));
+			form.find('input[name=contact-email]').val(button.data('email'));
+			$(modal).modal('hide');
+			$('html, body').animate({scrollTop: form.find('input[name=contact]').offset().top - 80}, 1000);
+		});
 
 	/*==============================================================
-	  ADD ITEM MODAL FUNCTIONS
+		ADD ITEM MODAL FUNCTIONS
 	=============================================================*/
 		$("body").on("submit", ".add-and-edit-form", function(e) { //FIX MAKE IT JUST AJAX ADD ALSO FIX REGULAR ADD ITEM
 			//WAS .add-to-order-form | MODIFIED TO SUIT BOTH QUOTES AND ORDERS
@@ -440,7 +476,7 @@ $(document).ready(function() {
 						}
 						editurl = URI(json.response.editurl).addQuery('line', linenumber).addQuery('modal', 'modal').normalizeQuery().toString();
 						$('.page').loadin(pageurl, function() {
-							edititempricing(itemID, custID,  function() {
+							edit_itempricing(itemID, custID,  function() {
 								$(loadinto).loadin(editurl, function() {
 									hideajaxloading();
 									$(config.modals.ajax).resizemodal('xl').modal();
@@ -555,7 +591,7 @@ $(document).ready(function() {
 		});
 
 		/*==============================================================
-			CI/II FUNCTIONS
+			CI / II / VI FUNCTIONS
 		=============================================================*/
 		$("body").on("keyup", ".ii-item-search", function() {
 			var thisform = $(this).closest('form');
@@ -614,16 +650,27 @@ $(document).ready(function() {
 				
 			});
 		});
-
-		// $("body").on("keyup", ".cust-index-search", function() {
-		// 		var thisform = $(this).closest('form');
-		// 		var pagefunction = thisform.find('[name=function]').val();
-		// 		var loadinto = '#cust-results';
-		// 		var href = URI(thisform.attr('action')).addQuery('q', $(this).val())
-		// 											   .addQuery('function', pagefunction)
-		// 											   .toString();
-		// 		$(loadinto).loadin(href+' '+loadinto, function() { });
-		// });
+		
+		$("body").on("submit", "#cust-contact-search-form", function(e) {
+			e.preventDefault();
+			var form = $(this);
+			var q = form.find('[name=q]').val();
+			var pagefunction = form.find('[name=function]').val();
+			var custID = form.find('[name=custID]').val();
+			var shipID = form.find('[name=shipID]').val();
+			var loadinto = '#contact-results';
+			var uri = URI(form.attr('action')).addQuery('q', q).addQuery('function', pagefunction);
+			href = uri.addQuery('custID', custID).addQuery('shipID', shipID).toString();	
+			
+			$(loadinto).empty();
+			var loadingwheel = $(darkloadingwheel);
+			loadingwheel.addClass('display-inline-block').addClass('text-center');
+			$(loadinto).append("<div class='text-center'>"+loadingwheel.prop('outerHTML')+"</div>");
+			
+			$(loadinto).loadin(href+' '+loadinto, function() {
+				
+			});
+		});
 		
 		$("body").on("submit", "#vi-search-item", function(e) {
 			e.preventDefault();
@@ -647,14 +694,14 @@ $(document).ready(function() {
 		});
 
 		$("body").on("keyup", ".vend-index-search", function() {
-				var thisform = $(this).closest('form');
-				var pagefunction = thisform.find('[name=function]').val();
-				var loadinto = '#vend-results';
-				var href = URI(thisform.attr('action')).addQuery('q', $(this).val())
-													   .addQuery('function', pagefunction)
-													   .toString();
-				$(loadinto).loadin(href+' '+loadinto, function() { 
-				});
+			var thisform = $(this).closest('form');
+			var pagefunction = thisform.find('[name=function]').val();
+			var loadinto = '#vend-results';
+			var href = URI(thisform.attr('action')).addQuery('q', $(this).val())
+												   .addQuery('function', pagefunction)
+												   .toString();
+			$(loadinto).loadin(href+' '+loadinto, function() { 
+			});
 		});
 
 		$('body').on('click', '.load-doc', function(e) {
@@ -677,10 +724,10 @@ $(document).ready(function() {
 				}
 			});
 		});
-
-
+		
 		/*==============================================================
-			ACTION FUNCTIONS
+			ACTIONS FUNCTIONS 
+			FOR TASKS, LISTING
 		=============================================================*/
 		$("body").on("change", "#actions-panel .change-action-type, #actions-modal-panel .change-action-type", function() {
 			var select = $(this);
@@ -801,7 +848,6 @@ $(document).ready(function() {
 										$('.actions-refresh').click(); 
 										$(config.modals.ajax).modal('hide');
 										$.notify({
-											// options
 											title: ucfirst(json.response.notifytype)+"!",
 											icon: json.response.icon,
 											message: json.response.message
@@ -815,9 +861,7 @@ $(document).ready(function() {
 								$.get(json.response.action.urls.completion, function(json) { 
 									$('.actions-refresh').click(); 
 									$(config.modals.ajax).modal('hide');
-									console.log(json);
 									$.notify({
-										// options
 										title: ucfirst(json.response.notifytype)+"!",
 										icon: json.response.icon,
 										message: json.response.message
@@ -928,7 +972,7 @@ $(document).ready(function() {
 					$(modal).resizemodal('xl').modal();
 				});
 			} else {
-				edititempricing(itemID, custID,  function() {
+				edit_itempricing(itemID, custID,  function() {
 					$(loadinto).loadin(url, function() {
 						hideajaxloading();
 						$(modal).resizemodal('xl').modal();
@@ -943,7 +987,7 @@ $(document).ready(function() {
 /*==============================================================
 	AJAX FUNCTIONS
 =============================================================*/
-	function infofunctionnotavailable() {
+	function generate_notavailablefunction() {
 		var modal = $(config.modals.ajax);
 		modal.find('.modal-body').html("<h4>Function not available</h4>");
 		modal.resizemodal('lg').modal();
@@ -1104,13 +1148,12 @@ $(document).ready(function() {
 	            } else {
 					form.find('.response').createalertpanel('All your items are valid, verify and submit', '', 'success');
 	            } 
-				
 			});
 			callback();
         }
 	});
 
-	function getpaginationurl(form) {
+	function get_paginationurl(form) {
 		var showonpage = form.find('.results-per-page').val();
 		var displaypage = form.attr('action');
 		return URI(displaypage).addQuery('display', showonpage).toString();
@@ -1161,20 +1204,10 @@ $(document).ready(function() {
 		return result;
 	}
 
-
 /*==============================================================
-	CUST INDEX FUNCTIONS
+	EDIT ITEM FUNCTIONS
 =============================================================*/
-	function pickcustomer(custID, sourcepage) {
-		var loadinto = config.modals.ajax + ' .modal-content';
-		var url = URI(config.urls.customer.load.loadindex).addQuery('custID', custID).addQuery('source', sourcepage).toString();
-		$(loadinto).loadin(url, function() {});
-	}
-
-/*==============================================================
-	ITEM FUNCTIONS
-=============================================================*/
-	function chooseitemwhse(itemID, whse) { // TODO
+	function choose_itemwhse(itemID, whse) {
 		var form = '#'+itemID+"-form";
 		var whsefield = '.'+itemID+'-whse';
 		var whserow = '.'+whse+"-row";
@@ -1184,7 +1217,7 @@ $(document).ready(function() {
 		$(whserow).addClass('warning');
 	}
 
-	function edititempricing(itemID, custID, callback) {
+	function edit_itempricing(itemID, custID, callback) {
 		var url = config.urls.products.redir.getitempricing+"&itemID="+urlencode(itemID)+"&custID="+urlencode(custID);
 		$.get(url, function() { callback(); });
 	}
@@ -1219,12 +1252,7 @@ $(document).ready(function() {
 			});
 		});
 	}
-	
-	function returntopricing() {
-		var modal = config.modals.ajax;
-		$(modal).modal('hide');
-		pricing();
-	}
+
 /*==============================================================
 	STRING FUNCTIONS
 =============================================================*/
@@ -1233,7 +1261,7 @@ $(document).ready(function() {
 		return emailregex.test(email);
 	}
 	
-	function formatphone(input) {
+	function format_phone(input) {
 		// Strip all characters from the input except digits
 		input = input.replace(/\D/g,'');
 
@@ -1289,8 +1317,8 @@ $(document).ready(function() {
 		if ($(field1).val() == $(field2).val()) { return true; } else { return false; }
 	}
 	
-	function disableEnterKey(e) {
-		var key;      
+	function disable_enterkey(e) {
+		var key;
 		if(window.event) {
 			key = window.event.keyCode; //IE
 		} else {
@@ -1398,6 +1426,7 @@ $(document).ready(function() {
                           .find("input:text").val("").end()
                           .appendTo(list);
 		$('.duplicable-item:last input:first').focus();
+		
 	}
 	
 	function fill_frommodal(field, value) {

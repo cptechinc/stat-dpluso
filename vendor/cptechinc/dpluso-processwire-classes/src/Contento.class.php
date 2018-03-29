@@ -254,9 +254,12 @@
             $str.= $this->close('div');
             return $str;
         }
+		
+		public function generate_attributes($attr) {
+			return $this->attributes($attr);
+		}
         
         public function indent() {
             return '    ';
         }
     }
-?>

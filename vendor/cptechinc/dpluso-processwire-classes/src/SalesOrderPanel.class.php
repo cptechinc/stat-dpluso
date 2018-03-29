@@ -190,7 +190,7 @@
 			return $form->finish();
 		}
 		
-		public function generate_filter(WireInput $input) {
+		public function generate_filter(Processwire\WireInput $input) {
 			$stringerbell = new StringerBell();
 			parent::generate_filter($input);
 			

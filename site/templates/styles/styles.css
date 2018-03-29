@@ -25,7 +25,7 @@
 	.table.no-bottom {margin-bottom: 0px}
 	.panel-body.panel-light { padding: 10px;}
 	.modal-content.transparent {background: none;}
-	.form-control.inline {display: inline-block;}
+	.form-control.inline, .display-inline-block {display: inline-block;}
 
 	table.table-sm {font-size: 90%;}
 	.nav-tabs > li > a {color: #2c3e50;}

@@ -14,6 +14,7 @@
             'order',
             'cast',
             'as',
+			'group',
             'by',
             'or', 
             'asc',

@@ -7,7 +7,7 @@
         <?php foreach ($warehouses as $whse) : ?>
             <tr class="warehouse-tr <?= $whse['whsecd']; ?>-row">
                 <td>
-                    <button type="button" class="btn btn-primary btn-xs" onclick="chooseitemwhse('<?= cleanforjs($item->itemid); ?>', '<?= $whse['whsecd']; ?>')">
+                    <button type="button" class="btn btn-primary btn-xs" onclick="choose_itemwhse('<?= cleanforjs($item->itemid); ?>', '<?= $whse['whsecd']; ?>')">
                         <?= $whse['whsecd']; ?>
                     </button>
                 </td>

@@ -8,7 +8,7 @@
          * @param  string $vars string of attributes separated by | 
          * @return string      string of atrributes and values like class=""
          */
-        private function attributes($vars) {
+        protected function attributes($vars) {
             $attributesarray = array();
             $attributes = '';
             

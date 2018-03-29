@@ -1,7 +1,7 @@
 <?php
 	$editactiondisplay = new EditUserActionsDisplay($page->fullURL);
     $action = $config->pages->actions."notes/edit/";
-    $form = new FormMaker("action=$action|method=post|id=new-action-form|data-refresh=#actions-panel|data-modal=#ajax-modal|onKeyPress=return disableEnterKey(event)");
+    $form = new FormMaker("action=$action|method=post|id=new-action-form|data-refresh=#actions-panel|data-modal=#ajax-modal|onKeyPress=return disable_enterkey(event)");
 	
 	    $form->input("type=hidden|name=action|value=edit-crm-note");
 		$form->input("type=hidden|name=id|value=$note->id");

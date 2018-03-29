@@ -1,7 +1,7 @@
 <?php
 	error_reporting(error_reporting() & ~E_NOTICE);
 	$customer = get_customerinfo(session_id(), $custID, false);
-	$shiptocount = count_shiptos($custID, $user->loginid, $user->hascontactrestrictions, false);
+	$shiptocount = count_shiptos($custID, $user->loginid);
 	$address = $city = $state = $zip = $phone = $contact = "";
 ?>
 <div class="row">

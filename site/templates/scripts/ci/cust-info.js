@@ -365,12 +365,12 @@ function standorders() { //CAN BE USED IF SHIPTO IS DEFINED
 }
 function customerstock() { //CAN BE USED IF SHIPTO IS DEFINED
 	//TODO
-	infofunctionnotavailable()
+	generate_notavailablefunction();
 }
 
 function notes() { //CAN BE USED IF SHIPTO IS DEFINED
 	//TODO
-	infofunctionnotavailable()
+	generate_notavailablefunction();
 }
 
 function docview() {

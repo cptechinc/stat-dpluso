@@ -15,8 +15,8 @@
 	<tr>
     	<td class="control-label"><?= $formconfig->fields['fields']['shiptoid']['label']; ?><?= $formconfig->generate_asterisk('shiptoid'); ?><input type="hidden" id="shipto-id" value="<?= $order->shiptoid; ?>"></td>
         <td>
-        	<select class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shiptoid'); ?> shipto-select" name="shiptoid" data-custid="<?= $order->custid; ?>">
-				<?php $shiptos = get_customershiptos($order->custid, $user->loginid, $user->hasrestrictions, false); ?>
+        	<select class="form-control input-sm ordrhed <?= $formconfig->generate_showrequiredclass('shiptoid'); ?> shipto-select" name="shiptoid" data-custid="<?= $order->custid; ?>">
+				<?php $shiptos = get_customershiptos($order->custid, $user->loginid); ?>
                 <?php foreach ($shiptos as $shipto) : ?>
                     <?php if ($order->shiptoid == $shipto->shiptoid) : ?>
                         <option value="<?= $order->shiptoid; ?>" selected><?= $order->shiptoid.' - '.$order->shipname; ?></option>
@@ -30,24 +30,24 @@
     </tr>
     <tr>
     	<td class="control-label"><?= $formconfig->fields['fields']['shipname']['label']; ?><?= $formconfig->generate_asterisk('shipname'); ?></td>
-    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipname'); ?> shipto-name" name="shiptoname" value="<?= $order->shipname; ?>"></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?= $formconfig->generate_showrequiredclass('shipname'); ?> shipto-name" name="shiptoname" value="<?= $order->shipname; ?>"></td>
     </tr>
     <tr>
     	<td class="control-label"><?= $formconfig->fields['fields']['shipaddress']['label']; ?><?= $formconfig->generate_asterisk('shipaddress'); ?></td>
-    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipaddress'); ?> shipto-address" name="shipto-address" value="<?= $order->shipaddress; ?>"></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?= $formconfig->generate_showrequiredclass('shipaddress'); ?> shipto-address" name="shipto-address" value="<?= $order->shipaddress; ?>"></td>
     </tr>
     <tr>
     	<td class="control-label"><?= $formconfig->fields['fields']['shipaddress2']['label']; ?><?= $formconfig->generate_asterisk('shipaddress2'); ?></td>
-    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipaddress2'); ?> shipto-address2" name="shipto-address2" value="<?= $order->shipaddress2; ?>"></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?= $formconfig->generate_showrequiredclass('shipaddress2'); ?> shipto-address2" name="shipto-address2" value="<?= $order->shipaddress2; ?>"></td>
     </tr>
     <tr>
     	<td class="control-label"><?= $formconfig->fields['fields']['shipcity']['label']; ?><?= $formconfig->generate_asterisk('shipcity'); ?></td>
-    	<td><input type="text" class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipcity'); ?> shipto-city" name="shipto-city" value="<?= $order->shipcity; ?>"></td>
+    	<td><input type="text" class="form-control input-sm ordrhed <?= $formconfig->generate_showrequiredclass('shipcity'); ?> shipto-city" name="shipto-city" value="<?= $order->shipcity; ?>"></td>
     </tr>
     <tr>
     	<td class="control-label"><?= $formconfig->fields['fields']['shipstate']['label']; ?><?= $formconfig->generate_asterisk('shipstate'); ?></td>
     	<td>
-        	<select class="form-control input-sm ordrhed <?php echo $formconfig->generate_showrequiredclass('shipstate'); ?> shipto-state" name="shipto-state">
+        	<select class="form-control input-sm ordrhed <?= $formconfig->generate_showrequiredclass('shipstate'); ?> shipto-state" name="shipto-state">
             <option value="">---</option>
 				<?php $states = getstates(); ?>
                 <?php foreach ($states as $state) : ?>
@@ -59,7 +59,7 @@
     </tr>
     <tr>
     	<td class="control-label"><?= $formconfig->fields['fields']['shipzip']['label']; ?><?= $formconfig->generate_asterisk('shipzip'); ?></td>
-    	<td><input type="text" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('shipzip'); ?> shipto-zip" name="shipto-zip" value="<?= $order->shipzip; ?>"></td>
+    	<td><input type="text" class="form-control input-sm <?= $formconfig->generate_showrequiredclass('shipzip'); ?> shipto-zip" name="shipto-zip" value="<?= $order->shipzip; ?>"></td>
     </tr>
 	<tr>
 		<td class="control-label">Country</td>

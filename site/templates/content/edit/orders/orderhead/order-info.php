@@ -1,8 +1,12 @@
 <legend>Contact</legend>
 <table class="table table-striped table-bordered table-condensed">
 	<tr>
-		<td class="control-label"><?= $formconfig->fields['fields']['contact']['label']; ?><?= $formconfig->generate_asterisk('contact'); ?></td>
-		<td> <input type="text" name="contact" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('contact'); ?>" id="shiptocontact" value="<?= $order->contact; ?>"> </td>
+		<td class="control-label">
+			<?= $formconfig->fields['fields']['contact']['label']; ?><?= $formconfig->generate_asterisk('contact'); ?>
+			&nbsp;
+			<button type="button" class="btn btn-sm btn-primary get-cust-contact-search" data-custid="<?= $order->custid; ?>" data-shiptoid="<?= $order->shiptoid; ?>">Search</button>
+		</td>
+		<td> <input type="text" name="contact" class="form-control input-sm <?= $formconfig->generate_showrequiredclass('contact'); ?>" id="shiptocontact" value="<?= $order->contact; ?>"> </td>
 	</tr>
 	<?php if ($config->phoneintl) : ?>
 		<tr>
@@ -23,7 +27,7 @@
 	
 	<tr>
 		<td class="control-label"><?= $formconfig->fields['fields']['email']['label']; ?><?= $formconfig->generate_asterisk('email'); ?></td>
-		<td> <input type="text" name="contact-email" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('email'); ?> email" value="<?= $order->email; ?>"> </td>
+		<td> <input type="text" name="contact-email" class="form-control input-sm <?= $formconfig->generate_showrequiredclass('email'); ?> email" value="<?= $order->email; ?>"> </td>
 	</tr>
 </table>
 
@@ -35,11 +39,11 @@
 	</tr>
 	<tr>
 		<td class="control-label"><?= $formconfig->fields['fields']['custpo']['label']; ?><?= $formconfig->generate_asterisk('custpo'); ?></td> 
-		<td> <input type="text" name="custpo" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('custpo'); ?>" value="<?= $order->custpo; ?>"> </td>
+		<td> <input type="text" name="custpo" class="form-control input-sm <?= $formconfig->generate_showrequiredclass('custpo'); ?>" value="<?= $order->custpo; ?>"> </td>
 	</tr>
 	<tr>
 		<td class="control-label"><?= $formconfig->fields['fields']['releasenbr']['label']; ?><?= $formconfig->generate_asterisk('releasenbr'); ?></td> 
-		<td> <input type="text" name="release-number" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('releasenbr'); ?>" value="<?= $order->releasenbr; ?>"> </td>
+		<td> <input type="text" name="release-number" class="form-control input-sm <?= $formconfig->generate_showrequiredclass('releasenbr'); ?>" value="<?= $order->releasenbr; ?>"> </td>
 	</tr>
 	<tr>
 		<td>Shipvia</td>

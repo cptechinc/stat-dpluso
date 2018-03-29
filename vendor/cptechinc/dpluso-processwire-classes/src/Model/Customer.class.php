@@ -1,19 +1,40 @@
 <?php 
+	/**
+	 * Class for dealing with Customers
+	 * Derived from the custindex Table
+	 */
     class Customer extends Contact {
 		
         /* =============================================================
 			GETTER FUNCTIONS 
 		============================================================ */
+		/**
+		 * Returns the customer name or just return the custid
+		 * @return string Name or Customer ID
+		 */
         public function get_name() {
             return (!empty($this->name)) ? $this->name : $this->custid;
         }
         
-        public function get_shiptocount() {
-            return count_shiptos($this->custid, Processwire\wire('user')->loginid, Processwire\wire('user')->hascontactrestrictions);
+		/**
+		 * Return the number of shiptos this Customer has
+		 * it also takes in account if user has customer restrictions
+		 * @param  bool   $debug Whether to return Number or SQL Query
+		 * @return int    # of Shiptos or SQL Query
+		 */
+        public function get_shiptocount($debug = false) {
+            return count_shiptos($this->custid, DplusWire::wire('user')->loginid, $debug);
         }
         
+		/**
+		 * Gets the next shiptoid for this Customer
+		 * if shiptoid is defined then we get the next one
+		 * if no next one, go to the first one
+		 * Used for CI page
+		 * @return string shiptoid
+		 */
         public function get_nextshiptoid() {
-            $shiptos = get_customershiptos($this->custid, Processwire\wire('user')->loginid, Processwire\wire('user')->hascontactrestrictions);
+            $shiptos = get_customershiptos($this->custid, DplusWire::wire('user')->loginid);
             if (sizeof($shiptos) < 1) {
                 return false;
             } else {
@@ -41,6 +62,10 @@
         /* =============================================================
 			CLASS FUNCTIONS 
 		============================================================ */
+		/**
+		 * Generates Title for CI page
+		 * @return string title for CI page
+		 */
         public function generate_title() {
             return $this->get_name() . (($this->has_shipto()) ? ' Ship-to: ' . $this->shiptoid : '');
         }
@@ -89,6 +114,13 @@
             return get_customer($custID, $shiptoID, $contactID, $debug);
         }
 		
+		/**
+		 * Changes customer's custid
+		 * @param  string $currentID current customerID
+		 * @param  string $newcustID new customerID
+		 * @param  bool   $debug     Whether to execute change
+		 * @return string            SQL Query
+		 */
 		public static function change_custidfrom($currentID, $newcustID, $debug = false) {
 			return change_custindexcustid($currentID, $newcustID);
 		}
@@ -96,6 +128,14 @@
 		/* =============================================================
 			STATIC FUNCTIONS
 		============================================================ */
+		/**
+		 * Uses the static function load() function to load the customer
+		 * then uses, the Customer->get_customername() to return the name
+		 * @param  string $custID   customerID
+		 * @param  string $shiptoID customer shiptoID
+		 * @return string           Customer Name
+		 * @uses load()
+		 */
 		public static function get_customernamefromid($custID, $shiptoID = '') {
 			$customer = self::load($custID, $shiptoID);
 			return $customer->get_customername();

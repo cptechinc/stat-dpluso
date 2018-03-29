@@ -5,7 +5,7 @@
 		<td>
 			<select name="shipTo" class="form-control input-sm" onChange="refreshshipto(this.value,'<?php echo $custID; ?>')">
 				<option value=" " <?php if ($shipID == '') { echo 'selected'; } ?>>Company Totals</option>
-				<?php $shiptos = get_customershiptos($custID, $user->loginid, $user->hascontactrestrictions, false); ?>
+				<?php $shiptos = get_customershiptos($custID, $user->loginid); ?>
 				<?php foreach ($shiptos as $shipto) : ?>
 					<?php $show = $shipto->name.' - '.$shipto->city.', '.$shipto->state; ?>
 					<option value="<?= $shipto->shiptoid; ?>" <?php if ($shipto->shiptoid == $shipID) { echo 'selected'; } ?>><?= $show; ?> </option>

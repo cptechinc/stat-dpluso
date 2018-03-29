@@ -1,4 +1,8 @@
 <?php 
+	/**
+	 * Class for dealing with Contacts in Dpluso
+	 * Contacts are loaded from custindex
+	 */
     class Contact {
         use CreateFromObjectArrayTraits;
 		use CreateClassArrayTraits;
@@ -24,9 +28,6 @@
 		public $contact;
 		public $source;
 		public $extension;
-		public $amountsold;
-		public $timesold;
-		public $lastsaledate;
 		public $email;
 		public $typecode;
 		public $faxnbr;
@@ -69,6 +70,10 @@
             'shipID' => 'shiptoid',
         );
         
+		/** 
+		 * Contact Types
+		 * @var array
+		 */
 		public static $types = array(
 			'customer' => 'C',
 			'customer-contact' => 'CC',
@@ -111,6 +116,55 @@
         public function has_cellphone() {
             return (!empty($this->cellphone)) ? true : false;
         }
+		
+		/**
+		 * Returns if Contact is the AR Contact
+		 * @return bool 
+		 */
+		public function is_arcontact() {
+			return ($this->arcontact == 'Y') ? true : false;
+		}
+		
+		/**
+		 * Returns if Contact is the Dunning Contact
+		 * @return bool 
+		 */
+		public function is_dunningcontact() {
+			return ($this->dunning == 'Y') ? true : false;
+		}
+		
+		/**
+		 * Returns if Contact is a buying Contact
+		 * @return bool 
+		 */
+		public function is_buyingcontact() {
+			return ($this->buyingcontact == 'Y' || $this->buyingcontact == 'P') ? true : false;
+		}
+		
+		/**
+		 * Returns if Contact is the Primary Buyer Contact
+		 * @return bool 
+		 */
+		public function is_primarybuyer() {
+			return ($this->buyingcontact == 'P') ? true : false;
+		}
+		
+		/**
+		 * Returns if Contact is the Certificate Contact
+		 * At Stat it's the End User
+		 * @return bool 
+		 */
+		public function is_certcontact() {
+			return ($this->certcontact == 'Y') ? true : false;
+		}
+		
+		/**
+		 * Returns if Contact is the Acknowledgment Contact
+		 * @return bool 
+		 */
+		public function is_ackcontact() {
+			return ($this->ackcontact == 'Y') ? true : false;
+		}
 		
 		/* =============================================================
 			SETTER FUNCTIONS 
@@ -191,7 +245,7 @@
         
 		/**
 		 * URL to the customer redirect page, will be used by other functions to extend on
-		 * @return [type] [description]
+		 * @return string Customer redirect URL
 		 */
         public function generate_redirurl() {
             return new \Purl\Url(Dpluswire::wire('config')->pages->customer."redir/");
@@ -199,8 +253,8 @@
         
         /**
          * Outputs the javascript function name with parameter
-         * @param string $function which II function
-         * @return string          Function name with parameter for the call
+         * @param  string $function which II function
+         * @return string Function name with parameter for the call
          */
         public function generate_iifunction($function) {
             switch ($function) {
@@ -219,7 +273,7 @@
 		/**
 		 * Returns Phone with extension 
 		 * or without it depending if it has one
-		 * @return string
+		 * @return string Phone (with extension)
 		 */
 		public function generate_phonedisplay() {
 			if ($this->has_extension()) {
@@ -258,7 +312,24 @@
 		public function generate_address() {
 			return $this->addr1 . ' ' . $this->addr2. ' ' . $this->city . ', ' . $this->state . ' ' . $this->zip;
 		}
-
+		
+		/**
+		 * Returns a display title for end users or buyers
+		 * @return string display title
+		 * @uses
+		 */
+		public function generate_buyerorenduserdisplay() {
+			$title = '';
+			if ($this->is_buyingcontact()) {
+				$title = $this->is_primarybuyer() ? 'Primary Buyer' : 'Buyer';
+			} elseif ($this->is_certcontact()) {
+				if (Dpluswire::wire('config')->dpluscustomer == 'stat') {
+					$title = 'End User';
+				}	
+			}
+			return $title;
+		}
+		
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
@@ -346,6 +417,7 @@
 		 */
 		public static function remove_nondbkeys($array) {
 			unset($array['fieldaliases']);
+			unset($array['types']);
 			return $array;
 		}
     }

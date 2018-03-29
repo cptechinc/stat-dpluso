@@ -51,7 +51,9 @@
 					$quotes = get_customerquotesorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
-				$quotes = get_customerquotes($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->filters, $this->filterable, $useclass, $debug);
+				$this->tablesorter->sortrule = 'DESC'; 
+				$quotes = get_customerquotesquotedate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+				//$quotes = get_customerquotes($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $quotes: $this->quotes = $quotes;
 		}

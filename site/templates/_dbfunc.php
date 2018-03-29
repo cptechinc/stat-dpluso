@@ -119,6 +119,7 @@
 			return 1;
 		}
 	}
+	
 	function get_customer($custID, $shiptoID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('custindex');	
 		$q->where('custid', $custID);
@@ -130,7 +131,7 @@
 			$q->where('source', Contact::$types['customer']);
 		}
 		
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = Dpluswire::wire('database')->prepare($q->render());
 		
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -142,14 +143,14 @@
 	}
 	
 	function get_customername($custID) {
-		$sql = Processwire\wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID LIMIT 1");
+		$sql = Dpluswire::wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID LIMIT 1");
 		$switching = array(':custID' => $custID);
 		$sql->execute($switching);
 		return $sql->fetchColumn();
 	}
 
 	function get_shiptoname($custID, $shipID, $debug = false) {
-		$sql = Processwire\wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
+		$sql = Dpluswire::wire('database')->prepare("SELECT name FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
 		$switching = array(':custID' => $custID, ':shipID' => $shipID); $withquotes = array(true, true);
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
@@ -160,7 +161,7 @@
 	}
 
 	function get_customerinfo($sessionID, $custID, $debug) { // DEPRECATE 
-		$sql = Processwire\wire('database')->prepare("SELECT custindex.*, customer.dateentered FROM custindex JOIN customer ON custindex.custid = customer.custid WHERE custindex.custid = :custID AND customer.sessionid = :sessionID LIMIT 1");
+		$sql = Dpluswire::wire('database')->prepare("SELECT custindex.*, customer.dateentered FROM custindex JOIN customer ON custindex.custid = customer.custid WHERE custindex.custid = :custID AND customer.sessionid = :sessionID LIMIT 1");
 		$switching = array(':sessionID' => $sessionID, ':custID' => $custID); $withquotes = array(true, true);
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
@@ -171,7 +172,7 @@
 	}
 
 	function get_firstcustindexrecord($debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex LIMIT 1");
+		$sql = DplusWire::wire('database')->prepare("SELECT * FROM custindex LIMIT 1");
 		if ($debug) {
 			return $sql->queryString;
 		} else {
@@ -180,26 +181,29 @@
 		}
 	}
 
-	function count_shiptos($custID, $loginID, $restrictions, $debug = false) { // TODO use QueryBuilder
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custperm WHERE custid = :custID AND shiptoid != '') t WHERE loginid = :loginID OR loginid = :shared ");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true);
+	function count_shiptos($custID, $loginID, $debug = false) { // TODO use QueryBuilder
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID)->where('shiptoid', '!=', '');
+			$q = (new QueryBuilder())->table($custquery, 'custpermcust');
+			$q->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
 		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custperm WHERE custid = :custID AND shiptoid != ''");
-			$switching = array(':custID' => $custID); $withquotes = array(true);
+			$q = (new QueryBuilder())->table('custperm');
+			$q->where('custid', $custID);
 		}
+		$q->field('COUNT(*)');
+		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
 	function get_shiptoinfo($custID, $shipID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
+		$sql = DplusWire::wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID AND shiptoid = :shipID LIMIT 1");
 		$switching = array(':custID' => $custID, ':shipID' => $shipID); $withquotes = array(true, true);
 		if ($debug) {
 			return returnsqlquery($sql->queryString, $switching, $withquotes);
@@ -209,35 +213,40 @@
 		}
 	}
 
-	function get_customershiptos($custID, $loginID, $restrictions, $debug = false) { // TODO use QueryBuilder
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM (SELECT * FROM custperm WHERE custid = :custID AND shiptoid != '') t WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid, shiptoid");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true);
+	function get_customershiptos($custID, $loginID, $debug = false) { // TODO use QueryBuilder
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
+		$q = (new QueryBuilder())->table('custindex');
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID)->where('shiptoid', '!=', '');
+			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust');
+			$permquery->field('custid, shiptoid');
+			$permquery->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
+			$q->where('(custid, shiptoid)','in', $permquery);
 		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE custid = :custID AND shiptoid != '' GROUP BY custid, shiptoid");
-			$switching = array(':custID' => $custID); $withquotes = array(true);
+			$q->where('custid', $custID);
 		}
-
+		$q->group('custid, shiptoid');
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
 			return $sql->fetchAll();
 		}
 	}
 	
 	function get_topxsellingshiptos($sessionID, $custID, $count, $debug = false) {
-		$loginID = (Processwire\wire('user')->hascontactrestrictions) ? Processwire\wire('user')->loginid : 'admin';
+		$loginID = (Dpluswire::wire('user')->hascontactrestrictions) ? Processwire\wire('user')->loginid : 'admin';
 		$q = (new QueryBuilder())->table('custperm');
 		$q->where('loginid', $loginID);
 		$q->where('custid', $custID);
 		$q->where('shiptoid', '!=', '');
 		$q->limit($count);
 		$q->order('amountsold DESC');
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = Dpluswire::wire('database')->prepare($q->render());
 		
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -248,7 +257,7 @@
 	}
 	
 	function count_customercontacts($loginID, $restrictions, $custID, $debug = false) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
+		$SHARED_ACCOUNTS = Dpluswire::wire('config')->sharedaccounts;
 		$q = (new QueryBuilder())->table('custindex');
 		$q->field('COUNT(*)');
 		
@@ -273,7 +282,7 @@
 	}
 
 	function get_customercontacts($loginID, $restrictions, $custID, $debug = false) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
+		$SHARED_ACCOUNTS = Dpluswire::wire('config')->sharedaccounts;
 		$q = (new QueryBuilder())->table('custindex');
 		
 		if ($restrictions) {
@@ -286,7 +295,7 @@
 			$q->where('custid', $custID);
 		}
 		
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = Dpluswire::wire('database')->prepare($q->render());
 		
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -357,7 +366,75 @@
 			return $sql->fetch();
 		}
 	}
-
+	
+	function get_customerbuyersendusers($loginID, $custID, $shiptoID = false, $debug = false) {
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
+		$q = (new QueryBuilder())->table('custindex');
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
+			if (!empty($shiptoID)) {
+				$custquery->where('shiptoid', $shiptoID);
+			}
+			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust');
+			$permquery->field('custid, shiptoid');
+			$permquery->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
+			$q->where('(custid, shiptoid)','in', $permquery);
+		} else {
+			$q->where('custid', $custID);
+			if (!empty($shiptoID)) {
+				$q->where('shiptoid', $shiptoID);
+			}
+		}
+		$q->where('buyingcontact', '!=', 'N');
+		$q->where('certcontact', 'Y');
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
+			return $sql->fetchAll();
+		}
+	}
+	
+	function search_customerbuyersendusers($loginID, $query, $custID, $shiptoID = false, $debug = false) {
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
+		$search = '%'.$query.'%';
+		$q = (new QueryBuilder())->table('custindex');
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
+			if (!empty($shiptoID)) {
+				$custquery->where('shiptoid', $shiptoID);
+			}
+			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust');
+			$permquery->field('custid, shiptoid');
+			$permquery->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
+			$q->where('(custid, shiptoid)','in', $permquery);
+		} else {
+			$q->where('custid', $custID);
+			if (!empty($shiptoID)) {
+				$q->where('shiptoid', $shiptoID);
+			}
+		}
+		$fieldstring = implode(", ' ', ", array_keys(Contact::generate_classarray()));
+		$q->where('buyingcontact', '!=', 'N');
+		$q->where('certcontact', 'Y');
+		$q->where($q->expr("UCASE(REPLACE(CONCAT($fieldstring), '-', '')) LIKE []", [$search]));
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
+			return $sql->fetchAll();
+		}
+	}
+	
 	function edit_customercontact($custID, $shipID, $contactID, $contact, $debug = false) {
 		$originalcontact = get_customercontact($custID, $shipID, $contactID, false);
 		$q = (new QueryBuilder())->table('custindex');

@@ -8,7 +8,7 @@
 	<br>
 	<div class="tab-content">
 		<div role="tabpanel" class="tab-pane active" id="task">
-			<form action="<?= $config->pages->actions."tasks/add/"; ?>" method="POST" id="new-action-form" data-refresh="#actions-panel" data-modal="#ajax-modal" onKeyPress="return disableEnterKey(event)">
+			<form action="<?= $config->pages->actions."tasks/add/"; ?>" method="POST" id="new-action-form" data-refresh="#actions-panel" data-modal="#ajax-modal" onKeyPress="return disable_enterkey(event)">
 				<input type="hidden" name="action" value="write-task">
 				<input type="hidden" name="customerlink" value="<?= $task->customerlink; ?>">
 				<input type="hidden" name="shiptolink" value="<?= $task->shiptolink; ?>">

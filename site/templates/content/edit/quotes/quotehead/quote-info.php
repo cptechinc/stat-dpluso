@@ -1,7 +1,11 @@
 <legend>Contact</legend>
 <table class="table table-striped table-bordered table-condensed">
 	<tr>
-    	<td class="control-label"><?= $formconfig->fields['fields']['contact']['label']; ?><?= $formconfig->generate_asterisk('contact'); ?></td>
+    	<td class="control-label">
+			<?= $formconfig->fields['fields']['contact']['label']; ?><?= $formconfig->generate_asterisk('contact'); ?>
+			&nbsp;
+			<button type="button" class="btn btn-sm btn-primary get-cust-contact-search" data-custid="<?= $quote->custid; ?>" data-shiptoid="<?= $quote->shiptoid; ?>">Find</button>
+		</td>
         <td> <input type="text" name="contact" class="form-control input-sm <?php echo $formconfig->generate_showrequiredclass('contact'); ?>" id="shiptocontact" value="<?= $quote->contact; ?>"> </td>
     </tr>
     <?php if ($config->phoneintl) : ?>

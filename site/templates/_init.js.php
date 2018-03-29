@@ -87,7 +87,8 @@
                     'ci_custpo' => $config->pages->customer."redir/?action=ci-custpo"
     			],
     			'load' => [
-    				'loadindex' =>  $config->pages->ajaxload."customers/cust-index/"
+    				'loadindex' =>  $config->pages->ajaxload."customers/cust-index/",
+					'searchcontacts' => $config->pages->ajaxload."customers/contacts/"
     			]
     		],
     		'products' => [

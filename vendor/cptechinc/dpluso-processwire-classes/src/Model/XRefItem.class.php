@@ -12,6 +12,19 @@
         protected $image;
         protected $create_date;
         protected $create_time;
+		
+		/**
+		 * If Item is Active
+		 * @var string 
+		 * (A)ctive | (D)elete when empty | (I)nactive
+		 */
+        protected $activestatus;
+		
+		/**
+		 * Aliases that properties might use or have
+		 * so the __get function can lookup and find
+		 * @var array
+		 */
         public $fieldaliases = array(
             'itemID' => 'itemid',
         );

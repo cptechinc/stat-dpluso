@@ -23,7 +23,7 @@
 					$tb->td('', $this->json['columns']['top'][$column]['heading']);
 					if ($column == 'shiptoid') {
 						$options = $bootstrap->option('value= ', 'No Shipto Selected');
-						$shiptos = get_customershiptos($customer->custID, Processwire\wire('user')->loginid, Processwire\wire('user')->hascontactrestrictions);
+						$shiptos = get_customershiptos($customer->custID, Processwire\wire('user')->loginid);
 						foreach ($shiptos as $shipto) {
 							$show = $shipto->shiptoid.' '.$shipto->name.' - '.$shipto->city.', '.$shipto->state;
 							$attr = ($shipto->shiptoid == $customer->shipID) ? "value=$shipto->shiptoid|selected" : "value=$shipto->shiptoid";

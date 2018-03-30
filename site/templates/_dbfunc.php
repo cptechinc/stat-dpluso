@@ -515,35 +515,38 @@
 	}
 	
 	function search_custindexpaged($loginID, $limit = 10, $page = 1, $restrictions, $keyword, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
 		$limiting = returnlimitstatement($limit, $page);
-		$search = '%'.str_replace(' ', '%', str_replace('-', '', $keyword)).'%';
-	
+		$query = addslashes($keyword);
+		$search = '%'.str_replace(' ', '%', str_replace('-', '', $query)).'%';
+		$q = (new QueryBuilder())->table('custindex');
+		
 		if ($restrictions) {
-			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search) GROUP BY custid, shiptoid ORDER BY custid <> '$keyword' $limiting");
-			} elseif (Processwire\wire('config')->cptechcustomer == 'stat') { 
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search) GROUP BY custid $limiting"); 
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search) ORDER BY custid <> '$keyword' $limiting");
-			}
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS, ':search' => $search);
-			$withquotes = array(true, true, true);
+			$permquery = (new QueryBuilder())->table('custperm');
+			$permquery->field('custid, shiptoid');
+			$permquery->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
+			$q->where('(custid, shiptoid)','in', $permquery);
 		} else {
-			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search) GROUP BY custid, shiptoid ORDER BY custid <> '$keyword' $limiting");
-			} elseif (wire('config')->cptechcustomer == 'stat') {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search) GROUP BY custid $limiting");
-			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search) ORDER BY custid <> '$keyword' $limiting");
-			}
-			$switching = array(':search' => $search); $withquotes = array(true);
+			
 		}
-	
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+		$fieldstring = implode(", ' ', ", array_keys(Contact::generate_classarray()));
+		
+		$q->where($q->expr("UCASE(REPLACE(CONCAT($fieldstring), '-', '')) LIKE UCASE([])", [$search]));
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
+			$q->group('custid, shiptoid');
+			$q->order($q->expr('custid <> []', [$query]));
+		} elseif (DplusWire::wire('config')->cptechcustomer == 'stat') {
+			$q->group('custid');
 		} else {
-			$sql->execute($switching);
+			$q->order($q->expr('custid <> []', [$query]));
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
 			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
 			return $sql->fetchAll();
 		}

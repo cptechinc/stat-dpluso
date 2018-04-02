@@ -1031,12 +1031,169 @@
 		$q->where('sessionid', $sessionID);
 		$q->where('orderno', $ordn);
 		$q->where('itemnbr', '');
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 		
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {
 			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+/* =============================================================
+	SALES HISTORY FUNCTIONS
+============================================================ */
+	function is_ordersaleshistory($ordn, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field('COUNT(*)');
+		$q->where('orderno', $ordn);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_custidfromsaleshistory($ordn, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field('custid');
+		$q->where('orderno', $ordn);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function count_usersaleshistory($sessionID, $filter = false, $filtertypes = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field('COUNT(*)');
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_usersaleshistory($sessionID, $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderHistory');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_usersaleshistoryorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->order($orderby .' '. $sortrule);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderHistory');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_usersaleshistoryinvoicedate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field('saleshist.*');
+		$q->field($q->expr("STR_TO_DATE(invdate, '%m/%d/%Y') as dateofinvoice"));
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->order('dateofinvoice ' . $sortrule);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		echo $q->generate_sqlquery($q->params);
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderHistory');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_usersaleshistoryorderdate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field('saleshist.*');
+		$q->field($q->expr("STR_TO_DATE(order, '%m/%d/%Y') as dateoforder"));
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->order('dateoforder ' . $sortrule);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		echo $q->generate_sqlquery($q->params);
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderHistory');
+				return $sql->fetchAll();
+			}
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}

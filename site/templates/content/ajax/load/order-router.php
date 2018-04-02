@@ -8,8 +8,4 @@
 		case 'tracking':
 			include $config->paths->content.'edit/orders/tracking-page.php';
 			break;
-
     }
-
-
-?>

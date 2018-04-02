@@ -260,14 +260,35 @@
 	.item-whse-row {display: none;}
 
 /*==============================================================
-   RECENT ORDERS TABLE
- =============================================================*/
- 	#orders-table tr.selected, #quotes-table tr.selected { background: #FCF894; font-weight: bold; border-top: 3px solid black; }
-	#orders-table tr.detail, #quotes-table tr.detail, .quote-details tr.detail {font-size: 90%; }
-	#orders-table tr.document-header, #quotes-table tr.document-header { background-color: #3498db; color: #FFF; }
-	#orders-table tr.last-detail, #quotes-table tr.last-detail {border-bottom: 3px solid black;}
+	RECENT ORDERS TABLE
+	CREATE CLASS // TODO
+=============================================================*/
+	#orders-table tr.selected, 
+	#quotes-table tr.selected, 
+	#sales-history-table tr.selected,
+	.order-listing-table tr.selected { background: #FCF894 !important; font-weight: bold; border-top: 3px solid black; }
+	
+	#orders-table tr.detail, 
+	#sales-history-table tr.detail, 
+	#quotes-table tr.detail, 
+	.quote-details tr.detail,
+	.order-listing-table tr.detail {font-size: 90%; }
+	
+	#orders-table tr.document-header, 
+	#quotes-table tr.document-header,
+	.order-listing-table tr.document-header { background-color: #3498db !important;  color: #FFF; }
+	
+	#orders-table tr.last-detail, 
+	#quotes-table tr.last-detail, 
+	#sales-history-table tr.last-detail, 
+	.order-listing-table tr.last-detail{border-bottom: 3px solid black;}
+	
+	
 	#orders-table tr.tracking { background: #5FEACF; }
 		#orders-table tr.tracking a {color: #2c3e50;}
+	
+	.order-listing-table tr.tracking { background: #5FEACF; }
+		.order-listing-table tr.tracking a {color: #2c3e50;}
 
 	#show-docs-header { background-color: #536878; color: white;  }
 
@@ -279,7 +300,9 @@
 
 	.text-muted.h3 {color: #b4bcc2;}
 	.numeric {font-family: 'Source Code Pro';}
-
+	.first-total-row {
+		border-top: 2px solid #b4bcc2;
+	}
 /*==============================================================
    CART / ORDER DETAIL LINES
  =============================================================*/

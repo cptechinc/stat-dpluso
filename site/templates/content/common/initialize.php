@@ -6,6 +6,8 @@
 	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/vendor/autoload.php");
 	include_once($config->paths->vendor."cptechinc/dpluso-screen-formatters/vendor/autoload.php");
 	include_once($config->paths->vendor."cptechinc/dplus-services/vendor/autoload.php");
+	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/src/Model/SalesOrderHistory.class.php");
+	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/src/SalesOrderHistoryPanel.class.php");
 	
 	TableScreenMaker::set_filedirectory($config->jsonfilepath);
 	TableScreenMaker::set_testfiledirectory($config->paths->vendor."cptechinc/dpluso-screen-formatters/src/examples/");

@@ -1,7 +1,7 @@
 <table class="table table-striped table-bordered table-condensed" id="quotes-table">
 	<thead>
-       <?php include $config->paths->content.'salesrep/quotes/quotes-thead-rows.php'; ?>
-    </thead>
+		<?php include $config->paths->content.'dashboard/quotes/thead-rows.php'; ?>
+	</thead>
 	<tbody>
 		<?php if (isset($input->get->qnbr)) : ?>
 			<?php if ($quotepanel->count == 0 && $input->get->text('qnbr') == '') : ?>
@@ -28,18 +28,18 @@
 
 			<?php if ($quote->quotnbr == $input->get->text('qnbr')) : ?>
 				<?php if ($quote->error == 'Y') : ?>
-	                <tr class="detail bg-danger" >
-	                    <td></td>
-						<td></td>
-	                    <td colspan="3"><b>Error: </b><?= $quote->errormsg; ?></td>
-	                    <td></td>
-	                    <td></td>
+					<tr class="detail bg-danger" >
 						<td></td>
 						<td></td>
-	                </tr>
-	            <?php endif; ?>
-				<?php include $config->paths->content."salesrep/quotes/quote-detail-rows.php"; ?>
-				<?php include $config->paths->content."salesrep/quotes/quote-totals.php"; ?>
+						<td colspan="3"><b>Error: </b><?= $quote->errormsg; ?></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				<?php endif; ?>
+				<?php include $config->paths->content."dashboard/quotes/detail-rows.php"; ?>
+				<?php include $config->paths->content."dashboard/quotes/totals-rows.php"; ?>
 				<tr class="detail last-detail">
 					<td></td>
 					<td></td>

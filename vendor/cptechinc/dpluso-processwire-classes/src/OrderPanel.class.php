@@ -95,7 +95,6 @@
 		public function generate_filter(ProcessWire\WireInput $input) {
 			if (!$input->get->filter) {
 				$this->filters = false;
-				return;
 			} else {
 				$this->filters = array();
 				foreach ($this->filterable as $filter => $type) {

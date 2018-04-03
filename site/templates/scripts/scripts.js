@@ -208,6 +208,23 @@ $(document).ready(function() {
 				init_bootstraptoggle();
 			});
 		});
+		
+		$("body").on("click", ".load-and-show", function(e) {
+			e.preventDefault();
+			showajaxloading();
+			var button = $(this);
+			var loadinto = $(this).data('loadinto');
+			var focuson = $(this).data('focus');
+			var href = $(this).attr('href');
+			
+			$(loadinto).loadin(href, function() {
+				hideajaxloading();
+				if (focuson.length > 0) {
+					$('html, body').animate({scrollTop: $(focuson).offset().top - 60}, 1000);
+				}
+				init_bootstraptoggle();
+			});
+		});
 
 		$("body").on("click", ".load-into-modal", function(e) {
 			e.preventDefault();

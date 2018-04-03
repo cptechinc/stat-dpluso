@@ -2,7 +2,7 @@
 	class SalesOrderHistoryPanel extends SalesOrderPanel {
 		
 		public $orders = array();
-		public $paneltype = 'sales-order';
+		public $paneltype = 'shipped-order';
 		public $filterable = array(
 			'custpo' => array(
 				'querytype' => 'between',

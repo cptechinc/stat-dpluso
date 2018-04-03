@@ -1198,6 +1198,157 @@
 		}
 	}
 	
+	function count_customersaleshistory($sessionID, $custID, $shiptoID = '', $filter = false, $filtertypes = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field('COUNT(*)');
+		$q->where('custid', $custID);
+		
+		if (!empty($shiptoID)) {
+			$q->where('shiptoid', $shiptoID);
+		}
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_customersaleshistory($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->where('custid', $custID);
+		
+		if (!empty($shiptoID)) {
+			$q->where('shiptoid', $shiptoID);
+		}
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderHistory');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_customersaleshistoryorderby($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->where('custid', $custID);
+		
+		if (!empty($shiptoID)) {
+			$q->where('shiptoid', $shiptoID);
+		}
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->order($orderby .' '. $sortrule);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderHistory');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_customersaleshistoryinvoicedate($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field('saleshist.*');
+		$q->field($q->expr("STR_TO_DATE(invdate, '%m/%d/%Y') as dateofinvoice"));
+		$q->where('custid', $custID);
+		
+		if (!empty($shiptoID)) {
+			$q->where('shiptoid', $shiptoID);
+		}
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->order('dateofinvoice ' . $sortrule);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		echo $q->generate_sqlquery($q->params);
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderHistory');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_customersaleshistoryorderdate($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field('saleshist.*');
+		$q->field($q->expr("STR_TO_DATE(order, '%m/%d/%Y') as dateoforder"));
+		$q->where('custid', $custID);
+		
+		if (!empty($shiptoID)) {
+			$q->where('shiptoid', $shiptoID);
+		}
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+		}
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$q->order('dateoforder ' . $sortrule);
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		echo $q->generate_sqlquery($q->params);
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			if ($useclass) {
+				$sql->setFetchMode(PDO::FETCH_CLASS, 'SalesOrderHistory');
+				return $sql->fetchAll();
+			}
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
 /* =============================================================
 	QUOTES FUNCTIONS
 ============================================================ */
@@ -3084,7 +3235,7 @@
 	/* =============================================================
 		LOGM FUNCTIONS
 	============================================================ */
-	function get_userbookings($days = 30, $debug = false) {
+	function get_userbookings2($sessionID, $filter, $debug = false) {
 		$salesrepID = (!empty(DplusWire::wire('user')->salespersonid)) ? DplusWire::wire('user')->salespersonid : 'admin';
 		$q = (new QueryBuilder())->table('bookingr');
 		$q->where('salesrep', $salesrepID);
@@ -3105,3 +3256,27 @@
 		}
 	}
 	
+	function get_userbookings($sessionID, $filter, $filtertypes, $interval = '', $debug = false) {
+		$salesrepID = (!empty(DplusWire::wire('user')->salespersonid)) ? DplusWire::wire('user')->salespersonid : 'admin';
+		$q = (new QueryBuilder())->table('bookingr');
+		$q->where('salesrep', $salesrepID);
+		$q->generate_filters($filter, $filtertypes);
+		
+		
+		
+		switch ($interval) {
+			case 'month':
+				$q->field($q->expr("CAST(CONCAT(YEAR(bookdate), LPAD(MONTH(bookdate), 2, '0'), '01') AS UNSIGNED) as bookdate"));
+				$q->field('SUM(amount) as amount');
+				$q->group('YEAR(bookdate), MONTH(bookdate)');
+				break;
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}

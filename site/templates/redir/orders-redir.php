@@ -121,7 +121,7 @@
 			$session->remove('ordersearch');
 			$custID = $input->get->text('custID');
 			$data = array('DBNAME' => $config->dbName, 'ORDRHED' => false, 'CUSTID' => $custID, 'TYPE' => 'O');
-			$session->loc = $config->pages->ajax."load/orders/cust/".urlencode($custID)."/"."?ordn=".$linkaddon;
+			$session->loc = $config->pages->ajax."load/sales-orders/cust/".urlencode($custID)."/"."?ordn=".$linkaddon;
 			$session->{'orders-loaded-for'} = $custID;
 			$session->{'orders-updated'} = date('m/d/Y h:i A');
 			break;

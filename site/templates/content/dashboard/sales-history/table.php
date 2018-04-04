@@ -63,7 +63,8 @@
 							<span class="glyphicon glyphicon-shopping-cart" title="re-order"></span> Reorder Order
 						 </a>
 					</td>
-					<td></td>  <td></td>
+					<td></td>
+					<td></td>
 					<td colspan="2">
 						<div class="pull-right"> <a class="btn btn-danger btn-sm load-link" href="<?= $orderpanel->generate_closedetailsurl($order); ?>" <?= $orderpanel->ajaxdata; ?>>Close</a> </div>
 					</td>

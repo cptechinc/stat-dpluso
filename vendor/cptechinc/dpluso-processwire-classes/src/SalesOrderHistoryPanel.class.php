@@ -113,7 +113,7 @@
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->createicon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Orders");
+			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh History");
 		}
 		
 		public function generate_searchlink() {
@@ -222,4 +222,5 @@
 			$url->query->set('type', 'history');
 			return $url->getUrl();
 		}
+		
 	}

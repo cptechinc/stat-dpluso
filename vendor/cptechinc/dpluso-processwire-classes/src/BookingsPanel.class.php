@@ -93,7 +93,7 @@
 			$this->pageurl = new Purl\Url($pageurl->getUrl());
 			$this->modal = $modal;
 			$this->ajaxdata = $this->parse_ajaxdata($ajaxdata);
-			$this->setup_url();
+			$this->setup_pageurl();
 		}
 		
 		/* =============================================================
@@ -112,11 +112,27 @@
 			return $debug ? $bookings : $this->bookings = $bookings;
 		}
 		
+		public function get_daybookingordernumbers($date, $debug = false) {
+			return get_daybookingordernumbers($this->sessionID, $date, false, false, $debug);
+		}
+		
+		public function count_daybookingordernumbers($date, $debug = false) {
+			return count_daybookingordernumbers($this->sessionID, $date, false, false, $debug);
+		}
+		
+		public function count_todaysbookings($debug = false) {
+			return count_todaysbookings($this->sessionID, false, false, $debug);
+		}
+		
+		public function get_bookingsummarybycustomer($debug = false) {
+			$bookings = get_bookingsummarybycustomer($this->sessionID, $this->filters, $this->filterable, $this->interval, $debug);
+			return $debug ? $bookings : $this->bookings = $bookings;
+		}
+		
 		/**
 		 * Determines the interval to use based on the filters
 		 * and based on the interval it creates the title description
 		 * @return string [description] "Viewing (daily | weekly | monthly) bookings between $from and $through"
-		 * @uses
 		 */
 		public function generate_title() {
 			$this->determine_interval();
@@ -136,7 +152,7 @@
 		 * Used when constructed, this sets the PageURL path to point at the bookings ajax URL
 		 * @return void 
 		 */
-		public function setup_url() {
+		public function setup_pageurl() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajaxload."bookings/";
 		}
 		/**
@@ -166,6 +182,11 @@
 			return $url->getURL();
 		}
 		
+		/**
+		 * Returns the HTML link for refreshing bookings
+		 * @return string HTML link
+		 * @uses
+		 */
 		public function generate_refreshlink() {
 			$bootstrap = new Contento();
 			$href = $this->generate_refreshurl();
@@ -233,17 +254,40 @@
 		 * if there are more than 90 days between from and through dates then
 		 * the interval is set to month
 		 * @return void
-		 * @uses
 		 */
 		protected function determine_interval() {
-			$from = strtotime($this->filters['bookdate'][0]);
-			$through = strtotime($this->filters['bookdate'][1]);
-			$days = floor(($through - $from) / (60*60*24));
+			$days = DplusDateTime::subtract_days($this->filters['bookdate'][0], $this->filters['bookdate'][1]);
 			
 			if ($days >= 90 && empty($this->interval)) {
 				$this->set_interval('month');
 			} elseif (empty($this->interval)) {
 				$this->set_interval('day');
 			}
+		}
+		
+		/**
+		 * Return the description for todays bookings
+		 * @return string $bookingscount booking(s) made today
+		 * @uses
+		 */
+		public function generate_todaysbookingsdescription() {
+			$bookingscount = $this->count_todaysbookings();
+			$description = $bookingscount == 1 ? 'booking' : 'bookings';
+			return "$bookingscount bookings made today";
+		}
+		
+		public function generate_viewsalesordersbydayurl($date) {
+			$url = new Purl\Url($this->pageurl->getUrl());
+			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
+			$url->query->set('date', $date);
+			return $url->getUrl();
+		}
+		
+		public function generate_viewsalesordersbydaylink($date) {
+			$bootstrap = new Contento();
+			$href = $this->generate_viewsalesordersbydayurl($date);
+			$icon = $bootstrap->createicon('glyphicon glyphicon-new-window');
+			$ajaxdata = "data-modal=$this->modal";
+			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Orders");
 		}
 	}

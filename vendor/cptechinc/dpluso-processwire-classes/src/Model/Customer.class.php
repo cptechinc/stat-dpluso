@@ -85,6 +85,7 @@
 			);
 		}
 		
+		
 		/**
 		 * Return URL to the add Contact form
 		 * @return string  Add Contact URL
@@ -138,6 +139,27 @@
 		 */
 		public static function get_customernamefromid($custID, $shiptoID = '') {
 			$customer = self::load($custID, $shiptoID);
-			return $customer->get_customername();
+			return $customer ? $customer->get_customername() : $custID;
+		}
+		
+		/** 
+		 * Generates an array for the bookings Data for this Customer
+		 * so it can be used in Morris.js to draw up a pie chart
+		 * if customer can't be found, then return data with as much
+		 * info as possible
+		 * @param  string $custID   Customer
+		 * @param  string $shiptoID Shipto ID
+		 * @param  float  $value    Amount
+		 * @return array        has the Name, value, custid and shiptoid in an array
+		 */
+		public static function generate_bookingsdata($custID, $shiptoID, $value) {
+			$customer = self::load($custID, $shiptoID);
+			
+			return array(
+				'label' => $customer ? $customer->get_name() : $custID,
+				'value' => $value,
+				'custid' => $custID,
+				'shiptoid' => $shiptoID
+			);
 		}
     }

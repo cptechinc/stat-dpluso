@@ -208,7 +208,12 @@ $(document).ready(function() {
 				init_bootstraptoggle();
 			});
 		});
-		
+		$("body").on("click", ".stuff", function(e) {
+		e.preventDefault();
+			console.log('clicked');
+			alert('sfd');
+			
+		}); 
 		$("body").on("click", ".load-and-show", function(e) {
 			e.preventDefault();
 			showajaxloading();

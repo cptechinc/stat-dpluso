@@ -12,6 +12,11 @@
 			}
 			$page->body = $config->paths->content.'customer/cust-page/orders/orders-panel.php';
 			break;
+		case 'sales-orders':
+			$date = DplusDateTime::format_date($input->get->text('date'));
+			$page->title = "Viewing Sales Orders booked on $date";
+			$page->body = $config->paths->content.'dashboard/bookings/sales-orders-by-day.php';
+			break;
 		default:
 			$page->body = $config->paths->content.'dashboard/bookings-panel.php';
 			break;

@@ -1,8 +1,7 @@
 <?php 
-	class CustomerSalesOrderPanel extends SalesOrderPanel implements OrderPanelCustomerInterface {
-		use OrderPanelCustomerTraits;
-		
+	class CustomerSalesOrderHistoryPanel  extends CustomerSalesOrderPanel {
 		public $orders = array();
+		public $paneltype = 'shipped-order';
 		public $filterable = array(
 			'custpo' => array(
 				'querytype' => 'between',
@@ -28,11 +27,6 @@
 				'querytype' => 'between',
 				'datatype' => 'date',
 				'label' => 'Order Date'
-			),
-			'status' => array(
-				'querytype' => 'in',
-				'datatype' => 'char',
-				'label' => 'Status'
 			)
 		);
 		
@@ -40,7 +34,7 @@
 			SalesOrderPanelInterface Functions
 		============================================================ */
 		public function get_ordercount($debug = false) {
-			$count = count_customerorders($this->sessionID, $this->custID, $this->filters, $this->filterable, $debug);
+			$count = count_customersaleshistory($this->sessionID, $this->custID, $this->shiptoID, $this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
 		
@@ -48,14 +42,16 @@
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
-					$orders = get_customerordersorderdate($this->sessionID, $this->custID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_customersaleshistoryorderdate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+				} elseif ($this->tablesorter->orderby == 'invdate') {
+					$orders = get_customersaleshistoryinvoicedate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
-					$orders = get_customerordersorderby($this->sessionID, $this->custID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_customersaleshistoryorderby($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
 				// DEFAULT BY ORDER DATE SINCE SALES ORDER # CAN BE ROLLED OVER
 				$this->tablesorter->sortrule = 'DESC';
-				$orders = get_customerordersorderdate($this->sessionID, $this->custID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+				$orders = get_customersaleshistoryorderdate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $orders : $this->orders = $orders;
 		}
@@ -71,6 +67,15 @@
 			return $url->getUrl();
 		}
 		
+		public function setup_pageurl(\Purl\Url $pageurl) {
+			$url = $pageurl;
+			$url->path = DplusWire::wire('config')->pages->ajax."load/sales-history/";
+			$url->query->remove('display');
+			$url->query->remove('ajax');
+			$this->paginationinsertafter = 'sales-history';
+			return $url;
+		}
+		
 		public function generate_searchurl() {
 			$url = new \Purl\Url(parent::generate_searchurl());
 			$url->path = DplusWire::wire('config')->pages->ajax.'load/orders/search/cust/';
@@ -84,6 +89,7 @@
 		public function generate_loaddetailsurl(Order $order) {
 			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $order->custid);
+			$url->query->set('type', 'history');
 			return $url->getUrl();
 		}
 		
@@ -127,6 +133,7 @@
 		public function generate_trackingrequesturl(Order $order) {
 			$url = new \Purl\Url(parent::generate_trackingrequesturl($order));
 			$url->query->set('custID', $this->custID);
+			$url->query->set('type', 'history');
 			return $url->getUrl();
 		}
 		
@@ -137,6 +144,7 @@
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
 			$url = new \Purl\Url(parent::generate_documentsrequesturl($order, $orderdetail));
 			$url->query->set('custID', $this->custID);
+			$url->query->set('type', 'history');
 			return $url->getUrl();
 		}
 	}

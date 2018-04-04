@@ -1145,7 +1145,7 @@
 	function get_usersaleshistoryinvoicedate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
-		$q->field($q->expr("STR_TO_DATE(invdate, '%m/%d/%Y') as dateofinvoice"));
+		$q->field($q->expr("STR_TO_DATE(invdate, '%Y%m%d') as dateofinvoice"));
 		
 		if (DplusWire::wire('user')->hascontactrestrictions) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
@@ -1172,8 +1172,7 @@
 	function get_usersaleshistoryorderdate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
-		$q->field($q->expr("STR_TO_DATE(order, '%m/%d/%Y') as dateoforder"));
-		
+		$q->field($q->expr("STR_TO_DATE(orderdate, '%Y%m%d') as dateoforder"));
 		if (DplusWire::wire('user')->hascontactrestrictions) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}

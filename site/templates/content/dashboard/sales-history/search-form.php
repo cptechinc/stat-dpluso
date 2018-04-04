@@ -50,7 +50,17 @@
 			<?php $name = 'orderdate[]'; $value = $orderpanel->get_filtervalue('orderdate', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>
-		  </div>
+		</div>
+		<div class="col-sm-2">
+			<h4>Invoice Date</h4>
+			<?php $name = 'invdate[]'; $value = $orderpanel->get_filtervalue('invdate'); ?>
+			<?php include $config->paths->content."common/date-picker.php"; ?>
+			<label class="small text-muted">From Date </label>
+			
+			<?php $name = 'invdate[]'; $value = $orderpanel->get_filtervalue('invdate', 1); ?>
+			<?php include $config->paths->content."common/date-picker.php"; ?>
+			<label class="small text-muted">Through Date </label>
+		</div>
 	</div>
 	</br>
 	<div class="form-group">

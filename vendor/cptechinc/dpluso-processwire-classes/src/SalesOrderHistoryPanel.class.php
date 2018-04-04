@@ -27,7 +27,14 @@
 			'orderdate' => array(
 				'querytype' => 'between',
 				'datatype' => 'date',
+				'date-format' => 'Ymd',
 				'label' => 'Order Date'
+			),
+			'invdate' => array(
+				'querytype' => 'between',
+				'datatype' => 'date',
+				'date-format' => 'Ymd',
+				'label' => 'Invoice Date'
 			),
 			'status' => array(
 				'querytype' => 'in',
@@ -53,7 +60,7 @@
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
-					 $orders =get_usersaleshistoryinvoicedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					 $orders =get_usersaleshistoryorderdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'invdate') {
 					 $orders =get_usersaleshistoryinvoicedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
@@ -179,6 +186,16 @@
 				
 				if (empty($this->filters['orderdate'][1])) {
 					$this->filters['orderdate'][1] = date('m/d/Y');
+				}
+			}
+			
+			if (isset($this->filters['invdate'])) {
+				if (empty($this->filters['invdate'][0])) {
+					$this->filters['invdate'][0] = date('m/d/Y', strtotime(get_minorderdate($this->sessionID, 'invdate')));
+				}
+				
+				if (empty($this->filters['invdate'][1])) {
+					$this->filters['invdate'][1] = date('m/d/Y');
 				}
 			}
 			

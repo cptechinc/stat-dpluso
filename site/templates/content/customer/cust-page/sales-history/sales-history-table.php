@@ -1,4 +1,4 @@
-
+<?= $orderpanel->get_orders(true); ?>
 <table class="table table-striped table-bordered table-condensed order-listing-table">
 	<thead>
 		<?php include $config->paths->content.'customer/cust-page/sales-history/sales-history-thead-rows.php'; ?>
@@ -30,18 +30,17 @@
 				</td>
 			</tr>
 
-            <!-- TODO: need customer detail info -->
 			<?php if ($order->orderno == $input->get->text('ordn')) : ?>
 				<?php if ($input->get->show == 'documents' && (!$input->get('item-documents'))) : ?>
-					<?php include $config->paths->content.'dashboard/sales-history/documents-rows.php'; ?>
+					<?php include $config->paths->content.'customer/cust-page/sales-history/documents-rows.php'; ?>
 				<?php endif; ?>
 
-				<?php include $config->paths->content.'dashboard/sales-history/detail-rows.php'; ?>
+				<?php include $config->paths->content.'customer/cust-page/sales-history/detail-rows.php'; ?>
 
-				<?php include $config->paths->content.'dashboard/sales-history/totals-rows.php'; ?>
+				<?php include $config->paths->content.'customer/cust-page/sales-history/totals-rows.php'; ?>
 
 				<?php if ($input->get->text('show') == 'tracking') : ?>
-					<?php include $config->paths->content.'dashboard/sales-history/tracking-rows.php'; ?>
+					<?php include $config->paths->content.'customer/cust-page/sales-history/tracking-rows.php'; ?>
 				<?php endif; ?>
 
 				<?php if ($order->error == 'Y') : ?>

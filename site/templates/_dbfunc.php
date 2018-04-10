@@ -1281,7 +1281,7 @@
 	function get_customersaleshistoryinvoicedate($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
-		$q->field($q->expr("STR_TO_DATE(invdate, '%m/%d/%Y') as dateofinvoice"));
+		$q->field($q->expr("STR_TO_DATE(invdate, '%Y%m%d') as dateofinvoice"));
 		$q->where('custid', $custID);
 		
 		if (!empty($shiptoID)) {
@@ -1312,7 +1312,7 @@
 	function get_customersaleshistoryorderdate($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
-		$q->field($q->expr("STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder"));
+		$q->field($q->expr("STR_TO_DATE(orderdate, '%Y%m%d') as dateoforder"));
 		$q->where('custid', $custID);
 		
 		if (!empty($shiptoID)) {
@@ -1340,9 +1340,25 @@
 		}
 	}
 	
+	function get_minsaleshistoryorderdate($sessionID, $field, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field($q->expr("MIN(STR_TO_DATE($field, '%m/%d/%Y'))"));
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = Processwire\wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
 	function get_maxsaleshistoryordertotal($sessionID, $custID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MAX(CAST(ordertotal AS DECIMAL(8,2))) AS ordertotal"));
+		$q->field($q->expr("MAX(ordertotal)"));
 		if ($custID) {
 			$q->where('custid', $custID);
 		}
@@ -1357,7 +1373,7 @@
 	
 	function get_minsaleshistoryordertotal($sessionID, $custID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MIN(CAST(ordertotal AS DECIMAL(8,2))) AS ordertotal"));
+		$q->field($q->expr("MIN(ordertotal)"));
 		if ($custID) {
 			$q->where('custid', $custID);
 		}

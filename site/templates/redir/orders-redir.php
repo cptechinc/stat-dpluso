@@ -142,7 +142,11 @@
 			} elseif ($input->get->print) {
 				$session->loc = $config->pages->print."order/?ordn=".$ordn;
 			} elseif ($input->get->custID) {
-				$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon, $pagenumber, $custID, '');
+				if ($input->get->text('type') == 'history') {
+					$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/customer/".urlencode($custID)."/?ordn=".$ordn.$linkaddon, $pagenumber, $custID, '');
+				} else {
+					$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon, $pagenumber, $custID, '');
+				}
 			} elseif($input->get->readonly) {
 				$session->loc = $config->pages->editorder."?ordn=".$ordn; 
 			} else {

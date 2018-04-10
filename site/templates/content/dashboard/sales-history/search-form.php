@@ -29,15 +29,15 @@
 		<div class="col-sm-2">
 			<h4>Order Total</h4>
 			<div class="input-group form-group">
-				<input class="form-control form-group inline input-sm" type="text" name="ordertotal[]" id="order-total-min" value="<?= $orderpanel->get_filtervalue('ordertotal'); ?>" placeholder="From Order Total">
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#order-total-min').val('<?= get_minordertotal(session_id()); ?>')"> <span class="fa fa-angle-double-down" aria-hidden="true"></span> <span class="sr-only">Min</span> </button>
-					</span>
+				<input class="form-control form-group inline input-sm" type="text" name="ordertotal[]" id="sales-history-ordertotal-min" value="<?= $orderpanel->get_filtervalue('ordertotal'); ?>" placeholder="From Order Total">
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#sales-history-ordertotal-min').val('<?= get_minsaleshistoryordertotal(session_id()); ?>')"> <span class="fa fa-angle-double-down" aria-hidden="true"></span> <span class="sr-only">Min</span> </button>
+				</span>
 			</div>
 			<div class="input-group form-group">
-				<input class="form-control form-group inline input-sm" type="text" name="ordertotal[]" id="order-total-max" value="<?= $orderpanel->get_filtervalue('ordertotal', 1); ?>" placeholder="Through Order Total">
+				<input class="form-control form-group inline input-sm" type="text" name="ordertotal[]" id="sales-history-ordertotal-max" value="<?= $orderpanel->get_filtervalue('ordertotal', 1); ?>" placeholder="Through Order Total">
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#order-total-max').val('<?= get_maxordertotal(session_id()); ?>')"> <span class="fa fa-angle-double-up" aria-hidden="true"></span> <span class="sr-only">Max</span> </button>
+					<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#sales-history-ordertotal-max').val('<?= get_maxsaleshistoryordertotal(session_id()); ?>')"> <span class="fa fa-angle-double-up" aria-hidden="true"></span> <span class="sr-only">Max</span> </button>
 				</span>
 			</div>
 		</div>

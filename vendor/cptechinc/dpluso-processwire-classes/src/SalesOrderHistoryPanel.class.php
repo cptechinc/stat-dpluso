@@ -60,9 +60,9 @@
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
-					$orders =get_usersaleshistoryorderdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_usersaleshistoryorderdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'invdate') {
-					$orders =get_usersaleshistoryinvoicedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_usersaleshistoryinvoicedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
 					$orders = get_usersaleshistoryorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
@@ -110,7 +110,19 @@
 		
 		public function generate_loadurl() { 
 			$url = new \Purl\Url($this->pageurl);
+			$url->query->remove('filter');
+			foreach (array_keys($this->filterable) as $filtercolumns) {
+				$url->query->remove($filtercolumns);
+			}
 			return $url->getUrl();
+		}
+		
+		public function generate_clearsearchlink() {
+			$bootstrap = new Contento();
+			$href = $this->generate_loadurl();
+			$icon = $bootstrap->createicon('fa fa-search-minus');
+			$ajaxdata = $this->generate_ajaxdataforcontento();
+			return $bootstrap->openandclose('a', "href=$href|class=load-link btn btn-warning btn-block|$ajaxdata", "Clear Search $icon");
 		}
 		
 		public function generate_refreshlink() {
@@ -189,7 +201,7 @@
 			
 			if (isset($this->filters['invdate'])) {
 				if (empty($this->filters['invdate'][0])) {
-					$this->filters['invdate'][0] = date('m/d/Y', strtotime(get_minorderdate($this->sessionID, 'invdate')));
+					$this->filters['invdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invdate')));
 				}
 				
 				if (empty($this->filters['invdate'][1])) {

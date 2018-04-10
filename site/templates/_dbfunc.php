@@ -1072,6 +1072,68 @@
 		}
 	}
 	
+	function get_minsaleshistoryorderdate($sessionID, $field, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field($q->expr("MIN(STR_TO_DATE($field, '%m/%d/%Y'))"));
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_maxsaleshistoryorderdate($sessionID, $field, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field($q->expr("MAX(STR_TO_DATE($field, '%m/%d/%Y'))"));
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_maxsaleshistoryordertotal($sessionID, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field($q->expr("MAX(ordertotal)"));
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_minsaleshistoryordertotal($sessionID, $custID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('saleshist');
+		$q->field($q->expr("MIN(ordertotal)"));
+		if ($custID) {
+			$q->where('custid', $custID);
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
 	function count_usersaleshistory($sessionID, $filter = false, $filtertypes = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('COUNT(*)');
@@ -1082,7 +1144,6 @@
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
 		}
-		
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		
 		if ($debug) {
@@ -1339,53 +1400,6 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
-	
-	function get_minsaleshistoryorderdate($sessionID, $field, $custID = false, $debug = false) {
-		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MIN(STR_TO_DATE($field, '%m/%d/%Y'))"));
-		if ($custID) {
-			$q->where('custid', $custID);
-		}
-		$sql = Processwire\wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_maxsaleshistoryordertotal($sessionID, $custID = false, $debug = false) {
-		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MAX(ordertotal)"));
-		if ($custID) {
-			$q->where('custid', $custID);
-		}
-		$sql = Processwire\wire('database')->prepare($q->render());
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_minsaleshistoryordertotal($sessionID, $custID = false, $debug = false) {
-		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MIN(ordertotal)"));
-		if ($custID) {
-			$q->where('custid', $custID);
-		}
-		$sql = Processwire\wire('database')->prepare($q->render());
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
 /* =============================================================
 	QUOTES FUNCTIONS
 ============================================================ */

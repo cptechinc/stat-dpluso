@@ -191,7 +191,7 @@
 			
 			if (isset($this->filters['orderdate'])) {
 				if (empty($this->filters['orderdate'][0])) {
-					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minorderdate($this->sessionID, 'orderdate')));
+					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'orderdate')));
 				}
 				
 				if (empty($this->filters['orderdate'][1])) {
@@ -228,7 +228,6 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		
 		public function generate_trackingrequesturl(Order $order) {
 			$url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
@@ -241,7 +240,6 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
 			$url = new \Purl\Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);

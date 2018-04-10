@@ -1,9 +1,19 @@
-<?php 
+<?php
+	/**
+	 * Traits that will be shared accross QuotePanels and Quote Displays
+	 * @var [type]
+	 */
 	trait QuoteDisplayTraits {
 		/* =============================================================
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		/**
+		 * Generates an HTML link for loading the dplus notes
+		 * @param  Order  $quote   Quote to load Dplus notes from
+		 * @param  string $linenbr Line Number to load the notes for
+		 * @return string          HTML to load the dplus notes
+		 */
 		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
 			$bootstrap = new Contento();
 			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
@@ -14,13 +24,18 @@
 				$title = ($quote->has_notes()) ? "View Quote Notes" : "View Quote Notes";
 			}
 			$content = $bootstrap->createicon('material-icons', '&#xE0B9;') . ' ' . $title;
-			$link = $bootstrap->openandclose('a', "href=$href|class=btn btn-default load-notes|title=$title|data-modal=$this->modal", $content);
-			return $link;
+			return $bootstrap->openandclose('a', "href=$href|class=btn btn-default load-notes|title=$title|data-modal=$this->modal", $content);
 		}
 		
+		/**
+		 * Returns URL load the dplus notes from
+		 * @param  Order  $quote    to use Quotenbr
+		 * @param  int    $linenbr  Line Number
+		 * @return string           URL to load Dplus Notes
+		 */
 		public function generate_dplusnotesrequesturl(Order $quote, $linenbr) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->notes."redir/";
+			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-quote-notes', 'qnbr' => $quote->quotnbr, 'linenbr' => $linenbr));
 			return $url->getUrl();
 		}
@@ -83,7 +98,7 @@
 		}
 		
 		public function generate_orderquotelink(Order $quote) {
-			if (!has_dpluspermission(Processwire\wire('user')->loginid, 'eso')) {
+			if (!has_dpluspermission(DplusWire::wire('user')->loginid, 'eso')) {
 				return false;
 			}
 			$bootstrap = new Contento();
@@ -94,7 +109,7 @@
 		
 		public function generate_orderquoteurl(Order $quote) {
 			$url = $url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->orderquote;
+			$url->path = DplusWire::wire('config')->pages->orderquote;
 			$url->query->setData(array('qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
@@ -114,7 +129,7 @@
 		
 		public function generate_viewprintpageurl(Order $quote) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->print."quote/";
+			$url->path = DplusWire::wire('config')->pages->print."quote/";
 			$url->query->set('qnbr', $quote->quotnbr);
 			$url->query->set('view', 'pdf');
 			return $url->getUrl();
@@ -135,7 +150,7 @@
 		
 		public function generate_viewlinkeduseractionsurl(Order $quote) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->actions."all/load/list/quote/";
+			$url->path = DplusWire::wire('config')->pages->actions."all/load/list/quote/";
 			$url->query->setData(array('qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
@@ -149,7 +164,7 @@
 		
 		public function generate_viewdetailurl(Order $quote, OrderDetail $detail) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->ajax."load/view-detail/quote/";
+			$url->path = DplusWire::wire('config')->pages->ajax."load/view-detail/quote/";
 			$url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
@@ -167,7 +182,7 @@
 		}
 		
 		public function generate_detailviewediturl(Order $quote, OrderDetail $detail) {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajaxload.'edit-detail/quote/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/quote/');
 			$url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
@@ -185,8 +200,8 @@
 		 * @return \Purl\Url URL to REDIRECT page
 		 */
 		public function generate_quotesredirurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->quotes);
-			$url->path = Processwire\wire('config')->pages->quotes."redir/";
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->quotes);
+			$url->path = DplusWire::wire('config')->pages->quotes."redir/";
 			return $url;
 		}
 	}

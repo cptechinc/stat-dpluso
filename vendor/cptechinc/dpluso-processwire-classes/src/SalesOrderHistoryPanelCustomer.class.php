@@ -1,5 +1,5 @@
 <?php 
-	class CustomerSalesOrderHistoryPanel extends CustomerSalesOrderPanel {
+	class CustomerSalesOrderHistoryPanel extends SalesOrderHistoryPanel {
 		use OrderPanelCustomerTraits;
 		
 		public $orders = array();
@@ -69,23 +69,6 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_loadurl() { 
-			$url = new \Purl\Url($this->pageurl);
-			$url->query->remove('filter');
-			foreach (array_keys($this->filterable) as $filtercolumns) {
-				$url->query->remove($filtercolumns);
-			}
-			return $url->getUrl();
-		}
-		
-		public function generate_clearsearchlink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_loadurl();
-			$icon = $bootstrap->createicon('fa fa-search-minus');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=load-link btn btn-warning btn-block|$ajaxdata", "Clear Search $icon");
-		}
-		
 		public function setup_pageurl(\Purl\Url $pageurl) {
 			$url = $pageurl;
 			$url->path = DplusWire::wire('config')->pages->ajax."load/sales-history/customer/";
@@ -100,29 +83,9 @@
 			return $url;
 		}
 		
-		public function generate_searchurl() {
-			$url = new \Purl\Url(parent::generate_searchurl());
-			$url->path = DplusWire::wire('config')->pages->ajax.'load/orders/search/cust/';
-			$url->query->set('custID', $this->custID);
-			if ($this->shipID) {
-				$url->query->set('shipID', $this->shipID);
-			}
-			return $url->getUrl();
-		}
-		
 		public function generate_loaddetailsurl(Order $order) {
-			$url = new \Purl\Url($this->generate_loaddetailsurltrait($order));
-			$url->query->set('page', $this->pagenbr);
+			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $this->custID);
-			$url->query->set('orderby', $this->tablesorter->orderbystring);
-			$url->query->set('type', 'history');
-			
-			if (!empty($this->filters)) {
-				$url->query->set('filter', 'filter');
-				foreach ($this->filters as $filter => $value) {
-					$url->query->set($filter, implode('|', $value));
-				}
-			}
 			return $url->getUrl();
 		}
 		
@@ -140,7 +103,7 @@
 			
 			if (isset($this->filters['orderdate'])) {
 				if (empty($this->filters['orderdate'][0])) {
-					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minorderdate($this->sessionID, 'orderdate')));
+					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'orderdate')));
 				}
 				
 				if (empty($this->filters['orderdate'][1])) {

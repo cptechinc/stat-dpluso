@@ -35,6 +35,7 @@
 	    * @param  string $column column to sort by if it matches the orderby column then the symbol will be the opposite of the current
 	    * @return htmlstring         
 	    */
+	   
 		public function generate_sortsymbol($column) {
 			$symbol = "";
 			if ($this->orderby == $column) {

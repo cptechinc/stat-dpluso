@@ -1,5 +1,7 @@
 <?php 
 	class CustomerSalesOrderHistoryPanel  extends CustomerSalesOrderPanel {
+		use OrderPanelCustomerTraits;
+		
 		public $orders = array();
 		public $paneltype = 'shipped-order';
 		public $filterable = array(
@@ -34,7 +36,7 @@
 			SalesOrderPanelInterface Functions
 		============================================================ */
 		public function get_ordercount($debug = false) {
-			$count = count_customersaleshistory($this->sessionID, $this->custID, $this->shiptoID, $this->filters, $this->filterable, $debug);
+			$count = count_customersaleshistory($this->sessionID, $this->custID, $this->shipID, $this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
 		
@@ -69,10 +71,15 @@
 		
 		public function setup_pageurl(\Purl\Url $pageurl) {
 			$url = $pageurl;
-			$url->path = DplusWire::wire('config')->pages->ajax."load/sales-history/";
+			$url->path = DplusWire::wire('config')->pages->ajax."load/sales-history/customer/";
+			$url->path->add($this->custID);
+            $this->paginationinsertafter = $this->custID;
+            if (!empty($this->shipID)) {
+                $url->path->add("shipto-$this->shipID");
+                $this->paginationinsertafter = "shipto-$this->shipID";
+            }
 			$url->query->remove('display');
 			$url->query->remove('ajax');
-			$this->paginationinsertafter = 'sales-history';
 			return $url;
 		}
 		

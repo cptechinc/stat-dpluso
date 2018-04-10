@@ -50,3 +50,8 @@
 		<?php include $config->paths->content.'customer/cust-page/quotes/quotes-panel.php'; ?>
 	</div>
 </div>
+<div class="row">
+	<div class="col-sm-12">
+		<?php include $config->paths->content.'customer/cust-page/sales-history/sales-history-panel.php'; ?>
+	</div>
+</div>

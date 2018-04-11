@@ -810,6 +810,9 @@
 		$q->field($q->expr('COUNT(*) as count'));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		$q->where('type', 'O');
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
@@ -857,6 +860,9 @@
 		$q->field($q->expr("CAST(ordertotal AS DECIMAL(8,2)) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		$q->where('type', 'O');
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
@@ -885,6 +891,9 @@
 		$q->field($q->expr("CAST(ordertotal AS DECIMAL(8,2)) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		$q->where('type', 'O');
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
@@ -1623,6 +1632,9 @@
 		$q->field('COUNT(*)');
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
 		}
@@ -1636,12 +1648,15 @@
 		}
 	}
 
-	function get_customerquotes($sessionID, $custID, $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	function get_customerquotes($sessionID, $custID, $shipID, $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
 		}
@@ -1667,6 +1682,9 @@
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
 		}
@@ -1693,6 +1711,9 @@
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
 		}
@@ -1719,6 +1740,9 @@
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
 		}
@@ -1744,6 +1768,9 @@
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shipid', $shipID);
+		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
 		}

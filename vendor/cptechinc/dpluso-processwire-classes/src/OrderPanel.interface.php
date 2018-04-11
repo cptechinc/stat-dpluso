@@ -4,7 +4,6 @@
 		public function generate_expandorcollapselink(Order $order);
 		public function generate_rowclass(Order $order);
 		public function generate_shiptopopover(Order $order); // OrderPanel
-		public function generate_ajaxdataforcontento();
 		public function generate_iconlegend();
 		public function generate_loadlink(); // OrderPanel
 		public function generate_loadurl();

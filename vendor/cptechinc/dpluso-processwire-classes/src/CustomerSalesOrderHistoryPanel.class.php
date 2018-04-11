@@ -39,7 +39,7 @@
 			SalesOrderPanelInterface Functions
 		============================================================ */
 		public function get_ordercount($debug = false) {
-			$count = count_customerorders($this->sessionID, $this->custID, $this->filters, $this->filterable, $debug);
+			$count = count_customerorders($this->sessionID, $this->custID, $this->shipID, $this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
 		
@@ -47,16 +47,16 @@
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
-					$orders = get_customerordersorderdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_customerordersorderdate($this->sessionID, $this->custID, $this->shipID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
-					$orders = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_customerordersorderby($this->sessionID, $this->custID, $this->shipID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
 				// DEFAULT BY ORDER DATE SINCE SALES ORDER # CAN BE ROLLED OVER
 				$this->tablesorter->sortrule = 'DESC';
 				// $this->tablesorter->orderby = 'orderno';
 				//$orders = get_customerordersorderby($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
-				$orders = get_customerordersorderdate($this->sessionID, $this->custID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+				$orders = get_customerordersorderdate($this->sessionID, $this->custID, $this->shipID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $orders : $this->orders = $orders;
 		}

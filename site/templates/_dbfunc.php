@@ -805,7 +805,7 @@
 		}
 	}
 
-	function count_customerorders($sessionID, $custID, $filter = false, $filtertypes = false, $debug) {
+	function count_customerorders($sessionID, $custID, $shipID, $filter = false, $filtertypes = false, $debug) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field($q->expr('COUNT(*) as count'));
 		$q->where('sessionid', $sessionID);
@@ -850,7 +850,7 @@
 		}
 	}
 
-	function get_customerordersorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	function get_customerordersorderby($sessionID, $custID, $shipID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field('ordrhed.*');
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
@@ -877,7 +877,7 @@
 		}
 	}
 
-	function get_customerordersorderdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug) {
+	function get_customerordersorderdate($sessionID, $custID, $shipID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field('ordrhed.*');
 		$q->field($q->expr("STR_TO_DATE(orderdate, '%m/%d/%Y') as dateoforder"));
@@ -1618,7 +1618,7 @@
 		}
 	}
 
-	function count_customerquotes($sessionID, $custID, $filter = false, $filtertypes = false, $debug = false) {
+	function count_customerquotes($sessionID, $custID, $shipID, $filter = false, $filtertypes = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('COUNT(*)');
 		$q->where('sessionid', $sessionID);
@@ -1660,7 +1660,7 @@
 		}
 	}
 	
-	function get_customerquotesquotedate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	function get_customerquotesquotedate($sessionID, $custID, $shipID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate"));
@@ -1686,7 +1686,7 @@
 		}
 	}
 	
-	function get_customerquotesrevdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	function get_customerquotesrevdate($sessionID, $custID, $shipID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("STR_TO_DATE(revdate, '%m/%d/%Y') as reviewdate"));
@@ -1712,7 +1712,7 @@
 		}
 	}
 		
-	function get_customerquotesexpdate($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	function get_customerquotesexpdate($sessionID, $custID, $shipID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("STR_TO_DATE(expdate, '%m/%d/%Y') as expiredate"));
@@ -1738,7 +1738,7 @@
 		}
 	}
 	
-	function get_customerquotesorderby($sessionID, $custID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = true, $debug = false) {
+	function get_customerquotesorderby($sessionID, $custID, $shipID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = true, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field('quothed.*');
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));

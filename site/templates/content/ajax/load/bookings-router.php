@@ -17,6 +17,12 @@
 			$page->title = "Viewing Sales Orders booked on $date";
 			$page->body = $config->paths->content.'dashboard/bookings/sales-orders-by-day.php';
 			break;
+		case 'sales-order':
+			$ordn = $input->get->text('ordn');
+			$date = DplusDateTime::format_date($input->get->text('date'));
+			$page->title = "Viewing Sales Order # $ordn on $date";
+			$page->body = $config->paths->content.'bookings/sales-order-diff.php';
+			break;
 		default:
 			$page->body = $config->paths->content.'dashboard/bookings-panel.php';
 			break;

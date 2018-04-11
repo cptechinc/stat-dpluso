@@ -3344,8 +3344,6 @@
 		
 		if (DplusWire::wire('user')->hascontactrestrictions) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
-		} else {
-			
 		}
 		
 		$q->generate_filters($filter, $filtertypes);
@@ -3435,7 +3433,34 @@
 	function get_daybookingordernumbers($sessionID, $date, $custID = false, $shiptoID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('bookingd');
 		$q->field($q->expr('DISTINCT(salesordernbr)'));
+		$q->field('bookdate');
 		$q->where('bookdate', date('Ymd', strtotime($date)));
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
+		}
+		
+		if (!empty($custID)) {
+			$q->where('custid', $custID);
+			if (!empty($shiptoID)) {
+				$q->where('shiptoid', $shiptoID);
+			}
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_bookingdayorderdetails($sessionID, $ordn, $date, $custID = false, $shiptoID = false, $debug = false) {
+		$q = (new QueryBuilder())->table('bookingd');
+		$q->where('bookdate', date('Ymd', strtotime($date)));
+		$q->where('salesordernbr', $ordn);
 		
 		if (DplusWire::wire('user')->hascontactrestrictions) {
 			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);

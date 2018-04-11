@@ -112,14 +112,32 @@
 			return $debug ? $bookings : $this->bookings = $bookings;
 		}
 		
+		/** 
+		 * Get the bookings made for that date
+		 * @param  string $date  Date
+		 * @param  bool   $debug To Run and return records | SQL Query
+		 * @return array         bookingd records | SQL Query
+		 * @uses
+		 */
 		public function get_daybookingordernumbers($date, $debug = false) {
 			return get_daybookingordernumbers($this->sessionID, $date, false, false, $debug);
 		}
 		
+		/** 
+		 * Count the bookings made for that date
+		 * @param  string $date  Date
+		 * @param  bool   $debug To Run and return count | SQL Query
+		 * @return int         count| SQL Query
+		 */
 		public function count_daybookingordernumbers($date, $debug = false) {
 			return count_daybookingordernumbers($this->sessionID, $date, false, false, $debug);
 		}
 		
+		/**
+		 * Count the booking records for that day 
+		 * @param  bool   $debug Whether or not to execute Query
+		 * @return int           Count | SQL Query
+		 */
 		public function count_todaysbookings($debug = false) {
 			return count_todaysbookings($this->sessionID, false, false, $debug);
 		}
@@ -127,6 +145,18 @@
 		public function get_bookingsummarybycustomer($debug = false) {
 			$bookings = get_bookingsummarybycustomer($this->sessionID, $this->filters, $this->filterable, $this->interval, $debug);
 			return $debug ? $bookings : $this->bookings = $bookings;
+		}
+		
+		/**
+		 * Get the detail lines for a booking
+		 * @param  string $ordn  Sales Order #
+		 * @param  string $date  Date
+		 * @param  bool   $debug To execute query | return SQL query
+		 * @return array         bookingd records | SQL query
+		 * @uses
+		 */
+		public function get_bookingdayorderdetails($ordn, $date, $debug = false) {
+			return get_bookingdayorderdetails($this->sessionID, $ordn, $date, false, false, $debug);
 		}
 		
 		/**
@@ -266,9 +296,9 @@
 		}
 		
 		/**
-		 * Return the description for todays bookings
+		 * Returns the description for todays bookings
 		 * @return string $bookingscount booking(s) made today
-		 * @uses
+		 * @uses   $this->count_todaysbookings()
 		 */
 		public function generate_todaysbookingsdescription() {
 			$bookingscount = $this->count_todaysbookings();
@@ -276,18 +306,60 @@
 			return "$bookingscount bookings made today";
 		}
 		
+		/**
+		 * Returns the URL to view the date provided's bookings
+		 * @param  string $date Date to view Orders for
+		 * @return string       URL to view the date's booked orders
+		 */
 		public function generate_viewsalesordersbydayurl($date) {
 			$url = new Purl\Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
+			$url->query = '';
 			$url->query->set('date', $date);
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns HTML Link to view the days booked sales orders
+		 * @param  string $date Date for viewing bookings
+		 * @return string       HTML Link to view booked sales orders
+		 * @uses   $this->generate_viewsalesordersbydayurl($date)
+		 */
 		public function generate_viewsalesordersbydaylink($date) {
 			$bootstrap = new Contento();
 			$href = $this->generate_viewsalesordersbydayurl($date);
 			$icon = $bootstrap->createicon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
 			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Orders");
+		}
+		
+		/**
+		 * Returns URL to view the bookingsfor a sales order on a particular date
+		 * @param  string $ordn Sales Order #
+		 * @param  string $date Date
+		 * @return string       URL to view bookings for that order # and date
+		 */
+		public function generate_viewsalesorderdayurl($ordn, $date) {
+			$url = new Purl\Url($this->pageurl->getUrl());
+			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-order/";
+			$url->query = '';
+			$url->query->set('ordn', $ordn);
+			$url->query->set('date', $date);
+			return $url->getUrl();
+		}
+		
+		/**
+		 * Returns HTML Link to view the bookings bookingsfor a sales order on a particular date
+		 * @param  string $ordn Sales Order #
+		 * @param  string $date Date
+		 * @return string       HTML Link to view bookings for that order # and date
+		 * @uses $this->generate_viewsalesorderdayurl($ordn, $date);
+		 */
+		public function generate_viewsalesorderdaylink($ordn, $date) {
+			$bootstrap = new Contento();
+			$href = $this->generate_viewsalesorderdayurl($ordn, $date);
+			$icon = $bootstrap->createicon('glyphicon glyphicon-new-window');
+			$ajaxdata = "data-modal=$this->modal";
+			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
 		}
 	}

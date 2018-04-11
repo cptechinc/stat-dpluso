@@ -1337,6 +1337,7 @@ a.bg-warning:focus {
   background-color: #c87f0a;
 }
 .bg-danger {
+  color: #fff !important;
   background-color: #e74c3c !important;
 }
 a.bg-danger:hover,

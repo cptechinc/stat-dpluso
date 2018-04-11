@@ -1,7 +1,7 @@
 <?= $orderpanel->get_orders(true); ?>
 <table class="table table-striped table-bordered table-condensed order-listing-table">
 	<thead>
-		<?php include $config->paths->content.'customer/cust-page/sales-history/sales-history-thead-rows.php'; ?>
+		<?php include $config->paths->content.'customer/cust-page/sales-history/thead-rows.php'; ?>
 	</thead>
 	<tbody>
 		<?php if ($orderpanel->count == 0 && $input->get->text('ordn') == '') : ?>

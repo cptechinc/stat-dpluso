@@ -1,6 +1,6 @@
 <table class="table table-striped table-bordered table-condensed" id="quotes-table">
 	<thead>
-       <?php include $config->paths->content.'customer/cust-page/quotes/quotes-thead-rows.php'; ?>
+       <?php include $config->paths->content.'customer/cust-page/quotes/thead-rows.php'; ?>
     </thead>
 	<tbody>
 		<?php if (isset($input->get->qnbr)) : ?>
@@ -37,8 +37,8 @@
 						<td></td>
 	                </tr>
 	            <?php endif; ?>
-				<?php include $config->paths->content."customer/cust-page/quotes/quote-detail-rows.php"; ?>
-				<?php include $config->paths->content."customer/cust-page/quotes/quote-totals.php"; ?>
+				<?php include $config->paths->content."customer/cust-page/quotes/detail-rows.php"; ?>
+				<?php include $config->paths->content."customer/cust-page/quotes/totals-rows.php"; ?>
 				<tr class="detail last-detail">
 					<td></td>
 					<td> <?= $quotepanel->generate_viewprintlink($quote); ?> </td>

@@ -33,11 +33,11 @@
 					 </div>
 				</div>
 			<div id="cust-sales-history-search-div" class="<?= (empty($orderpanel->filters)) ? 'collapse' : ''; ?>">
-				<?php include $config->paths->content.'customer/cust-page/sales-history/sales-history-search-form.php'; ?>
+				<?php include $config->paths->content.'customer/cust-page/sales-history/search-form.php'; ?>
 			</div>
 		  </div>
 		<div class="table-responsive">
-			<?php include $config->paths->content.'customer/cust-page/sales-history/sales-history-table.php'; ?>
+			<?php include $config->paths->content.'customer/cust-page/sales-history/table.php'; ?>
 			<?= $paginator; ?>
 		</div>
 	 </div>

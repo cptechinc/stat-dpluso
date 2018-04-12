@@ -1,5 +1,5 @@
 <?php 
-    class UserActionsReport extends UserActionDisplay {
+    class UserActionsReport extends UserActionDisplay { // Deprecate TODO
         protected $querylinks = array();
         
         public function __construct(\Purl\Url $pageurl, $querylinks) {

@@ -16,9 +16,9 @@
 				<?= $orderpanel->generate_refreshlink(); ?>
 			</a>
 		<?php elseif ($orderpanel->count > 0) : ?>
-			<a href="#cust-sales-history-div" data-parent="#cust-sales-history-panel" data-toggle="collapse">Your Shipped Orders<span class="caret"></span></a> &nbsp; <span class="badge"> <?= $orderpanel->count; ?></span>
+			<a href="#cust-sales-history-div" data-parent="#cust-sales-history-panel" data-toggle="collapse">Customer Shipped Orders<span class="caret"></span></a> &nbsp; <span class="badge"> <?= $orderpanel->count; ?></span>
 		<?php else : ?>
-			<a href="#cust-sales-history-div" data-parent="#cust-sales-history-panel" data-toggle="collapse">Your Shipped Orders<span class="caret"></span></a> &nbsp; <span class="badge"> <?= $orderpanel->count; ?></span>
+			<a href="#cust-sales-history-div" data-parent="#cust-sales-history-panel" data-toggle="collapse">Customer Shipped Orders<span class="caret"></span></a> &nbsp; <span class="badge"> <?= $orderpanel->count; ?></span>
 		<?php endif; ?>
 		<span class="pull-right"><?= $orderpanel->generate_pagenumberdescription(); ?> </span>
 	 </div>

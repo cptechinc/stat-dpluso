@@ -1,4 +1,4 @@
 <?php 
-    class Report {
+    class Report { // TODO Deprecate
     
     }

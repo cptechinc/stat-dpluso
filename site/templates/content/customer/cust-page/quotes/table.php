@@ -49,6 +49,7 @@
 					<td></td>
 					<td><a href="<?= $quotepanel->generate_closedetailsurl(); ?>" class="btn btn-sm btn-danger load-link" <?= $quotepanel->ajaxdata; ?>>Close</a></td>
 					<td></td>
+					<td></td>
 				</tr>
 			<?php endif; ?>
 		<?php endforeach; ?>

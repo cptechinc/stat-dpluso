@@ -86,6 +86,9 @@
 		public function generate_loaddetailsurl(Order $order) {
 			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $this->custID);
+			if (!empty($this->shipID)) {
+				$url->query->set('shipID', $this->shipID);
+			}
 			return $url->getUrl();
 		}
 		
@@ -139,6 +142,9 @@
 		public function generate_trackingrequesturl(Order $order) {
 			$url = new \Purl\Url(parent::generate_trackingrequesturl($order));
 			$url->query->set('custID', $this->custID);
+			if (!empty($this->shipID)) {
+				$url->query->set('shipID', $this->shipID);
+			}
 			$url->query->set('type', 'history');
 			return $url->getUrl();
 		}
@@ -150,6 +156,9 @@
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
 			$url = new \Purl\Url(parent::generate_documentsrequesturl($order, $orderdetail));
 			$url->query->set('custID', $this->custID);
+			if (!empty($this->shipID)) {
+				$url->query->set('shipID', $this->shipID);
+			}
 			$url->query->set('type', 'history');
 			return $url->getUrl();
 		}

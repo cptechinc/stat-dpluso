@@ -13,14 +13,18 @@
 		private $opensection = false;
 		private $tablestring = '';
 		private static $count = 0;
-
-		function __construct($vars = '') {
+		
+		/**
+		 * Primary Constructor
+		 * @param string $attr HTML attributes that the table will need
+		 */
+		public function __construct($attr = '') {
 			self::$count++;
-			$this->tablestring = $this->indent() . '<table' . $this->attributes($vars) . '>';
+			$this->tablestring = $this->indent() . '<table' . $this->attributes($attr) . '>';
 		}
 		
 		/**
-		 * [tablesection description]
+		 * Add table section like thead | tbody | tfoot
 		 * @param  string $section [Which table section to use tbody|thead|tfoot]
 		 * 
 		 */
@@ -31,7 +35,7 @@
 		}
 		
 		/**
-		 * [closetablesection description]
+		 * Add closing element tag for table section e.g. thead | tbody | tfoot
 		 * @param string $section [Which table section to close tbody|thead|tfoot]
 		 */
 		public function closetablesection($section) {
@@ -51,7 +55,7 @@
 		}
 		
 		/**
-		 * [tr description]
+		 * Add table row 
 		 * @param string $vars string of attribute values separated by | 
 		 */
 		public function tr($vars = '') { // (across the board in every cell)
@@ -71,7 +75,7 @@
 		}
 		
 		/**
-		 * [td description]
+		 * Add table cell
 		 * @param string $vars    string of attribute values separated by | 
 		 * @param string $content Content that will be in the cell
 		 */
@@ -85,7 +89,7 @@
 		}
 		
 		/**
-		 * [th description]
+		 * add table header cell
 		 * @param string $vars    string of attribute values separated by | 
 		 * @param string $content Content that will be in the cell
 		 */
@@ -98,6 +102,11 @@
 			return $this;
 		}
 		
+		/**
+		 * Cose element
+		 * @param  string $element Element to close
+		 * @return string          html element close
+		 */
 		public function tclose($element) {
 			return '</'.$element.'>';
 		}
@@ -147,5 +156,4 @@
 			}
 			return $indent;
 		}
-		
 	}

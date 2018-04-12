@@ -5,6 +5,8 @@
 	*
 	*/
 
+use Purl\Url;
+
 
 	$action = ($input->post->action ? $input->post->text('action') : $input->get->text('action'));
 
@@ -131,14 +133,22 @@
 			break;
 		case 'load-cust-quotes':
 			$custID = $input->get->text('custID');
+			$shipID = $input->get->text('shipID');
+			$url = new Purl\Url($config->pages->ajax."load/quotes/cust/");
+			$url->path->add($custID);
+			if (!empty($shipID)) {
+				$url->path->add("shipto-$shipID");
+			}
+			$url->query = "qnbr=".$linkaddon;
+			$session->loc = $url->getUrl();
 			$data = array('DBNAME' => $config->dbName, 'LOADCUSTQUOTEHEAD' => false, 'TYPE' => 'QUOTE', 'CUSTID' => $custID);
-			$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$linkaddon;
 			$session->{'quotes-loaded-for'} = $custID;
 			$session->{'quotes-updated'} = date('m/d/Y h:i A');
 			break;
 		case 'load-quote-details':
 			$qnbr = $input->get->text('qnbr');
 			$custID = get_custidfromquote(session_id(), $qnbr, false);
+			
 			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
 			
 			if ($input->get->lock) {
@@ -147,17 +157,15 @@
 				$session->loc = $config->pages->print."quote/?qnbr=".$qnbr;
 			} else {
 				if ($input->get->custID) {
-					$session->loc = $config->pages->ajax."load/quotes/cust/".urlencode($custID)."/?qnbr=".$qnbr.$linkaddon;
+					if ($input->get->shipID) {
+						$session->loc = Paginator::paginateurl($config->pages->ajax."load/quotes/cust/{$input->get->custID}/shipto-{$input->get->shipID}/?qnbr=".$qnbr.$linkaddon, $pagenumber, "shipto-{$input->get->shipID}", '');
+					} else {
+						$session->loc = Paginator::paginateurl($config->pages->ajax."load/quotes/cust/{$input->get->custID}/?qnbr=".$qnbr.$linkaddon, $pagenumber, $input->get->custID, '');
+					}
 				} else {
-					$session->loc = $config->pages->ajax."load/quotes/salesrep/?qnbr=".$qnbr.$linkaddon;
+					$session->loc = Paginator::paginateurl($config->pages->ajax."load/quotes/salesrep/?qnbr=".$qnbr.$linkaddon, $pagenumber, "quotes", '');
 				}
 			}
-			break;
-		case 'get-quote-details-print': // DEPRECATED 10/30/2017
-			$qnbr = $input->get->text('qnbr');
-			$custID = get_custidfromquote(session_id(), $qnbr, false);
-			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
-			$session->loc = $config->pages->print."quote/?qnbr=".$qnbr;
 			break;
 		case 'edit-quote':
 			$qnbr = $input->get->text('qnbr');

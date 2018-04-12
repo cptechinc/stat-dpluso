@@ -12,9 +12,6 @@
 			}
 			$page->body = $config->paths->content.'customer/cust-page/quotes/quotes-panel.php';
 			break;
-		case 'salesrep': //TODO
-			$page->body = $config->paths->content.'salesrep/quotes/quotes-panel.php';
-			break;
 		case 'search': //TODO
 			//$include = $config->paths->content.'recent-orders/ajax/load/order-search-modal.php'; //FIX
             $searchtype = $sanitizer->text($input->urlSegment(3));
@@ -27,7 +24,9 @@
                     break;
             }
 			break;
-
+		default:
+			$page->body = $config->paths->content.'dashboard/quotes/quotes-panel.php';
+			break;
 	}
 
 	if ($config->ajax) {

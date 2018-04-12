@@ -13,8 +13,7 @@
 			<tr class="<?= $orderpanel->generate_rowclass($order); ?>" id="<?= $order->orderno; ?>">
 				<td class="text-center"><?= $orderpanel->generate_expandorcollapselink($order); ?></td>
 				<td><?= $order->orderno; ?></td>
-				<td><a href="<?= $orderpanel->generate_customerurl($order); ?>"><?= $order->custid; ?></a> <span class="glyphicon glyphicon-share" aria-hidden="true"></span><br><?= get_customername($order->custid); ?></td>
-				<td><?= $order->custpo; ?></td>
+				<td colspan="2"><?= $order->custpo; ?></td>
 				<td>
 					<a href="<?= $orderpanel->generate_customershiptourl($order); ?>"><?= $order->shiptoid; ?></a>
 					<?= $orderpanel->generate_shiptopopover($order); ?>

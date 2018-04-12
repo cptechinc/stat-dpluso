@@ -144,28 +144,26 @@
 				$session->loc = $config->pages->editorder."?ordn=".$ordn;
 			} elseif ($input->get->print) {
 				$session->loc = $config->pages->print."order/?ordn=".$ordn;
-			} elseif ($input->get->custID) {
-				if ($input->get->text('type') == 'history') {
-					if ($input->get->shipID) {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/customer/{$input->get->custID}/shipto-{$input->get->shipID}/?ordn=".$ordn.$linkaddon, $pagenumber, "shipto-{$input->get->shipID}", '');
-					} else {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/customer/{$input->get->custID}/?ordn=".$ordn.$linkaddon, $pagenumber, $input->get->custID, '');
-					}
-				} else {
-					if ($input->get->shipID) {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/{$input->get->custID}/shipto-{$input->get->shipID}/?ordn=".$ordn.$linkaddon, $pagenumber, "shipto-{$input->get->shipID}", '');
-					} else {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/{$input->get->custID}/?ordn=".$ordn.$linkaddon, $pagenumber, $custID, '');
-					}
-				}
 			} elseif ($input->get->readonly) {
 				$session->loc = $config->pages->editorder."?ordn=".$ordn; 
 			} else {
-				if ($input->get->text('type') == 'history') {
-					$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/?ordn=".$ordn.$linkaddon, $pagenumber, "sales-history", '');
-				} else {
-					$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/?ordn=".$ordn.$linkaddon, $pagenumber, "sales-orders", '');
+				$url = new Purl\Url($config->pages->ajaxload);
+				$insertafter = ($input->get->text('type') == 'history') ? 'sales-history' : 'sales-orders';
+				$url->path->add($insertafter);
+				
+				if ($input->get->custID) {
+					$url->path->add('customer');
+					$insertafter = $input->get->text('custID');
+					$url->path->add($insertafter);
+					
+					if ($input->get->shipID) {
+						$insertafter = "shipto-{$input->get->text('shipID')}";
+						$url->path->add($insertafter);
+					}
 				}
+				$url->query = "ordn=$ordn$linkaddon";
+				Paginator::paginate_purl($url, $pagenumber, $insertafter);
+				$session->loc = $url->getUrl();
 			}
 			break;
 		case 'get-order-tracking':
@@ -174,72 +172,59 @@
 			$data = array('DBNAME' => $config->dbName, 'ORDRTRK' => $ordn, 'CUSTID' => $custID);
 			if ($input->get->ajax) {
 				$session->loc = $config->pages->ajax."load/order/tracking/?ordn=".$ordn;
-			} elseif ($input->get->custID) {
-				if ($input->get->text('type') == 'history') {
-					if ($input->get->shipID) {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/customer/{$input->get->custID}/shipto-{$input->get->shipID}/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, "shipto-{$input->get->shipID}", '');
-					} else {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/customer/{$input->get->custID}/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, $input->get->custID, '');
-					}
-				} else {
-					if ($input->get->shipID) {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/{$input->get->custID}/shipto-{$input->get->shipID}/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, "shipto-{$input->get->shipID}", '');
-					} else {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/{$input->get->custID}/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, $input->get->custID, '');
-					}
-				}
 			} elseif ($input->get->page == 'edit') {
 				$session->loc = $config->pages->ajax.'load/sales-orders/tracking/?ordn='.$ordn;
 			} else {
-				if ($input->get->text('type') == 'history') {
-					$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, "sales-history", '');
-				} else {
-					$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/".urlencode($custID)."/?ordn=".$ordn.$linkaddon."&show=tracking", $pagenumber, 'sales-orders', '');
+				$url = new Purl\Url($config->pages->ajaxload);
+				$insertafter = ($input->get->text('type') == 'history') ? 'sales-history' : 'sales-orders';
+				$url->path->add($insertafter);
+				
+				if ($input->get->custID) {
+					$url->path->add('customer');
+					$insertafter = $input->get->text('custID');
+					$url->path->add($insertafter);
+					
+					if ($input->get->shipID) {
+						$insertafter = "shipto-{$input->get->text('shipID')}";
+						$url->path->add($insertafter);
+					}
 				}
+				$url->query = "ordn=$ordn$linkaddon";
+				$url->query->set('show', 'tracking');
+				Paginator::paginate_purl($url, $pagenumber, $insertafter);
+				$session->loc = $url->getUrl();
 			}
 			break;
 		case 'get-order-documents':
 			$ordn = $input->get->text('ordn');
 			$custID = get_custidfromorder(session_id(), $ordn);
-
-			if ($input->get->itemdoc) {
-				if ($input->get->custID) {
-					$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/".urlencode($custID)."/?ordn=".$ordn.$linkaddon."&show=documents&itemdoc=".$input->get->text('itemdoc'), $pagenumber, $custID, '');
-				} elseif ($input->get->page == 'edit') {
-					$session->loc = $config->pages->ajax.'load/order/documents/?ordn='.$ordn;
-				} else {
-					if ($input->get->text('type') == 'history') {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/?ordn=".$ordn.$linkaddon."&show=documents&itemdoc=".$input->get->text('itemdoc'), $pagenumber, "sales-history", '');
-					} else {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/?ordn=".$ordn.$linkaddon."&show=documents&itemdoc=".$input->get->text('itemdoc'), $pagenumber, "sales-orders", '');
-					}
-				}
+			
+			if ($input->get->page == 'edit') {
+				$session->loc = $config->pages->ajax.'load/order/documents/?ordn='.$ordn;
 			} else {
-				if ($input->get->custID) {
-					$custID = $input->get->text('custID');
-					if ($input->get->text('type') == 'history') {
-						if ($input->get->shipID) {
-							$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/customer/{$input->get->custID}/shipto-{$input->get->shipID}/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, "shipto-{$input->get->shipID}", '');
-						} else {
-							$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/customer/{$input->get->custID}/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, $input->get->custID, '');
-						}
-					} else {
-						if ($input->get->shipID) {
-							$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/{$input->get->custID}/shipto-{$input->get->shipID}/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, "shipto-{$input->get->shipID}", '');
-						} else {
-							$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/cust/{$input->get->custID}/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, $input->get->custID, '');
-						}
-					}
-				} elseif ($input->get->page == 'edit') {
-					$session->loc = $config->pages->ajax.'load/order/documents/?ordn='.$ordn;
-				} else {
-					if ($input->get->text('type') == 'history') {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-history/?ordn=".$ordn.$linkaddon."&show=documents", $pagenumber, "sales-history", '');
-					} else {
-						$session->loc = Paginator::paginateurl($config->pages->ajax."load/sales-orders/?ordn=".$ordn."&show=documents".$linkaddon, $pagenumber, "sales-orders", '');
+				$url = new Purl\Url($config->pages->ajaxload);
+				$insertafter = ($input->get->text('type') == 'history') ? 'sales-history' : 'sales-orders';
+				$url->path->add($insertafter);
+				
+				if ($input->get->custID) { // If looking at customer orders
+					$url->path->add('customer');
+					$insertafter = $input->get->text('custID');
+					$url->path->add($insertafter);
+					
+					if ($input->get->shipID) { // If looking at customer shipto orders
+						$insertafter = "shipto-{$input->get->text('shipID')}";
+						$url->path->add($insertafter);
 					}
 				}
-			}
+				$url->query = "ordn=$ordn$linkaddon";
+				$url->query->set('show', 'documents');
+				
+				if ($input->get->itemdoc) {
+					$url->query->set('itemdoc', $input->get->text('itemdoc'));
+				}
+				Paginator::paginate_purl($url, $pagenumber, $insertafter);
+				$session->loc = $url->getUrl();
+			} 
 			$data = array('DBNAME' => $config->dbName, 'ORDDOCS' => $ordn, 'CUSTID' => $custID);
 			break;
 		case 'edit-new-order':

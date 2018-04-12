@@ -145,6 +145,31 @@
 		 }
 		
 		/**
+		 * Paginates the Purl\Url object by adding the page number to its path
+		 * @param  Purl\Url $url         URL Object
+		 * @param  int      $pagenbr     Page Number to page to
+		 * @param  string   $insertafter Path Segment to insert the page number
+		 * @return Purl\Url              Url object with the paginated path
+		 */
+		public static function paginate_purl(Purl\Url $url, $pagenbr, $insertafter) {
+			$insertafter = trim($insertafter, '/');
+			$path = $url->getPath();
+			
+			if (strpos($path, 'page') !== false) {
+				$regex = "((page)\d{1,3})";
+				$replace = ($pagenbr > 1) ? $replace = "page$pagenbr" : "";
+				$newpath = preg_replace($regex, $replace, $path);
+			} else {
+				$regex = "(($insertafter))";
+				$replace = ($pagenbr > 1) ? "{$insertafter}/page{$pagenbr}/" : $insertafter;
+				$newpath = preg_replace($regex, $replace, $path);
+			}
+			
+			$url->path = $newpath;
+			return $url;
+		}
+		
+		/**
 		* Initializes the DplusWire::wire('session')->display value;
 		*/
 		public static function setup_displayonpage() {

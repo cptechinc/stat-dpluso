@@ -13,6 +13,16 @@
 			}
 			$page->body = $config->paths->content.'customer/cust-page/orders/orders-panel.php';
 			break;
+		case 'customer':
+			$custID = $sanitizer->text($input->urlSegment(3));
+			$shipID = '';
+			if ($input->urlSegment(4)) {
+				if (strpos($input->urlSegment(4), 'shipto') !== false) {
+					$shipID = str_replace('shipto-', '', $input->urlSegment(4));
+				}
+			}
+			$page->body = $config->paths->content.'customer/cust-page/orders/orders-panel.php';
+			break;
 		default:
 			$page->body = $config->paths->content.'dashboard/sales-orders/sales-orders-panel.php';
 			break;

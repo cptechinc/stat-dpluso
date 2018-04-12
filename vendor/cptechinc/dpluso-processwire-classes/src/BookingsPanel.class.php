@@ -226,6 +226,19 @@
 		}
 		
 		/**
+		 * Returns the HTML link for refreshing bookings
+		 * @return string HTML link
+		 * @uses
+		 */
+		public function generate_cleardateparameterslink() {
+			$bootstrap = new Contento();
+			$href = $this->generate_refreshurl();
+			$icon = $bootstrap->createicon('fa fa-times');
+			$ajaxdata = $this->generate_ajaxdataforcontento();
+			return $bootstrap->openandclose('a', "href=$href|class=btn btn-xs btn-warning load-and-show|$ajaxdata", "$icon Remove Date Parameters");
+		}
+		
+		/**
 		 * Looks through the $input->get for properties that have the same name
 		 * as filterable properties, then we populate $this->filter with the key and value
 		 * @param  ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
@@ -360,6 +373,6 @@
 			$href = $this->generate_viewsalesorderdayurl($ordn, $date);
 			$icon = $bootstrap->createicon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
+			return $bootstrap->openandclose('a', "href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
 		}
 	}

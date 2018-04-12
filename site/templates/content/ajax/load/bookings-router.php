@@ -14,7 +14,7 @@
 			break;
 		case 'sales-orders':
 			$date = DplusDateTime::format_date($input->get->text('date'));
-			$page->title = "Viewing Sales Orders booked on $date";
+			$page->title = "Viewing bookings made on $date";
 			$page->body = $config->paths->content.'dashboard/bookings/sales-orders-by-day.php';
 			break;
 		case 'sales-order':

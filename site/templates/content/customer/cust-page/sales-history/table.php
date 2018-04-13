@@ -1,4 +1,3 @@
-<?= $orderpanel->get_orders(true); ?>
 <table class="table table-striped table-bordered table-condensed order-listing-table">
 	<thead>
 		<?php include $config->paths->content.'customer/cust-page/sales-history/thead-rows.php'; ?>

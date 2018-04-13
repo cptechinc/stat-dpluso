@@ -933,13 +933,16 @@
 		}
 	}
 
-	function get_maxordertotal($sessionID, $custID = false, $debug = false) {
+	function get_maxordertotal($sessionID, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field($q->expr("MAX(CAST(ordertotal AS DECIMAL(8,2))) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		if ($custID) {
 			$q->where('custid', $custID);
 		}
+		if ($shipID) {
+			$q->where('shiptoid', $shipID);
+		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -949,13 +952,16 @@
 		}
 	}
 
-	function get_minordertotal($sessionID, $custID = false, $debug = false) {
+	function get_minordertotal($sessionID, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field($q->expr("MIN(CAST(ordertotal AS DECIMAL(8,2))) AS ordertotal"));
 		$q->where('sessionid', $sessionID);
 		if ($custID) {
 			$q->where('custid', $custID);
 		}
+		if ($shipID) {
+			$q->where('shiptoid', $shipID);
+		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -965,12 +971,15 @@
 		}
 	}
 
-	function get_minorderdate($sessionID, $field, $custID = false, $debug = false) {
+	function get_minorderdate($sessionID, $field, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field($q->expr("MIN(STR_TO_DATE($field, '%m/%d/%Y'))"));
 		$q->where('sessionid', $sessionID);
 		if ($custID) {
 			$q->where('custid', $custID);
+		}
+		if ($shipID) {
+			$q->where('shiptoid', $shipID);
 		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		
@@ -1071,11 +1080,14 @@
 		}
 	}
 	
-	function get_minsaleshistoryorderdate($sessionID, $field, $custID = false, $debug = false) {
+	function get_minsaleshistoryorderdate($sessionID, $field, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MIN(STR_TO_DATE($field, '%m/%d/%Y'))"));
+		$q->field($q->expr("MIN(STR_TO_DATE(CAST($field as CHAR(12)), '%Y%m%d'))"));
 		if ($custID) {
 			$q->where('custid', $custID);
+		}
+		if ($shipID) {
+			$q->where('shiptoid', $shipID);
 		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		
@@ -1087,28 +1099,15 @@
 		}
 	}
 	
-	function get_maxsaleshistoryorderdate($sessionID, $field, $custID = false, $debug = false) {
-		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MAX(STR_TO_DATE($field, '%m/%d/%Y'))"));
-		if ($custID) {
-			$q->where('custid', $custID);
-		}
-		$sql = DplusWire::wire('database')->prepare($q->render());
-		
-		if ($debug) {
-			return $q->generate_sqlquery($q->params);
-		} else {
-			$sql->execute($q->params);
-			return $sql->fetchColumn();
-		}
-	}
-	
-	function get_maxsaleshistoryordertotal($sessionID, $custID = false, $debug = false) {
+	function get_maxsaleshistoryordertotal($sessionID, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field($q->expr("MAX(ordertotal)"));
 		if ($custID) {
 			$q->where('custid', $custID);
 		}
+		if ($shipID) {
+			$q->where('shiptoid', $shipID);
+		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -1118,11 +1117,14 @@
 		}
 	}
 	
-	function get_minsaleshistoryordertotal($sessionID, $custID = false, $debug = false) {
+	function get_minsaleshistoryordertotal($sessionID, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field($q->expr("MIN(ordertotal)"));
 		if ($custID) {
 			$q->where('custid', $custID);
+		}
+		if ($shipID) {
+			$q->where('shiptoid', $shipID);
 		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
@@ -1445,14 +1447,17 @@
 		}
 	}
 	
-	function get_maxquotetotal($sessionID, $custID = false, $debug = false) {
+	function get_maxquotetotal($sessionID, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field($q->expr("MAX(CAST(subtotal AS DECIMAL(8,2))) AS subtotal"));
 		$q->where('sessionid', $sessionID);
 		if ($custID) {
 			$q->where('custid', $custID);
 		}
-		$sql = Processwire\wire('database')->prepare($q->render());
+		if ($shipID) {
+			$q->where('shiptoid', $shipID);
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {
@@ -1461,7 +1466,7 @@
 		}
 	}
 	
-	function get_minquotetotal($sessionID, $custID = false, $debug = false) {
+	function get_minquotetotal($sessionID, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field($q->expr("MIN(CAST(subtotal AS DECIMAL(8,2))) AS subtotal"));
 		
@@ -1469,7 +1474,10 @@
 		if ($custID) {
 			$q->where('custid', $custID);
 		}
-		$sql = Processwire\wire('database')->prepare($q->render());
+		if ($shipID) {
+			$q->where('shiptoid', $shipID);
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {

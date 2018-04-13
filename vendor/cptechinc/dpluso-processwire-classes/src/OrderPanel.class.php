@@ -208,6 +208,34 @@
 			}
 		}
 		
+		
+		/**
+		 * Looks through the $input->get for properties that have the same name
+		 * as filterable properties, then we populate $this->filter with the key and value
+		 * @param  ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 */
+		public function generate_defaultfilter(ProcessWire\WireInput $input) {
+			if (!$input->get->filter) {
+				$this->filters = false;
+			} else {
+				$this->filters = array();
+				foreach ($this->filterable as $filter => $type) {
+					if (!empty($input->get->$filter)) {
+						if (!is_array($input->get->$filter)) {
+							$value = $input->get->text($filter);
+							$this->filters[$filter] = explode('|', $value);
+						} else {
+							$this->filters[$filter] = $input->get->$filter;
+						}
+					} elseif (is_array($input->get->$filter)) {
+						if (strlen($input->get->$filter[0])) {
+							$this->filters[$filter] = $input->get->$filter;
+						}
+					}
+				}
+			}
+		}
+		
 		/**
 		 * Grab the value of the filter at index
 		 * Goes through the $this->filters array, looks at index $filtername

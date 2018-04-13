@@ -130,7 +130,7 @@
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->createicon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh History");
+			return $bootstrap->openandclose('a', "href=$href|class=load-and-show|$ajaxdata", "$icon Refresh History");
 		}
 		
 		public function generate_searchlink() {
@@ -187,11 +187,11 @@
 		
 		public function generate_filter(Processwire\WireInput $input) {
 			$stringerbell = new StringerBell();
-			parent::generate_filter($input);
+			$this->generate_defaultfilter($input);
 			
 			if (isset($this->filters['orderdate'])) {
 				if (empty($this->filters['orderdate'][0])) {
-					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'orderdate')));
+					$this->filters['orderdate'][0] = DplusDateTime::format_date(get_minsaleshistoryorderdate($this->sessionID, 'orderdate'));
 				}
 				
 				if (empty($this->filters['orderdate'][1])) {

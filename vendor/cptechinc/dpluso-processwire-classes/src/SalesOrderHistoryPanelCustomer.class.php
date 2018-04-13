@@ -102,11 +102,11 @@
 		}
 		
 		public function generate_filter(ProcessWire\WireInput $input) {
-			parent::generate_filter($input);
+			$this->generate_defaultfilter($input);
 			
 			if (isset($this->filters['orderdate'])) {
 				if (empty($this->filters['orderdate'][0])) {
-					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'orderdate')));
+					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'orderdate', $this->custID, $this->shipID)));
 				}
 				
 				if (empty($this->filters['orderdate'][1])) {
@@ -116,10 +116,10 @@
 			
 			if (isset($this->filters['invdate'])) {
 				if (empty($this->filters['invdate'][0])) {
-					$this->filters['invdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invdate')));
+					$this->filters['invdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invdate', $this->custID, $this->shipID)));
 				}
 				
-				if (empty($this->filters['orderdate'][1])) {
+				if (empty($this->filters['invdate'][1])) {
 					$this->filters['invdate'][1] = date('m/d/Y');
 				}
 			}
@@ -130,7 +130,7 @@
 				}
 				
 				if (!strlen($this->filters['ordertotal'][1])) {
-					$this->filters['ordertotal'][1] = get_maxordertotal($this->sessionID, $this->custID);
+					$this->filters['ordertotal'][1] = get_maxordertotal($this->sessionID, $this->custID, $this->shipID);
 				}
 			}
 		}

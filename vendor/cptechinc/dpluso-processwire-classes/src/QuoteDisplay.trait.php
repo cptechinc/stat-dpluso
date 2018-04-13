@@ -1,7 +1,6 @@
 <?php
 	/**
 	 * Traits that will be shared accross QuotePanels and Quote Displays
-	 * @var [type]
 	 */
 	trait QuoteDisplayTraits {
 		/* =============================================================

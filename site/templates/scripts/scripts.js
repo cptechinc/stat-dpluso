@@ -238,7 +238,10 @@ $(document).ready(function() {
 			var closestmodal = $(this).closest('.modal');
 			
 			if (closestmodal) {
-				closestmodal.find("[data-dismiss='modal']").click();
+				if (closestmodal.attr('id') != ajaxloader.loadinto) {
+					closestmodal.find("[data-dismiss='modal']").click();
+				}
+				
 			}
 			
 			ajaxloader.url = URI(ajaxloader.url).addQuery('modal', 'modal').normalizeQuery().toString();
@@ -260,6 +263,11 @@ $(document).ready(function() {
 			var button = $(this);
 			var ajaxloader = new ajaxloadedmodal(button);
 			ajaxloader.url = URI(ajaxloader.url).addQuery('modal', 'modal').normalizeQuery().toString();
+			console.log(ajaxloader.loadinto);
+			$(ajaxloader.loadinto).empty();
+			var loadingwheel = $(darkloadingwheel);
+			loadingwheel.addClass('display-inline-block').addClass('text-center');
+			$(ajaxloader.loadinto).append("<div class='modal-body'><div class='text-center'>"+loadingwheel.prop('outerHTML')+"</div></div>");
 			
 			$(ajaxloader.loadinto).loadin(ajaxloader.url, function() {
 				hideajaxloading();

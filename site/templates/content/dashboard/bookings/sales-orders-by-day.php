@@ -1,9 +1,8 @@
 <?php 
-	$bookingspanel = new BookingsPanel(session_id(), $page->fullURL); 
+	$bookingspanel = new BookingsPanel(session_id(), $page->fullURL, '#ajax-modal'); 
 	$date = $input->get->text('date');
 	$salesorders = $bookingspanel->get_daybookingordernumbers($date);
 	$count = $bookingspanel->count_daybookingordernumbers($date);
-	echo $bookingspanel->get_daybookingordernumbers($date, true);
 ?>
 <div class="table-responsive">
 	<table class="table table-bordered table-condensed table-striped">
@@ -15,14 +14,14 @@
 				<?php foreach ($salesorders as $salesorder) : ?>
 					<tr>
 						<td><?= DplusDateTime::format_date($salesorder['bookdate']); ?></td>
-						<td><?= $salesorder['salesordernbr']; ?></td>
-						<td><?= $bookingspanel->generate_viewsalesorderdaylink($salesorder['salesordernbr'], DplusDateTime::format_date($salesorder['bookdate'])); ?></td>
+						<td class="text-right"><?= $salesorder['salesordernbr']; ?></td>
+						<td class="text-right"><?= $bookingspanel->generate_viewsalesorderdaylink($salesorder['salesordernbr'], DplusDateTime::format_date($salesorder['bookdate'])); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php else : ?>
 				<tr>
-					<td colspan="2" class="text-center">
-						No Sales Orders Booked
+					<td colspan="3" class="text-center">
+						No Bookings found
 					</td>
 				</tr>
 			<?php endif; ?>

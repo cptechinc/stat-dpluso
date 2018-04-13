@@ -211,6 +211,13 @@
        		return $sql;
        	}
 		
+		/**
+		 * Returns filter description for the filter
+		 * @param  string $key         Name of filter
+		 * @param  array $val          Array of Values for that filter
+		 * @param  array $filtertypes  Array of filters indexed by the names
+		 * @return string              Description of Filter based on the values, and type of filter
+		 */
 		public static function generate_filterdescription($key, $val, $filtertypes) {
 			switch ($filtertypes[$key]['querytype']) {
 				case 'between':

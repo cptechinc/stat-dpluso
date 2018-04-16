@@ -27,6 +27,12 @@
 		</a>
 	</div>
 	<div id="bookings-div" class="" aria-expanded="true">
+		<div class="panel-body">
+			<button class="btn btn-primary toggle-order-search pull-right" type="button" data-toggle="collapse" data-target="#bookings-search-div" aria-expanded="false" aria-controls="bookings-search-div">Toggle Search <i class="fa fa-search" aria-hidden="true"></i></button>
+			<div id="bookings-search-div" class="<?= (!empty($bookingspanel->filters)) ? 'collapse' : ''; ?>">
+				<?php include $config->paths->content.'dashboard/bookings/search-form.php'; ?>
+			</div>
+		</div>
 		<div>
 			<h3 class="text-center"><?= $bookingspanel->generate_title(); ?></h3>
 			<div id="bookings-chart">
@@ -42,6 +48,4 @@
 		</div>
 	</div>
 </div>
-<?php 
-	include $config->paths->content."dashboard/bookings/bookings-line-chart.js.php";
-?>
+<?php include $config->paths->content."dashboard/bookings/bookings-line-chart.js.php"; ?>

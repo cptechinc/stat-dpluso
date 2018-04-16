@@ -68,6 +68,11 @@
 				'datatype' => 'date',
 				'date-format' => 'Ymd',
 				'label' => 'Book Date'
+			),
+			'amount' => array(
+				'querytype' => 'between',
+				'datatype' => 'decimal',
+				'label' => 'Amount'
 			)
 		);
 		
@@ -270,6 +275,33 @@
 					$this->generate_defaultfilter();
 				}
 			}
+		}
+		
+		/**
+		 * Grab the value of the filter at index
+		 * Goes through the $this->filters array, looks at index $filtername
+		 * grabs the value at index provided
+		 * @param  string $key        Key in filters
+		 * @param  int    $index      Which index to look at for value
+		 * @return mixed              value of key index
+		 */
+		public function get_filtervalue($key, $index = 0) {
+			if (empty($this->filters)) return '';
+			if (isset($this->filters[$key])) {
+				return (isset($this->filters[$key][$index])) ? $this->filters[$key][$index] : '';
+			}
+			return '';
+		}
+		
+		/**
+		 * Checks if $this->filters has value of $value
+		 * @param  string $key        string
+		 * @param  mixed $value       value to look for
+		 * @return bool               whether or not if value is in the filters array at the key $key
+		 */
+		public function has_filtervalue($key, $value) {
+			if (empty($this->filters)) return false;
+			return (isset($this->filters[$key])) ? in_array($value, $this->filters[$key]) : false;
 		}
 		
 		/**

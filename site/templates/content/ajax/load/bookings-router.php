@@ -2,7 +2,7 @@
 	$filteron = $input->urlSegment(2);
 		
 	switch ($filteron) {
-		case 'cust':
+		case 'customer':
 			$custID = $sanitizer->text($input->urlSegment(3));
 			$shipID = '';
 			if ($input->urlSegment(4)) {
@@ -10,7 +10,7 @@
 					$shipID = str_replace('shipto-', '', $input->urlSegment(4));
 				}
 			}
-			$page->body = $config->paths->content.'customer/cust-page/orders/orders-panel.php';
+			$page->body = $config->paths->content.'customer/cust-page/bookings/bookings-panel.php';
 			break;
 		case 'sales-orders':
 			$date = DplusDateTime::format_date($input->get->text('date'));

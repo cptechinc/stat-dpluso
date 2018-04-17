@@ -1,6 +1,6 @@
 <?php 
     
-    class CustomerBookings extends BookingsPanel {
+    class CustomerBookingsPanel extends BookingsPanel {
         use OrderPanelCustomerTraits;
         use ThrowErrorTrait;
 		use MagicMethodTraits;
@@ -78,21 +78,6 @@
 		/* =============================================================
 			CONSTRUCTOR FUNCTIONS
 		============================================================ */
-		/**
-		 * Constructor
-		 * @param string  $sessionID Session Identifier
-		 * @param Purl\Url $pageurl  Object that contains the URL of the page
-		 * @param string  $modal     ID of Modal to use
-		 * @param bool    $ajaxdata  Attributes used for ajax loading
-		 * @uses
-		 */
-		public function __construct($sessionID, Purl\Url $pageurl, $modal = '', $ajaxdata = false) {
-			$this->sessionID = $sessionID;
-			$this->pageurl = new Purl\Url($pageurl->getUrl());
-			$this->modal = $modal;
-			$this->ajaxdata = $this->parse_ajaxdata($ajaxdata);
-			$this->setup_pageurl();
-		}
 		
 		/* =============================================================
 			GETTER FUNCTIONS
@@ -169,7 +154,8 @@
 				$intervaldesc = self::$intervals[$this->interval];
 				$from = $this->filters['bookdate'][0];
 				$through = $this->filters['bookdate'][1];
-				return "Viewing $intervaldesc bookings between $from and $through";
+				$customer = Customer::load($this->custID, $this->shipID);
+				return "Viewing {$customer->get_customername()} $intervaldesc bookings between $from and $through";
 			}
 		}
 		
@@ -177,19 +163,8 @@
 			SETTER FUNCTIONS
 		============================================================ */
 		/**
-		 * Used when constructed, this sets the PageURL path to point at the bookings ajax URL
-		 * @return void 
-		 */
-         public function setup_pageurl() {
-         	$this->pageurl->path = DplusWire::wire('config')->pages->ajaxload."bookings/customer/$this->custID";
-               if (!empty($this->shipID)) {
-                   $this->pageurl->path->add("shipto-$this->shipID");
-               }
-         }
-		/**
 		 * Defines the interval
 		 * @param string $interval Must be one of the predefined interval types
-		 * @uses
 		 */
 		public function set_interval($interval) {
 			if (in_array($interval, array_keys(self::$intervals))) {
@@ -205,7 +180,6 @@
 		/**
 		 * Returns the URL to bookings panel's normal state
 		 * @return string URL
-		 * @uses
 		 */
 		public function generate_refreshurl() {
 			$url = new Purl\Url($this->pageurl->getURL());

@@ -39,7 +39,8 @@
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = $this->setup_pageurl($pageurl);
+			$this->pageurl = new Purl\Url($pageurl->getUrl());
+			$this->setup_pageurl();
 		}
 		
 		/* =============================================================
@@ -72,9 +73,9 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function setup_pageurl(\Purl\Url $pageurl) {
-			$url = $pageurl;
-			$url->path = Processwire\wire('config')->pages->ajax."load/sales-orders/";
+		public function setup_pageurl() {
+			$url = new Purl\Url($this->pageurl->getUrl());
+			$url->path = DplusWire::wire('config')->pages->ajax."load/sales-orders/";
 			$url->query->remove('display');
 			$url->query->remove('ajax');
 			$this->paginationinsertafter = 'sales-orders';

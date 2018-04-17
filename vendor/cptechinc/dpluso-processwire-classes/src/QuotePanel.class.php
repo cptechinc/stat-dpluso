@@ -39,12 +39,13 @@
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = $this->setup_pageurl($pageurl);
+			$this->pageurl = $this->pageurl = new Purl\Url($pageurl->getUrl());
+			$this->setup_pageurl();
 		}
 		
-		public function setup_pageurl(\Purl\Url $pageurl) {
-			$url = $pageurl;
-			$url->path = Processwire\wire('config')->pages->ajax."load/quotes/";
+		public function setup_pageurl() {
+			$url = new Purl\Url($this->pageurl->getUrl());
+			$url->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
 			$url->query->remove('display');
 			$url->query->remove('ajax');
 			$this->paginationinsertafter = 'quotes';

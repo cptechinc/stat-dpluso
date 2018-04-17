@@ -10,9 +10,16 @@
 					$shipID = str_replace('shipto-', '', $input->urlSegment(4));
 				}
 			}
-			$page->body = $config->paths->content.'customer/cust-page/bookings/bookings-panel.php';
+			$page->body = $config->paths->content.'customer/cust-page/bookings-panel.php';
 			break;
 		case 'sales-orders':
+			$custID = $sanitizer->text($input->urlSegment(3));
+			$shipID = '';
+			if ($input->urlSegment(4)) {
+				if (strpos($input->urlSegment(4), 'shipto') !== false) {
+					$shipID = str_replace('shipto-', '', $input->urlSegment(4));
+				}
+			}
 			$date = DplusDateTime::format_date($input->get->text('date'));
 			$page->title = "Viewing bookings made on $date";
 			$page->body = $config->paths->content.'dashboard/bookings/sales-orders-by-day.php';

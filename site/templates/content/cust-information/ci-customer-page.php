@@ -42,6 +42,11 @@
 </div>
 <div class="row">
 	<div class="col-sm-12">
+		<?php include $config->paths->content.'customer/cust-page/bookings-panel.php'; ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
 		<?php include $config->paths->content.'customer/cust-page/sales-orders/orders-panel.php'; ?>
 	</div>
 </div>

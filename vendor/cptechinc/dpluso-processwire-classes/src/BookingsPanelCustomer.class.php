@@ -183,7 +183,8 @@
          public function setup_pageurl() {
          	$this->pageurl->path = DplusWire::wire('config')->pages->ajaxload."bookings/customer/$this->custID";
                if (!empty($this->shipID)) {
-              $this->pageurl->path->add("shipto-$this->shipID");
+                   $this->pageurl->path->add("shipto-$this->shipID");
+               }
          }
 		/**
 		 * Defines the interval
@@ -329,6 +330,10 @@
 			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
 			$url->query = '';
 			$url->query->set('date', $date);
+            $url->query->set('custID', $this->custID);
+			if (!empty($this->shipID)) {
+				$url->query->set('shipID', $this->shipID);
+			}
 			return $url->getUrl();
 		}
 		
@@ -358,6 +363,10 @@
 			$url->query = '';
 			$url->query->set('ordn', $ordn);
 			$url->query->set('date', $date);
+            $url->query->set('custID', $this->custID);
+			if (!empty($this->shipID)) {
+				$url->query->set('shipID', $this->shipID);
+			}
 			return $url->getUrl();
 		}
 		

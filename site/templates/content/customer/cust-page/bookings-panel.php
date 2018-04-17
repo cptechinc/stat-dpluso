@@ -1,7 +1,7 @@
 <?php
-	$bookingspanel = new BookingsPanel(session_id(), $page->fullURL, '#ajax-modal', 'data-loadinto=#bookings-panel|data-focus=#bookings-panel');
+	$bookingspanel = new CustomerBookings(session_id(), $page->fullURL, '#ajax-modal', 'data-loadinto=#bookings-panel|data-focus=#bookings-panel');
 	$bookingspanel->generate_filter($input);
-    $bookingspanel->set_customer($customer->custid, $customer->shipid);
+    $bookingspanel->set_customer($customer->custID, $customer->shipID);
 	$bookings = $bookingspanel->get_bookings();
 	
 	foreach ($bookings as $booking) {

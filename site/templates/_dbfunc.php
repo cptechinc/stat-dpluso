@@ -3424,6 +3424,8 @@
 		$q = (new QueryBuilder())->table('bookingd');
 		$q->field($q->expr('DISTINCT(salesordernbr)'));
 		$q->field('bookdate');
+		$q->field('custid');
+		$q->field('shiptoid');
 		$q->where('bookdate', date('Ymd', strtotime($date)));
 		
 		if (DplusWire::wire('user')->hascontactrestrictions) {

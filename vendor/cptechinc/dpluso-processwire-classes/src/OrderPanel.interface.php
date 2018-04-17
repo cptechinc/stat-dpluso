@@ -5,10 +5,8 @@
 	interface OrderPanelInterface {
 		/**
 		 * Returns a Manipulated Purl\Url object that is the base URL for that page
-		 * @param  Purl\Url $pageurl Purl\Url for that OrderPanel
-		 * @return Purl\Url          Updated Url object
 		 */
-		public function setup_pageurl(\Purl\Url $pageurl);
+		public function setup_pageurl();
 		
 		/**
 		 * Returns an HTML Link to expand or collapse details

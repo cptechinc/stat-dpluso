@@ -1,6 +1,6 @@
 <?php 
     
-    class CustomerBookings {
+    class CustomerBookings extends BookingsPanel {
         use OrderPanelCustomerTraits;
         use ThrowErrorTrait;
 		use MagicMethodTraits;

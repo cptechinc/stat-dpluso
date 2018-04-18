@@ -103,7 +103,7 @@
 		 * @uses
 		 */
 		public function get_daybookingordernumbers($date, $debug = false) {
-			return get_customerdaybookingordernumbers($this->sessionID, $this->custID, $this->shipID, $date, false, false, $debug);
+			return get_customerdaybookingordernumbers($this->sessionID, $date, $this->custID, $this->shipID, $debug);
 		}
 		
 		/** 
@@ -113,7 +113,7 @@
 		 * @return int         count| SQL Query
 		 */
 		public function count_daybookingordernumbers($date, $debug = false) {
-			return count_customerdaybookingordernumbers($this->sessionID, $this->custID, $this->shipID, $date, false, false, $debug);
+			return count_customerdaybookingordernumbers($this->sessionID, $date, $this->custID, $this->shipID, $debug);
 		}
 		
 		/**
@@ -362,5 +362,15 @@
 			$icon = $bootstrap->createicon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
 			return $bootstrap->openandclose('a', "href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
+		}
+		
+		public function setup_pageurl() {
+			parent::setup_pageurl();
+			$this->pageurl->path->add('customer');
+			$this->pageurl->path->add($this->custID);
+
+            if (!empty($this->shipID)) {
+                $this->pageurl->path->add("shipto-$this->shipID");
+            }
 		}
     }

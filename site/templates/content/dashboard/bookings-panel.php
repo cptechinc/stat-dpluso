@@ -41,7 +41,7 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="table-responsive bookings-table-div">
-						<?php include $config->paths->content."bookings/panel/$bookingspanel->interval-table.php"; ?>
+						<?php include $config->paths->content."dashboard/bookings/$bookingspanel->interval-table.php"; ?>
 					</div>
 				</div>
 			</div>

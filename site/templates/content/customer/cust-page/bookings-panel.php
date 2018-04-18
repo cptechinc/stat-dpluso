@@ -1,7 +1,7 @@
 <?php
 	$bookingspanel = new CustomerBookingsPanel(session_id(), $page->fullURL, '#ajax-modal', 'data-loadinto=#bookings-panel|data-focus=#bookings-panel');
 	$bookingspanel->generate_filter($input);
-    $bookingspanel->set_customer($customer->custID, $customer->shipID);
+    $bookingspanel->set_customer($customer->custid, $customer->shiptoid);
 	$bookings = $bookingspanel->get_bookings();
 	
 	foreach ($bookings as $booking) {
@@ -28,6 +28,12 @@
 		</a>
 	</div>
 	<div id="bookings-div" class="" aria-expanded="true">
+		<div class="panel-body">
+			<button class="btn btn-primary toggle-order-search pull-right" type="button" data-toggle="collapse" data-target="#bookings-search-div" aria-expanded="false" aria-controls="bookings-search-div">Toggle Search <i class="fa fa-search" aria-hidden="true"></i></button>
+			<div id="bookings-search-div" class="<?= (!empty($bookingspanel->filters)) ? 'collapse' : ''; ?>">
+				<?php include $config->paths->content.'dashboard/bookings/search-form.php'; ?>
+			</div>
+		</div>
 		<div>
 			<h3 class="text-center"><?= $bookingspanel->generate_title(); ?></h3>
 			<div id="bookings-chart">
@@ -36,7 +42,7 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="table-responsive bookings-table-div">
-						<?php include $config->paths->content."bookings/panel/$bookingspanel->interval-table.php"; ?>
+						<?php include $config->paths->content."customer/cust-page/bookings/$bookingspanel->interval-table.php"; ?>
 					</div>
 				</div>
 			</div>

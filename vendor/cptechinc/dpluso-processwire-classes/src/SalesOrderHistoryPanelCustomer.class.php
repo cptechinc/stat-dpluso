@@ -70,18 +70,15 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function setup_pageurl() {
-			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajax."load/sales-history/customer/";
-			$url->path->add($this->custID);
-            $this->paginationinsertafter = $this->custID;
+			parent::setup_pageurl();
+			$this->pageurl->path->add('customer');
+			$this->pageurl->add($this->custID);
+			$this->paginationinsertafter = $this->custID;
 			
-            if (!empty($this->shipID)) {
-                $url->path->add("shipto-$this->shipID");
-                $this->paginationinsertafter = "shipto-$this->shipID";
-            }
-			$url->query->remove('display');
-			$url->query->remove('ajax');
-			return $url;
+			if (!empty($this->shipID)) {
+				$this->pageurl->path->add("shipto-$this->shipID");
+				$this->paginationinsertafter = "shipto-$this->shipID";
+			}
 		}
 		
 		public function generate_loaddetailsurl(Order $order) {

@@ -74,12 +74,10 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function setup_pageurl() {
-			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajax."load/sales-orders/";
-			$url->query->remove('display');
-			$url->query->remove('ajax');
+			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-orders/";
+			$this->pageurl->query->remove('display');
+			$this->pageurl->query->remove('ajax');
 			$this->paginationinsertafter = 'sales-orders';
-			return $url;
 		}
 		
 		public function generate_expandorcollapselink(Order $order) {

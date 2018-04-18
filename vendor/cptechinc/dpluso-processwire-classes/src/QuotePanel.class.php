@@ -44,12 +44,10 @@
 		}
 		
 		public function setup_pageurl() {
-			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
-			$url->query->remove('display');
-			$url->query->remove('ajax');
-			$this->paginationinsertafter = 'quotes';
-			return $url;
+			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
+			$this->pageurl->query->remove('display');
+			$this->pageurl->query->remove('ajax');
+			$this->pageurl->paginationinsertafter = 'quotes';
 		}
 		
 		/* =============================================================

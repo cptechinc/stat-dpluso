@@ -8,12 +8,10 @@
 		}
 		
 		public function setup_pageurl() {
-			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajax."load/quotes/salesrep/";
-			$url->query->remove('display');
-			$url->query->remove('ajax');
+			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/salesrep/";
+			$this->pageurl->query->remove('display');
+			$this->pageurl->query->remove('ajax');
 			$this->paginationinsertafter = 'salesrep';
-			return $url;
 		}
 		
 		/* =============================================================

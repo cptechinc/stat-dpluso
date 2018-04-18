@@ -3,6 +3,9 @@
 		var pageurl = new URI('<?= $bookingspanel->pageurl->getUrl(); ?>').toString();
 		var loadinto = '#bookings-panel';
 		var xlabelformat = 'MM/DD/YYYY';
+		var custID = '<?= $customer->custid; ?>';
+		var shipID = '<?= $customer->shiptoid; ?>';
+		
 		<?php if ($bookingspanel->interval ==  'month') : ?>
 			xlabelformat = 'MMM YYYY';
 		<?php endif; ?>
@@ -18,6 +21,7 @@
 				var ds = new Date(d);
 				return moment(ds).format('MM/DD/YYYY');
 			},
+            // need to call for custID and shipto
 			hoverCallback: function (index, options, content, row) {
 				var bootstrap = new JsContento();
 				var ajaxdata = 'data-loadinto='+loadinto+'|data-focus='+loadinto;
@@ -28,7 +32,8 @@
 					date = moment(row.bookdate).format('MMM YYYY');
 					var firstofmonth = moment(row.bookdate).format('MM/DD/YYYY');
 					var lastofmonth = moment(row.bookdate).endOf('month').format('MM/DD/YYYY');
-					href = URI(url).setQuery('filter', 'filter').removeQuery('bookdate[]').addQuery('bookdate', firstofmonth+"|"+lastofmonth).normalizeQuery().toString();
+					// add call for custID and shipto
+                    href = URI(url).setQuery('filter', 'filter').removeQuery('bookdate[]').addQuery('bookdate', firstofmonth+"|"+lastofmonth).addQuery('custID', custID).addQuery('shipID', shipID).normalizeQuery().toString();
 					link = "<a href='"+href+"' class='load-and-show' data-loadinto='"+loadinto+"' data-focus='"+loadinto+"'>"+
 									'Click to view ' + date +
 									'</a>';

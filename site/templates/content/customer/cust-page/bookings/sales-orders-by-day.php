@@ -1,5 +1,6 @@
 <?php 
-	$bookingspanel = new BookingsPanel(session_id(), $page->fullURL, '#ajax-modal'); 
+	$bookingspanel = new CustomerBookingsPanel(session_id(), $page->fullURL, '#ajax-modal'); 
+	$bookingspanel->set_customer($customer->custid, $customer->shiptoid);
 	$date = $input->get->text('date');
 	$salesorders = $bookingspanel->get_daybookingordernumbers($date);
 	$count = $bookingspanel->count_daybookingordernumbers($date);

@@ -3365,8 +3365,6 @@
 		
 		if (DplusWire::wire('user')->hascontactrestrictions) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
-		} else {
-			
 		}
 		
 		$q->generate_filters($filter, $filtertypes);
@@ -3495,7 +3493,7 @@
 				$q->group('YEAR(bookdate), MONTH(bookdate)');
 				break;
 			case 'day':
-				$q->field('bookingr.*');
+				$q->field('bookingc.*');
 				$q->field('SUM(amount) as amount');
 				$q->group('bookdate');
 				break;
@@ -3510,8 +3508,8 @@
 		}
 	}
 	
-	function get_customerdaybookingordernumbers($sessionID, $date, $custID, $shiptoID, $debug = false) {
-		$q = (new QueryBuilder())->table('bookingc');
+	function get_customerdaybookingordernumbers($sessionID, $date, $custID, $shipID, $debug = false) {
+		$q = (new QueryBuilder())->table('bookingd');
 		$q->field($q->expr('DISTINCT(salesordernbr)'));
 		$q->field('bookdate');
 		$q->where('bookdate', date('Ymd', strtotime($date)));
@@ -3535,8 +3533,8 @@
 		}
 	}
 	
-	function count_customerdaybookingordernumbers($sessionID, $date, $custID, $shiptoID, $debug = false) {
-		$q = (new QueryBuilder())->table('bookingc');
+	function count_customerdaybookingordernumbers($sessionID, $date, $custID, $shipID, $debug = false) {
+		$q = (new QueryBuilder())->table('bookingd');
 		$q->field($q->expr('COUNT(DISTINCT(salesordernbr))'));
 
 		$q->where('bookdate', date('Ymd', strtotime($date)));
@@ -3560,7 +3558,7 @@
 		}
 	}
 	
-	function count_customertodaysbookings($sessionID, $custID, $shiptoID, $debug = false) {
+	function count_customertodaysbookings($sessionID, $custID, $shipID, $debug = false) {
 		$q = (new QueryBuilder())->table('bookingc');
 		$q->field('COUNT(*)');
 		
@@ -3604,8 +3602,9 @@
 		switch ($interval) {
 			case 'month':
 				$q->field('custid');
+				$q->field('shiptoid');
 				$q->field('SUM(amount) as amount');
-				$q->group('custid');
+				$q->group('custid,shiptoid');
 				break;
 			case 'day':
 				$q->field('bookingc.*');

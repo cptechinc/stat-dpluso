@@ -3474,3 +3474,151 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
+	
+	function get_customerbookings($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
+		$q = (new QueryBuilder())->table('bookingc');
+		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shiptoid', $shipID);
+		}
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
+		}
+		
+		$q->generate_filters($filter, $filtertypes);
+
+		switch ($interval) {
+			case 'month':
+				$q->field($q->expr("CAST(CONCAT(YEAR(bookdate), LPAD(MONTH(bookdate), 2, '0'), '01') AS UNSIGNED) as bookdate"));
+				$q->field('SUM(amount) as amount');
+				$q->group('YEAR(bookdate), MONTH(bookdate)');
+				break;
+			case 'day':
+				$q->field('bookingr.*');
+				$q->field('SUM(amount) as amount');
+				$q->group('bookdate');
+				break;
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function get_customerdaybookingordernumbers($sessionID, $date, $custID, $shiptoID, $debug = false) {
+		$q = (new QueryBuilder())->table('bookingc');
+		$q->field($q->expr('DISTINCT(salesordernbr)'));
+		$q->field('bookdate');
+		$q->where('bookdate', date('Ymd', strtotime($date)));
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
+		}
+		
+		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shiptoid', $shipID);
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+	
+	function count_customerdaybookingordernumbers($sessionID, $date, $custID, $shiptoID, $debug = false) {
+		$q = (new QueryBuilder())->table('bookingc');
+		$q->field($q->expr('COUNT(DISTINCT(salesordernbr))'));
+
+		$q->where('bookdate', date('Ymd', strtotime($date)));
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
+		}
+		
+		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shiptoid', $shipID);
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function count_customertodaysbookings($sessionID, $custID, $shiptoID, $debug = false) {
+		$q = (new QueryBuilder())->table('bookingc');
+		$q->field('COUNT(*)');
+		
+		$q->where('bookdate', date('Ymd'));
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
+		}
+		
+		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shiptoid', $shipID);
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+	
+	function get_bookingsummarybyshipto($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
+		$q = (new QueryBuilder())->table('bookingc');
+		
+		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shiptoid', $shipID);
+		}
+		
+		if (DplusWire::wire('user')->hascontactrestrictions) {
+			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
+		} else {
+			
+		}
+		
+		$q->generate_filters($filter, $filtertypes);
+
+		switch ($interval) {
+			case 'month':
+				$q->field('custid');
+				$q->field('SUM(amount) as amount');
+				$q->group('custid');
+				break;
+			case 'day':
+				$q->field('bookingc.*');
+				$q->field('SUM(amount) as amount');
+				$q->group('bookdate');
+				break;
+		}
+		
+		$sql = DplusWire::wire('database')->prepare($q->render());
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}

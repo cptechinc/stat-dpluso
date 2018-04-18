@@ -91,7 +91,7 @@
 		 */
 		public function get_bookings($debug = false) {
 			$this->determine_interval();
-			$bookings = get_userbookings($this->sessionID, $this->filters, $this->filterable, $this->interval, $debug);
+			$bookings = get_customerbookings($this->sessionID, $this->custID, $this->shipID, $this->filters, $this->filterable, $this->interval, $debug);
 			return $debug ? $bookings : $this->bookings = $bookings;
 		}
 		
@@ -103,7 +103,7 @@
 		 * @uses
 		 */
 		public function get_daybookingordernumbers($date, $debug = false) {
-			return get_daybookingordernumbers($this->sessionID, $date, false, false, $debug);
+			return get_customerdaybookingordernumbers($this->sessionID, $this->custID, $this->shipID, $date, false, false, $debug);
 		}
 		
 		/** 
@@ -113,7 +113,7 @@
 		 * @return int         count| SQL Query
 		 */
 		public function count_daybookingordernumbers($date, $debug = false) {
-			return count_daybookingordernumbers($this->sessionID, $date, false, false, $debug);
+			return count_customerdaybookingordernumbers($this->sessionID, $this->custID, $this->shipID, $date, false, false, $debug);
 		}
 		
 		/**
@@ -122,11 +122,16 @@
 		 * @return int           Count | SQL Query
 		 */
 		public function count_todaysbookings($debug = false) {
-			return count_todaysbookings($this->sessionID, false, false, $debug);
+			return count_customertodaysbookings($this->sessionID, $this->custID, $this->shipID, false, false, $debug);
 		}
 		
-		public function get_bookingsummarybycustomer($debug = false) {
+        public function get_bookingsummarybycustomer($debug = false) {
 			$bookings = get_bookingsummarybycustomer($this->sessionID, $this->filters, $this->filterable, $this->interval, $debug);
+			return $debug ? $bookings : $this->bookings = $bookings;
+		}
+        
+        public function get_bookingsummarybyshipto($debug = false) {
+			$bookings = get_bookingsummarybyshipto($this->sessionID, $this->custID, $this->shipID, $this->filters, $this->filterable, $this->interval, $debug);
 			return $debug ? $bookings : $this->bookings = $bookings;
 		}
 		

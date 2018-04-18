@@ -69,17 +69,6 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function setup_pageurl() {
-			parent::setup_pageurl();
-			$this->pageurl->path->add('customer');
-			$this->pageurl->add($this->custID);
-			$this->paginationinsertafter = $this->custID;
-			
-			if (!empty($this->shipID)) {
-				$this->pageurl->path->add("shipto-$this->shipID");
-				$this->paginationinsertafter = "shipto-$this->shipID";
-			}
-		}
 		
 		public function generate_loaddetailsurl(Order $order) {
 			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));

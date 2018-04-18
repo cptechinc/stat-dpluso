@@ -12,7 +12,7 @@
 </div>
 <div class="row">
 	<div class="col-sm-12">
-		<?php include $config->paths->content.'dashboard/bookings-panel.php'; ?>
+		<?php include $config->paths->content.'dashboard/bookings/bookings-panel.php'; ?>
 	</div>
 </div>
 <div class="row">

@@ -67,13 +67,13 @@
 		
 		/**
 		 * Array of filters that will apply to the orders
-		 * @var [type]
+		 * @var array
 		 */
 		public $filters = false; // Will be instance of array
 		
 		/**
 		 * Array of key->array of filterable columns
-		 * @var [array
+		 * @var array
 		 */
 		public $filterable;
 		
@@ -83,6 +83,15 @@
 		 */
 		public $paneltype;
 		
+		/**
+		 * Constructor
+		 * @param string  $sessionID  Session Identifier
+		 * @param Purl\Url $pageurl   Page URL Object
+		 * @param string  $modal      ID of Modal Element
+		 * @param string  $loadinto   ID of element to AJAX Load into
+		 * @param bool  $ajax         Use Ajax
+		 * @uses
+		 */
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal);
 			$this->loadinto = $this->focus = $loadinto;
@@ -95,6 +104,13 @@
 				$this->collapse = 'collapse';
 			}
 		}
+		
+		/**
+		 * Setup the Page URL then add the necessary components in the path and querystring
+		 * @return void
+		 * @uses parent::setup_pageurl()
+		 */
+		abstract public function setup_pageurl();
 		
 		/* =============================================================
 			Class Functions

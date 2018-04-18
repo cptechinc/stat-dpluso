@@ -29,7 +29,6 @@
 		 * @param string  $sessionID  Session Identifier
 		 * @param Purl\Url $pageurl   URL object to get URL
 		 * @param mixed    $modal     ID of modal to use or false
-		 * @uses
 		 */
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal = false) {
 			$this->sessionID = $sessionID;

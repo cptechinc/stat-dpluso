@@ -31,7 +31,7 @@
 		<div class="panel-body">
 			<button class="btn btn-primary toggle-order-search pull-right" type="button" data-toggle="collapse" data-target="#bookings-search-div" aria-expanded="false" aria-controls="bookings-search-div">Toggle Search <i class="fa fa-search" aria-hidden="true"></i></button>
 			<div id="bookings-search-div" class="<?= (!empty($bookingspanel->filters)) ? 'collapse' : ''; ?>">
-				<?php include $config->paths->content.'dashboard/bookings/search-form.php'; ?>
+				<?php include $config->paths->content.'customer/cust-page/bookings/search-form.php'; ?>
 			</div>
 		</div>
 		<div>
@@ -39,16 +39,23 @@
 			<div id="bookings-chart">
 				
 			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="table-responsive bookings-table-div">
-						<?php include $config->paths->content."customer/cust-page/bookings/$bookingspanel->interval-table.php"; ?>
+			<div class="table-responsive bookings-table-div">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="jumbotron item-detail-heading"> <div> <h4>Booking Dates</h4> </div> </div>
+						<div class="table-responsive">
+							<?php include $config->paths->content."customer/cust-page/bookings/$bookingspanel->interval-table.php"; ?>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="jumbotron item-detail-heading"> <div> <h4>Shipto Bookings</h4> </div> </div>
+						<div class="table-responsive">
+							<?php include $config->paths->content."customer/cust-page/bookings/shipto-booking-totals-table.php"; ?>
+						</div>
 					</div>
 				</div>
-			</div>
+			</div>	
 		</div>
 	</div>
 </div>
-<?php 
-	include $config->paths->content."dashboard/bookings/bookings-line-chart.js.php";
-?>
+<?php include $config->paths->content."customer/cust-page/bookings/bookings-line-chart.js.php"; ?>

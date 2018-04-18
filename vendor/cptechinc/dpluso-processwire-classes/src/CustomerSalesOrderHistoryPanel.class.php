@@ -72,16 +72,6 @@
 			return $url->getUrl();
 		}
 		
-		public function generate_searchurl() {
-			$url = new \Purl\Url(parent::generate_searchurl());
-			$url->path = Processwire\wire('config')->pages->ajax.'load/orders/search/cust/';
-			$url->query->set('custID', $this->custID);
-			if ($this->shipID) {
-				$url->query->set('shipID', $this->shipID);
-			}
-			return $url->getUrl();
-		}
-		
 		public function generate_loaddetailsurl(Order $order) {
 			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $order->custid);
@@ -89,9 +79,9 @@
 		}
 		
 		public function generate_lastloadeddescription() {
-			if (Processwire\wire('session')->{'orders-loaded-for'}) {
-				if (Processwire\wire('session')->{'orders-loaded-for'} == $this->custID) {
-					return 'Last Updated : ' . Processwire\wire('session')->{'orders-updated'};
+			if (DplusWire::wire('session')->{'orders-loaded-for'}) {
+				if (DplusWire::wire('session')->{'orders-loaded-for'} == $this->custID) {
+					return 'Last Updated : ' . DplusWire::wire('session')->{'orders-updated'};
 				}
 				return '';
 			}

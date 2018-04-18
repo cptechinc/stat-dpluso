@@ -3360,7 +3360,7 @@
 		}
 	}
 	
-	function get_bookingsummarybycustomer($sessionID, $filter, $filtertypes, $interval = '', $debug = false) {
+	function get_bookingtotalsbycustomer($sessionID, $filter, $filtertypes, $interval = '', $debug = false) {
 		$q = (new QueryBuilder())->table('bookingc');
 		
 		if (DplusWire::wire('user')->hascontactrestrictions) {
@@ -3583,7 +3583,7 @@
 		}
 	}
 	
-	function get_bookingsummarybyshipto($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
+	function get_bookingtotalsbyshipto($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
 		$q = (new QueryBuilder())->table('bookingc');
 		
 		$q->where('custid', $custID);

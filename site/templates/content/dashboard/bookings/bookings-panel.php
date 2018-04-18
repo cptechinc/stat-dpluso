@@ -8,10 +8,10 @@
 			'bookdate' => DplusDateTime::format_date($booking['bookdate'], 'Y-m-d'),
 			'amount' => floatval($booking['amount'])
 		);
+		
 		if ($bookingspanel->interval == 'day') {
 			$bookdata['dayurl'] = $bookingspanel->generate_viewsalesordersbydaylink($booking['bookdate']);
 		}
-		
 		$bookingdata[] = $bookdata;
 	}
 ?>
@@ -38,10 +38,19 @@
 			<div id="bookings-chart">
 				
 			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="table-responsive bookings-table-div">
-						<?php include $config->paths->content."dashboard/bookings/$bookingspanel->interval-table.php"; ?>
+			<div class="bookings-table-div">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="jumbotron item-detail-heading"> <div> <h4>Booking Dates</h4> </div> </div>
+						<div class="table-responsive">
+							<?php include $config->paths->content."dashboard/bookings/$bookingspanel->interval-table.php"; ?>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="jumbotron item-detail-heading"> <div> <h4>Customer Bookings</h4> </div> </div>
+						<div class="table-responsive">
+							<?= include $config->paths->content."dashboard/bookings/customer-booking-totals-table.php"; ?>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -42,7 +42,7 @@
 </div>
 <div class="row">
 	<div class="col-sm-12">
-		<?php include $config->paths->content.'customer/cust-page/bookings-panel.php'; ?>
+		<?php include $config->paths->content.'customer/cust-page/bookings/bookings-panel.php'; ?>
 	</div>
 </div>
 <div class="row">

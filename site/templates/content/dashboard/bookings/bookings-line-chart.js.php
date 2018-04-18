@@ -1,8 +1,11 @@
 <script>
 	$(function() {
+		$('#bookings-by-customer').DataTable();
+		
 		var pageurl = new URI('<?= $bookingspanel->pageurl->getUrl(); ?>').toString();
 		var loadinto = '#bookings-panel';
 		var xlabelformat = 'MM/DD/YYYY';
+		
 		<?php if ($bookingspanel->interval ==  'month') : ?>
 			xlabelformat = 'MMM YYYY';
 		<?php endif; ?>

@@ -100,12 +100,6 @@
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-success", $icon. " Finished with quote");
 		}
 		
-		/**
-		 * Returns HTML link to edit the detail line
-		 * @param  Order       $quote  Quote
-		 * @param  OrderDetail $detail QuoteDetail
-		 * @return string              HTML link to edit the detail line
-		 */
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new Contento();
 			$href = $this->generate_detailviewediturl($quote, $detail);

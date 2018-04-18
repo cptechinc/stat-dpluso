@@ -147,8 +147,13 @@
 			return count_todaysbookings($this->sessionID, false, false, $debug);
 		}
 		
-		public function get_bookingsummarybycustomer($debug = false) {
-			$bookings = get_bookingsummarybycustomer($this->sessionID, $this->filters, $this->filterable, $this->interval, $debug);
+		/**
+		 * Returns total bookings amounts for each customer during the timeframe specifeld
+		 * @param  bool   $debug Whether or not to execute Query and return results
+		 * @return array         Results | SQL Query
+		 */
+		public function get_bookingtotalsbycustomer($debug = false) {
+			$bookings = get_bookingtotalsbycustomer($this->sessionID, $this->filters, $this->filterable, $this->interval, $debug);
 			return $debug ? $bookings : $this->bookings = $bookings;
 		}
 		
@@ -167,7 +172,7 @@
 		/**
 		 * Determines the interval to use based on the filters
 		 * and based on the interval it creates the title description
-		 * @return string [description] "Viewing (daily | weekly | monthly) bookings between $from and $through"
+		 * @return string  "Viewing (daily | weekly | monthly) bookings between $from and $through"
 		 */
 		public function generate_title() {
 			$this->determine_interval();

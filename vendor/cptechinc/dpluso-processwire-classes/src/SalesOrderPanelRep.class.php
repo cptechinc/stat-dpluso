@@ -17,9 +17,7 @@
 		============================================================ */
 		public function setup_pageurl() {
 			parent::setup_pageurl();
-			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/orders/salesrep/";
-			$this->pageurl->query->remove('display');
-			$this->pageurl->query->remove('ajax');
+			$this->pageurl->path->add('salesrep');
 			$this->paginationinsertafter = 'salesrep';
 		}
 	}

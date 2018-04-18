@@ -62,19 +62,6 @@
 		public function generate_clearsearchlink(); // OrderPanel
 		
 		/**
-		 * Deprecated
-		 * // TODO Remove
-		 * @return [type] [description]
-		 */
-		public function generate_searchlink();
-		/**
-		 * Deprecated
-		 * // TODO Remove
-		 * @return [type] [description]
-		 */
-		public function generate_searchurl();
-		
-		/**
 		 * Returns HTML Link to remove the sort on the panel
 		 * @return string HTML Link to remove the sort on the panel
 		 */

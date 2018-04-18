@@ -12,7 +12,7 @@
 		
 		/**
 		 * Returns URL to load the Customer Shipto Page
-		 * @param  Order  $order Sales Order Number | Quote # 
+		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        Load Customer Shipto Page URL
 		 */
 		public function generate_customershiptourl(Order $order);
@@ -20,7 +20,7 @@
 		/**
 		 * Returns HTNL Link to load Dplus Notes
 		 * @param  Order  $order   SalesOrder | Quote
-		 * @param  string $linenbr Line #
+		 * @param  string $linenbr Line Number
 		 * @return string          HTML link to view Dplus Notes
 		 */
 		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0');
@@ -28,16 +28,16 @@
 		/**
 		 * Returns URL to request Dplus Notes
 		 * @param  Order  $order   SalesOrder | Quote
-		 * @param  string $linenbr Line #
+		 * @param  string $linenbr Line Number
 		 * @return string          URL to request Dplus Notes
 		 */
 		public function generate_dplusnotesrequesturl(Order $order, $linenbr);
 		
 		/**
 		 * Returns HTML link that loads documents for Order
-		 * @param  Order  $order  SalesOrder | Quote
-		 * @param  OrderDetail    $detail Detail to load documents for SalesOrderDetail | QuoteDetail
-		 * @return string         HTML link to view documents
+		 * @param  Order       $order  SalesOrder | Quote
+		 * @param  OrderDetail         $detail Detail to load documents for SalesOrderDetail | QuoteDetail
+		 * @return string              HTML link to view documents
 		 * @uses
 		 */
 		public function generate_loaddocumentslink(Order $order, OrderDetail $detail = null);
@@ -115,7 +115,14 @@
 		 * @return string        URL to load detail lines for order
 		 */
 		public function generate_loaddetailsurl(Order $order);
-		// public function generate_detailvieweditlink(Order $order, OrderDetail $detail, $display = false);
+		
+		/**
+		 * Returns HTML link to view/edit OrderDetail
+		 * @param  Order       $order  SalesOrder | Quote
+		 * @param  OrderDetail $detail SalesOrderDetail | QuoteDetail
+		 * @return string              HTML Link
+		 */
+		public function generate_detailvieweditlink(Order $order, OrderDetail $detail);
 		
 		/**
 		 * Returns the URL to load the edit/view detail URL

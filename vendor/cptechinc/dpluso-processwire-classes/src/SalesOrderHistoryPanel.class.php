@@ -1,6 +1,9 @@
 <?php 	
 	class SalesOrderHistoryPanel extends SalesOrderPanel {
-		
+		/**
+		 * Array of SalesOrderHistory
+		 * @var array
+		 */
 		public $orders = array();
 		public $paneltype = 'shipped-order';
 		public $filterable = array(
@@ -132,19 +135,6 @@
 			return $bootstrap->openandclose('a', "href=$href|class=load-and-show|$ajaxdata", "$icon Refresh History");
 		}
 		
-		public function generate_searchlink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_searchurl();
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-default bordered load-into-modal|data-modal=$this->modal", "Search Orders");
-		}
-		
-		public function generate_searchurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajax.'load/sales-history/search/';
-			$url->query = '';
-			return $url->getUrl();
-		}
-		
 		public function generate_closedetailsurl() { 
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
@@ -166,9 +156,14 @@
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns HTML form for reordering SalesOrderDetails
+		 * @param  Order       $order  SalesOrderHistory
+		 * @param  OrderDetail $detail SalesOrderDetail
+		 * @return string              HTML Form
+		 */
 		public function generate_detailreorderform(Order $order, OrderDetail $detail) {
 			if (empty(($detail->itemid))) {
-				echo $detail->itemid;
 				return '';
 			}
 			$action = DplusWire::wire('config')->pages->cart.'redir/';
@@ -184,7 +179,7 @@
 			return $form->finish();
 		}
 		
-		public function generate_filter(Processwire\WireInput $input) {
+		public function generate_filter(ProcessWire\WireInput $input) {
 			$stringerbell = new StringerBell();
 			$this->generate_defaultfilter($input);
 			
@@ -246,5 +241,4 @@
 			$url->query->set('type', 'history');
 			return $url->getUrl();
 		}
-		
 	}

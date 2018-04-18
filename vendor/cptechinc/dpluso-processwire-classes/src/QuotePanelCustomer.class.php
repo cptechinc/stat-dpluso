@@ -71,16 +71,6 @@
 			return $url->getUrl();
 		}
 		
-		public function generate_searchurl() {
-			$url = new \Purl\Url(parent::generate_searchurl());
-			$url->path = DplusWire::wire('config')->pages->ajax.'load/quotes/search/cust/';
-			$url->query->set('custID', $this->custID);
-			if (!empty($this->shipID)) {
-				$url->query->set('shipID', $this->shipID);
-			}
-			return $url->getUrl();
-		}
-		
 		public function generate_loaddetailsurl(Order $quote) {
 			$url = new \Purl\Url(parent::generate_loaddetailsurl($quote));
 			$url->query->set('custID', $quote->custid);

@@ -1,84 +1,11 @@
 <?php 
-    
-    class CustomerBookingsPanel extends BookingsPanel {
-        use OrderPanelCustomerTraits;
-        use ThrowErrorTrait;
-		use MagicMethodTraits;
-		use AttributeParser;
-		
-		/**
-		 * Object that stores page location and where to load
-		 * and search from
-		 * @var Purl\Url
-		 */
-		protected $pageurl;
-		/**
-		 * Session Identifier
-		 * @var string
-		 */
-		protected $sessionID;
-		
-		/**
-		 * Modal to use
-		 * @var string
-		 */
-		protected $modal;
-		
-		/**
-		 * String that contains attributes for ajax loading
-		 * @var string
-		 */
-		protected $ajaxdata;
-		
-		/**
-		 * What path segment to paginate after
-		 * @var string
-		 */
-		protected $paginateafter = 'bookings';
-		
-		/**
-		 * Array of booking records
-		 * @var string
-		 */
-		protected $bookings;
-		/**
-		 * What interval to Use
-		 * day | week | month 
-		 * // NOTE if blank, the default is day unless there's more than 90 days then we switch to month  
-		 * @var string
-		 */
-		protected $interval;
-		
-		/**
-		 * Array of filters to filterdown the data
-		 * @var array
-		 */
-		protected $filters = false;
-		
-		/**
-		 * Array of filterable fields and the attributes
-		 * for each filterable
-		 * @var array
-		 */
-		protected $filterable = array(
-			'bookdate' => array(
-				'querytype' => 'between',
-				'datatype' => 'date',
-				'date-format' => 'Ymd',
-				'label' => 'Book Date'
-			)
-		);
-		
-		/**
-		 * Time intervals used in the filtering of data
-		 * @var array
-		 */
-		public static $intervals = array('day' => 'daily', 'week' => 'weekly', 'month' => 'monthly');
-		
-		/* =============================================================
-			CONSTRUCTOR FUNCTIONS
-		============================================================ */
-		
+	/**
+	 * Class for handling of getting and displaying booking records from the database for a Customer
+	 * @author Barbara Bullemer barbara@cptechinc.com
+	 */
+	class CustomerBookingsPanel extends BookingsPanel {
+		use OrderPanelCustomerTraits;
+
 		/* =============================================================
 			GETTER FUNCTIONS
 		============================================================ */
@@ -87,7 +14,6 @@
 		 * that meets the criteria defined in the $this->filters array
 		 * @param  bool $debug Whether or not to execute and return list | return SQL Query
 		 * @return array       Booking records | SQL Query
-		 * @uses
 		 */
 		public function get_bookings($debug = false) {
 			$this->determine_interval();
@@ -97,10 +23,9 @@
 		
 		/** 
 		 * Get the bookings made for that date
-		 * @param  string $date  Date
+		 * @param  string $date  Date in m/d/Y format
 		 * @param  bool   $debug To Run and return records | SQL Query
 		 * @return array         bookingd records | SQL Query
-		 * @uses
 		 */
 		public function get_daybookingordernumbers($date, $debug = false) {
 			return get_customerdaybookingordernumbers($this->sessionID, $date, $this->custID, $this->shipID, $debug);
@@ -108,7 +33,7 @@
 		
 		/** 
 		 * Count the bookings made for that date
-		 * @param  string $date  Date
+		 * @param  string $date  Date m/d/Y format
 		 * @param  bool   $debug To Run and return count | SQL Query
 		 * @return int         count| SQL Query
 		 */
@@ -118,20 +43,25 @@
 		
 		/**
 		 * Count the booking records for that day 
-		 * @param  bool   $debug Whether or not to execute Query
+		 * @param  bool  $debug  Whether or not to execute Query
 		 * @return int           Count | SQL Query
 		 */
 		public function count_todaysbookings($debug = false) {
 			return count_customertodaysbookings($this->sessionID, $this->custID, $this->shipID, false, false, $debug);
 		}
 		
-        public function get_bookingsummarybycustomer($debug = false) {
-			$bookings = get_bookingsummarybycustomer($this->sessionID, $this->filters, $this->filterable, $this->interval, $debug);
+		public function get_bookingtotalsbycustomer($debug = false) {
+			$bookings = get_bookingtotalsbycustomer($this->sessionID, $this->filters, $this->filterable, $this->interval, $debug);
 			return $debug ? $bookings : $this->bookings = $bookings;
 		}
-        
-        public function get_bookingsummarybyshipto($debug = false) {
-			$bookings = get_bookingsummarybyshipto($this->sessionID, $this->custID, $this->shipID, $this->filters, $this->filterable, $this->interval, $debug);
+		
+		/**
+		 * Return total bookings amounts foreach Shipto for defined Customer
+		 * @param  bool   $debug Whether or not to execute Query and return results
+		 * @return array         Results | SQL Query
+		 */
+		public function get_bookingtotalsbyshipto($debug = false) {
+			$bookings = get_bookingtotalsbyshipto($this->sessionID, $this->custID, $this->shipID, $this->filters, $this->filterable, $this->interval, $debug);
 			return $debug ? $bookings : $this->bookings = $bookings;
 		}
 		
@@ -309,7 +239,7 @@
 			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
 			$url->query = '';
 			$url->query->set('date', $date);
-            $url->query->set('custID', $this->custID);
+			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {
 				$url->query->set('shipID', $this->shipID);
 			}
@@ -342,7 +272,7 @@
 			$url->query = '';
 			$url->query->set('ordn', $ordn);
 			$url->query->set('date', $date);
-            $url->query->set('custID', $this->custID);
+			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {
 				$url->query->set('shipID', $this->shipID);
 			}
@@ -364,13 +294,5 @@
 			return $bootstrap->openandclose('a', "href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
 		}
 		
-		public function setup_pageurl() {
-			parent::setup_pageurl();
-			$this->pageurl->path->add('customer');
-			$this->pageurl->path->add($this->custID);
-
-            if (!empty($this->shipID)) {
-                $this->pageurl->path->add("shipto-$this->shipID");
-            }
-		}
-    }
+		
+	}

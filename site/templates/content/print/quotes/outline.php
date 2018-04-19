@@ -6,7 +6,7 @@
 </div>
 <div class="row">
 	<div class="col-xs-6">
-		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
+		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>" style="max-width: 100%;">
 	</div>
 	<div class="col-xs-6 text-right">
 		<h1>Quote # <?= $quote->quotnbr; ?></h1>
@@ -41,7 +41,7 @@
 
 <div class="row">
 	<div class="col-xs-4">
-		<div class="address-header"><h4>Ship To </h4></div>
+		<div class="address-header"><h3>Ship To </h3></div>
 		<address>
 			<?php if (strlen($quote->shipname) > 0) : ?>
 				<?= $quote->shipname; ?><br>
@@ -54,7 +54,7 @@
 		</address>
 	</div>
 	<div class="col-xs-4">
-		<div class="address-header"><h4>Bill To </h4></div>
+		<div class="address-header"><h3>Bill To </h3></div>
 		<address>
 			<?= $quote->billname; ?><br>
 			<?= $quote->billaddress; ?><br>
@@ -65,7 +65,7 @@
 		</address>
 	</div>
 	<div class="col-xs-4">
-		<div class="address-header"><h4>Contact</h4></div>
+		<div class="address-header"><h3>Contact</h3></div>
 		<address>
 			<?= $quote->contact; ?><br>
 			<?= $quote->phone; ?><br>

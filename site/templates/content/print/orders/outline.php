@@ -5,10 +5,10 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-5">
-		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
+	<div class="col-xs-5">
+		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>" style="max-width: 100%;">
 	</div>
-	<div class="col-sm-7 text-right">
+	<div class="col-xs-7 text-right">
 		<h1>Order # <?= $ordn; ?></h1>
 		</br>
 	</div>
@@ -64,7 +64,7 @@
 		</address>
 	</div>
 	<div class="col-xs-4">
-		<div class="address-header"><h4>Contact</h4></div>
+		<div class="address-header"><h3>Contact</h3></div>
 		<address>
 			<?= $order->contact; ?><br>
 			<?= $order->phone; ?><br>

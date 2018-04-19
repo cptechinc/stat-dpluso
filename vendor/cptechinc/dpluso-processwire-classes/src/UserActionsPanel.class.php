@@ -399,7 +399,7 @@
         }
         
         public function get_actions($debug = false) {
-            return get_useractions($this->assigneduserID, $this->querylinks, Processwire\wire('session')->display, $this->pagenbr, $debug);
+            return get_useractions($this->assigneduserID, $this->querylinks, DplusWire::wire('session')->display, $this->pagenbr, $debug);
         }
         
         public function generate_pagenumberdescription() {

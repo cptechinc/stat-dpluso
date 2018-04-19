@@ -1,11 +1,16 @@
 <?php 
 	class EditQuoteDisplay extends QuoteDisplay {
 		use QuoteDisplayTraits;
-		
-		protected $qnbr;
-		protected $modal;
+	
 		public $canedit;
 		
+		/**
+		 * Primary Constructor
+		 * @param string   $sessionID Session Identifier
+		 * @param Purl\Url $pageurl   URL to Page
+		 * @param string   $modal     Modal to use for AJAX
+		 * @param string   $qnbr       Quote #
+		 */
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $qnbr) {
 			parent::__construct($sessionID, $pageurl, $modal, $qnbr);
 		}
@@ -13,6 +18,11 @@
 		/* =============================================================
 			Class Functions
 		============================================================ */
+		/**
+		 * Returns HTML link to send Quote to Order
+		 * @param  Order  $quote Quote
+		 * @return string        HTML link to send Quote to Order
+		 */
 		public function generate_sendtoorderlink(Order $quote) {
 			$bootstrap = new Contento();
 			$href = $this->generate_sendtoorderurl($quote);
@@ -20,12 +30,22 @@
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-default", $icon. " Send To Order");
 		}
 		
+		/**
+		 * Returns URL to send Quote to Order
+		 * @param  Order  $quote Quote
+		 * @return string        HTML link to send Quote to Order
+		 */
 		public function generate_sendtoorderurl(Order $quote) {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->orderquote);
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->orderquote);
 			$url->query->set('qnbr', $quote->quotnbr);
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns URL to unlock Quote
+		 * @param  Order  $quote Quote
+		 * @return string        URL to unlock Quote
+		 */
 		public function generate_unlockurl(Order $quote) {
 			$url = $this->generate_quotesredirurl();
 			$url->query->set('action', 'unlock-quote');
@@ -33,12 +53,22 @@
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns confirmation page URL
+		 * @param  Order  $quote Quote
+		 * @return string        URL for Quote confirmation page
+		 */
 		public function generate_confirmationurl(Order $quote) {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->confirmquote);
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->confirmquote);
 			$url->query->set('qnbr', $quote->quotnbr);
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns HTML to discard Quote changes
+		 * @param  Order  $quote Quote
+		 * @return string        HTML to discard Quote changes
+		 */
 		public function generate_discardchangeslink(Order $quote) {
 			$bootstrap = new Contento();
 			$href = $this->generate_unlockurl($quote);
@@ -46,12 +76,22 @@
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Quote");
 		}
 		
+		/**
+		 * Returns HTML button to save and unlock Quote
+		 * @param  Order  $quote Quote
+		 * @return string        HTML button to save and unlock Quote
+		 */
 		public function generate_saveunlockbutton(Order $quote) {
 			$bootstrap = new Contento();
 			$icon = $bootstrap->createicon('fa fa-unlock');
 			return $bootstrap->openandclose('button', "class=btn btn-block btn-emerald save-unlock-quotehead|data-form=#quotehead-form", $icon. " Save and Exit");
 		}
 		
+		/**
+		 * Returns HTML link to unlock quote and return to confirmation page
+		 * @param  Order  $quote Quote
+		 * @return string        HTML link to unlock quote and return to confirmation page
+		 */
 		public function generate_confirmationlink(Order $quote) {
 			$href = $this->generate_confirmationurl($quote);
 			$bootstrap = new Contento();
@@ -67,6 +107,13 @@
 			return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $icon);	
 		}
 		
+		/**
+		 * Returns HTML Form to delete the detail line
+		 * @param  Order       $quote  Quote
+		 * @param  OrderDetail $detail QuoteDetail
+		 * @return string              HTML Form to delete the detail line
+		 * @uses
+		 */
 		public function generate_deletedetailform(Order $quote, OrderDetail $detail) {
 			$url = $this->generate_quotesredirurl();
 			$action = $url->getUrl();
@@ -79,6 +126,12 @@
 			return $form->finish();
 		}
 		
+		/**
+		 * Returns HTML Link to delete detail line
+		 * @param  Order       $quote  Quote
+		 * @param  OrderDetail $detail QuoteDetail
+		 * @return string              HTML Link to delete detail line
+		 */
 		public function generate_deletedetaillink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new Contento();
 			$icon = $bootstrap->createicon('fa fa-trash fa-1-5x') . $bootstrap->openandclose('span', 'class=sr-only', 'Delete Line');
@@ -88,12 +141,21 @@
 			return $bootstrap->a("href=$href|class=btn btn-sm btn-danger", $icon);
 		}
 		
+		/**
+		 * Returns HTML bootstrap alert div that this Quote is will be in read only mode
+		 * @return string HTML bootstrap alert div that this Quote is will be in read only mode
+		 */
 		public function generate_readonlyalert() {
 			$bootstrap = new Contento();
 			$msg = $bootstrap->openandclose('b', '', 'Attention!') . ' This order will open in read-only mode, you will not be able to save changes.';
 			return $bootstrap->createalert('warning', $msg);
 		}
 		
+		/**
+		 * Returns HTML bootstrap alert for an error
+		 * @param  Quote  $quote Quote
+		 * @return string        HTML bootstrap alert for an error
+		 */
 		public function generate_erroralert($quote) {
 			$bootstrap = new Contento();
 			$msg = $bootstrap->openandclose('b', '', 'Error!') . $quote->errormsg;

@@ -7,20 +7,38 @@
 	class Table {
 		use AttributeParser;
 		
-		private $tropen = false; // after the first row in a table this $var stays true
-		private $tdopen = false; // after the first cell in a row this $var stays true
-		private $thopen = false; // after the first cell in a row this $var stays true
+		/**
+		 * After the first row in a table this $var stays true
+		 * @var bool
+		 */
+		private $tropen = false; 
+		
+		/**
+		 * After the first cell in a row this $var stays true
+		 * @var bool
+		 */
+		private $tdopen = false;
+		
+		/**
+		 * After the first cell in a row this $var stays true
+		 * @var bool
+		 */
+		private $thopen = false;
 		private $opensection = false;
 		private $tablestring = '';
 		private static $count = 0;
-
-		function __construct($vars = '') {
+		
+		/**
+		 * Primary Constructor
+		 * @param string $attr HTML attributes that the table will need
+		 */
+		public function __construct($attr = '') {
 			self::$count++;
-			$this->tablestring = $this->indent() . '<table' . $this->attributes($vars) . '>';
+			$this->tablestring = $this->indent() . '<table' . $this->attributes($attr) . '>';
 		}
 		
 		/**
-		 * [tablesection description]
+		 * Add table section like thead | tbody | tfoot
 		 * @param  string $section [Which table section to use tbody|thead|tfoot]
 		 * 
 		 */
@@ -31,7 +49,7 @@
 		}
 		
 		/**
-		 * [closetablesection description]
+		 * Add closing element tag for table section e.g. thead | tbody | tfoot
 		 * @param string $section [Which table section to close tbody|thead|tfoot]
 		 */
 		public function closetablesection($section) {
@@ -51,7 +69,7 @@
 		}
 		
 		/**
-		 * [tr description]
+		 * Add table row 
 		 * @param string $vars string of attribute values separated by | 
 		 */
 		public function tr($vars = '') { // (across the board in every cell)
@@ -71,7 +89,7 @@
 		}
 		
 		/**
-		 * [td description]
+		 * Add table cell
 		 * @param string $vars    string of attribute values separated by | 
 		 * @param string $content Content that will be in the cell
 		 */
@@ -85,7 +103,7 @@
 		}
 		
 		/**
-		 * [th description]
+		 * add table header cell
 		 * @param string $vars    string of attribute values separated by | 
 		 * @param string $content Content that will be in the cell
 		 */
@@ -98,6 +116,11 @@
 			return $this;
 		}
 		
+		/**
+		 * Cose element
+		 * @param  string $element Element to close
+		 * @return string          html element close
+		 */
 		public function tclose($element) {
 			return '</'.$element.'>';
 		}
@@ -116,7 +139,7 @@
 		
 		/**
 		 * Generates the celldata based of the column, column type and the json array it's in, looks at if the data is numeric
-		 * @param string $type the type of data D = Date, N = Numeric, string
+		 * @param string $type   the type of data D = Date, N = Numeric, string
 		 * @param string $parent the array in which the data is contained
 		 * @param string $column the key in which we use to look up the value 
 		 */
@@ -147,5 +170,4 @@
 			}
 			return $indent;
 		}
-		
 	}

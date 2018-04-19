@@ -27,6 +27,20 @@
 		 * @return string               formatted result
 		 */
 		public static function format_date($date, $formatstring = 'm/d/Y') {
-	return (strtotime($date) == strtotime("12/31/1969")) ? '' : date($formatstring, strtotime($date));
+			return (strtotime($date) == strtotime("12/31/1969")) ? '' : date($formatstring, strtotime($date));
+		}
+		
+		/**
+		 * Subtract two dates from each other
+		 * after converting them into timestring
+		 * then returing the number of days
+		 * @param  string $fromdate ex. 01/25/2018
+		 * @param  string $todate   ex. 01/30/2018
+		 * @return int           	Number of days ex. 5
+		 */
+		public static function subtract_days($fromdate, $todate) {
+			$from = strtotime($fromdate);
+			$through = strtotime($todate);
+			return floor(($through - $from) / (60*60*24));
 		}
 	}

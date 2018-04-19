@@ -12,6 +12,9 @@
         case 'quotes': //ADDED 12/22/2016 $input->urlSegment(3) is going to be cust or salesrep
             include $config->paths->content . 'ajax/load/quotes-router.php';
             break;
+		case 'bookings':
+			include $config->paths->content . 'ajax/load/bookings-router.php';
+			break;
         case 'notes':
             include $config->paths->content . 'ajax/load/notes-router.php';
             break;

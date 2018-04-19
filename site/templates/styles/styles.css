@@ -445,3 +445,9 @@
 	.docs-nav {font-size: 105%;}
 	.docs-nav li { padding-left: 5px;}
 	.docs-nav li.active {border-left: 2px solid #2c3e50;}
+
+/*==============================================================
+   BOOKINGS STYLES
++=============================================================*/
+	.bookings-table-div {max-height: 600px; overflow-y: scroll;}
+	.cust-bookings-table-div {max-height: 400px; overflow-y: scroll;}

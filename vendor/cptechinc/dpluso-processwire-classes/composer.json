@@ -60,6 +60,7 @@
 			"src/SalesOrderHistoryPanel.class.php",
 			"src/SalesOrderPanelRep.class.php",
 			"src/SalesOrderPanelCustomer.class.php",
+			"src/SalesOrderHistoryPanel.class.php",
 			"src/SalesOrderHistoryPanelCustomer.class.php",
 			"src/QuoteDisplay.interface.php",
 			"src/QuotePanel.interface.php",
@@ -69,13 +70,13 @@
 			"src/QuotePanel.class.php",
 			"src/QuotePanelRep.class.php",
 			"src/QuotePanelCustomer.class.php",
+			"src/BookingsPanel.class.php",
+			"src/BookingsPanelCustomer.class.php",
 			"src/TablePageSorter.class.php",
 			"src/Paginator.class.php",
 			"src/Stringer.class.php",
 			"src/OrderCreditCard.class.php",
 			"src/QueryBuilder.php",
-			"src/Report.class.php",
-			"src/UserActionsReport.class.php",
 			"src/ItemLookupModal.class.php",
 			"src/FormFieldsConfig.class.php"
 		]

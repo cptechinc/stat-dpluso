@@ -1,4 +1,10 @@
 <div class="row">
+	<div class="col-xs-6"></div>
+	<div class="col-xs-6 text-right">
+		<h3><img src="data:image/png;base64, <?= base64_encode($generator->getBarcode($quote->quotnbr, $generator::TYPE_CODE_128)); ?>" alt="Barcode for Quote <?= $quote->quotnbr; ?>"></h3>
+	</div>
+</div>
+<div class="row">
 	<div class="col-xs-6">
 		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
 	</div>

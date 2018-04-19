@@ -7,6 +7,7 @@
 	<th>Notes</th>
 	<th></th>
 	<th></th>
+	<th></th>
 </tr>
 
 <?php $details = $quotepanel->get_quotedetails($quote); ?>
@@ -25,6 +26,7 @@
 		<td class="text-right">$ <?= $page->stringerbell->format_money($detail->quotprice * $detail->quotqty); ?></td>
 		<td></td>
 		<td><?= $quotepanel->generate_loaddplusnoteslink($quote, $detail->linenbr); ?></td>
+		<td></td>
 		<td></td>
 	</tr>
 <?php endforeach; ?>

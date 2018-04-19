@@ -23,8 +23,9 @@
 		</a>
 	</th>
 	<th>
-		Invoice Date 
-		<?php // TODO ?>
+		<a href="<?= $orderpanel->generate_tablesortbyurl("invdate") ; ?>" class="load-link" <?= $orderpanel->ajaxdata; ?>>
+			Invoice Date: <?= $orderpanel->tablesorter->generate_sortsymbol('invdate'); ?>
+		</a>
 	</th>
 	<th colspan="3">
 		<?= $orderpanel->generate_iconlegend(); ?>

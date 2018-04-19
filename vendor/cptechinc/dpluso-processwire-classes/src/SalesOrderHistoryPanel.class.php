@@ -1,8 +1,11 @@
 <?php 	
 	class SalesOrderHistoryPanel extends SalesOrderPanel {
-		
+		/**
+		 * Array of SalesOrderHistory
+		 * @var array
+		 */
 		public $orders = array();
-		public $paneltype = 'sales-order';
+		public $paneltype = 'shipped-order';
 		public $filterable = array(
 			'custpo' => array(
 				'querytype' => 'between',
@@ -27,7 +30,14 @@
 			'orderdate' => array(
 				'querytype' => 'between',
 				'datatype' => 'date',
+				'date-format' => 'Ymd',
 				'label' => 'Order Date'
+			),
+			'invdate' => array(
+				'querytype' => 'between',
+				'datatype' => 'date',
+				'date-format' => 'Ymd',
+				'label' => 'Invoice Date'
 			),
 			'status' => array(
 				'querytype' => 'in',
@@ -38,7 +48,8 @@
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = $this->setup_pageurl($pageurl);
+			$this->pageurl = new Purl\Url($pageurl->getUrl());
+			$this->setup_pageurl();
 		}
 		
 		/* =============================================================
@@ -53,9 +64,9 @@
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
-					 $orders =get_usersaleshistoryinvoicedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_usersaleshistoryorderdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'invdate') {
-					 $orders =get_usersaleshistoryinvoicedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_usersaleshistoryinvoicedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
 					$orders = get_usersaleshistoryorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
@@ -71,13 +82,11 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function setup_pageurl(\Purl\Url $pageurl) {
-			$url = $pageurl;
-			$url->path = DplusWire::wire('config')->pages->ajax."load/sales-history/";
-			$url->query->remove('display');
-			$url->query->remove('ajax');
+		public function setup_pageurl() {
+			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-history/";
+			$this->pageurl->query->remove('display');
+			$this->pageurl->query->remove('ajax');
 			$this->paginationinsertafter = 'sales-history';
-			return $url;
 		}
 		
 		public function generate_expandorcollapselink(Order $order) {
@@ -102,10 +111,20 @@
 		}
 		
 		public function generate_loadurl() { 
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->orders.'redir/';
-			$url->query->setData(array('action' => 'load-orders'));
+			$url = new \Purl\Url($this->pageurl);
+			$url->query->remove('filter');
+			foreach (array_keys($this->filterable) as $filtercolumns) {
+				$url->query->remove($filtercolumns);
+			}
 			return $url->getUrl();
+		}
+		
+		public function generate_clearsearchlink() {
+			$bootstrap = new Contento();
+			$href = $this->generate_loadurl();
+			$icon = $bootstrap->createicon('fa fa-search-minus');
+			$ajaxdata = $this->generate_ajaxdataforcontento();
+			return $bootstrap->openandclose('a', "href=$href|class=load-link btn btn-warning btn-block|$ajaxdata", "Clear Search $icon");
 		}
 		
 		public function generate_refreshlink() {
@@ -113,20 +132,7 @@
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->createicon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Orders");
-		}
-		
-		public function generate_searchlink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_searchurl();
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-default bordered load-into-modal|data-modal=$this->modal", "Search Orders");
-		}
-		
-		public function generate_searchurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajax.'load/sales-history/search/';
-			$url->query = '';
-			return $url->getUrl();
+			return $bootstrap->openandclose('a', "href=$href|class=load-and-show|$ajaxdata", "$icon Refresh History");
 		}
 		
 		public function generate_closedetailsurl() { 
@@ -150,9 +156,14 @@
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns HTML form for reordering SalesOrderDetails
+		 * @param  Order       $order  SalesOrderHistory
+		 * @param  OrderDetail $detail SalesOrderDetail
+		 * @return string              HTML Form
+		 */
 		public function generate_detailreorderform(Order $order, OrderDetail $detail) {
 			if (empty(($detail->itemid))) {
-				echo $detail->itemid;
 				return '';
 			}
 			$action = DplusWire::wire('config')->pages->cart.'redir/';
@@ -168,17 +179,27 @@
 			return $form->finish();
 		}
 		
-		public function generate_filter(Processwire\WireInput $input) {
+		public function generate_filter(ProcessWire\WireInput $input) {
 			$stringerbell = new StringerBell();
-			parent::generate_filter($input);
+			$this->generate_defaultfilter($input);
 			
 			if (isset($this->filters['orderdate'])) {
 				if (empty($this->filters['orderdate'][0])) {
-					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minorderdate($this->sessionID, 'orderdate')));
+					$this->filters['orderdate'][0] = DplusDateTime::format_date(get_minsaleshistoryorderdate($this->sessionID, 'orderdate'));
 				}
 				
 				if (empty($this->filters['orderdate'][1])) {
 					$this->filters['orderdate'][1] = date('m/d/Y');
+				}
+			}
+			
+			if (isset($this->filters['invdate'])) {
+				if (empty($this->filters['invdate'][0])) {
+					$this->filters['invdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invdate')));
+				}
+				
+				if (empty($this->filters['invdate'][1])) {
+					$this->filters['invdate'][1] = date('m/d/Y');
 				}
 			}
 			
@@ -201,7 +222,6 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		
 		public function generate_trackingrequesturl(Order $order) {
 			$url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
@@ -214,7 +234,6 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
 			$url = new \Purl\Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);

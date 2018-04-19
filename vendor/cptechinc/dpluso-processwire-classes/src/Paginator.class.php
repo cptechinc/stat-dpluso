@@ -1,5 +1,7 @@
 <?php     
 	class Paginator {
+		use AttributeParser;
+		
 		public $pagenbr;
 		public $ajaxdata;
 		public $count;
@@ -19,7 +21,7 @@
 			$this->count = $count;
 			$this->pageurl = new \Purl\Url($pageurl);
 			$this->insertafter = $insertafter;
-			$this->ajaxdata = $ajaxdata;
+			$this->ajaxdata = $this->parse_ajaxdata($ajaxdata);
 			
 			$this::setup_displayonpage();
 		}
@@ -34,14 +36,6 @@
 		 */
 		public function paginate($pagenbr) {
 			return self::paginateurl($this->pageurl, $pagenbr, $this->insertafter);
-		}
-		
-		/** 
-		 * Takes the $this->ajaxdata string and formats it for contento
-		 * @return string pipe delimited representation of the ajax data ex data-focus=#this|data-loadinto=
-		 */
-		public function generate_ajaxdataforcontento() {
-			return str_replace(' ', '|', str_replace("'", "", str_replace('"', '', $this->ajaxdata)));
 		}
 		
 		/**
@@ -59,8 +53,8 @@
 			$form .= $bootstrap->label('', 'Results Per Page') . '&nbsp; &nbsp;';
 			$form .= $bootstrap->open('select', 'class=form-control input-sm results-per-page|name=results-per-page');
 			
-			foreach (Processwire\wire('config')->showonpageoptions as $val) {
-				if ($val == Processwire\wire('session')->display) {
+			foreach (DplusWire::wire('config')->showonpageoptions as $val) {
+				if ($val == DplusWire::wire('session')->display) {
 					$form .= $bootstrap->openandclose('option',"value=$val|selected", $val);
 				} else {
 					$form .= $bootstrap->openandclose('option',"value=$val", $val);
@@ -80,7 +74,7 @@
 		public function __toString() {
 			$bootstrap = new Contento();
 			$list = '';
-			$totalpages = ceil($this->count / Processwire\wire('session')->display); 
+			$totalpages = ceil($this->count / DplusWire::wire('session')->display); 
 			if ($this->pagenbr == 1) {
 				$link = $bootstrap->openandclose('a', 'href=#|aria-label=Previous', '<span aria-hidden="true">&laquo;</span>');
 				$list .= $bootstrap->openandclose('li', 'class=disabled', $link);
@@ -125,7 +119,7 @@
 	   ============================================================ */
 	   /**
 		* Find what page number the $url is on
-		* @param  PurlUrl $url 
+		* @param  Purl\Url $url 
 		* @return int     Page Number
 		*/
 		public static function generate_pagenbr(\Purl\Url $url) {
@@ -151,14 +145,39 @@
 		 }
 		
 		/**
-		* Initializes the Processwire\wire('session')->display value;
+		 * Paginates the Purl\Url object by adding the page number to its path
+		 * @param  Purl\Url $url         URL Object
+		 * @param  int      $pagenbr     Page Number to page to
+		 * @param  string   $insertafter Path Segment to insert the page number
+		 * @return Purl\Url              Url object with the paginated path
+		 */
+		public static function paginate_purl(Purl\Url $url, $pagenbr, $insertafter) {
+			$insertafter = trim($insertafter, '/');
+			$path = $url->getPath();
+			
+			if (strpos($path, 'page') !== false) {
+				$regex = "((page)\d{1,3})";
+				$replace = ($pagenbr > 1) ? $replace = "page$pagenbr" : "";
+				$newpath = preg_replace($regex, $replace, $path);
+			} else {
+				$regex = "(($insertafter))";
+				$replace = ($pagenbr > 1) ? "{$insertafter}/page{$pagenbr}/" : $insertafter;
+				$newpath = preg_replace($regex, $replace, $path);
+			}
+			
+			$url->path = $newpath;
+			return $url;
+		}
+		
+		/**
+		* Initializes the DplusWire::wire('session')->display value;
 		*/
 		public static function setup_displayonpage() {
-			if (Processwire\wire('input')->get->display) {
-				Processwire\wire('session')->display = Processwire\wire('input')->get->text('display');
+			if (DplusWire::wire('input')->get->display) {
+				DplusWire::wire('session')->display = DplusWire::wire('input')->get->text('display');
 			} else {
-				if (!Processwire\wire('session')->display) {
-					Processwire\wire('session')->display = Processwire\wire('config')->showonpage;
+				if (!DplusWire::wire('session')->display) {
+					DplusWire::wire('session')->display = DplusWire::wire('config')->showonpage;
 				}
 			}
 		}

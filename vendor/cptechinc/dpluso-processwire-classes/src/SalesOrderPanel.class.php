@@ -2,6 +2,10 @@
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
 		use SalesOrderDisplayTraits;
 		
+		/**
+		 * Array of SalesOrders
+		 * @var array
+		 */
 		public $orders = array();
 		public $paneltype = 'sales-order';
 		public $filterable = array(
@@ -39,7 +43,8 @@
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = $this->setup_pageurl($pageurl);
+			$this->pageurl = new Purl\Url($pageurl->getUrl());
+			$this->setup_pageurl();
 		}
 		
 		/* =============================================================
@@ -54,16 +59,16 @@
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
-					$orders = get_userordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_userordersorderdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
-					$orders = get_userordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
+					$orders = get_userordersorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
 				// DEFAULT BY ORDER DATE SINCE SALES ORDER # CAN BE ROLLED OVER
 				$this->tablesorter->sortrule = 'DESC'; 
 				//$this->tablesorter->orderby = 'orderno';
-				//$orders = get_salesrepordersorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
-				$orders = get_userordersorderdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+				//$orders = get_salesrepordersorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
+				$orders = get_userordersorderdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $orders : $this->orders = $orders;
 		}
@@ -72,13 +77,11 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function setup_pageurl(\Purl\Url $pageurl) {
-			$url = $pageurl;
-			$url->path = Processwire\wire('config')->pages->ajax."load/sales-orders/";
-			$url->query->remove('display');
-			$url->query->remove('ajax');
+		public function setup_pageurl() {
+			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-orders/";
+			$this->pageurl->query->remove('display');
+			$this->pageurl->query->remove('ajax');
 			$this->paginationinsertafter = 'sales-orders';
-			return $url;
 		}
 		
 		public function generate_expandorcollapselink(Order $order) {
@@ -104,7 +107,7 @@
 		
 		public function generate_loadurl() { 
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->orders.'redir/';
+			$url->path = DplusWire::wire('config')->pages->orders.'redir/';
 			$url->query->setData(array('action' => 'load-orders'));
 			return $url->getUrl();
 		}
@@ -115,19 +118,6 @@
 			$icon = $bootstrap->createicon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Orders");
-		}
-		
-		public function generate_searchlink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_searchurl();
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-default bordered load-into-modal|data-modal=$this->modal", "Search Orders");
-		}
-		
-		public function generate_searchurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->ajax.'load/orders/search/';
-			$url->query = '';
-			return $url->getUrl();
 		}
 		
 		public function generate_closedetailsurl() { 
@@ -164,20 +154,25 @@
 		}
 		
 		public function generate_lastloadeddescription() {
-			if (Processwire\wire('session')->{'orders-loaded-for'}) {
-				if (Processwire\wire('session')->{'orders-loaded-for'} == Processwire\wire('user')->loginid) {
-					return 'Last Updated : ' . Processwire\wire('session')->{'orders-updated'};
+			if (DplusWire::wire('session')->{'orders-loaded-for'}) {
+				if (DplusWire::wire('session')->{'orders-loaded-for'} == DplusWire::wire('user')->loginid) {
+					return 'Last Updated : ' . DplusWire::wire('session')->{'orders-updated'};
 				}
 			}
 			return '';
 		}
 		
+		/**
+		 * Returns HTML form for reordering SalesOrderDetails
+		 * @param  Order       $order  SalesOrder 
+		 * @param  OrderDetail $detail SalesOrderDetail
+		 * @return string              HTML Form
+		 */
 		public function generate_detailreorderform(Order $order, OrderDetail $detail) {
 			if (empty(($detail->itemid))) {
-				echo $detail->itemid;
 				return '';
 			}
-			$action = Processwire\wire('config')->pages->cart.'redir/';
+			$action = DplusWire::wire('config')->pages->cart.'redir/';
 			$id = $order->orderno.'-'.$detail->itemid.'-form';
 			$form = new FormMaker("method=post|action=$action|class=item-reorder|id=$id");
 			$form->input("type=hidden|name=action|value=add-to-cart");
@@ -190,7 +185,7 @@
 			return $form->finish();
 		}
 		
-		public function generate_filter(Processwire\WireInput $input) {
+		public function generate_filter(ProcessWire\WireInput $input) {
 			$stringerbell = new StringerBell();
 			parent::generate_filter($input);
 			
@@ -299,8 +294,8 @@
 				$icon = $bootstrap->createicon('glyphicon glyphicon-pencil');
 				$title = "Edit this Order";
 			} elseif ($order->editord == 'L') {
-				if (Processwire\wire('user')->hasorderlocked) {
-					if ($order->orderno == Processwire\wire('user')->lockedordn) {
+				if (DplusWire::wire('user')->hasorderlocked) {
+					if ($order->orderno == DplusWire::wire('user')->lockedordn) {
 						$icon = $bootstrap->createicon('glyphicon glyphicon-wrench');
 						$title = "Edit this Order";
 					} else {

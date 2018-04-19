@@ -1,7 +1,13 @@
 <?php
-	class QuotePanel extends OrderPanel implements OrderDisplayInterface, QuoteDisplayInterface, QuotePanelInterface {
+	/**
+	 * Class for dealing with list of quotes
+	 */
+	class QuotePanel extends OrderPanel implements OrderDisplayInterface, QuoteDisplayInterface, OrderPanelInterface, QuotePanelInterface {
 		use QuoteDisplayTraits;
-		
+		/**
+		 * Array of Quotes
+		 * @var array
+		 */
 		public $quotes = array();
 		public $paneltype = 'quote';
 		public $filterable = array(
@@ -39,43 +45,53 @@
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = $this->setup_pageurl($pageurl);
+			$this->pageurl = $this->pageurl = new Purl\Url($pageurl->getUrl());
+			$this->setup_pageurl();
 		}
 		
-		public function setup_pageurl(\Purl\Url $pageurl) {
-			$url = $pageurl;
-			$url->path = Processwire\wire('config')->pages->ajax."load/quotes/";
-			$url->query->remove('display');
-			$url->query->remove('ajax');
-			$this->paginationinsertafter = 'quotes';
-			return $url;
+		public function setup_pageurl() {
+			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
+			$this->pageurl->query->remove('display');
+			$this->pageurl->query->remove('ajax');
+			$this->pageurl->paginationinsertafter = 'quotes';
 		}
 		
 		/* =============================================================
 			SalesOrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		/**
+		 * Returns the number of quote that will be found with the filters applied
+		 * @param  bool   $debug Whether or Not the Count will be returned
+		 * @return int           Number of Quotes | SQL Query
+		 */
 		public function get_quotecount($debug = false) {
 			$count = count_userquotes($this->sessionID, $this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
 		
+		/**
+		 * Returns the Quotes into the property $quotes
+		 * @param  bool   $debug Whether to run query to return quotes
+		 * @return array         Quotes | SQL Query
+		 * @uses
+		 */
 		public function get_quotes($debug = false) {
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'quotdate') {
-					$quotes = get_userquotesquotedate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$quotes = get_userquotesquotedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'revdate') {
-					$quotes = get_userquotesrevdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$quotes = get_userquotesrevdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'expdate') {
-					$quotes = get_userquotesexpdate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug); 
+					$quotes = get_userquotesexpdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug); 
 				} else {
-					$quotes = get_userquotesorderby($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
+					$quotes = get_userquotesorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
 				$this->tablesorter->sortrule = 'DESC'; 
-				$quotes = get_userquotesquotedate($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
-				//$quotes = get_userquotes($this->sessionID, Processwire\wire('session')->display, $this->pagenbr, $this->filters, $this->filterable, $useclass, $debug);
+				$quotes = get_userquotesquotedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+				//$quotes = get_userquotes($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $quotes: $this->quotes = $quotes;
 		}
@@ -151,21 +167,8 @@
 
 		public function generate_loadurl() { 
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->quotes.'redir/';
+			$url->path = DplusWire::wire('config')->pages->quotes.'redir/';
 			$url->query->setData(array('action' => 'load-quotes'));
-			return $url->getUrl();
-		}
-		
-		public function generate_searchlink() {
-			$bootstrap = new Contento();
-			$href = $this->generate_searchurl();
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-default bordered load-into-modal|data-modal=$this->modal", "Search Orders");
-		}
-		
-		public function generate_searchurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->ajax.'load/quotes/search/';
-			$url->query = '';
 			return $url->getUrl();
 		}
 		
@@ -220,8 +223,8 @@
 		public function generate_editlink(Order $quote) {
 			$bootstrap = new Contento();
 			
-			if (Processwire\wire('user')->hasquotelocked) {
-				if ($quote->quotnbr == Processwire\wire('user')->lockedqnbr) {
+			if (DplusWire::wire('user')->hasquotelocked) {
+				if ($quote->quotnbr == DplusWire::wire('user')->lockedqnbr) {
 					$icon = $bootstrap->createicon('glyphicon glyphicon-wrench');
 					$title = "Continue editing this Quote";
 				} else {
@@ -250,18 +253,17 @@
 			}
 		}
 		
-		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail, $display = false) {
+		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new Contento();
 			$href = $this->generate_detailviewediturl($quote, $detail);
 			return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);	
 		}
 		
 		public function generate_lastloadeddescription() {
-			if (Processwire\wire('session')->{'quotes-loaded-for'}) {
-				if (Processwire\wire('session')->{'quotes-loaded-for'} == Processwire\wire('user')->loginid) {
-					return 'Last Updated : ' . Processwire\wire('session')->{'quotes-updated'};
+			if (DplusWire::wire('session')->{'quotes-loaded-for'}) {
+				if (DplusWire::wire('session')->{'quotes-loaded-for'} == DplusWire::wire('user')->loginid) {
+					return 'Last Updated : ' . DplusWire::wire('session')->{'quotes-updated'};
 				}
-				return '';
 			}
 			return '';
 		}

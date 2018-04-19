@@ -15,12 +15,9 @@
 		/* =============================================================
 			OrderPanelInterface Functions
 		============================================================ */
-		public function setup_pageurl(\Purl\Url $pageurl) {
-			$url = $pageurl;
-			$url->path = Processwire\wire('config')->pages->ajax."load/orders/salesrep/";
-			$url->query->remove('display');
-			$url->query->remove('ajax');
+		public function setup_pageurl() {
+			parent::setup_pageurl();
+			$this->pageurl->path->add('salesrep');
 			$this->paginationinsertafter = 'salesrep';
-			return $url;
 		}
 	}

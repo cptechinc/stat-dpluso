@@ -1,4 +1,6 @@
 <?php
+	$toolbar = false;
+	
     if (has_dpluspermission($user->loginid, 'ci')) { 
         $custID = $shipID = '';
         $page->useractionpanelfactory = new UserActionPanelFactory($user->loginid, $page->fullURL);

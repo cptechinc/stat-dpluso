@@ -1,6 +1,6 @@
 <table class="table table-striped table-bordered table-condensed" id="orders-table">
 	<thead>
-       <?php include $config->paths->content.'customer/cust-page/orders/orders-thead-rows.php'; ?>
+       <?php include $config->paths->content.'customer/cust-page/sales-orders/thead-rows.php'; ?>
     </thead>
     <tbody>
 		<?php if (isset($input->get->ordn)) : ?>
@@ -30,15 +30,15 @@
 
             <?php if ($order->orderno == $input->get->text('ordn')) : ?>
             	<?php if ($input->get->show == 'documents' && (!$input->get('item-documents'))) : ?>
-                	<?php include $config->paths->content.'customer/cust-page/orders/order-documents-rows.php'; ?>
+                	<?php include $config->paths->content.'customer/cust-page/orders/documents-rows.php'; ?>
                 <?php endif; ?>
 
-               <?php include $config->paths->content.'customer/cust-page/orders/order-detail-rows.php'; ?>
+               <?php include $config->paths->content.'customer/cust-page/sales-orders/detail-rows.php'; ?>
 
-               <?php include $config->paths->content.'customer/cust-page/orders/order-totals.php'; ?>
+               <?php include $config->paths->content.'customer/cust-page/sales-orders/totals-row.php'; ?>
 
                <?php if ($input->get->text('show') == 'tracking') : ?>
-					<?php include $config->paths->content.'customer/cust-page/orders/order-tracking-rows.php'; ?>
+					<?php include $config->paths->content.'customer/cust-page/sales-orders/tracking-rows.php'; ?>
                <?php endif; ?>
 
         	<?php if ($order->has_error()) : ?>

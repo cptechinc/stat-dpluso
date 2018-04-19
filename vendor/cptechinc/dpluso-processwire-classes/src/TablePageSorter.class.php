@@ -1,12 +1,32 @@
 <?php     
 	class TablePageSorter {
+		/**
+		 * Column to sort by
+		 * @var string
+		 */
 		public $orderby;
+		
+		/**
+		 * Sort Rule ASC | DESC
+		 * @var string
+		 */
 		public $sortrule;
+		
+		/**
+		 * Raw string with both orderby and sortrule 
+		 * e.g. orderno-ASC
+		 * @var string
+		 */
 		public $orderbystring;
 		
 		/* =============================================================
- 		   CONSTRUCTOR FUNCTIONS 
- 	   ============================================================ */
+			CONSTRUCTOR FUNCTIONS 
+		============================================================= */
+		/**
+		 * Primary Constructor, takes the provided $orderbystring
+		 * and parses it into the order by and the sortrule properties
+		 * @param string $orderbystring Order by string that is provided, usualy from $input->get->orderby, e.g. orderno-ASC
+		 */
 		public function __construct($orderbystring) {
 			$this->orderbystring = $orderbystring;
 			if (!empty($orderbystring)) { // $orderbystring looks like orderno-ASC
@@ -33,8 +53,9 @@
 	   /**
 	    * Returns an html string of the symbole to use based on the sort rule
 	    * @param  string $column column to sort by if it matches the orderby column then the symbol will be the opposite of the current
-	    * @return htmlstring         
+	    * @return string         HTML for the sort icon
 	    */
+	   
 		public function generate_sortsymbol($column) {
 			$symbol = "";
 			if ($this->orderby == $column) {
@@ -69,4 +90,3 @@
 			return $sortrule;
 		}
 	}
-?>

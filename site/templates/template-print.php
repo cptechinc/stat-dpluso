@@ -3,7 +3,8 @@
     $sessionID = $input->get->referenceID ? $input->get->text('referenceID') : session_id();
     $emailurl = new \Purl\Url($config->pages->ajaxload."email/email-file-form/");
     $emailurl->query->set('referenceID', $sessionID);
-    
+    $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
+	
     switch ($page->name) { //$page->name is what we are printing
         case 'order':
             $ordn = $input->get->text('ordn');

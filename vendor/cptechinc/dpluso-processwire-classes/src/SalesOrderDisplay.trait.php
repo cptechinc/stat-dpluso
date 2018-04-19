@@ -1,9 +1,18 @@
-<?php 
+<?php
+	/**
+	 * Traits that will be shared by Sales Order Displays like Displays or Panels
+	 */
 	trait SalesOrderDisplayTraits {
 		/* =============================================================
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		/**
+		 * Returns HTNL Link to load Dplus Notes
+		 * @param  Order  $order   SalesOrder
+		 * @param  string $linenbr Line Number
+		 * @return string          HTML link to view Dplus Notes
+		 */		
 		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
 			$bootstrap = new Contento();
 			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
@@ -18,13 +27,26 @@
 			return $link;
 		}
 		
+		/**
+		 * Returns URL to request Dplus Notes
+		 * @param  Order  $order   SalesOrder
+		 * @param  string $linenbr Line Number
+		 * @return string          URL to request Dplus Notes
+		 */
 		public function generate_dplusnotesrequesturl(Order $order, $linenbr) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->notes."redir/";
+			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->orderno, 'linenbr' => $linenbr));
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns HTML link that loads documents for Order
+		 * @param  Order       $order   SalesOrder
+		 * @param  OrderDetail $detail  Detail to load documents for SalesOrderDetail
+		 * @return string               HTML link to view documents
+		 * @uses
+		 */
 		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
 			if ($orderdetail) {
 				return $this->generate_loaddetaildocumentslink($order, $orderdetail);
@@ -33,6 +55,13 @@
 			}
 		}
 		
+		/**
+		 * Returns HTML link that loads documents for Order header
+		 * @param  Order       $order   SalesOrder
+		 * @param  OrderDetail $detail  Detail to load documents for SalesOrderDetail
+		 * @return string               HTML link to view documents
+		 * @uses
+		 */
 		public function generate_loadheaderdocumentslink(Order $order, OrderDetail $orderdetail = null) {
 			$bootstrap = new Contento();
 			$href = $this->generate_documentsrequesturl($order, $orderdetail);
@@ -46,6 +75,13 @@
 			}
 		}
 		
+		/**
+		 * Returns HTML link that loads documents for Sales Order Details
+		 * @param  Order       $order   SalesOrder
+		 * @param  OrderDetail $detail  Detail to load documents for SalesOrderDetail
+		 * @return string               HTML link to view documents
+		 * @uses
+		 */
 		public function generate_loaddetaildocumentslink(Order $order, OrderDetail $orderdetail = null) {
 			$bootstrap = new Contento();
 			$href = $this->generate_documentsrequesturl($order, $orderdetail);
@@ -63,8 +99,9 @@
 		/**
 		 * Sets up a common url function for getting documents request url, classes that have this trait 
 		 * will define generate_documentsrequesturltr(Order $order)
-		 * @param  Order  $order [description]
-		 * @return String		URL to the order redirect to make the get order documents request
+		 * @param  Order       $order        SalesOrder
+		 * @param  OrderDetail $orderdetail  SalesOrderDetail
+		 * @return string		             URL to the order redirect to make the get order documents request
 		 */
 		public function generate_documentsrequesturltrait(Order $order, OrderDetail $orderdetail = null) {
 			$url = $this->generate_ordersredirurl();
@@ -75,6 +112,11 @@
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns URL to edit order page
+		 * @param  Order  $order SalesOrder
+		 * @return string        URL to edit order page
+		 */
 		public function generate_editurl(Order $order) {
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'get-order-details','ordn' => $order->orderno));
@@ -82,8 +124,8 @@
 			if ($order->can_edit()) {
 				$url->query->set('lock', 'lock');
 			} elseif ($order->editord == 'L') {
-				if (Processwire\wire('user')->hasorderlocked) {
-					$queryset = ($order->orderno == Processwire\wire('user')->lockedordn) ?  'lock' : 'readonly';
+				if (DplusWire::wire('user')->hasorderlocked) {
+					$queryset = ($order->orderno == DplusWire::wire('user')->lockedordn) ?  'lock' : 'readonly';
 					$url->query->set($queryset, $queryset);
 				} else {
 					$url->query->set('readonly', 'readonly');
@@ -94,6 +136,11 @@
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns HTML link to view print page for Sales Order
+		 * @param  Order  $order SalesOrder
+		 * @return string        HTML link to view print page
+		 */
 		public function generate_viewprintlink(Order $order) {
 			$bootstrap = new Contento();
 			$href = $this->generate_viewprinturl($order);
@@ -101,27 +148,49 @@
 			return $bootstrap->openandclose('a', "href=$href|target=_blank", $icon." View Printable Order");
 		}
 		
+		/**
+		 * Returns URL to view print page for Sales Order
+		 * @param  Order  $order SalesOrder
+		 * @return string        URL to view print page
+		 */
 		public function generate_viewprinturl(Order $order) {
 			$url = new \Purl\Url($this->generate_loaddetailsurl($order));
 			$url->query->set('print', 'true');
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns URL to view print page for order
+		 * NOTE USED by PDFMaker
+		 * @param  Order  $order SalesOrder
+		 * @return string        URL to view print page
+		 */
 		public function generate_viewprintpageurl(Order $order) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->print."order/";
+			$url->path = DplusWire::wire('config')->pages->print."order/";
 			$url->query->set('ordn', $order->orderno);
 			$url->query->set('view', 'pdf');
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns URL to send email of this print page
+		 * 
+		 * @param  Order  $order SalesOrder
+		 * @return string        URL to email Order
+		 */
 		public function generate_sendemailurl(Order $order) {
-			$url = new \Purl\Url(wire('config')->pages->email."sales-order/");
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->email."sales-order/");
 			$url->query->set('ordn', $order->orderno);
 			$url->query->set('referenceID', $this->sessionID);
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns HTML Link to view linked user actions
+		 * @param  Order  $order SalesOrder | Quote
+		 * @return string        HTML Link to view linked user actions
+		 */
 		public function generate_viewlinkeduseractionslink(Order $order) {
 			$bootstrap = new Contento();
 			$href = $this->generate_viewlinkeduseractionsurl($order);
@@ -129,13 +198,24 @@
 			return $bootstrap->openandclose('a', "href=$href|target=_blank", $icon." View Associated Actions");
 		}
 		
+		/**
+		 * Returns URL to load linked UserActions
+		 * @param  Order  $order SalesOrder | Quote
+		 * @return string        URL to load linked UserActions
+		 */
 		public function generate_viewlinkeduseractionsurl(Order $order) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->actions."all/load/list/salesorder/";
+			$url->path = DplusWire::wire('config')->pages->actions."all/load/list/salesorder/";
 			$url->query->setData(array('ordn' => $order->orderno));
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns HTML link to view SalesOrderDetail
+		 * @param  Order       $order  SalesOrder
+		 * @param  OrderDetail $detail SalesOrderDetail
+		 * @return string              HTML Link
+		 */
 		public function generate_viewdetaillink(Order $order, OrderDetail $detail) {
 			$bootstrap = new Contento();
 			$href = $this->generate_viewdetailurl($order, $detail);
@@ -143,9 +223,15 @@
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-xs btn-primary view-item-details|data-itemid=$detail->itemid|data-kit=$detail->kititemflag|data-modal=#ajax-modal", $icon);
 		}
 		
+		/**
+		 * Returns URL to view SalesOrderDetail
+		 * @param  Order       $order  SalesOrder
+		 * @param  OrderDetail $detail SalesOrderDetail
+		 * @return string              URL view detail
+		 */
 		public function generate_viewdetailurl(Order $order, OrderDetail $detail) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Processwire\wire('config')->pages->ajax."load/view-detail/order/";
+			$url->path = DplusWire::wire('config')->pages->ajax."load/view-detail/order/";
 			$url->query->setData(array('ordn' => $order->orderno, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
@@ -156,7 +242,7 @@
 		 * will be used by classes to extend 
 		 * Extending classes : SalesOrderPanel
 		 * @param  Order  $order
-		 * @return String 
+		 * @return string
 		 */
 		public function generate_loaddetailsurltrait(Order $order) {
 			$url = $this->generate_ordersredirurl();
@@ -164,12 +250,25 @@
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns URL to load detail lines for Sales Order
+		 * @param  Order  $order SalesOrder
+		 * @return string        URL to load detail lines for Sales Order
+		 */
 		public function generate_loaddetailsurl(Order $order) {
 			return $this->generate_loaddetailsurltrait($order);
 		}
 		
+		/**
+		 * Returns the URL to load the edit/view detail URL
+		 * Checks if we are editing Sales Order to show edit functions
+		 * @param  Order       $order  SalesOrder
+		 * @param  OrderDetail $detail SalesOrderDetail
+		 * @return string              URL to load the edit/view detail URL
+		 * @uses $order->can_edit()
+		 */
 		public function generate_detailviewediturl(Order $order, OrderDetail $detail) {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajaxload.'edit-detail/order/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/order/');
 			$url->query->setData(array('ordn' => $order->orderno, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
@@ -177,6 +276,11 @@
 		/* =============================================================
 			SalesOrderDisplayInterface Functions
 		============================================================ */
+		/**
+		 * Returns HTML Link to load tracking for that Sales Orders
+		 * @param  Order  $order Sales Order
+		 * @return string        HTML Link
+		 */
 		public function generate_loadtrackinglink(Order $order) {
 			$bootstrap = new Contento();
 			$href = $this->generate_trackingrequesturl($order);
@@ -193,8 +297,8 @@
 		/**
 		 * Sets up a common url function for getting d request url, classes that have this trait 
 		 * will definve generate_trackingrequesturl(Order $order)
-		 * @param  Order  $order [description]
-		 * @return String		URL to the order redirect to make the get order documents request
+		 * @param  Order  $order Sales Order
+		 * @return string        URL to the order redirect to make the get order documents request
 		 */
 		public function generate_trackingrequesturltrait(Order $order) {
 			$url = $this->generate_ordersredirurl();
@@ -202,17 +306,23 @@
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns Sales Order Details
+		 * @param  Order  $order SalesOrder
+		 * @param  bool   $debug Whether to execute query and return Sales Order Details
+		 * @return array        SalesOrderDetails Array | SQL Query
+		 */
 		public function get_orderdetails(Order $order, $debug = false) {
 			return get_orderdetails($this->sessionID, $order->orderno, true, $debug);
 		}
 		
 		/** 
 		 * Makes the URL to the orders redirect page, 
-		 * @return \Purl\Url URL to REDIRECT page
+		 * @return Purl\Url URL to REDIRECT page
 		 */
 		public function generate_ordersredirurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->orders);
-			$url->path = Processwire\wire('config')->pages->orders."redir/";
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->orders);
+			$url->path = DplusWire::wire('config')->pages->orders."redir/";
 			return $url;
 		}
 	}

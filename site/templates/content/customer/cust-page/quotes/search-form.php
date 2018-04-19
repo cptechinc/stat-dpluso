@@ -39,13 +39,13 @@
             <div class="input-group form-group">
                 <input class="form-control form-group inline input-sm" type="text" name="subtotal[]" id="cust-quote-total-min" value="<?= $quotepanel->get_filtervalue('subtotal'); ?>" placeholder="From Quote Total">
 	            <span class="input-group-btn">
-	            	<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#cust-quote-total-min').val('<?= get_minquotetotal(session_id(), "$custID"); ?>')"> <span class="fa fa-angle-double-down" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+	            	<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#cust-quote-total-min').val('<?= get_minquotetotal(session_id(), "$custID", "$shipID"); ?>')"> <span class="fa fa-angle-double-down" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
 	            </span>
 	        </div>
             <div class="input-group form-group">
                 <input class="form-control form-group inline input-sm" type="text" name="subtotal[]" id="cust-quote-total-max" value="<?= $quotepanel->get_filtervalue('subtotal', 1); ?>" placeholder="Through Quote Total">
 	            <span class="input-group-btn">
-	            	<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#cust-quote-total-max').val('<?= get_maxquotetotal(session_id(), "$custID"); ?>')"> <span class="fa fa-angle-double-up" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+	            	<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#cust-quote-total-max').val('<?= get_maxquotetotal(session_id(), "$custID", "$shipID"); ?>')"> <span class="fa fa-angle-double-up" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
 	            </span>
 	        </div>
 		</div>

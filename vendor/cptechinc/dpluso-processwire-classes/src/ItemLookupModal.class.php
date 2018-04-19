@@ -5,9 +5,23 @@
 	 */
 	class ItemLookupModal {
 		use ThrowErrorTrait;
-		
+		/**
+		 * Type
+		 * Used for description
+		 * @var string
+		 */
 		protected $type = 'worksheet';
+		
+		/**
+		 * Customer to lookup items for
+		 * @var string
+		 */
 		protected $custID;
+		
+		/**
+		 * Customer Shipto to lookup items for
+		 * @var string
+		 */
 		protected $shipID;
 		
 		/* =============================================================
@@ -67,7 +81,7 @@
 		
 		/**
 		 * This creates a Lookup Modal Quote and replaces $this with it
-		 * @param string $ordn Sales Order #
+		 * @param string $qnbr Quote #
 		 */
 		public function set_qnbr($qnbr) {
 			$lookup = new ItemLookupModalQuote($qnbr);
@@ -83,7 +97,7 @@
 		 * @return string URL
 		 */
 		public function generate_resultsurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/products/item-search-results/cart/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/cart/');
 			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
@@ -93,7 +107,7 @@
 		 * @return string URL
 		 */
 		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/products/non-stock/form/cart/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/cart/');
 			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
@@ -103,14 +117,27 @@
 		 * @return string URL
 		 */
 		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/add-detail/cart/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/cart/');
 			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
 	}
 	
+	/**
+	 * Item Lookup modal for Sales Orders
+	 */
 	class ItemLookupModalOrder extends ItemLookupModal  {
+		/**
+		 * Type of Look up modal
+		 * Used for description
+		 * @var string
+		 */
 		protected $type = 'order';
+		
+		/**
+		 * Order Number
+		 * @var string
+		 */
 		protected $ordn;
 		
 		/* =============================================================
@@ -126,9 +153,13 @@
 		
 		/* =============================================================
 			CLASS FUNCTIONS 
-		============================================================ */
+		============================================================= */
+		/**
+		 * Return the URL where the results are going to be loaded from
+		 * @return string URL
+		 */
 		public function generate_resultsurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/products/item-search-results/order/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/order/');
 			$url->query->setData(array('ordn' => $this->ordn,'custID' => $this->custID, 'shipID' => $this->shipID));
 			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
@@ -139,7 +170,7 @@
 		 * @return string URL
 		 */
 		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/products/non-stock/form/order/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/order/');
 			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
@@ -149,19 +180,36 @@
 		 * @return string URL
 		 */
 		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/add-detail/order/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/order/');
 			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
 	}
 	
+	/**
+	 * Item Lookup modal for Quotes
+	 */
 	class ItemLookupModalQuote extends ItemLookupModal {
+		/**
+		 * Type of Look up modal
+		 * Used for description
+		 * @var string
+		 */
 		protected $type = 'quote';
+		
+		/**
+		 * Quote Number
+		 * @var string
+		 */
 		protected $qnbr;
 		
 		/* =============================================================
 			CONSTRUCTOR FUNCTIONS
-		============================================================ */
+		============================================================= */
+		/**
+		 * Primary Constructor
+		 * @param string $qnbr Quote Nbr
+		 */
 		public function __construct($qnbr) {
 			$this->qnbr = $qnbr;
 		}
@@ -174,19 +222,27 @@
 		 * @return string URL
 		 */
 		public function generate_resultsurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/products/item-search-results/quote/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns the URL where the nonstock form can be loaded
+		 * @return string URL
+		 */
 		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/products/non-stock/form/quote/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
 		
+		/**
+		 * Returns the URL where the add multiple items form can be loaded
+		 * @return string URL
+		 */
 		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(Processwire\wire('config')->pages->ajax.'load/add-detail/quote/');
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}

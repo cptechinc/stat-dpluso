@@ -2,6 +2,7 @@
     class QueryBuilder extends atk4\dsql\Query {
         /**
          * $sqlkeywords is a list of SQL keywords that will be shown in uppercase when we debug the query
+         * @var array
          */
         protected $sqlkeywords = array(
             'select',
@@ -32,9 +33,9 @@
          * Optionally adds the ORDER BY clause
          * Optiionally adds the LIMIT clause
          * @param  array  $querylinks [description]
-         * @param  boolean $orderby    String of the orderby e.g. columnname-ASC
-         * @param  boolean $limit      How many records to return ** OPTIONAL
-         * @param  boolean $page       What Page Number to start from
+         * @param  bool $orderby      String of the orderby e.g. columnname-ASC
+         * @param  bool $limit        How many records to return ** OPTIONAL
+         * @param  bool $page         What Page Number to start from
          */
         public function generate_query(array $querylinks, $orderby = false, $limit = false, $page = false) {
     		foreach ($querylinks as $column => $val) {
@@ -97,7 +98,8 @@
 								$dateformat = $this->generate_dateformat($filter, $filtertypes);
 								$this->where($this->expr("STR_TO_DATE($filter, '$dateformat') between STR_TO_DATE([], '%m/%d/%Y') and STR_TO_DATE([], '%m/%d/%Y')", $filtervalue));
                             } else if ($filtertypes[$filter]['datatype'] == 'numeric') {
-                                $this->where($this->expr("$filter between CAST([] as UNSIGNED) and CAST([] as UNSIGNED)", $filtervalue));
+                                // $this->where($this->expr("$filter between CAST([] as UNSIGNED) and CAST([] as UNSIGNED)", $filtervalue));
+                                $this->where($this->expr("$filter between CAST([] as DECIMAL) and CAST([] as DECIMAL)", $filtervalue));
                             } else {    
                                 $this->where($this->expr("$filter between [] and []", $filtervalue));
                             }

@@ -10,15 +10,15 @@
 		<div class="col-sm-2">
 			<h4>Cust ID</h4>
 			<div class="input-group form-group">
-				<input class="form-control form-group inline input-sm" type="text" name="custid[]" id="sales-order-cust-from" value="<?= $orderpanel->get_filtervalue('custid'); ?>" placeholder="From CustID">
+				<input class="form-control form-group inline input-sm" type="text" name="custid[]" id="sales-hist-cust-from" value="<?= $orderpanel->get_filtervalue('custid'); ?>" placeholder="From CustID">
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default btn-sm not-round get-custid-search" data-field="#sales-order-cust-from"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+					<button type="button" class="btn btn-default btn-sm not-round get-custid-search" data-field="#sales-hist-cust-from"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
 				</span>
 			</div>
 			<div class="input-group form-group">
-				<input class="form-control form-group inline input-sm" type="text" name="custid[]" id="sales-order-cust-to" value="<?= $orderpanel->get_filtervalue('custid', 1); ?>" placeholder="Through CustID">
+				<input class="form-control form-group inline input-sm" type="text" name="custid[]" id="sales-hist-cust-to" value="<?= $orderpanel->get_filtervalue('custid', 1); ?>" placeholder="Through CustID">
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default btn-sm not-round get-custid-search" data-field="#sales-order-cust-to"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
+					<button type="button" class="btn btn-default btn-sm not-round get-custid-search" data-field="#sales-hist-cust-to"> <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <span class="sr-only">Search</span> </button>
 				</span>
 			</div>
 		</div>

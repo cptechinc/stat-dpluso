@@ -35,7 +35,7 @@
 				}
 			}
 			if (has_dpluspermission(Dpluswire::wire('user')->loginid, 'eso') || has_dpluspermission(Dpluswire::wire('user')->loginid, 'eqo')) {
-				$button = $bootstrap->button('type=button|class=btn btn-primary|data-toggle=modal|data-target=#item-lookup-modal', $bootstrap->createicon('glyphicon glyphicon-plus'). ' Add Item');
+				$button = $bootstrap->button('type=button|class=btn btn-primary|data-toggle=modal|data-target=#item-lookup-modal', $bootstrap->createicon('glyphicon glyphicon-plus'). ' Item Entry');
 				$tb->tr()->td('colspan=2', $bootstrap->p('class=text-center', $button));
 			}
 			return $tb->close();

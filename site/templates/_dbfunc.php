@@ -2405,7 +2405,7 @@
 		} else {
 			$sql->execute($q->params);
 			$sql->setFetchMode(PDO::FETCH_CLASS, 'Vendor');
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->fetchAll();
 		}
 	}
 	

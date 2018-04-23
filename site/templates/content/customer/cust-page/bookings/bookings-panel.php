@@ -58,4 +58,8 @@
 		</div>
 	</div>
 </div>
-<?php include $config->paths->content."customer/cust-page/bookings/bookings-line-chart.js.php"; ?>
+<?php 
+	if (!empty($bookingdata)) {
+		include $config->paths->content."customer/cust-page/bookings/bookings-line-chart.js.php"; 
+	}
+?>

@@ -98,8 +98,9 @@
 								$dateformat = $this->generate_dateformat($filter, $filtertypes);
 								$this->where($this->expr("STR_TO_DATE($filter, '$dateformat') between STR_TO_DATE([], '%m/%d/%Y') and STR_TO_DATE([], '%m/%d/%Y')", $filtervalue));
                             } else if ($filtertypes[$filter]['datatype'] == 'numeric') {
-                                $this->where($this->expr("$filter between CAST([] as UNSIGNED) and CAST([] as UNSIGNED)", $filtervalue));
-                            } else {    
+                                //$this->where($this->expr("$filter between CAST([] as UNSIGNED) and CAST([] as UNSIGNED)", $filtervalue));
+                            	$this->where($this->expr("$filter between CAST([] as DECIMAL) and CAST([] as DECIMAL)", $filtervalue));
+							} else {    
                                 $this->where($this->expr("$filter between [] and []", $filtervalue));
                             }
                         }

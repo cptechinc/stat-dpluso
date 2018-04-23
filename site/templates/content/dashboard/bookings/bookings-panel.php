@@ -57,4 +57,8 @@
 		</div>
 	</div>
 </div>
-<?php include $config->paths->content."dashboard/bookings/bookings-line-chart.js.php"; ?>
+<?php 
+	if (!empty($bookingdata)) {
+		include $config->paths->content."dashboard/bookings/bookings-line-chart.js.php";
+	}
+?>

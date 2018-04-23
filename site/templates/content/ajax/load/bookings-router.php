@@ -38,7 +38,11 @@
 			$page->body = $config->paths->content.'bookings/sales-order-diff.php';
 			break;
 		default:
+<<<<<<< HEAD
 			$page->body = $config->paths->content.'dashboard/bookings-panel.php';
+=======
+			$page->body = $config->paths->content.'dashboard/bookings/bookings-panel.php';
+>>>>>>> master
 			break;
 	}
 

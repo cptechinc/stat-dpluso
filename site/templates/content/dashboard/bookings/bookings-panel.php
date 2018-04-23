@@ -49,7 +49,11 @@
 					<div class="col-sm-6">
 						<div class="jumbotron item-detail-heading"> <div> <h4>Customer Bookings</h4> </div> </div>
 						<div class="table-responsive">
+<<<<<<< HEAD
 							<?= include $config->paths->content."dashboard/bookings/customer-booking-totals-table.php"; ?>
+=======
+							<?php include $config->paths->content."dashboard/bookings/customer-booking-totals-table.php"; ?>
+>>>>>>> master
 						</div>
 					</div>
 				</div>

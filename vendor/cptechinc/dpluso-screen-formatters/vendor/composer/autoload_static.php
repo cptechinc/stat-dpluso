@@ -28,6 +28,7 @@ class ComposerStaticInit60d0ce33873e823796c7fb8b01b9c750
         'b2c42415282d51119248aef7b3591ae6' => __DIR__ . '/../..' . '/src/ii/ItemUsageScreen.class.php',
         '99c820740406d4be2976c4c2c7715cf3' => __DIR__ . '/../..' . '/src/ii/ItemNotesScreen.class.php',
         '2d119c28a95d421297d10bbf28629bc0' => __DIR__ . '/../..' . '/src/ii/ItemMiscScreen.class.php',
+        '26f51048f5b1a9de33846e9b2e8e57df' => __DIR__ . '/../..' . '/src/ii/ItemCostingScreen.class.php',
         'f128f67794ed1352ca85f3969ce59c8a' => __DIR__ . '/../..' . '/src/ci/SalesOrdersFormatter.class.php',
         '3e450730fcb21bc90edcfd524e2e003e' => __DIR__ . '/../..' . '/src/ci/SalesHistoryFormatter.class.php',
         '01f20971f6b9b2759737be36ed1456c8' => __DIR__ . '/../..' . '/src/ci/OpenInvoicesFormatter.class.php',

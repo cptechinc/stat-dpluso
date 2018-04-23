@@ -6,10 +6,17 @@
 		
 		/**
 		 * Primary Constructor
+<<<<<<< HEAD
 		 * @param string  $sessionID Session Identifier
 		 * @param Purl\Url $pageurl  URL to Page
 		 * @param string  $modal     Modal to use for AJAX
 		 * @param string  $qnbr      Quote #
+=======
+		 * @param string   $sessionID Session Identifier
+		 * @param Purl\Url $pageurl   URL to Page
+		 * @param string   $modal     Modal to use for AJAX
+		 * @param string   $qnbr       Quote #
+>>>>>>> master
 		 */
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $qnbr) {
 			parent::__construct($sessionID, $pageurl, $modal, $qnbr);
@@ -153,8 +160,13 @@
 		
 		/**
 		 * Returns HTML bootstrap alert for an error
+<<<<<<< HEAD
 		 * @param  Quote $quote Quote
 		 * @return string       HTML bootstrap alert for an error
+=======
+		 * @param  Quote  $quote Quote
+		 * @return string        HTML bootstrap alert for an error
+>>>>>>> master
 		 */
 		public function generate_erroralert($quote) {
 			$bootstrap = new Contento();

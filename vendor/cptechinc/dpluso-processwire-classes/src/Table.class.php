@@ -7,9 +7,23 @@
 	class Table {
 		use AttributeParser;
 		
-		private $tropen = false; // after the first row in a table this $var stays true
-		private $tdopen = false; // after the first cell in a row this $var stays true
-		private $thopen = false; // after the first cell in a row this $var stays true
+		/**
+		 * After the first row in a table this $var stays true
+		 * @var bool
+		 */
+		private $tropen = false; 
+		
+		/**
+		 * After the first cell in a row this $var stays true
+		 * @var bool
+		 */
+		private $tdopen = false;
+		
+		/**
+		 * After the first cell in a row this $var stays true
+		 * @var bool
+		 */
+		private $thopen = false;
 		private $opensection = false;
 		private $tablestring = '';
 		private static $count = 0;
@@ -125,7 +139,7 @@
 		
 		/**
 		 * Generates the celldata based of the column, column type and the json array it's in, looks at if the data is numeric
-		 * @param string $type the type of data D = Date, N = Numeric, string
+		 * @param string $type   the type of data D = Date, N = Numeric, string
 		 * @param string $parent the array in which the data is contained
 		 * @param string $column the key in which we use to look up the value 
 		 */

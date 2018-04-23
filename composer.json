@@ -30,7 +30,8 @@
         "jwage/purl": "dev-cptechinc",
         "atk4/dsql": "1.1",
         "eoghanobrien/php-simple-mail": "^1.7",
-        "mikehaertl/phpwkhtmltopdf": "^2.3"
+        "mikehaertl/phpwkhtmltopdf": "^2.3",
+        "picqer/php-barcode-generator": "^0.2.2"
     },
     "autoload": {
         "files": [ "wire/core/ProcessWire.php" ]

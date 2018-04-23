@@ -293,6 +293,9 @@
 			$ajaxdata = "data-modal=$this->modal";
 			return $bootstrap->openandclose('a', "href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
 		}
+<<<<<<< HEAD
 		
 		
+=======
+>>>>>>> master
 	}

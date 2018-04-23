@@ -6,7 +6,7 @@
         /**
          * Takes a string of attributes and parses it out by a delimiter (|)
          * @param  string $vars string of attributes separated by | 
-         * @return string      string of atrributes and values like class=""
+         * @return string       string of atrributes and values like class=""
          */
         protected function attributes($vars) {
             $attributesarray = array();
@@ -35,7 +35,11 @@
 		/**
          * Takes a string of attributes and parses it out by a delimiter (|)
          * @param  string $attributes string of attributes separated by | 
+<<<<<<< HEAD
          * @return string      string of atrributes and values like class=""
+=======
+         * @return string             string of atrributes and values like class=""
+>>>>>>> master
          * @uses attributes()
          */
 		protected function generate_attributes($attributes) {

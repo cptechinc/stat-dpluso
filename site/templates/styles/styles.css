@@ -448,6 +448,12 @@
 
 /*==============================================================
    BOOKINGS STYLES
+<<<<<<< HEAD
 =============================================================*/
 .bookings-table-div {max-height: 600px; overflow-y: scroll;}
 .cust-bookings-table-div {max-height: 400px; overflow-y: scroll;}
+=======
++=============================================================*/
+	.bookings-table-div {max-height: 600px; overflow-y: scroll;}
+	.cust-bookings-table-div {max-height: 400px; overflow-y: scroll;}
+>>>>>>> master

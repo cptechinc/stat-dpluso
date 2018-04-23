@@ -6,7 +6,10 @@
 		case 'customer':
 			$custID = $input->urlSegment(3);
 			$shipID = ($input->urlSegment(4)) ? urldecode(str_replace('shipto-', '', $input->urlSegment(4))) : '';
+<<<<<<< HEAD
 			
+=======
+>>>>>>> master
 			$customer = Customer::load($custID, $shipID);
 			$page->body = $config->paths->content.'customer/cust-page/sales-history/sales-history-panel.php';
 			break;

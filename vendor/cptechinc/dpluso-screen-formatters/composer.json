@@ -27,7 +27,7 @@
 			"src/ii/ItemUsageScreen.class.php",
 			"src/ii/ItemNotesScreen.class.php",
 			"src/ii/ItemMiscScreen.class.php",
-            "src/ii/ItemCostingScreen.class.php",
+			"src/ii/ItemCostingScreen.class.php",
 			"src/ci/SalesOrdersFormatter.class.php",
 			"src/ci/SalesHistoryFormatter.class.php",
 			"src/ci/OpenInvoicesFormatter.class.php",

@@ -27,6 +27,7 @@ return array(
     'b2c42415282d51119248aef7b3591ae6' => $baseDir . '/src/ii/ItemUsageScreen.class.php',
     '99c820740406d4be2976c4c2c7715cf3' => $baseDir . '/src/ii/ItemNotesScreen.class.php',
     '2d119c28a95d421297d10bbf28629bc0' => $baseDir . '/src/ii/ItemMiscScreen.class.php',
+    '26f51048f5b1a9de33846e9b2e8e57df' => $baseDir . '/src/ii/ItemCostingScreen.class.php',
     'f128f67794ed1352ca85f3969ce59c8a' => $baseDir . '/src/ci/SalesOrdersFormatter.class.php',
     '3e450730fcb21bc90edcfd524e2e003e' => $baseDir . '/src/ci/SalesHistoryFormatter.class.php',
     '01f20971f6b9b2759737be36ed1456c8' => $baseDir . '/src/ci/OpenInvoicesFormatter.class.php',

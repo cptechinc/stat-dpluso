@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$topshiptos = get_topxsellingshiptos(session_id(), $customer->custid, 25);
 	$data = array();
 ?>
@@ -31,9 +31,34 @@
 									<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
 									<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
 								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								<?php foreach ($topshiptos as $shipto) : ?>
+									<?php $location = Customer::load($customer->custid, $shipto['shiptoid']); ?>
+									<?php
+										if ($location) {
+											$data[] = $location->generate_piesalesdata($shipto['amountsold']);
+										} else {
+											$data[] = array(
+												'label' => $customer->custid . ' - ' . $shipto['shiptoid'],
+												'value' => $shipto['amountsold'],
+												'custid' => $customer->custid,
+												'shiptoid' => $shipto['shiptoid']
+											);
+										}
+									?>
+									<tr>
+										<td id="<?= $shipto['shiptoid'].'-shipto'; ?>"></td>
+										<td><?= $shipto['shiptoid']; ?></td>
+										<td><?= $location ? $location->get_name() : 'Unknown Name'; ?></td>
+										<td class="text-right"><?= $shipto['timesold']; ?></td>
+										<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
+										<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -48,7 +73,7 @@
 				data: <?= json_encode($data); ?>,
 				colors: <?= json_encode(array_rand(array_flip($config->allowedcolors), 25)); ?>
 			});
-			
+
 			pie.options.data.forEach(function(label, i) {
 				var index = i;
 				if (pie.options.colors.length < 11) {
@@ -61,6 +86,6 @@
 				$('#legend-table').find('#'+label['shiptoid']+'-shipto').css('backgroundColor', pie.options.colors[index]);
 			});
 		<?php endif; ?>
-		
+
 	});
 </script>

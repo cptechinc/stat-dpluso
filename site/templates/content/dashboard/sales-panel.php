@@ -1,4 +1,5 @@
-<?php 
+<?php
+	$customers = get_topxsellingcustomers(session_id(), 25);
 	$data = array();
 ?>
 <div class="panel panel-primary not-round" id="customer-sales-panel">
@@ -8,55 +9,60 @@
 		</a>
 	</div>
 	<div id="salesdata-div" class="" aria-expanded="true">
-		<div>
-			<div class="row">
-				<div class="col-sm-4">
-					<div id="cust-sales-graph">
-						
+		<?php if (sizeof($customers)) : ?>
+			<div>
+				<div class="row">
+					<div class="col-sm-4">
+						<div id="cust-sales-graph">
+
+						</div>
 					</div>
-				</div>
-				<div class="col-sm-8">
-					<div class="table-responsive">
-						<table class="table table-bordered table-condensed table-striped" id="cust-sales">
-							<thead> 
-								<tr> <th>Color</th> <th>CustID</th> <th>Name</th> <th>Amount Sold</th> <th>Times Sold</th> <th>Last Sale Date</th> </tr> 
-							</thead>
-							<tbody>
-								<?php $customers = get_topxsellingcustomers(session_id(), 25); ?>
-								<?php foreach ($customers as $customer) : ?>
-									<?php $cust = Customer::load($customer['custid']); ?>
-									<?php $data[] = $cust->generate_piesalesdata($customer['amountsold']); ?>
-									<tr>
-										<td id="<?= $customer['custid'].'-cust'; ?>"></td>
-										<td>
-											<a href="<?= $cust->generate_ciloadurl(); ?>" class="btn btn-primary btn-sm"><?= $customer['custid']; ?></a>
-										</td>
-										<td><?= $cust->get_name(); ?></td>
-										<td class="text-right">$ <?= $page->stringerbell->format_money($customer['amountsold']); ?></td>
-										<td class="text-right"><?= $customer['timesold']; ?></td> 
-										<td class="text-right"><?= $customer['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($customer['lastsaledate']); ?></td>
-									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
+					<div class="col-sm-8">
+						<div class="table-responsive">
+							<table class="table table-bordered table-condensed table-striped" id="cust-sales">
+								<thead>
+									<tr> <th>Color</th> <th>CustID</th> <th>Name</th> <th>Amount Sold</th> <th>Times Sold</th> <th>Last Sale Date</th> </tr>
+								</thead>
+								<tbody>
+									<?php foreach ($customers as $customer) : ?>
+										<?php $cust = Customer::load($customer['custid']); ?>
+										<?php $data[] = $cust->generate_piesalesdata($customer['amountsold']); ?>
+										<tr>
+											<td id="<?= $customer['custid'].'-cust'; ?>"></td>
+											<td>
+												<a href="<?= $cust->generate_ciloadurl(); ?>" class="btn btn-primary btn-sm"><?= $customer['custid']; ?></a>
+											</td>
+											<td><?= $cust->get_name(); ?></td>
+											<td class="text-right">$ <?= $page->stringerbell->format_money($customer['amountsold']); ?></td>
+											<td class="text-right"><?= $customer['timesold']; ?></td>
+											<td class="text-right"><?= $customer['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($customer['lastsaledate']); ?></td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
-			
-		</div>
+		<?php else : ?>
+			<div>
+				<p class="text-center">
+					No Customer Sales Data found
+				</p>
+			</div>
+		<?php endif; ?>
 	</div>
 </div>
 
-
-<script>
-	$(function() {
-		<?php if (!(empty($data))) : ?>
+<?php if (!(empty($data))) : ?>
+	<script>
+		$(function() {
 			var pie = Morris.Donut({
 				element: 'cust-sales-graph',
 				data: <?= json_encode($data); ?>,
 				colors: <?= json_encode(array_rand(array_flip($config->allowedcolors), 25)); ?>
 			});
-			
+
 			pie.options.data.forEach(function(label, i) {
 				var index = i;
 				if (pie.options.colors.length < 11) {
@@ -68,6 +74,6 @@
 				}
 				$('#cust-sales').find('#'+label['custid']+'-cust').css('backgroundColor', pie.options.colors[index]);
 			});
-		<?php endif; ?>
-	});
-</script>
+		});
+	</script>
+<?php endif; ?>

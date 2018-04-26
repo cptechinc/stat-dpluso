@@ -44,8 +44,9 @@
 		public function generate_editlink(Order $order) {
 			$bootstrap = new Contento();
 			$href = $this->generate_editurl($order);
-			$icon = $bootstrap->createicon('material-icons', '&#xE150;');
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-warning", $icon. " Edit Order");   
+			$icon = $order->can_edit() ? $bootstrap->createicon('material-icons', '&#xE150;') : $bootstrap->createicon('glyphicon glyphicon-eye-open');
+			$text = $order->can_edit() ? 'Edit' : 'View';
+			return $bootstrap->openandclose('a', "href=$href|class=btn btn-block btn-warning", $icon. " $text Sales Order");   
 		}
 		
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {

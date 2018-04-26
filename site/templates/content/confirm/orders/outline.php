@@ -3,7 +3,7 @@
 </div>
 <div class="row">
 	<div class="col-sm-6">
-		<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
+		<img src="<?= $appconfig->companylogo->url; ?>" class="img-responsive" alt="<?= $appconfig->companydisplayname.' logo'; ?>">
 	</div>
 	<div class="col-sm-6 text-right">
 		<h1>Order # <?= $order->orderno; ?></h1>

@@ -66,13 +66,15 @@
 		public function generate_javascript() {
 			$bootstrap = new Contento();
 			$content = $bootstrap->open('script', '');
+			if (!$this->forprint) {
 				$content .= "\n";
-                    if ($this->tableblueprint['detail']['maxrows'] < 2) {
+					if ($this->tableblueprint['detail']['maxrows'] < 2) {
 						$content .= $bootstrap->indent() . "$(function() {";
-                        $content .= $bootstrap->indent() . $bootstrap->indent() . "$('#payments').DataTable();";
+						$content .= $bootstrap->indent() . $bootstrap->indent() . "$('#payments').DataTable();";
 						$content .= $bootstrap->indent() ."});";
-                    }
+					}
 				$content .= "\n";
+			}	
 			$content .= $bootstrap->close('script');
 			return $content;
 		}

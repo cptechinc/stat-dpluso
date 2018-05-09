@@ -10,12 +10,14 @@
     <div id="contacts-div" class="collapse" data-tableloaded="no" data-shipid="<?= $shipID; ?>">
         <div class="panel-body">
         	<div class="row">
-        		<div class="col-sm-4">
-                	<div class="form-group">
-                    	<label class="control-label">Show only this ShipTo's contacts?</label><br>
-                     <input type="checkbox" id="limit-shiptos" class="check-toggle" data-size="small" data-width="73px" value="<?= $shipID; ?>">
+                <?php if ($customer->has_shipto()) : ?>
+            		<div class="col-sm-4">
+                    	<div class="form-group">
+                        	<label class="control-label">Show only this ShipTo's contacts?</label><br>
+                         <input type="checkbox" id="limit-shiptos" class="check-toggle" data-size="small" data-width="73px" value="<?= $shipID; ?>">
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
                 <div class="col-sm-4">
                 	<div class="form-group">
                     	<label class="control-label">Show only Customer Contacts</label><br>

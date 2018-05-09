@@ -1,4 +1,4 @@
-<?php
+<?php 
 	$topshiptos = get_topxsellingshiptos(session_id(), $customer->custid, 25);
 	$data = array();
 ?>
@@ -42,9 +42,23 @@
 									<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
 									<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
 								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								<?php foreach ($topshiptos as $shipto) : ?>
+									<?php $location = Customer::load($customer->custid, $shipto['shiptoid']); ?>
+									<?php $data[] = $location->generate_piesalesdata($shipto['amountsold']); ?>
+									<tr>
+										<td id="<?= $shipto['shiptoid'].'-shipto'; ?>"></td>
+										<td><?= $shipto['shiptoid']; ?></td>
+										<td><?= $location->get_name(); ?></td>
+										<td class="text-right"><?= $shipto['timesold']; ?></td>
+										<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
+										<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -72,5 +86,9 @@
 				$('#legend-table').find('#'+label['shiptoid']+'-shipto').css('backgroundColor', pie.options.colors[index]);
 			});
 		<?php endif; ?>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 87a916f0... Merge pull request #164 from cptechinc/test-fixes
 	});
 </script>

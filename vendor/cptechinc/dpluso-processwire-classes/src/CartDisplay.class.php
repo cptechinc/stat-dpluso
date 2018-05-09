@@ -110,7 +110,7 @@
 		public function generate_detailvieweditlink(Order $cart, OrderDetail $detail) {
 			$bootstrap = new Contento();
 			$href = $this->generate_detailviewediturl($cart, $detail);
-			$icon = $bootstrap->openandclose('button', 'class=btn btn-sm btn-warning', $bootstrap->createicon('glyphicon glyphicon-pencil'));
+			$icon = $bootstrap->openandclose('button', 'class=btn btn-md btn-warning', $bootstrap->createicon('glyphicon glyphicon-pencil'));
 			return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$cart->custid|aria-label=View Detail Line", $icon);
 		}
 		

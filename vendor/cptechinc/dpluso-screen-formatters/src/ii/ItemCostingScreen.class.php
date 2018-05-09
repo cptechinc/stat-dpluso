@@ -13,17 +13,26 @@
         public function generate_screen() {
             $bootstrap = new Contento();
             $content = $this->generate_itemtable();
-			
-			$listitems = $bootstrap->li('role=presentation|class=active', $bootstrap->a('href=#whse|aria-controls=warehouse|role=tab|data-toggle=tab', 'Warehouse'));
-			$listitems .= $bootstrap->li('role=presentation', $bootstrap->a('href=#vendor|aria-controls=vendor|role=tab|data-toggle=tab', 'Vendor'));
-			$listitems .= $bootstrap->li('role=presentation', $bootstrap->a('href=#lastpurchase|aria-controls=lastpurchase|role=tab|data-toggle=tab', 'Last Purchase'));
-			$content .= $bootstrap->ul('class=nav nav-tabs|role=tablist', $listitems);
-			
-			$tabs = $bootstrap->div('role=tabpanel|class=tab-pane active|id=whse', $this->generate_whsesection());
-			$tabs .= $bootstrap->div('role=tabpanel|class=tab-pane|id=vendor', $this->generate_vendorsection());
-			$tabs .= $bootstrap->div('role=tabpanel|class=tab-pane|id=lastpurchase', $this->generate_lastpurchasedtable());
-			
-			$content .= $bootstrap->div('', $bootstrap->div('class=tab-content', $tabs));
+            
+            if ($this->forprint) {
+                $content .= $bootstrap->h2('class=page-header', 'Warehouse');
+                $content .= $bootstrap->div('class=form-group', $this->generate_whsesection());
+                $content .= $bootstrap->h2('class=page-header', 'Vendor');
+                $content .= $bootstrap->div('class=form-group', $this->generate_vendorsection());
+                $content .= $bootstrap->h2('class=page-header', 'Last Purchase');
+                $content .= $bootstrap->div('class=form-group', $this->generate_lastpurchasedtable());
+            } else {
+                $listitems = $bootstrap->li('role=presentation|class=active', $bootstrap->a('href=#whse|aria-controls=warehouse|role=tab|data-toggle=tab', 'Warehouse'));
+    			$listitems .= $bootstrap->li('role=presentation', $bootstrap->a('href=#vendor|aria-controls=vendor|role=tab|data-toggle=tab', 'Vendor'));
+    			$listitems .= $bootstrap->li('role=presentation', $bootstrap->a('href=#lastpurchase|aria-controls=lastpurchase|role=tab|data-toggle=tab', 'Last Purchase'));
+    			$content .= $bootstrap->ul('class=nav nav-tabs|role=tablist', $listitems);
+    			
+    			$tabs = $bootstrap->div('role=tabpanel|class=tab-pane active|id=whse', $this->generate_whsesection());
+    			$tabs .= $bootstrap->div('role=tabpanel|class=tab-pane|id=vendor', $this->generate_vendorsection());
+    			$tabs .= $bootstrap->div('role=tabpanel|class=tab-pane|id=lastpurchase', $this->generate_lastpurchasedtable());
+    			
+    			$content .= $bootstrap->div('', $bootstrap->div('class=tab-content', $tabs));
+            }
 			return $content;
         }
 		
@@ -44,9 +53,9 @@
 		public function generate_whsesection() {
 			$bootstrap = new Contento();
 			$content = '';
-			if (!isset($this->json['warehouse'])) return $content;
+			if (!isset($this->json['data']['warehouse'])) return $content;
 			
-			foreach ($this->json['warehouse'] as $whse) {
+			foreach ($this->json['data']['warehouse'] as $whse) {
 				$content .= '<h3>'.$whse['whse name'].'</h3>'; 
 				$tb = new Table('class=table table-striped table-bordered table-condensed table-excel no-bottom');
 				$tb->tablesection('thead')->tr();
@@ -58,7 +67,7 @@
 				$tb->tablesection('tbody');
 					foreach ($whse['lots'] as $lot) {
 						$tb->tr();
-						foreach ($warehousecolumns as $column) {
+						foreach (array_keys($this->json['columns']['warehouse']) as $column) {
 							$class = DplusWire::wire('config')->textjustify[$this->json['columns']['warehouse'][$column]['datajustify']];
 							$tb->td("class=$class", $lot[$column]);
 						}

@@ -42,12 +42,14 @@
         public function generate_javascript() {
 			$bootstrap = new Contento();
 			$content = $bootstrap->open('script', '');
-				$content .= "\n";
+            if (!$this->forprint) {
+                $content .= "\n";
 				$content .= $bootstrap->indent().'$(function() {';
 					$content .= $bootstrap->indent() . $bootstrap->indent() ."$('#activity').DataTable();";
 				$content .= $bootstrap->indent().'});';
 				$content .= "\n";
-			$content .= $bootstrap->close('script');
+            }
+            $content .= $bootstrap->close('script');
 			return $content;
 		}
     }

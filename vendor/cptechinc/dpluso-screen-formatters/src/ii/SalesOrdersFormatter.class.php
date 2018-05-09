@@ -103,16 +103,18 @@
 		public function generate_javascript() {
 			$bootstrap = new Contento();
 			$content = '';
-			if ($this->tableblueprint['detail']['maxrows'] < 2) {
-				$content = $bootstrap->open('script', '');
-					$content .= "\n";
-					$content .= $bootstrap->indent().'$(function() {';
-						foreach ($this->json['data'] as $whseid => $whse) {
-							$content .= $bootstrap->indent()."$('#$whseid').DataTable();";
-						}
-					$content .= $bootstrap->indent().'});';
-					$content .= "\n";
-				$content .= $bootstrap->close('script');
+			if (!$this->forprint) {
+				if ($this->tableblueprint['detail']['maxrows'] < 2) {
+					$content = $bootstrap->open('script', '');
+						$content .= "\n";
+						$content .= $bootstrap->indent().'$(function() {';
+							foreach ($this->json['data'] as $whseid => $whse) {
+								$content .= $bootstrap->indent()."$('#$whseid').DataTable();";
+							}
+						$content .= $bootstrap->indent().'});';
+						$content .= "\n";
+					$content .= $bootstrap->close('script');
+				}
 			}
 			return $content;
 		}

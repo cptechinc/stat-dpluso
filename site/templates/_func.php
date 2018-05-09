@@ -414,11 +414,14 @@
  ============================================================ */
 	function setupuser($sessionID) {
 		$loginrecord = get_loginrecord($sessionID);
+        $loginID = $loginrecord['loginid'];
+        $user = get_logmuser($loginID);
 		DplusWire::wire('user')->fullname = $loginrecord['loginname'];
 		DplusWire::wire('user')->loginid = $loginrecord['loginid'];
 		DplusWire::wire('user')->hascontactrestrictions = $loginrecord['restrictcustomer'];
 		DplusWire::wire('user')->hasrestrictions = $loginrecord['restrictuseraccess'];
 		DplusWire::wire('user')->salespersonid = $loginrecord['salespersonid'];
+    
 	}
     
     /**

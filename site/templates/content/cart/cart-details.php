@@ -2,8 +2,8 @@
 	<table class="table-condensed cf order-details numeric">
 		<thead class="cf">
 			<tr>
-				<th>Item</th> <th class="numeric">Price</th> <th class="numeric">Qty</th> <th class="numeric">Total</th>
-				<th>Rqstd Ship Date</th> <th>Warehouse</th>
+				<th>Item</th> <th class="numeric text-right">Price</th> <th class="numeric text-right">Qty</th> <th class="numeric text-right">Total</th>
+				<th class="text-center">Rqstd Ship Date</th> <th>Warehouse</th>
 				<th>
 					<div class="row">
 						<div class="col-xs-3">Details</div><div class="col-xs-2">Docs</div> <div class="col-xs-2">Notes</div> <div class="col-xs-5">Edit</div>
@@ -29,7 +29,7 @@
 					<td data-title="Price" class="text-right">$ <?= $page->stringerbell->format_money($detail->price); ?></td>
 					<td data-title="Ordered" class="text-right"><?= $detail->qty + 0; ?></td>
 					<td data-title="Total" class="text-right">$ <?= $page->stringerbell->format_money($detail->totalprice); ?></td>
-					<td data-title="Requested Ship Date" class="text-right"><?= $detail->rshipdate; ?></td>
+					<td data-title="Requested Ship Date"  class="text-center"><?= $detail->rshipdate; ?></td>
 					<td data-title="Warehouse"><?= $detail->whse; ?></td>
 					<td class="action">
 						<div class="row">
@@ -43,8 +43,8 @@
 								<form class="inline-block" action="<?= $config->pages->cart."redir/"; ?>" method="post">
 									<input type="hidden" name="action" value="remove-line">
 									<input type="hidden" name="linenbr" value="<?= $detail->linenbr; ?>">
-									<button type="submit" class="btn btn-sm btn-danger" name="button">
-										<i class="fa fa-trash fa-1-5x" aria-hidden="true"></i><span class="sr-only">Delete</span>
+									<button type="submit" class="btn btn-md btn-danger" name="button">
+										<span class="glyphicon glyphicon-trash"></span><span class="sr-only">Delete</span>
 									</button>
 								</form>
 							</div>

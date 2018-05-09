@@ -31,66 +31,66 @@
                 $script->generate_onready();
                 
                 foreach (array_keys($this->json['data']['24month']) as $warehouse) {
-                    $script->generate_functioncall("$('a[href=#$warehouse-graph]').on('shown.bs.tab', function(e) {");
-                        $script->generate_functioncall('new Morris.Line({');
-                            $script->line("element: '$warehouse-chart',");
-                            $script->line("data: ");
-                                $script->tabs++;
-                                $monthdata = array();
-                                foreach ($this->json['data']['24month'][$warehouse]['months'] as $month) {
-                                    $month['month'] = ($month['month'] == 'Current') ? date('Y-m') : str_replace(' ', ' 20', $month['month']);
-                                    $data = array(
-                                        'month' => date('Y-m', strtotime($month['month'])),
-                                        'saleamount' => (float)$month['sale amount'],
-                                        'usageamount' => (float)$month['usage amount']
-                                    );
-                                    if (isset($month['lost amount'])) {
-                                        $data['lostamount'] = (float)$month['lost amount'];
+                        $script->generate_functioncall("$('a[href=#$warehouse-graph]').on('shown.bs.tab', function(e) {");
+                            $script->generate_functioncall('new Morris.Line({');
+                                $script->line("element: '$warehouse-chart',");
+                                $script->line("data: ");
+                                    $script->tabs++;
+                                    $monthdata = array();
+                                    foreach ($this->json['data']['24month'][$warehouse]['months'] as $month) {
+                                        $month['month'] = ($month['month'] == 'Current') ? date('Y-m') : str_replace(' ', ' 20', $month['month']);
+                                        $data = array(
+                                            'month' => date('Y-m', strtotime($month['month'])),
+                                            'saleamount' => (float)$month['sale amount'],
+                                            'usageamount' => (float)$month['usage amount']
+                                        );
+                                        if (isset($month['lost amount'])) {
+                                            $data['lostamount'] = (float)$month['lost amount'];
+                                        }
+                                        $monthdata[] = $data;
                                     }
-                                    $monthdata[] = $data;
-                                }
-                                $script->line(json_encode($monthdata) .",");
-                                $script->tabs--;
-                            $script->line("xLabelFormat: function (x) {  ");
-                                $script->tabs++;
-                                $script->line("return  moment(x).format('MMM YYYY');");
-                                $script->tabs--;
-                            $script->line("},");
-                            
-                            $script->line("yLabelFormat: function (y) {");
-                                $script->tabs++;
-                                $script->line("return '$ '+y.formatMoney()+ ' dollars';");
-                                $script->tabs--;
-                            $script->line("},");
-                            
-                            $script->line("xkey: 'month',");
-                            
-                            $script->line('ykeys: [');
-                                $script->tabs++;
-                                    $script->line("'saleamount',");
-                                    if (isset($month['lost amount'])) {
-                                        $script->line("'lostamount',");
-                                    }
-                                    $script->line("'usageamount'");
-                                $script->tabs--;
-                            $script->line('],');
-                            $script->line('labels: [');
-                                $script->tabs++;
-                                    $script->line("'Amount Sold',");
-                                    if (isset($month['lost amount'])) {
-                                        $script->line("'Amount Lost',");
-                                    }
-                                    $script->line("'Amount Used'");
-                                $script->tabs--;
-                            $script->line('],');
-                            $script->line("dateFormat: function (d) {");
-                                $script->tabs++;
-                                $script->line("var ds = new Date(d);");
-                                $script->line("return moment(ds).format('MMM YYYY');");
-                                $script->tabs--;
-                            $script->line("}");
-                        $script->close_functioncall(); // CLOSES MORRIS.LINE
-                    $script->close_functioncall(); // CLOSES WAREHOUSE GRAPH
+                                    $script->line(json_encode($monthdata) .",");
+                                    $script->tabs--;
+                                $script->line("xLabelFormat: function (x) {  ");
+                                    $script->tabs++;
+                                    $script->line("return  moment(x).format('MMM YYYY');");
+                                    $script->tabs--;
+                                $script->line("},");
+                                
+                                $script->line("yLabelFormat: function (y) {");
+                                    $script->tabs++;
+                                    $script->line("return '$ '+y.formatMoney()+ ' dollars';");
+                                    $script->tabs--;
+                                $script->line("},");
+                                
+                                $script->line("xkey: 'month',");
+                                
+                                $script->line('ykeys: [');
+                                    $script->tabs++;
+                                        $script->line("'saleamount',");
+                                        if (isset($month['lost amount'])) {
+                                            $script->line("'lostamount',");
+                                        }
+                                        $script->line("'usageamount'");
+                                    $script->tabs--;
+                                $script->line('],');
+                                $script->line('labels: [');
+                                    $script->tabs++;
+                                        $script->line("'Amount Sold',");
+                                        if (isset($month['lost amount'])) {
+                                            $script->line("'Amount Lost',");
+                                        }
+                                        $script->line("'Amount Used'");
+                                    $script->tabs--;
+                                $script->line('],');
+                                $script->line("dateFormat: function (d) {");
+                                    $script->tabs++;
+                                    $script->line("var ds = new Date(d);");
+                                    $script->line("return moment(ds).format('MMM YYYY');");
+                                    $script->tabs--;
+                                $script->line("}");
+                            $script->close_functioncall(); // CLOSES MORRIS.LINE
+                        $script->close_functioncall(); // CLOSES WAREHOUSE GRAPH
                     
                     $script->generate_functioncall("$('a[href=#$warehouse-graph]').on('hidden.bs.tab', function(e) {");
                         $script->line("$('#$warehouse-chart').empty();");
@@ -179,13 +179,20 @@
         protected function generate_warehousediv($whse) {
             $bootstrap = new Contento();
             $heading = $bootstrap->h3('', $this->json['data']['24month'][$whse]['whse name']);
-            $tablist = $bootstrap->li('role=presentation|class=active', $bootstrap->a("href=#$whse-table|aria-controls=$whse-table|role=tab|data-toggle=tab", 'Table'));
-            $tablist .= $bootstrap->li('role=presentation', $bootstrap->a("href=#$whse-graph|aria-controls=$whse-table|role=tab|data-toggle=tab", 'Graph'));
-            $tabnav = $bootstrap->ul('class=nav nav-tabs|role=tablist', $tablist);
-            $tablediv = $bootstrap->div("role=tabpanel|class=tab-pane active|id=$whse-table", $this->generate_warehousetable($whse));
-            $graphdiv = $bootstrap->div("role=tabpanel|class=tab-pane|id=$whse-graph", $bootstrap->div("id=$whse-chart", ' '));
-            $tabcontent = $bootstrap->div('class=tab-content', $tablediv . $graphdiv);
-            return $heading . $bootstrap->div('', $tabnav . $tabcontent);
+            if ($this->forprint) {
+                $tablediv = $bootstrap->div("role=tabpanel|class=tab-pane active|id=$whse-table", $this->generate_warehousetable($whse));
+                $graphdiv = $bootstrap->div("role=tabpanel|class=tab-pane|id=$whse-graph", $bootstrap->div("id=$whse-chart", ' '));
+                $tabcontent = $bootstrap->div('class=tab-content', $tablediv . $graphdiv);
+                return $heading . $bootstrap->div('', $tabcontent);
+            } else {
+                $tablist = $bootstrap->li('role=presentation|class=active', $bootstrap->a("href=#$whse-table|aria-controls=$whse-table|role=tab|data-toggle=tab", 'Table'));
+                $tablist .= $bootstrap->li('role=presentation', $bootstrap->a("href=#$whse-graph|aria-controls=$whse-table|role=tab|data-toggle=tab", 'Graph'));
+                $tabnav = $bootstrap->ul('class=nav nav-tabs|role=tablist', $tablist);
+                $tablediv = $bootstrap->div("role=tabpanel|class=tab-pane active|id=$whse-table", $this->generate_warehousetable($whse));
+                $graphdiv = $bootstrap->div("role=tabpanel|class=tab-pane|id=$whse-graph", $bootstrap->div("id=$whse-chart", ' '));
+                $tabcontent = $bootstrap->div('class=tab-content', $tablediv . $graphdiv);
+                return $heading . $bootstrap->div('', $tabnav . $tabcontent);
+            }
         }
         
         protected function generate_warehousetable($whse) {

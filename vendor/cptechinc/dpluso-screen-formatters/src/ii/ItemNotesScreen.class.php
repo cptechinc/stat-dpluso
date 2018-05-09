@@ -14,9 +14,9 @@
             $bootstrap = new Contento();
             $content = $bootstrap->h3('', 'Inspection Notes');
             $content .= $this->generate_inspectiontable();
-            $content = $bootstrap->h3('', 'Internal Notes');
+            $content .= $bootstrap->h3('', 'Internal Notes');
             $content .= $this->generate_internaltable();
-            $content = $bootstrap->h3('', 'Order Notes');
+            $content .= $bootstrap->h3('', 'Order Notes');
             $content .= $this->generate_orderstable();
             return $content;
         }
@@ -30,7 +30,7 @@
           CLASS FUNCTIONS
        	============================================================ */
         protected function generate_inspectiontable() {
-            echo json_encode($this->json);
+            // echo json_encode($this->json);
             $tb = new Table('class=table table-striped table-condensed table-excel');
             $tb->tablesection('thead');
                 $tb->tr();
@@ -63,9 +63,9 @@
             $tb->tablesection('tbody');
                 foreach ($this->json['data']['internal notes'] as $note) {
                     $tb->tr();
-                    foreach ($this->json['columns']['internal notes'] as $column) {
+                    foreach ($this->json['columns']['internal notes'] as $key => $column) {
                         $class = Processwire\wire('config')->textjustify[$column['datajustify']];
-                        $tb->td("class=$class", $note[$column]);
+                        $tb->td("class=$class", $note[$key]);
                     }
                 }
             $tb->closetablesection('tbody');
@@ -84,9 +84,9 @@
             $tb->tablesection('tbody');
                 foreach ($this->json['data']['order notes'] as $note) {
                     $tb->tr();
-                    foreach ($this->json['columns']['order notes'] as $column) {
+                    foreach ($this->json['columns']['order notes'] as $key => $column) {
                         $class = Processwire\wire('config')->textjustify[$column['datajustify']];
-                        $tb->td("class=$class", $note[$column]);
+                        $tb->td("class=$class", $note[$key]);
                     }
                 }
             $tb->closetablesection('tbody');

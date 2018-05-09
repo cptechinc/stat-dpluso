@@ -9,7 +9,7 @@
 		protected $datasections = array(
 			"detail" => "Detail",
 		);
-        
+		
         public function generate_screen() {
             $bootstrap = new Contento();
 			$this->generate_tableblueprint();

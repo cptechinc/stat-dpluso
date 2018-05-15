@@ -22,43 +22,29 @@
 						<tbody>
 							<?php foreach ($topshiptos as $shipto) : ?>
 								<?php $location = Customer::load($customer->custid, $shipto['shiptoid']); ?>
-								<?php $data[] = $location->generate_piesalesdata($shipto['amountsold']); ?>
+								<?php
+									if ($location) {
+										$data[] = $location->generate_piesalesdata($shipto['amountsold']);
+									} else {
+										$data[] = array(
+											'label' => $customer->custid . ' - ' . $shipto['shiptoid'],
+											'value' => $shipto['amountsold'],
+											'custid' => $customer->custid,
+											'shiptoid' => $shipto['shiptoid']
+										);
+									}
+								?>
 								<tr>
 									<td id="<?= $shipto['shiptoid'].'-shipto'; ?>"></td>
 									<td><?= $shipto['shiptoid']; ?></td>
-									<td><?= $location->get_name(); ?></td>
+									<td><?= $location ? $location->get_name() : 'Unknown Name'; ?></td>
 									<td class="text-right"><?= $shipto['timesold']; ?></td>
 									<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
 									<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
 								</tr>
-							</thead>
-							<tbody>
-								<?php foreach ($topshiptos as $shipto) : ?>
-									<?php $location = Customer::load($customer->custid, $shipto['shiptoid']); ?>
-									<?php
-										if ($location) {
-											$data[] = $location->generate_piesalesdata($shipto['amountsold']);
-										} else {
-											$data[] = array(
-												'label' => $customer->custid . ' - ' . $shipto['shiptoid'],
-												'value' => $shipto['amountsold'],
-												'custid' => $customer->custid,
-												'shiptoid' => $shipto['shiptoid']
-											);
-										}
-									?>
-									<tr>
-										<td id="<?= $shipto['shiptoid'].'-shipto'; ?>"></td>
-										<td><?= $shipto['shiptoid']; ?></td>
-										<td><?= $location ? $location->get_name() : 'Unknown Name'; ?></td>
-										<td class="text-right"><?= $shipto['timesold']; ?></td>
-										<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
-										<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
-									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
-					</div>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -86,6 +72,5 @@
 				$('#legend-table').find('#'+label['shiptoid']+'-shipto').css('backgroundColor', pie.options.colors[index]);
 			});
 		<?php endif; ?>
-
 	});
 </script>

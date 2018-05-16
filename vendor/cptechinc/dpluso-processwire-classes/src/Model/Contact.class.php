@@ -335,11 +335,13 @@
 		============================================================ */
 		/**
 		 * Creates a new contact in the database
-		 * @param  bool $debug Determines if query will execute and if sQL is returned or Contact object
+		 * Custid is trimmed to match the character length in the Cobol Dplus
+		 * @param  bool $debug Determines if query will execute and if SQL is returned or Contact object
 		 * @return Contact         OR SQL QUERY
 		 */
 		public function create($debug = false) {
-			return insert_customerindexrecord($this, $debug);
+            $this->custid = substr($this->custid, 0, 6);
+			return insert_customerindexrecord($this, $debug) . " - " . insert_custperm($this, $debug);
 		}
 		
 		/**

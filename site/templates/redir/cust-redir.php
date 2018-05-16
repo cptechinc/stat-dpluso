@@ -230,7 +230,7 @@
 			$shipto = Contact::create_fromobject($customer);
 			$shipto->set('shiptoid', '1');
 			$shipto->set('source', 'CS');
-			$shipto->set('name', $input->post->text('shipto-name'));
+			$shipto->set('name', $input->post->text('shipto-name') ? $input->post->text('shipto-name') : $customer->name);
 			$shipto->set('addr1', $input->post->text('shipto-address'));
 			$shipto->set('addr2', $input->post->text('shipto-address2'));
 			$shipto->set('city', $input->post->text('shipto-city'));
@@ -293,7 +293,7 @@
 			break;
 		case 'load-new-customer':
 			$custID = get_createdordn(session_id());
-			$session->sql = Customer::change_custidfrom(session_id(), $custID);
+			$session->sql = Customer::change_custid(session_id(), $custID);
 			$session->loc = $config->pages->custinfo."$custID/";
 			
 			if (!empty($shipID)) { 

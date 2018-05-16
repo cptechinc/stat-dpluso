@@ -1,22 +1,22 @@
 <?php
     $custpricejson = json_decode(file_get_contents($config->companyfiles."json/custpricecodetbl.json"), true);
-	$pricecodes = array();
-	foreach ($custpricejson['data'] as $key => $code) {
-		$pricecodes[$key] = $code['custpricecodedesc'];
-	}
+    $pricecodes = array();
+    foreach ($custpricejson['data'] as $key => $code) {
+        $pricecodes[$key] = $code['custpricecodedesc'];
+    }
 
     $salespersonjson = json_decode(file_get_contents($config->companyfiles."json/salespersontbl.json"), true);
-	$salespeople = array();
-	foreach ($salespersonjson['data'] as $salesperson) {
-		$salespeople[$salesperson['splogin']] = $salesperson['spname'];
-	}
-	
-	$changesalesrep = $users->find("name=$user->loginid")->count ? ($users->get("name=$user->loginid")->hasRole('manager')) : false;
+    $salespeople = array();
+    foreach ($salespersonjson['data'] as $salesperson) {
+        $salespeople[$salesperson['splogin']] = $salesperson['spname'];
+    }
+
+    $changesalesrep = $users->find("name=$user->loginid")->count ? ($users->get("name=$user->loginid")->hasRole('manager')) : false;
 ?>
 <form action="<?= $config->pages->customer.'redir/'; ?>" method="post">
     <input type="hidden" name="action" value="add-customer">
-	<input type="hidden" name="salesperson2" value="">
-	<input type="hidden" name="salesperson3" value="">
+    <input type="hidden" name="salesperson2" value="">
+    <input type="hidden" name="salesperson3" value="">
     <div class="row">
         <div class="col-sm-6">
            <legend>Bill-To</legend>
@@ -120,92 +120,92 @@
     </div> <!-- end top row-->
     <br>
     <div class="row">
-		<div class="col-xs-6">
-			<legend>Contact Information</legend>
-			<table class="table table-striped table-bordered table-condensed">
-				<tr>
-					<td class="control-label">Contact</td>
-					<td><input type="text" class="form-control input-sm" name="contact-name" value=""></td>
-				</tr>
-				<tr>
-					<td class="control-label">Contact Title</td>
-					<td><input type="text" class="form-control input-sm" name="contact-title" value=""></td>
-				</tr>
-				<tr>
-					<td class="control-label">Phone</td>
-					<td><input type="tel" class="form-control input-sm phone-input" name="contact-phone" value=""></td>
-				</tr>
-				<tr>
-					<td class="control-label">Ext.</td>
-					<td><input type="tel" class="form-control input-sm qty pull-right" name="contact-ext" value=""></td>
-				</tr>
-				<tr>
-					<td class="control-label">Fax</td>
-					<td><input type="tel" class="form-control input-sm phone-input" name="contact-fax" value=""></td>
-				</tr>
-				<tr>
-					<td class="control-label">E-mail</td>
-					<td><input type="email" class="form-control input-sm" name="contact-email" value=""></td>
-				</tr>
-				<tr>
-					<td class="control-label">AR Contact</td>
-					<td>
-						<?= $page->bootstrap->select('class=form-control input-sm|name=arcontact', array_flip($config->yesnoarray), 'N'); ?>
-					</td>
-				</tr>
-				<tr>
-					<td class="control-label">Dunning Contact</td>
-					<td>
-						<?= $page->bootstrap->select('class=form-control input-sm|name=dunningcontact', array_flip($config->yesnoarray), 'N'); ?>
-					</td>
-				</tr>
-				<tr>
-					<td class="control-label">Buying Contact</td>
-					<td>
-						<?= $page->bootstrap->select('class=form-control input-sm|name=buycontact', $config->buyertypes, 'N'); ?>
-					</td>
-				</tr>
-				<tr>
-					<?php if ($config->cptechcustomer == 'stat') : ?>
-						<td class="control-label">End User</td>
-					<?php else : ?>
-						<td class="control-label">Certificate Contact</td>
-					<?php endif; ?>
-					<td>
-						<?= $page->bootstrap->select('class=form-control input-sm|name=certcontact', array_flip($config->yesnoarray), 'N'); ?>
-					</td>
-				</tr>
-				<tr>
-					<td class="control-label">Acknowledgement Contact</td>
-					<td>
-						<?= $page->bootstrap->select('class=form-control input-sm|name=ackcontact', array_flip($config->yesnoarray), 'N'); ?>
-					</td>
-				</tr>
-			</table>
-		</div>
         <div class="col-xs-6">
-			<legend>Salesperson Information</legend>
+            <legend>Contact Information</legend>
+            <table class="table table-striped table-bordered table-condensed">
+                <tr>
+                    <td class="control-label">Contact</td>
+                    <td><input type="text" class="form-control input-sm" name="contact-name" value=""></td>
+                </tr>
+                <tr>
+                    <td class="control-label">Contact Title</td>
+                    <td><input type="text" class="form-control input-sm" name="contact-title" value=""></td>
+                </tr>
+                <tr>
+                    <td class="control-label">Phone</td>
+                    <td><input type="tel" class="form-control input-sm phone-input" name="contact-phone" value=""></td>
+                </tr>
+                <tr>
+                    <td class="control-label">Ext.</td>
+                    <td><input type="tel" class="form-control input-sm qty pull-right" name="contact-ext" value=""></td>
+                </tr>
+                <tr>
+                    <td class="control-label">Fax</td>
+                    <td><input type="tel" class="form-control input-sm phone-input" name="contact-fax" value=""></td>
+                </tr>
+                <tr>
+                    <td class="control-label">E-mail</td>
+                    <td><input type="email" class="form-control input-sm" name="contact-email" value=""></td>
+                </tr>
+                <tr>
+                    <td class="control-label">AR Contact</td>
+                    <td>
+                        <?= $page->bootstrap->select('class=form-control input-sm|name=arcontact', array_flip($config->yesnoarray), 'N'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="control-label">Dunning Contact</td>
+                    <td>
+                        <?= $page->bootstrap->select('class=form-control input-sm|name=dunningcontact', array_flip($config->yesnoarray), 'N'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="control-label">Buying Contact</td>
+                    <td>
+                        <?= $page->bootstrap->select('class=form-control input-sm|name=buycontact', $config->buyertypes, 'N'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <?php if ($config->cptechcustomer == 'stat') : ?>
+                        <td class="control-label">End User</td>
+                    <?php else : ?>
+                        <td class="control-label">Certificate Contact</td>
+                    <?php endif; ?>
+                    <td>
+                        <?= $page->bootstrap->select('class=form-control input-sm|name=certcontact', array_flip($config->yesnoarray), 'N'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="control-label">Acknowledgement Contact</td>
+                    <td>
+                        <?= $page->bootstrap->select('class=form-control input-sm|name=ackcontact', array_flip($config->yesnoarray), 'N'); ?>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-xs-6">
+            <legend>Salesperson Information</legend>
             <table class="table table-striped table-bordered table-condensed">
                 <tbody>
                     <tr>
                         <td class="control-label">Salesperson1</td>
-						<?php if ($config->cptechcustomer == 'stat' && $changesalesrep === false) : ?>
-							<td>
-								<?= $salespeople[$user->loginid]; ?>
-								<?= $page->bootstrap->input("name=salesperson1|type=hidden|value=$user->loginid"); ?>
-							</td>
-						<?php else : ?>
-							<td>
-								<?= $page->bootstrap->select('name=salesperson1|class=form-control input-sm', $salespeople, $user->loginid); ?>
-	                        </td>
-						<?php endif; ?>
+                        <?php if ($config->cptechcustomer == 'stat' && $changesalesrep === false) : ?>
+                            <td>
+                                <?= $salespeople[$user->loginid]; ?>
+                                <?= $page->bootstrap->input("name=salesperson1|type=hidden|value=$user->salespersonid"); ?>
+                            </td>
+                        <?php else : ?>
+                            <td>
+                                <?= $page->bootstrap->select('name=salesperson1|class=form-control input-sm', $salespeople, $user->loginid); ?>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                     <tr>
                         <td class="control-label">Price Code</td>
                         <td>
-							<?php $defaultcode = $pages->get('/config/')->default_pricecode; ?>
-							<?= isset($pricecodes[$defaultcode]) ? $pricecodes[$defaultcode] : 'No Default Code'; ?>
-							<?= $page->bootstrap->input("name=pricecode|type=hidden|value=$defaultcode"); ?>
+                            <?php $defaultcode = $pages->get('/config/')->default_pricecode; ?>
+                            <?= isset($pricecodes[$defaultcode]) ? $pricecodes[$defaultcode] : 'No Default Code'; ?>
+                            <?= $page->bootstrap->input("name=pricecode|type=hidden|value=$defaultcode"); ?>
                         </td>
                     </tr>
                     <tr>

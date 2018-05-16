@@ -122,8 +122,9 @@
 		 * @param  bool   $debug     Whether to execute change
 		 * @return string            SQL Query
 		 */
-		public static function change_custidfrom($currentID, $newcustID, $debug = false) {
-			return change_custindexcustid($currentID, $newcustID);
+		public static function change_custid($currentID, $newcustID, $debug = false) {
+            $currentID = substr($currentID, 0, 6);
+			return change_custindexcustid($currentID, $newcustID, $debug). " - " . change_custpermcustid($currentID, $newcustID, $debug);
 		}
 		
 		/* =============================================================

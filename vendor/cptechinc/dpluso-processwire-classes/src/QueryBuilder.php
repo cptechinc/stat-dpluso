@@ -15,7 +15,7 @@
             'order',
             'cast',
             'as',
-			'group',
+			       'group',
             'by',
             'or', 
             'asc',
@@ -25,7 +25,12 @@
             'into',
             'set',
             'is', 
-			'in'
+			      'in',
+            'join',
+            'left',
+            'inner',
+            'outer',
+            'right'
         );
         
         /**

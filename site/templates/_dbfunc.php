@@ -3415,7 +3415,7 @@
 
 		switch ($interval) {
 			case 'month':
-				$q->field('custid');
+				$q->field('bookingc.custid');
 				$q->field('SUM(amount) as amount');
 				$q->group('custid');
 				break;
@@ -3425,6 +3425,10 @@
 				$q->group('bookdate');
 				break;
 		}
+
+		$q->field('name');
+		$q->join('custindex.custid', 'bookingc.custid', 'left outer');
+		$q->where('custindex.shiptoid', '');
 
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {

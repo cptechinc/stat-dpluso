@@ -28,16 +28,13 @@
 		protected $ponbr;
 		protected $poref;
 		protected $notes; // this needs to be removed from the MySQL tables
+		protected $canbackorder;
 		
 		/* =============================================================
 			GETTER FUNCTIONS
 		============================================================ */
 		public function has_error() {
 			return !empty($this->errormsg);
-		}
-		
-		public function is_kititem() {
-			return $this->kitemflag == 'Y' ? true : false;
 		}
 		
 		public function has_documents() {
@@ -52,6 +49,22 @@
 		public function can_edit() {
 			$order = SalesOrder::load($this->sessionid, $this->orderno);
 			return $order->can_edit();
+		}
+		
+		/**
+		 * Checks if canbackorder is 'Y' from ordrdet and returns true
+		 * @return bool
+		 */
+		public function can_backorder() {
+			return $this->canbackorder == 'Y' ? true : false;
+		}
+		
+		/**
+		 * Returns canbackorder from ordrdet
+		 * @return string
+		 */
+		public function display_canbackorder() {
+			return $this->canbackorder;
 		}
 		
 		/* =============================================================

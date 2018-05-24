@@ -2,7 +2,7 @@
     <table class="table-condensed cf order-details table-bordered numeric">
         <thead class="cf">
             <tr>
-                <th>Item / Description</th> <th class="numeric" width="90">Price</th> <th class="numeric">Quantity</th> <th class="numeric" width="90">Total</th>
+                <th>Item / Description</th> <th class="numeric text-right" width="90">Price</th> <th class="numeric text-right">Quantity</th> <th class="numeric text-right" width="90">Total</th>
                 <th>Whse</th>
                 <th>
                 	<div class="row">

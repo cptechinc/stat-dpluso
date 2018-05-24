@@ -2,8 +2,9 @@
     <table class="table-condensed cf order-details">
         <thead class="cf">
             <tr>
-                <th>Item</th> <th class="numeric" width="90">Price</th> <th class="numeric">Qty</th> <th class="numeric" >Total</th>
-                <th class="numeric">Shipped</th> <th>Rqstd Ship Date</th> <th>Whse</th>
+                <th>Item</th> 
+                <th class="numeric text-right" width="90">Price</th> <th class="numeric text-right">Qty</th> <th class="numeric text-right" >Total</th>
+                <th class="numeric text-right">Shipped</th> <th class="text-center">Rqstd Ship</th> <th>Whse</th>
                 <th>
                 	<div class="row">
                     	<div class="col-xs-2 action-padding">Details</div><div class="col-xs-2 action-padding">Docs</div> <div class="col-xs-2 action-padding">Notes</div> <div class="col-xs-6 action-padding">Edit</div>

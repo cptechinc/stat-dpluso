@@ -4,7 +4,7 @@
     if ($input->get->vendorID) {
         $vendorID = $input->get->text('vendorID');
     }
-    
+
     switch ($edittype) {
         case 'cart':
             $linedetail = CartDetail::load(session_id(), $linenbr);
@@ -13,7 +13,7 @@
             $custID = get_custidfromcart(session_id());
             $formaction = $config->pages->cart."redir/";
             $ordn = '';
-			$page->body = $config->paths->content."edit/pricing/edit-pricing-form.php";
+			$page->body = $config->paths->content."edit/pricing/sales-orders/edit-pricing-form.php";
             break;
         case 'order':
             $ordn = $input->get->text('ordn');
@@ -28,7 +28,7 @@
                 $page->title = 'Viewing Details for '. $linedetail->itemid;
 				$page->title .= (strlen($linedetail->vendoritemid)) ? ' &nbsp;'.$linedetail->vendoritemid : '';
             }
-			$page->body = $config->paths->content."edit/pricing/edit-pricing-form.php";
+			$page->body = $config->paths->content."edit/pricing/sales-orders/edit-pricing-form.php";
             break;
 		case 'quote':
 			$qnbr = $input->get->text('qnbr');

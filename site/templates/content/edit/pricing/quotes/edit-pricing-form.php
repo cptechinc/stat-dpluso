@@ -51,12 +51,20 @@
     	</div>
     	<div class="col-sm-4 item-form">
     		<h4>Current Price</h4>
-            <?php
-                if ($appconfig->allow_changeprice) {
-                    include $config->paths->content.'edit/pricing/quotes/tables/price-edit-table.php';
-                } else {
-                    include $config->paths->content.'edit/pricing/quotes/tables/price-static-table.php';
-                }
+			<?php
+				if ($modules->isInstalled('QtyPerCase')) {
+					if ($appconfig->allow_changeprice) {
+						include $config->paths->siteModules.'QtyPerCase/content/edit/pricing/quotes/tables/price-edit-table.php';
+					} else {
+						include $config->paths->siteModules.'QtyPerCase/content/edit/pricing/quotes/tables/price-static-table.php';
+					}
+				} else {
+					if ($appconfig->allow_changeprice) {
+	                    include $config->paths->content.'edit/pricing/quotes/tables/price-edit-table.php';
+	                } else {
+	                    include $config->paths->content.'edit/pricing/quotes/tables/price-static-table.php';
+	                }
+				}
             ?>
 
    			<table class="table table-bordered table-striped table-condensed">

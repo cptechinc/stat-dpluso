@@ -1,4 +1,4 @@
-<?php 
+<?php
 	/**
 	 * Class for dealing with Sales Order Details from ordrdet
 	 */
@@ -29,18 +29,18 @@
 		protected $poref;
 		protected $notes; // this needs to be removed from the MySQL tables
 		protected $canbackorder;
-		
+
 		/* =============================================================
 			GETTER FUNCTIONS
 		============================================================ */
 		public function has_error() {
 			return !empty($this->errormsg);
 		}
-		
+
 		public function has_documents() {
 			return $this->hasdocuments == 'Y' ? true : false;
 		}
-		
+
 		/**
 		 * Returns if SalesOrderDetail is editable
 		 * @return bool
@@ -50,7 +50,7 @@
 			$order = SalesOrder::load($this->sessionid, $this->orderno);
 			return $order->can_edit();
 		}
-		
+
 		/**
 		 * Checks if canbackorder is 'Y' from ordrdet and returns true
 		 * @return bool
@@ -58,7 +58,7 @@
 		public function can_backorder() {
 			return $this->canbackorder == 'Y' ? true : false;
 		}
-		
+
 		/**
 		 * Returns canbackorder from ordrdet
 		 * @return string
@@ -66,9 +66,45 @@
 		public function display_canbackorder() {
 			return $this->canbackorder;
 		}
-		
+
+		/**
+		 * Return the number of cases
+		 * @return int The number of cases
+		 */
+		public function get_caseqtyshipped() {
+			$item = XRefItem::load($this->itemid);
+			return ($item->has_caseqty()) ? floor($this->qtyshipped) : 0;
+		}
+
+		/**
+		 * Return the Number of Bottles
+		 * @param  bool   $subtractcases Exclude cases?
+		 * @return int                   Bottle Count
+		 */
+		public function get_bottleqtyshipped($subtractcases = true) {
+			$item = XRefItem::load($this->itemid);
+
+			if ($item->has_caseqty()) {
+				$cases = $this->get_caseqtyshipped();
+				$fraction = $subtractcases ? $this->qtyshipped - $cases : $this->qtyshipped;
+				return round($fraction * $item->qty_percase);
+			} else {
+				return $this->qtyshipped;
+			}
+		}
+
+		/**
+		 * Returns the number of bottles that the cases contain
+		 * @return int Number of bottles in the cases
+		 */
+		public function get_casebottleqtyshipped() {
+			$item = XRefItem::load($this->itemid);
+			$cases = $this->get_caseqty();
+			return intval($cases * $item->qty_percase);
+		}
+
 		/* =============================================================
-			GENERATE ARRAY FUNCTIONS 
+			GENERATE ARRAY FUNCTIONS
 			The following are defined CreateClassArrayTraits
 			public static function generate_classarray()
 			public function _toArray()
@@ -84,7 +120,7 @@
 		public static function remove_nondbkeys($array) {
 			return $array;
 		}
-		
+
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
@@ -93,7 +129,7 @@
 		 * @param  string $sessionID Session ID
 		 * @param  string $ordn      Sales Order #
 		 * @param  int    $linenbr   Line #
-		 * @param  bool   $debug     Wheter or not to return SalesOrderDetail or 
+		 * @param  bool   $debug     Wheter or not to return SalesOrderDetail or
 		 * @return SalesOrderDetail [description]
 		 * @uses Read (CRUD)
 		 * @source _dbfunc.php
@@ -101,7 +137,7 @@
 		public static function load($sessionID, $ordn, $linenbr, $debug = false) {
 			return get_orderdetail($sessionID, $ordn, $linenbr, $debug);
 		}
-		
+
 		/**
 		 * Updates SalesOrderDetail in orderdet
 		 * @param  bool   $debug Whether or not SQL is Executed
@@ -112,7 +148,7 @@
 		public function update($debug = false) {
 			return update_orderdetail($this->sessionid, $this, $debug);
 		}
-		
+
 		/**
 		 * Checks if changes have been made by comparing it to original SalesOrderDetail
 		 * @return bool If changes have been made
@@ -121,7 +157,7 @@
 		public function has_changes() {
 			$properties = array_keys(get_object_vars($this));
 			$detail = self::load($this->sessionid, $this->linenbr, $this->orderno, false);
-			
+
 			foreach ($properties as $property) {
 				if ($this->$property != $detail->$property) {
 					return true;

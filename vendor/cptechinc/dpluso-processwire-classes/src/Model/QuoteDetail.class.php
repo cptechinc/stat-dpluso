@@ -1,4 +1,4 @@
-<?php 
+<?php
 	/**
 	 * [QuoteDetail description]
 	 */
@@ -17,7 +17,7 @@
 		protected $quotcost;
 		protected $quotmkupmarg;
 		protected $error;
-		
+
 		/* =============================================================
 			GETTER FUNCTIONS
 		============================================================ */
@@ -28,7 +28,7 @@
 		public function has_error() {
 			return $this->error == 'Y' ? true : false;
 		}
-		
+
 		/**
 		 * Returns if QuoteDetail has doucments
 		 * @return bool
@@ -37,19 +37,55 @@
 			//return $this->notes == 'Y' ? true : false;
 			return false;
 		}
-		
+
 		/**
 		 * Returns if Quote Detail is Editable
-		 * @uses Quote 
+		 * @uses Quote
 		 * @return bool Comes from Quote->can_edit()
 		 */
 		public function can_edit() {
 			$quote = Quote::load($this->sessionid, $this->quotenbr);
 			return $quote->can_edit();
 		}
-		
+
+		/**
+		 * Return the number of cases
+		 * @return int The number of cases
+		 */
+		public function get_caseqty() {
+			$item = XRefItem::load($this->itemid);
+			return ($item->has_caseqty()) ? floor($this->quotqty) : 0;
+		}
+
+		/**
+		 * Return the Number of Bottles
+		 * @param  bool   $subtractcases Exclude cases?
+		 * @return int                   Bottle Count
+		 */
+		public function get_bottleqty($subtractcases = true) {
+			$item = XRefItem::load($this->itemid);
+
+			if ($item->has_caseqty()) {
+				$cases = $this->get_caseqty();
+				$fraction = $subtractcases ? $this->quotqty - $cases : $this->quotqty;
+				return round($fraction * $item->qty_percase);
+			} else {
+				return $this->quotqty;
+			}
+		}
+
+		/**
+		 * Returns the number of bottles that the cases contain
+		 * @return int Number of bottles in the cases
+		 */
+		public function get_casebottleqty() {
+			$item = XRefItem::load($this->itemid);
+			$cases = $this->get_caseqty();
+			return intval($cases * $item->qty_percase);
+		}
+
 		/* =============================================================
-			GENERATE ARRAY FUNCTIONS 
+			GENERATE ARRAY FUNCTIONS
 			The following are defined CreateClassArrayTraits
 			public static function generate_classarray()
 			public function _toArray()
@@ -66,7 +102,7 @@
 			unset($array['totalprice']);
 			return $array;
 		}
-		
+
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
@@ -79,7 +115,7 @@
 		public function create($debug = false) {
 			return insert_quotedetail($this->sessionid, $this, $debug);
 		}
-		
+
 		/**
 		 * Returns a QuoteDetail
 		 * @param  string $sessionID Session ID
@@ -92,7 +128,7 @@
 		public static function load($sessionID, $qnbr, $linenbr, $debug = false) {
 			return get_quotedetail($sessionID, $qnbr, $linenbr, $debug);
 		}
-		
+
 		/**
 		 * Updates the QuoteDetail in the database
 		 * @param  bool   $debug Whether Update Query is run or not
@@ -102,9 +138,9 @@
 		public function update($debug = false) {
 			return update_quotedetail($this->sessionid, $this, $debug);
 		}
-		
+
 		/**
-		 * Checks if QuoteDetail has changes by comparing it to 
+		 * Checks if QuoteDetail has changes by comparing it to
 		 * the original Detail
 		 * @return bool
 		 * @uses Read (CRUD)
@@ -112,7 +148,7 @@
 		public function has_changes() {
 			$properties = array_keys(get_object_vars($this));
 			$detail = self::load($this->sessionid, $this->quotenbr, $this->linenbr, false);
-			
+
 			foreach ($properties as $property) {
 				if ($this->$property != $detail->$property) {
 					return true;

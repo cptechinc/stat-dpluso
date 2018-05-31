@@ -4,7 +4,7 @@
 	$quotepanel->activeID = !empty($input->get->qnbr) ? $input->get->text('qnbr') : false;
 	$quotepanel->generate_filter($input);
 	$quotepanel->get_quotecount();
-	
+
 	$paginator = new Paginator($quotepanel->pagenbr, $quotepanel->count, $quotepanel->pageurl->getUrl(), $quotepanel->paginationinsertafter, $quotepanel->ajaxdata);
 ?>
 <div class="panel panel-primary not-round" id="quotes-panel">
@@ -39,8 +39,14 @@
 			</div>
 		</div>
 		<div class="table-responsive">
-			<?php include $config->paths->content.'dashboard/quotes/table.php'; ?>
-			<?= $paginator; ?>
+			<?php
+				if ($modules->isInstalled('QtyPerCase')) {
+					include $config->paths->siteModules.'QtyPerCase/content/dashboard/quotes/table.php';
+				} else {
+					include $config->paths->content.'dashboard/quotes/table.php';
+				}
+				echo $paginator;
+			?>
 		</div>
 	</div>
 </div>

@@ -5,7 +5,7 @@
 	$orderpanel->activeID = !empty($input->get->ordn) ? $input->get->text('ordn') : false;
 	$orderpanel->generate_filter($input);
 	$orderpanel->get_ordercount();
-	
+
 	$paginator = new Paginator($orderpanel->pagenbr, $orderpanel->count, $orderpanel->pageurl->getUrl(), $orderpanel->paginationinsertafter, $orderpanel->ajaxdata);
 ?>
 <div class="panel panel-primary not-round" id="orders-panel">
@@ -13,7 +13,7 @@
     	<?php if ($input->get->filter) : ?>
         	<a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">
 				<?= $orderpanel->generate_filterdescription(); ?> <span class="caret"></span> <span class="badge"><?= $orderpanel->count; ?></span> &nbsp; | &nbsp;
-            </a> 
+            </a>
 			<?= $orderpanel->generate_refreshlink(); ?>
     	<?php elseif ($orderpanel->count > 0) : ?>
             <a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">Customer Orders <span class="caret"></span></a> <span class="badge"> <?= $orderpanel->count; ?></span> &nbsp; | &nbsp;
@@ -43,8 +43,14 @@
 			</div>
         </div>
         <div class="table-responsive">
-            <?php include $config->paths->content.'customer/cust-page/sales-orders/table.php'; ?>
-			<?= $paginator; ?>
+			<?php
+				if ($modules->isInstalled('QtyPerCase')) {
+					include $config->paths->siteModules.'QtyPerCase/content/customer/sales-orders/table.php';
+				} else {
+					include $config->paths->content.'customer/cust-page/sales-orders/table.php';
+				}
+				echo $paginator;
+			?>
         </div>
     </div>
 </div>

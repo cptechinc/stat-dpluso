@@ -7,13 +7,17 @@
         'tracking' => array('href' => 'tracking', "id" => 'tracking-tab-link', 'text' => 'View Tracking', 'tabcontent' => 'edit/orders/tracking-page.php'),
         'actions' => array('href' => 'actions', "id" => 'actions-tab-link', 'text' => 'View Actions', 'tabcontent' => 'edit/orders/actions-page.php')
     );
-    
+
     if (!$editorderdisplay->canedit) {
         echo $editorderdisplay->generate_readonlyalert();
     }
-    
+
     if (!empty($order->errormsg)) {
         echo $editorderdisplay->generate_erroralert($order);
+    }
+
+    if ($modules->isInstalled('QtyPerCase')) {
+        $tabs['details']['tabcontent'] = $config->paths->siteModules.'QtyPerCase/content/edit/sales-order/details/details-page.php';
     }
 ?>
 

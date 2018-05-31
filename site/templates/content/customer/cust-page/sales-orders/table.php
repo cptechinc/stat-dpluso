@@ -30,12 +30,12 @@
 
             <?php if ($order->orderno == $input->get->text('ordn')) : ?>
             	<?php if ($input->get->show == 'documents' && (!$input->get('item-documents'))) : ?>
-                	<?php include $config->paths->content.'customer/cust-page/orders/documents-rows.php'; ?>
+                	<?php include $config->paths->content.'customer/cust-page/sales-orders/documents-rows.php'; ?>
                 <?php endif; ?>
 
                <?php include $config->paths->content.'customer/cust-page/sales-orders/detail-rows.php'; ?>
 
-               <?php include $config->paths->content.'customer/cust-page/sales-orders/totals-row.php'; ?>
+               <?php include $config->paths->content.'customer/cust-page/sales-orders/total-rows.php'; ?>
 
                <?php if ($input->get->text('show') == 'tracking') : ?>
 					<?php include $config->paths->content.'customer/cust-page/sales-orders/tracking-rows.php'; ?>

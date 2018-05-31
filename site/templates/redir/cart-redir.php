@@ -4,25 +4,39 @@
 	*  @param string $action
 	*
 	*/
-	
+
 	$custID = $shipID = '';
 	if ($input->post->action) {
 		$action = $input->post->text('action');
 		$itemID = $input->post->text('itemID');
-		$qty = $input->post->text('qty');
+
+		if ($modules->isInstalled('QtyPerCase')) {
+			$qtypercase = $modules->get('QtyPerCase');
+			$session->bottles = $input->post->text('bottle-qty');
+			$session->cases = $input->post->text('case-qty');
+			$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
+		} else {
+			$qty = $input->post->text('qty');
+		}
 	} else {
 		$action = $input->get->text('action');
 		$itemID = $input->get->text('itemID');
-		$qty = $input->get->text('qty');
+
+		if ($modules->isInstalled('QtyPerCase')) {
+			$qtypercase = $modules->get('QtyPerCase');
+			$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->get->text('bottle-qty'), $input->get->text('bottle-qty'));
+		} else {
+			$qty = $input->get->text('qty');
+		}
 	}
 
-	if (empty($qty)) {$qty = "1"; }
+	$qty = empty(trim($qty, '.')) ? 1 : $qty;
 
 	$custID = (!empty($input->post->custID) ? $input->post->text('custID') : $input->get->text('custID'));
 	$shipID = (!empty($input->post->shipID) ? $input->post->text('shipID') : $input->get->text('shipID'));
 	if (!empty($custID)) {$session->custID = $custID;}
 	if (!empty($shipID)) {$session->shipID = $shipID;}
-	
+
 	if ($input->post->sessionID) {
 		$filename = $input->post->text('sessionID');
 		$sessionID = $input->post->text('sessionID');
@@ -96,7 +110,7 @@
 
     switch ($action) {
         case 'add-to-cart':
-			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'ITEMID' => $itemID, 'QTY' => $qty);
+			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'ITEMID' => $itemID, 'QTY' => "$qty");
 			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
 			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
 			if ($input->post->whse) { if (!empty($input->post->whse)) { $data['WHSE'] = $input->post->whse; } }
@@ -170,7 +184,7 @@
 			$cartdetail->set('ponbr', $input->post->text('ponbr'));
 			$cartdetail->set('poref', $input->post->text('poref'));
 			$cartdetail->set('uom', $input->post->text('uofm'));
-			
+
 			if ($cartdetail->spcord != 'N') {
 				$cartdetail->set('desc1', $input->post->text('desc1'));
 				$cartdetail->set('desc2', $input->post->text('desc2'));

@@ -39,8 +39,14 @@
 			</div>
 		</div>
 		<div class="table-responsive">
-			<?php include $config->paths->content.'dashboard/sales-orders/table.php'; ?>
-			<?= $paginator; ?>
+			<?php
+				if ($modules->isInstalled('QtyPerCase')) {
+					include $config->paths->siteModules.'QtyPerCase/content/dashboard/sales-orders/table.php';
+				} else {
+					include $config->paths->content.'dashboard/sales-orders/table.php';
+				}
+				echo $paginator;
+			?>
 		</div>
 	</div>
 </div>

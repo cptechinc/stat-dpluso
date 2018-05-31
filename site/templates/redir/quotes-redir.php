@@ -17,7 +17,7 @@ use Purl\Url;
 	if ($input->get->filter) {
 		$quotepanel = new QuotePanel(session_id(), $page->fullURL, '', '', '');
 		$quotepanel->generate_filter($input);
-		
+
 		if (!empty($quotepanel->filters)) {
 			$filteraddon = "&filter=filter";
 			foreach ($quotepanel->filters as $filter => $value) {
@@ -127,14 +127,14 @@ use Purl\Url;
 	switch ($action) {
 		case 'load-quotes':
 			$data = array('DBNAME' => $config->dbName, 'LOADREPQUOTEHED' => false);
-			$session->loc = $config->pages->ajax."load/quotes/salesrep/".urlencode($custID)."/?qnbr=".$linkaddon;
+			$session->loc = $config->pages->ajax."load/quotes/?qnbr=".$linkaddon;
 			$session->{'quotes-loaded-for'} = $user->loginid;
 			$session->{'quotes-updated'} = date('m/d/Y h:i A');
 			break;
 		case 'load-cust-quotes':
 			$custID = $input->get->text('custID');
 			$shipID = $input->get->text('shipID');
-			$url = new Purl\Url($config->pages->ajax."load/quotes/cust/");
+			$url = new Purl\Url($config->pages->ajax."load/quotes/customer/");
 			$url->path->add($custID);
 			if (!empty($shipID)) {
 				$url->path->add("shipto-$shipID");
@@ -148,9 +148,9 @@ use Purl\Url;
 		case 'load-quote-details':
 			$qnbr = $input->get->text('qnbr');
 			$custID = get_custidfromquote(session_id(), $qnbr, false);
-			
+
 			$data = array('DBNAME' => $config->dbName, 'LOADQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'CUSTID' => $custID);
-			
+
 			if ($input->get->lock) {
 				$session->loc = $config->pages->editquote."?qnbr=".$qnbr;
 			} elseif ($input->get->print) {
@@ -204,9 +204,9 @@ use Purl\Url;
 			$quote->set('faxnbr', $input->post->text('contact-fax'));
 			$haschanges = $quote->has_changes();
 			$session->sql = $quote->update();
-		
+
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEHEAD' => false, 'QUOTENO' => $qnbr);
-			
+
 			if ($input->post->exitquote) {
 				$session->loc = $config->pages->edit."quote/confirm/?qnbr=".$qnbr.$linkaddon;
 				if (!$haschanges) {
@@ -292,7 +292,7 @@ use Purl\Url;
 
 			$custID = get_custidfromquote(session_id(), $qnbr);
 			$session->sql = $quotedetail->update();
-			
+
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'CUSTID' => $custID);
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
@@ -310,7 +310,7 @@ use Purl\Url;
 			$session->sql = $quotedetail->update();
 			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
-			
+
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} else {
@@ -326,7 +326,7 @@ use Purl\Url;
 			$session->sql = $quotedetail->update();
 			$custID = get_custidfromquote(session_id(), $qnbr, false);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
-			
+
 			if ($input->get->page) {
 				$session->loc = $input->get->text('page');
 			} else {

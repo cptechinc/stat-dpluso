@@ -2,7 +2,7 @@
     $addtype = $input->urlSegment(3); // cart|order|quote
     $linenumber = $input->get->text('linenumber');
     $addtoform = new stdClass();
-    
+
     switch($addtype) {
         case 'cart':
             $ordn = '';
@@ -26,25 +26,37 @@
     $items = get_itemsearchresults(session_id(), $config->showonpage, $input->pageNum());
     $totalcount = count_itemsearchresults(session_id());
     $paginator = new Paginator($input->pageNum, $totalcount, $page->fullURL, $addtype, 'data-loadinto=".results" data-focus=".results"');
-    
+
     if ($config->ajax) {
 		echo $page->bootstrap->openandclose('p', '', $page->bootstrap->makeprintlink($config->filename, 'View Printable Version'));
 	}
-    
+
     echo $page->bootstrap->open('div', 'class=results');
         if ($totalcount > 0) {
             foreach ($items as $item) {
                 $pricing = $specs = $item->_toArray();
-                
+
                 switch ($addtype) {
                     case 'cart':
-                        include $config->paths->content."products/ajax/load/product-results/product-cart-results.php";
+                        if ($modules->isInstalled('QtyPerCase')) {
+                            include $config->paths->siteModules.'QtyPerCase/content/item-search/add-detail/cart.php';
+                        } else {
+                            include $config->paths->content."products/ajax/load/product-results/product-cart-results.php";
+                        }
                         break;
                     case 'order':
-                        include $config->paths->content."products/ajax/load/product-results/product-order-results.php";
+                        if ($modules->isInstalled('QtyPerCase')) {
+                            include $config->paths->siteModules.'QtyPerCase/content/item-search/add-detail/sales-order.php';
+                        } else {
+                            include $config->paths->content."products/ajax/load/product-results/product-order-results.php";
+                        }
                         break;
                     case 'quote':
-                        include $config->paths->content."products/ajax/load/product-results/product-quote-results.php";
+                        if ($modules->isInstalled('QtyPerCase')) {
+                            include $config->paths->siteModules.'QtyPerCase/content/item-search/add-detail/quote.php';
+                        } else {
+                            include $config->paths->content."products/ajax/load/product-results/product-quote-results.php";
+                        }
                         break;
                 }
             }

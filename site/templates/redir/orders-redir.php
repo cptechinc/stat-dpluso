@@ -11,11 +11,11 @@
 	$pagenumber = (!empty($input->get->page) ? $input->get->int('page') : 1);
 	$sortaddon = (!empty($input->get->orderby) ? '&orderby=' . $input->get->text('orderby') : '');
 	$filteraddon = '';
-	
+
 	if ($input->get->filter) {
 		$orderpanel = new SalesOrderPanel(session_id(), $page->fullURL, '', '', '');
 		$orderpanel->generate_filter($input);
-		
+
 		if (!empty($orderpanel->filters)) {
 			$filteraddon = "&filter=filter";
 			foreach ($orderpanel->filters as $filter => $value) {
@@ -123,9 +123,9 @@
 			$session->{'orders-loaded-for'} = $custID;
 			$session->{'orders-updated'} = date('m/d/Y h:i A');
 			if ($input->get->shipID) {
-				$session->loc = $config->pages->ajax."load/sales-orders/cust/{$input->get->custID}/shipto-{$input->get->shipID}?ordn=".$linkaddon;
+				$session->loc = $config->pages->ajax."load/sales-orders/customer/{$input->get->custID}/shipto-{$input->get->shipID}?ordn=".$linkaddon;
 			} else {
-				$session->loc = $config->pages->ajax."load/sales-orders/cust/{$input->get->custID}/?ordn=".$linkaddon;
+				$session->loc = $config->pages->ajax."load/sales-orders/customer/{$input->get->custID}/?ordn=".$linkaddon;
 			}
 			break;
 		case 'load-orders':
@@ -138,24 +138,24 @@
 			$ordn = $input->get->text('ordn');
 			$custID = SalesOrderHistory::is_saleshistory($ordn) ? SalesOrderHistory::read_custid($ordn) : get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'ORDRDET' => $ordn, 'CUSTID' => $custID);
-			
+
 			if ($input->get->lock) {
 				$data['LOCK'] = false;
 				$session->loc = $config->pages->editorder."?ordn=".$ordn;
 			} elseif ($input->get->print) {
 				$session->loc = $config->pages->print."order/?ordn=".$ordn;
 			} elseif ($input->get->readonly) {
-				$session->loc = $config->pages->editorder."?ordn=".$ordn; 
+				$session->loc = $config->pages->editorder."?ordn=".$ordn;
 			} else {
 				$url = new Purl\Url($config->pages->ajaxload);
 				$insertafter = ($input->get->text('type') == 'history') ? 'sales-history' : 'sales-orders';
 				$url->path->add($insertafter);
-				
+
 				if ($input->get->custID) {
 					$url->path->add('customer');
 					$insertafter = $input->get->text('custID');
 					$url->path->add($insertafter);
-					
+
 					if ($input->get->shipID) {
 						$insertafter = "shipto-{$input->get->text('shipID')}";
 						$url->path->add($insertafter);
@@ -178,12 +178,12 @@
 				$url = new Purl\Url($config->pages->ajaxload);
 				$insertafter = ($input->get->text('type') == 'history') ? 'sales-history' : 'sales-orders';
 				$url->path->add($insertafter);
-				
+
 				if ($input->get->custID) {
 					$url->path->add('customer');
 					$insertafter = $input->get->text('custID');
 					$url->path->add($insertafter);
-					
+
 					if ($input->get->shipID) {
 						$insertafter = "shipto-{$input->get->text('shipID')}";
 						$url->path->add($insertafter);
@@ -198,19 +198,19 @@
 		case 'get-order-documents':
 			$ordn = $input->get->text('ordn');
 			$custID = get_custidfromorder(session_id(), $ordn);
-			
+
 			if ($input->get->page == 'edit') {
 				$session->loc = $config->pages->ajax.'load/order/documents/?ordn='.$ordn;
 			} else {
 				$url = new Purl\Url($config->pages->ajaxload);
 				$insertafter = ($input->get->text('type') == 'history') ? 'sales-history' : 'sales-orders';
 				$url->path->add($insertafter);
-				
+
 				if ($input->get->custID) { // If looking at customer orders
 					$url->path->add('customer');
 					$insertafter = $input->get->text('custID');
 					$url->path->add($insertafter);
-					
+
 					if ($input->get->shipID) { // If looking at customer shipto orders
 						$insertafter = "shipto-{$input->get->text('shipID')}";
 						$url->path->add($insertafter);
@@ -218,13 +218,13 @@
 				}
 				$url->query = "ordn=$ordn$linkaddon";
 				$url->query->set('show', 'documents');
-				
+
 				if ($input->get->itemdoc) {
 					$url->query->set('itemdoc', $input->get->text('itemdoc'));
 				}
 				Paginator::paginate_purl($url, $pagenumber, $insertafter);
 				$session->loc = $url->getUrl();
-			} 
+			}
 			$data = array('DBNAME' => $config->dbName, 'ORDDOCS' => $ordn, 'CUSTID' => $custID);
 			break;
 		case 'edit-new-order':
@@ -236,7 +236,7 @@
 		case 'update-orderhead':
 			$ordn = $input->post->text("ordn");
 			$intl = $input->post->text("intl");
-			
+
 			$order = SalesOrder::load(session_id(), $ordn);
 			$order->set('shiptoid', $input->post->text('shiptoid'));
 			$order->set('custpo', $input->post->text("custpo"));
@@ -274,18 +274,18 @@
 			}
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$session->sql = $order->update();
-			
+
 			$order->set('paymenttype', $input->post->text("paytype"));
-			
+
 			if ($order->paymenttype == 'cc') {
 				$order->set('cardnumber', $input->post->text("ccno"));
 				$order->set('cardexpire', $input->post->text("xpd"));
 				$order->set('cardcode', $input->post->text("ccv"));
 			}
-			
+
 			$session->sql .= '<br>'. $order->update_payment();
 			$data = array('DBNAME' => $config->dbName, 'SALESHEAD' => false, 'ORDERNO' => $ordn, 'CUSTID' => $custID);
-			
+
 			if ($input->post->exitorder) {
 				$session->loc = $config->pages->orders."redir/?action=unlock-order&ordn=$ordn";
 				$data['UNLOCK'] = false;
@@ -331,9 +331,9 @@
 			$orderdetail->set('poref', $input->post->text('poref'));
 			$orderdetail->set('spcord', 'S');
 			$orderdetail->update();
-			
+
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => '0', 'ITEMID' => 'N', 'QTY' => $qty, 'CUSTID' => $custID);
-		
+
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} else {
@@ -367,7 +367,7 @@
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$session->sql = $orderdetail->update();
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => $linenbr, 'CUSTID' => $custID);
-			
+
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} else {

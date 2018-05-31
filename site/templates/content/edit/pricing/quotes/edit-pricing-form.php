@@ -126,7 +126,7 @@
 					<tr>
 						<td>Group</td>
 						<td>
-							<?php $groups = getitemgroups(false); ?>
+							<?php $groups = get_itemgroups(); ?>
                             <select name="nsitemgroup" class="form-control input-sm">
                                 <option value="">None</option>
                                 <?php foreach ($groups as $group) : ?>

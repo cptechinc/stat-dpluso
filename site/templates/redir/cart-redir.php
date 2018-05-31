@@ -185,7 +185,7 @@
 			$cartdetail = CartDetail::load($sessionID, $linenbr);
 			$cartdetail->set('price', $input->post->text('price'));
 			$cartdetail->set('discpct', $input->post->text('discount'));
-			$cartdetail->set('qty', $input->post->text('qty'));
+			$cartdetail->set('qty', $qty);
 			$cartdetail->set('rshipdate', $input->post->text('rqstdate'));
 			$cartdetail->set('whse', $input->post->text('whse'));
 			$cartdetail->set('spcord', $input->post->text('specialorder'));

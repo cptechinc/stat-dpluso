@@ -17,6 +17,7 @@
 	<input type="hidden" class="action" name="action" value="update-line">
 	<input type="hidden" name="ordn" value="<?= $ordn; ?>">
 	<input type="hidden" name="custID" value="<?= $custID; ?>">
+	<input type="hidden" name="itemID" value="<?= $linedetail->itemid; ?>">
 	<input type="hidden" class="listprice" value="<?= $page->stringerbell->format_money($linedetail->listprice); ?>">
 	<input type="hidden" class="linenumber" name="linenbr" value="<?= $linedetail->linenbr; ?>">
 	<input type="hidden" class="originalprice" value="<?= $page->stringerbell->format_money($linedetail->price); ?>">

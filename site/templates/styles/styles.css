@@ -97,6 +97,10 @@
 		color: #fff;
 		font-size: 95%;
 	}
+
+	.has-hover {
+		border-bottom: 1px solid #000;
+	}
 /*==============================================================
 	PRINT STYLES
 =============================================================*/
@@ -299,7 +303,7 @@
 
 	#show-docs-header { background-color: #536878; color: white;  }
 
-	#orders-table .item-header { font-weight: lighter; background-color: #e5e4e2; }
+	#orders-table .item-header, .order-listing-table .item-header { font-weight: lighter; background-color: #e5e4e2 !important; }
 
 	#recent-orders .tracking { background-color: #AEFF08; }
 	.order-details#last {border-bottom: 3px solid black; }

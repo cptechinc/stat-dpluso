@@ -16,6 +16,7 @@
 <form action="<?php echo $formaction; ?>" method="post" id="<?= $linedetail->itemid.'-form'; ?>">
     <input type="hidden" class="action" name="action" value="update-line">
     <input type="hidden" name="qnbr" value="<?= $qnbr; ?>">
+	<input type="hidden" name="itemID" value="<?= $linedetail->itemid; ?>">
     <input type="hidden" class="listprice" value="<?= formatmoney($linedetail->listprice); ?>">
     <input type="hidden" class="linenumber" name="linenbr" value="<?= $linedetail->linenbr; ?>">
     <input type="hidden" class="originalprice" value="<?= formatmoney($linedetail->quotprice); ?>">

@@ -295,10 +295,16 @@
 			break;
 		case 'add-to-order':
 			$itemID = $input->post->text('itemID');
-			$qty = $input->post->text('qty'); if ($qty == '') {$qty = 1; }
+			if ($modules->isInstalled('QtyPerCase')) {
+				$qtypercase = $modules->get('QtyPerCase');
+				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
+			} else {
+				$qty = $input->post->text('qty');
+			}
+			$qty = empty(trim($qty, '.')) ? 1 : $qty;
 			$ordn = $input->post->text('ordn');
 			$custID = get_custidfromorder(session_id(), $ordn);
-			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'ITEMID' => $itemID, 'QTY' => $qty, 'CUSTID' => $custID);
+			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'ITEMID' => $itemID, 'QTY' => "$qty", 'CUSTID' => $custID);
 			$session->loc = $input->post->page;
 			break;
 		case 'add-multiple-items':
@@ -341,13 +347,46 @@
 			}
 			$session->editdetail = true;
 			break;
+		case 'quick-update-line':
+			$ordn = $input->post->text('ordn');
+			$linenbr = $input->post->text('linenbr');
+			$custID = get_custidfromorder(session_id(), $ordn);
+			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
+			$orderdetail->set('whse', $input->post->text('whse'));
+			if ($modules->isInstalled('QtyPerCase')) {
+				$qtypercase = $modules->get('QtyPerCase');
+				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
+			} else {
+				$qty = $input->post->text('qty');
+			}
+			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+			$orderdetail->set('qty', $qty);
+			$orderdetail->set('price', $input->post->text('price'));
+			$orderdetail->set('rshipdate', $input->post->text('rqstdate'));
+			$session->sql = $orderdetail->update();
+			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => $linenbr, 'CUSTID' => $custID);
+
+			if ($input->post->page) {
+				$session->loc = $input->post->text('page');
+			} else {
+				$session->loc = $config->pages->edit."order/?ordn=$ordn";
+			}
+			$session->editdetail = true;
+			break;
 		case 'update-line':
 			$ordn = $input->post->text('ordn');
 			$linenbr = $input->post->text('linenbr');
 			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
 			$orderdetail->set('price', $input->post->text('price'));
 			$orderdetail->set('discpct', $input->post->text('discount'));
-			$orderdetail->set('qty', $input->post->text('qty'));
+			if ($modules->isInstalled('QtyPerCase')) {
+				$qtypercase = $modules->get('QtyPerCase');
+				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
+			} else {
+				$qty = $input->post->text('qty');
+			}
+			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+			$orderdetail->set('qty', $qty);
 			$orderdetail->set('rshipdate', $input->post->text('rqstdate'));
 			$orderdetail->set('whse', $input->post->text('whse'));
 			$orderdetail->set('linenbr', $input->post->text('linenbr'));
@@ -371,7 +410,7 @@
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} else {
-				$session->loc = $config->pages->edit."order/?ordn=".$ordn;
+				$session->loc = $config->pages->edit."order/?ordn=$ordn";
 			}
 			$session->editdetail = true;
 			break;

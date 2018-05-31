@@ -219,8 +219,14 @@ use Purl\Url;
 		case 'add-to-quote':
 			$qnbr = $input->post->text('qnbr');
 			$itemID = $input->post->text('itemID');
-			$qty = $input->post->text('qty');
-			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'ITEMID' => $itemID, 'QTY' => $qty);
+			if ($modules->isInstalled('QtyPerCase')) {
+				$qtypercase = $modules->get('QtyPerCase');
+				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
+			} else {
+				$qty = $input->post->text('qty');
+			}
+			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'ITEMID' => $itemID, 'QTY' => "$qty");
 			$session->editdetail = true;
 			break;
 		case 'add-multiple-items':
@@ -261,6 +267,33 @@ use Purl\Url;
 			}
 			$session->editdetail = true;
 			break;
+		case 'quick-update-line':
+			$qnbr = $input->post->text('qnbr');
+			$linenbr = $input->post->text('linenbr');
+			$custID = get_custidfromquote(session_id(), $qnbr);
+			if ($modules->isInstalled('QtyPerCase')) {
+				$qtypercase = $modules->get('QtyPerCase');
+				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
+			} else {
+				$qty = $input->post->text('qty');
+			}
+			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+			$quotedetail = QuoteDetail::load(session_id(), $qnbr, $linenbr);
+			$quotedetail->set('whse', $input->post->text('whse'));
+			$quotedetail->set('quotqty', $qty);
+			$quotedetail->set('ordrqty', $qty);
+			$quotedetail->set('quotprice', $input->post->text('price'));
+			$quotedetail->set('rshipdate', $input->post->text('rqstdate'));
+			$session->sql = $quotedetail->update();
+
+			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'LINENO' => $linenbr, 'CUSTID' => $custID);
+			if ($input->post->page) {
+				$session->loc = $input->post->text('page');
+			} else {
+				$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
+			}
+			$session->editdetail = true;
+			break;
 		case 'update-line':
 			if ($input->post) {
 				$qnbr = $input->post->text('qnbr');
@@ -270,11 +303,19 @@ use Purl\Url;
 				$linenbr = $input->get->text('linenbr');
 			}
 
+			if ($modules->isInstalled('QtyPerCase')) {
+				$qtypercase = $modules->get('QtyPerCase');
+				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
+			} else {
+				$qty = $input->post->text('qty');
+			}
+			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+
 			$quotedetail = QuoteDetail::load(session_id(), $qnbr, $linenbr);
 			$quotedetail->set('quotprice', $input->post->text('price'));
 			$quotedetail->set('discpct', $input->post->text('discount'));
-			$quotedetail->set('quotqty', $input->post->text('qty'));
-			$quotedetail->set('ordrqty', $input->post->text('qty'));
+			$quotedetail->set('quotqty', $qty);
+			$quotedetail->set('ordrqty', $qty);
 			$quotedetail->set('rshipdate', $input->post->text('rqstdate'));
 			$quotedetail->set('whse', $input->post->text('whse'));
 			$quotedetail->set('linenbr', $input->post->text('linenbr'));

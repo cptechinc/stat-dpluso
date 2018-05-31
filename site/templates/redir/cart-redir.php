@@ -12,8 +12,6 @@
 
 		if ($modules->isInstalled('QtyPerCase')) {
 			$qtypercase = $modules->get('QtyPerCase');
-			$session->bottles = $input->post->text('bottle-qty');
-			$session->cases = $input->post->text('case-qty');
 			$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
 		} else {
 			$qty = $input->post->text('qty');
@@ -168,6 +166,20 @@
 			$data = writedataformultitems($data, $itemids, $qtys);
 			$session->loc = $config->pages->cart;
 			break;
+		case 'quick-update-line':
+			$linenbr = $input->post->text('linenbr');
+			$cartdetail = CartDetail::load($sessionID, $linenbr);
+			$cartdetail->set('whse', $input->post->text('whse'));
+			$cartdetail->set('qty', $qty);
+			$cartdetail->set('price', $input->post->text('price'));
+			$orderdetail->set('rshipdate', $input->post->text('rqstdate'));
+			$session->sql = $cartdetail->update();
+			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $linenbr);
+			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
+			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
+			writedplusfile($data, $sessionID);
+			$session->loc = $config->pages->cart;
+			break;
 		case 'update-line':
 			$linenbr = $input->post->text('linenbr');
 			$cartdetail = CartDetail::load($sessionID, $linenbr);
@@ -191,11 +203,10 @@
 			}
 			$session->sql = $cartdetail->update();
 			$session->loc = $input->post->text('page');
-			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $input->post->linenbr);
+			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $linenbr);
 			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
 			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
-			$data2 = $cartdetail->_toArray();
-			writedplusfile($data2, $cartdetail->itemid);
+			writedplusfile($data, $sessionID);
 			$session->loc = $config->pages->cart;
 			break;
 		case 'remove-line':

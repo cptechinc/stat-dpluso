@@ -11,7 +11,8 @@ $(document).ready(function() {
 	   INITIALIZE BOOTSTRAP FUNCTIONS
 	=============================================================*/
 		$('body').popover({selector: '[data-toggle="popover"]', placement: 'top'});
-
+		$('body').tooltip({selector: '[data-toggle="tooltip"]', placement: 'top'});
+		
 		init_datepicker();
 		init_timepicker();
 		init_bootstraptoggle();

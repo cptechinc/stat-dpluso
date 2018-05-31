@@ -973,12 +973,15 @@
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field($q->expr('MAX(ordertotal)'));
 		$q->where('sessionid', $sessionID);
-		if ($custID) {
+
+		if (!empty($custID)) {
 			$q->where('custid', $custID);
+
+			if (!(empty($shipID))) {
+				$q->where('shiptoid', $shipID);
+			}
 		}
-		if ($shipID) {
-			$q->where('shiptoid', $shipID);
-		}
+
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -992,11 +995,13 @@
 		$q = (new QueryBuilder())->table('ordrhed');
 		$q->field($q->expr('MIN(ordertotal)'));
 		$q->where('sessionid', $sessionID);
-		if ($custID) {
+
+		if (!empty($custID)) {
 			$q->where('custid', $custID);
-		}
-		if ($shipID) {
-			$q->where('shiptoid', $shipID);
+
+			if (!(empty($shipID))) {
+				$q->where('shiptoid', $shipID);
+			}
 		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
@@ -1487,11 +1492,13 @@
 		$q = (new QueryBuilder())->table('quothed');
 		$q->field($q->expr('MAX(ordertotal)'));
 		$q->where('sessionid', $sessionID);
-		if ($custID) {
+
+		if (!empty($custID)) {
 			$q->where('custid', $custID);
-		}
-		if ($shipID) {
-			$q->where('shiptoid', $shipID);
+
+			if (!empty($shipID)) {
+				$q->where('shiptoid', $shipID);
+			}
 		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
@@ -1507,12 +1514,12 @@
 		$q->field($q->expr('MIN(ordertotal)'));
 		$q->where('sessionid', $sessionID);
 
-		$q->where('sessionid', $sessionID);
-		if ($custID) {
+		if (!empty($custID)) {
 			$q->where('custid', $custID);
-		}
-		if ($shipID) {
-			$q->where('shiptoid', $shipID);
+
+			if (!empty($shipID)) {
+				$q->where('shiptoid', $shipID);
+			}
 		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
@@ -1549,7 +1556,7 @@
 			$q->generate_filters($filter, $filtertypes);
 		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -1569,12 +1576,13 @@
 		$q->field($q->expr("STR_TO_DATE(quotdate, '%m/%d/%Y') as quotedate"));
 		$q->field($q->expr("CAST(subtotal AS DECIMAL(8,2)) AS subtotal"));
 		$q->where('sessionid', $sessionID);
+
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filtertypes);
 		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('quotedate', $sortrule);
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -1623,7 +1631,7 @@
 		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$q->order('expiredate', $sortrule);
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -3116,7 +3124,38 @@
 			$sql->execute($switching);
 			return $sql->fetchColumn();
 		}
+	}
 
+	/**
+	 * Return the item from the cross-reference table
+	 * @param  string $itemID   Item Number / ID
+	 * @param  string $custID   Customer ID
+	 * @param  string $vendorID Vendor ID
+	 * @param  bool   $debug    Run in debug? If so, return SQL Query
+	 * @return XRefItem         Item
+	 */
+	function get_xrefitem($itemID, $custID = '', $vendorID = '', $debug = false) {
+		$q = (new QueryBuilder())->table('itemsearch');
+		$q->where('itemid', $itemID);
+
+		if (!empty($custID)) {
+			$q->where('origintype', 'C');
+			$q->where('originid', $custID);
+		}
+		if (!empty($vendorID)) {
+			$q->where('origintype', 'V');
+			$q->where('originid', $vendorID);
+		}
+		$q->limit(1);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'XRefItem');
+			return $sql->fetch();
+		}
 	}
 
 	/* =============================================================

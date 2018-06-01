@@ -2437,10 +2437,11 @@
 		$sql->execute($switching);
 		return $sql->fetchColumn();
 	}
+
 /* =============================================================
 	VENDOR FUNCTIONS
 ============================================================ */
-	function get_vendors($debug) {
+	function get_vendors($debug = false) {
 		$q = (new QueryBuilder())->table('vendors');
 		$q->where('shipfrom', '');
 		$sql = DplusWire::wire('database')->prepare($q->render());
@@ -3672,16 +3673,14 @@
 
 	function get_bookingtotalsbyshipto($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
 		$q = (new QueryBuilder())->table('bookingc');
-
 		$q->where('custid', $custID);
+
 		if (!empty($shipID)) {
 			$q->where('shiptoid', $shipID);
 		}
 
 		if (DplusWire::wire('user')->hascontactrestrictions) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
-		} else {
-
 		}
 
 		$q->generate_filters($filter, $filtertypes);

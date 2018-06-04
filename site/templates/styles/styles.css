@@ -1,13 +1,13 @@
 /*==============================================================
-   GENERAL STYLES
- =============================================================*/
+	GENERAL STYLES
+==============================================================*/
 	html { position: relative; height: 100%; }
 	body { height: 100%; margin-top: 40px;}
+	body.no-nav {margin-top: 0px;}
 	h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{font-family:Lato; }
 	footer { background-color: #242F40; width: 100%; color: #f8f8f8; padding-top: 15px; }
-	ul.list-unstyled ul.list-unstyled {margin-left: 20px;}
 	.container.page {min-height: 100%; height: 100%; height: auto; padding-bottom:200px;}
-	.pagination {margin: 12px 0}
+
 	.not-round {border-radius: 0px; }
 	.autowidth {width: auto; }
 	.highlight {background: #efcc00; }
@@ -15,7 +15,7 @@
 	.highlight a {color: #0f7864; }
 	.jumbotron.pagetitle {padding-top: 15px; padding-bottom: 15px; color: #ecf0f1; background-color: #2c3e50;}
 	.jumbotron.pagetitle h1 {margin-top: 5px; margin-bottom: 5px; font-size: 50px;}
-	.table-striped > tbody > tr.bg-warning:nth-of-type(odd) { background-color: #f39c12; }
+
 	.btn.btn-rounded {border-radius: 50%;}
 
 	.fliphorizontal {transform: scaleX(-1);}
@@ -25,30 +25,57 @@
 	.table.no-bottom {margin-bottom: 0px}
 	.panel-body.panel-light { padding: 10px;}
 	.modal-content.transparent {background: none;}
-	.form-control.inline, .display-inline-block {display: inline-block;}
+
 
 	table.table-sm {font-size: 90%;}
 	.nav-tabs > li > a {color: #2c3e50;}
-	.btn-emerald {
-	  color: #ffffff;
-	  background-color: #28B62C;
-	  border-color: #28B62C;
+
+	.fa-1-5x {font-size: 1.5em;}
+	.fa-15x {font-size: 15em;}
+
+	.list-group-item-primary {
+		background-color: #2c3e50;
+		color: #ecf0f1;
 	}
+
+	.label.context {
+		display: block;
+		background: #2c3e50;
+		color: #fff;
+		font-size: 95%;
+	}
+
+	.sm-padding {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	@media only screen and (max-width: 768px) {
+		.sm-padding {
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+	}
+
+/*==============================================================
+	BOOTSTRAP STYLES
+==============================================================*/
+	.btn-emerald { color: #ffffff; background-color: #28B62C; border-color: #28B62C; }
 
 	.btn-emerald:hover,
 	.btn-emerald:focus,
 	.btn-emerald:active,
 	.btn-emerald.active,
 	.open .dropdown-toggle.btn-emerald {
-	  color: #ffffff;
-	  background-color: #23A127;
-	  border-color: #28B62C;
+		color: #ffffff;
+		background-color: #23A127;
+		border-color: #28B62C;
 	}
 
 	.btn-emerald:active,
 	.btn-emerald.active,
 	.open .dropdown-toggle.btn-emerald {
-	  background-image: none;
+		background-image: none;
 	}
 
 	.btn-emerald.disabled,
@@ -66,22 +93,22 @@
 	.btn-emerald.disabled.active,
 	.btn-emerald[disabled].active,
 	fieldset[disabled] .btn-emerald.active {
-	  background-color: #28B62C;
-	  border-color: #28B62C;
+		background-color: #28B62C;
+		border-color: #28B62C;
 	}
 
-	.btn-emerald .badge {
-	  color: #28B62C;
-	  background-color: #ffffff;
-	}
+	.btn-emerald .badge { color: #28B62C; background-color: #ffffff; }
 
-	.fa-1-5x {font-size: 1.5em;}
-	.fa-15x {font-size: 15em;}
-	body.no-nav {margin-top: 0px;}
+	.pagination {margin: 12px 0}
+	.table-striped > tbody > tr.bg-warning:nth-of-type(odd) { background-color: #f39c12; }
+	ul.list-unstyled ul.list-unstyled {margin-left: 20px;}
 
-	.list-group-item-primary {
-		background-color: #2c3e50;
-		color: #ecf0f1;
+/*==============================================================
+	FUELUX STYLES
+==============================================================*/
+	.fuelux .datepicker-calendar-days td.selected.current-day b,
+	.fuelux .datepicker-calendar-days td.selected.current-day button {
+		color: #fff;
 	}
 
 	.fuelux .datepicker-calendar-days td.current-day span {
@@ -103,7 +130,11 @@
 	}
 /*==============================================================
 	PRINT STYLES
-=============================================================*/
+==============================================================*/
+	.container.page.print {
+		padding-bottom: 50px;
+	}
+
 	@media print {
 		body {height: auto; font-size: 12px;}
 		a[href]:after {
@@ -133,9 +164,10 @@
 		margin: 21px 0 10px;
 		border-bottom: 2px solid #2c3e50;
 	}
+
 /*==============================================================
-   NAVIGATION
- =============================================================*/
+	NAVIGATION
+==============================================================*/
 	.nav>li>a.login { background-color: #5cb85c;; color: white; display: block;}
 	.nav>li>a.login { background-color: #5cb85c;; color: white; display: block;}
 	.nav>li>a.logout, ul a.logout { background-color: #d9534f; color: white; }
@@ -145,6 +177,7 @@
 	.header-logo {display: inline-block; max-width: 250px;  margin-top: 10px; float:left;}
 	#show-toolbar {position: fixed; bottom: 20px; left: 20px; z-index: 16; }
 	#back-to-top {position: fixed; bottom: 20px; right: 20px; z-index: 12; display: none;}
+
 	@media screen and (max-width: 768px) {
 		#function-toolbar {
 			overflow-y: scroll;
@@ -152,14 +185,13 @@
 		}
 	}
 
-
 	#function-toolbar {position: fixed; top: 20px; left: 60px;  z-index: 20; display:none; }
 	.toolbar .close {position: absolute; top: 20px; right: 10%;}
 	.modal-backdrop.toolbar {z-index: 15;}
 
 /*==============================================================
-   YOUTUBE MENU
- =============================================================*/
+	YOUTUBE MENU
+==============================================================*/
 	/* #nav-yt{z-index: 13;} */
 	#yt-menu, #slide-menu {
 		background-color: #f8f8f8; border: 1px solid #e8e8e8; border: 1px solid #ccc; z-index: 13; position: fixed; box-shadow: 5px 10px 15px 5px rgba(0,0,0,.1); margin-top: 20px; display: none; }
@@ -167,26 +199,26 @@
 	#yt-menu .dropdown-header, #slide-menu .dropdown-header { color: #cc181e; }
 	#yt-menu .heading, #slide-menu .heading { color: #cc181e; }
 	#yt-menu li>a, #slide-menu li>a{ padding-top: 5px; padding-bottom: 5px; color: #555;}
- 	#yt-menu li.logout>a, #slide-menu li.logout>a { color: #FFF;}
+	#yt-menu li.logout>a, #slide-menu li.logout>a { color: #FFF;}
 
 
 	@media screen and (max-width: 768px) {
 		 #yt-menu li>a { padding-top: 10px; padding-bottom: 10px; }
 		 #yt-menu { overflow-y: scroll; max-height: 90%; }
-	 }
+	}
 
 	li.divider {border-bottom: 1px solid #ccc; }
 	a.navbar-brand.yt-menu-open:hover, a.navbar-brand.slide-menu-open:hover { background: #242F40; color: #f8f8f8; }
 	a.yt-menu-open.menu-open, a.slide-menu-open.menu-open { background: #242F40; color: #f8f8f8; }
 
 /*==============================================================
-   MATERIAL ICONS NAVBAR STYLES
-=============================================================*/
-		#yt-menu .material-icons, #slide-menu .material-icons {font-size: 18px;margin-left: -2px; }
+	MATERIAL ICONS NAVBAR STYLES
+==============================================================*/
+	#yt-menu .material-icons, #slide-menu .material-icons {font-size: 18px;margin-left: -2px; }
 
 /*==============================================================
-   NOTIFY JS STYLES
- =============================================================*/
+	NOTIFY JS STYLES
+==============================================================*/
 	[data-notify="progressbar"] { margin-bottom: 0px; position: absolute; bottom: 0px; left: 0px; width: 100%; height: 5px; }
 	.notify-alert { border-radius: 4px; }
 	.notify-alert.table {margin-bottom: 0px;}
@@ -206,16 +238,16 @@
 	.notify-alert.alert-warning .progress-bar { background-color: #7f5006; }
 	.notify-alert.alert-danger .progress-bar { background-color: #921e12; }
 
- /*==============================================================
-   DATA TABLES STYLES
- =============================================================*/
+/*==============================================================
+	DATA TABLES STYLES
+==============================================================*/
 	 .dataTables_info, .dataTables_length {padding-left: 15px; }
 	 .dataTables_filter, .dataTables_paginate {padding-right: 15px; }
 	 .dataTables_length, .dataTables_filter {padding-top: 10px; }
 
 /*==============================================================
-   AJAX LOADING BACKGROUND STYLES
-=============================================================*/
+	AJAX LOADING BACKGROUND STYLES
+==============================================================*/
 	#loading-bkgd {z-index: 13; display: none; opacity: .8;}
 		#loading-bkgd .close {position: absolute; top: 10%; right: 10%;}
 		#loading-bkgd .close a {color: white;}
@@ -226,25 +258,36 @@
 	#lightbox-modal .modal-content {box-shadow: none; border: none;}
 
 /*==============================================================
-   IMAGE STYLES
- =============================================================*/
+	IMAGE STYLES
+==============================================================*/
 	.item-result img, #login-panel img, .edit-pricing img, .sign-in img { max-width: 100%; max-height: 100%; }
-
 	.item-master-result img {max-height: 100px; max-width: 100%; }
 
-
 /*==============================================================
-   COMMON FORM STYLES
- =============================================================*/
+	FORM STYLES
+==============================================================*/
 	.form-control.qty { width: 80px; }
 	.form-control.qty-sm { width: 50px; }
 	.form-control.price {width: 200px;}
-	form.inline-block{display: inline-block;}
+	form.inline-block{ display: inline-block; }
+	.form-control.inline, .display-inline-block {display: inline-block;}
+	input.underlined {
+		background: transparent;
+		border: none;
+		border-bottom: 1px solid #2c3e50;
+	}
+
+	.form-control.underlined {
+		margin: 0;
+		padding: 0;
+		border-radius: 0;
+		padding-top: 10px;
+	}
 
 /*==============================================================
-   BILLING STYLES
- =============================================================*/
- 	td.value {width: 40%; }
+	BILLING STYLES
+==============================================================*/
+	td.value {width: 40%; }
 	.has-error td.control-label { background-color: #e74c3c; color: #fff;}
 	.has-warning td.field { background-color: #f39c12; color: #fff;}
 	.table>tbody>tr>td.control-label{vertical-align: middle; }
@@ -256,8 +299,8 @@
 	}
 
 /*==============================================================
-   ADD ITEM MODAL STYLES
- =============================================================*/
+	ADD ITEM MODAL STYLES
+==============================================================*/
 	.item-result { height: auto; min-height: 100px; display: table;}
 		.item-result img { max-width: 100%; }
 	#ajax-modal .results {max-height: 600px; overflow-y: scroll;}
@@ -294,7 +337,6 @@
 	#sales-history-table tr.last-detail,
 	.order-listing-table tr.last-detail{border-bottom: 3px solid black;}
 
-
 	#orders-table tr.tracking { background: #5FEACF; }
 		#orders-table tr.tracking a {color: #2c3e50;}
 
@@ -314,9 +356,10 @@
 	.first-total-row {
 		border-top: 2px solid #b4bcc2;
 	}
+
 /*==============================================================
-   CART / ORDER DETAIL LINES
- =============================================================*/
+	CART / ORDER DETAIL LINES
+=============================================================*/
 	 @media only screen and (max-width: 800px) {
 
 		/*=Force table to not be like tables anymore=*/
@@ -340,54 +383,58 @@
 
 		/* Label the data */
 		#no-more-tables td:before { content: attr(data-title); }
+		.detail-line {display: block;}
+		.detail-line-break {display: none;}
 	}
 
 	table.order-details {font-size: 90%; width: 100%; }
 	.cf tr { border-top: 1px solid #ddd;}
 
-	@media screen and (min-width: 800px) {
+	@media screen and (min-width: 991px) {
 		.action-padding {padding-left: 10px; padding-right: 10px;}
-	 }
+		.detail-line-field-name {display: none;}
+	}
+
+	@media screen and (max-width: 991px) {
+		.detail-line-header {display: none;}
+		.detail-line-break {display: block;}
+		.detail-line-field-name {font-weight: bold;}
+		.detail-line-field {float: right;}
+	}
+
+	@media screen and (max-width: 1200px) {
+		.detail-line-icon {margin-bottom: 5px;}
+	}
 
 /*==============================================================
-   EDIT PRICING STYLES
-=============================================================*/
-	 .jumbotron.item-detail-heading { padding: 7px; margin-bottom: 7px;}
+	EDIT PRICING STYLES
+==============================================================*/
+	.jumbotron.item-detail-heading { padding: 7px; margin-bottom: 7px;}
 		@media screen and (min-width: 600px) { .no-padding-left {padding-left: 0px;} .no-padding-right {padding-right: 0px;} }
-	 .row.row-bordered { border-top: 1px solid black; border-bottom: 1px solid black; }
+	.row.row-bordered { border-top: 1px solid black; border-bottom: 1px solid black; }
 		.grid-item { border-right: 1px solid black; border-left: 1px solid black; }
 	.item-form {overflow-y: scroll;}
 
 /*==============================================================
-   EDIT ORDER STYLES
-=============================================================*/
+	EDIT ORDER STYLES
+==============================================================*/
 	.creditcard {width: 220px;}
 	.expiredate {width: 100px;}
 	#credit-status { margin-top: 5px; clear: both; }
 
 /*==============================================================
-   CUST INDEX STYLES
-=============================================================*/
-	#cust-index { font-size: 90%; }
+	CUST INDEX, VENDOR INDEX, ITEMS STYLES
+==============================================================*/
+	#cust-index, #vend-index, #item-results { font-size: 90%; }
 
 /*==============================================================
-   VEND INDEX STYLES
-=============================================================*/
-	#vend-index { font-size: 90%; }
-
-/*==============================================================
-   ITEMS STYLES
-=============================================================*/
-	#item-results { font-size: 90%; }
-
-/*==============================================================
-   DASHBOARD STYLES
-=============================================================*/
+	DASHBOARD STYLES
+==============================================================*/
 	#salesdata-div {max-height: 500px; overflow-y: scroll;}
 
 /*==============================================================
-   ITEM INFORMATION STYLES
- =============================================================*/
+	ITEM INFORMATION STYLES
+==============================================================*/
 	.table-condensed.table-excel > thead > tr > th,
 	.table-condensed.table-excel > tbody > tr > td { padding: 2px; }
 	.table-excel .totals {font-weight: bold; background-color: rgba(44,62,80, 0.2) !important;}
@@ -404,61 +451,60 @@
 	hr.dark {border-top: 1px solid #242F40;}
 	a.h1, a.h2, a.h3, a.h4, a.h5, a.h6 {color: #18bc9c;}
 
-.table-data {
-	font-family: 'PT Mono';
-}
+	.table-data { font-family: 'PT Mono'; }
+
 /*==============================================================
-   lIGHTBOX STYLES
- =============================================================*/
+	lIGHTBOX STYLES
+==============================================================*/
 	#lightbox-modal {z-index: 30;}
 	.lightbox-content img {max-height: 100%; max-width: 100%; display: block; margin-left: auto; margin-right: auto;}
 	.lightbox-conent p {padding-top: 5px;}
 
 /*==============================================================
-   TASK STYLES
-=============================================================*/
+	TASK STYLES
+==============================================================*/
 	.btn.day-number {font-size: 10px; }
 
 /*==============================================================
-   ACCOUNT STYLES
-=============================================================*/
+	ACCOUNT STYLES
+==============================================================*/
 	.profile {color: #fff; padding: 15px;}
 	.profile .material-icons {font-size: 60px;}
 
 /*==============================================================
-   FORMATTER STYLES
-=============================================================*/
+	FORMATTER STYLES
+==============================================================*/
 	.formatter-container {max-height: 600px; overflow-x: auto;}
 
 /*==============================================================
-   DOCUMENTATION MENU
- =============================================================*/
+	DOCUMENTATION MENU
+==============================================================*/
 	ul.docs.nav ul.docs.nav {margin-left: 15px;}
 
 /*==============================================================
-   DOCUMENTATION MENU
- =============================================================*/
- 	.item-not-selected {background: #ececec;}
+	DOCUMENTATION MENU
+==============================================================*/
+	.item-not-selected {background: #ececec;}
 
 /*==============================================================
-   CUSTOM DATE MENU
- =============================================================*/
+	CUSTOM DATE MENU
+==============================================================*/
 	.modal-body.modal-results .dropdown-menu.datepicker-calendar-wrapper { position: fixed; top: inherit; }
 
 /*==============================================================
-   ACTIONS STYLES
- =============================================================*/
+	ACTIONS STYLES
+==============================================================*/
 	#new-action-form #note, .display-notes {white-space: pre-wrap;}
 
 /*==============================================================
-   DOCS STYLES
-=============================================================*/
+	DOCS STYLES
+==============================================================*/
 	.docs-nav {font-size: 105%;}
 	.docs-nav li { padding-left: 5px;}
 	.docs-nav li.active {border-left: 2px solid #2c3e50;}
 
 /*==============================================================
-   BOOKINGS STYLES
+	BOOKINGS STYLES
 +=============================================================*/
 	.bookings-table-div {max-height: 600px; overflow-y: scroll;}
 	.cust-bookings-table-div {max-height: 400px; overflow-y: scroll;}

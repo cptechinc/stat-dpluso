@@ -1,6 +1,6 @@
 <?php
 	$page->useractionpanelfactory = new UserActionPanelFactory($user->loginid, $page->fullURL);
-	
+
 	switch ($page->name) { //$page->name is what we are editing
 		case 'order':
 			if ($input->get->ordn) {
@@ -8,7 +8,7 @@
 				$custID = get_custidfromorder(session_id(), $ordn);
 				$editorderdisplay = new EditSalesOrderDisplay(session_id(), $page->fullURL, '#ajax-modal', $ordn);
 				$order = $editorderdisplay->get_order();
-				
+
 				if (!$order) {
 					$page->title = "Order #" . $ordn . ' failed to load';
 					$page->body = '';
@@ -57,6 +57,8 @@
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-quotes.js'));
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-quote-to-order.js'));
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
+				$itemlookup->set_customer($quote->custid, $quote->shiptoid);
+				$itemlookup = $itemlookup->set_qnbr($qnbr);
 				$formconfig = new FormFieldsConfig('quote');
 			} else {
 				throw new Wire404Exception();

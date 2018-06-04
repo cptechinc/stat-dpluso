@@ -4,13 +4,13 @@
 	 */
 	class CartDisplay extends OrderDisplay {
 		use ThrowErrorTrait;
-		
+
 		/**
 		 * Carthead, from carthed
 		 * @var CartQuote
 		 */
 		protected $cart;
-		
+
 		/* =============================================================
 			Class Functions
 		============================================================ */
@@ -22,7 +22,7 @@
 		public function get_cartquote($debug = false) {
 			return $this->cart = get_carthead($this->sessionID, true, $debug);
 		}
-		
+
 		/**
 		 * Returns the link for loading cart detail notes
 		 * @param  int     $linenbr Line #
@@ -38,7 +38,7 @@
 			$link = $bootstrap->openandclose('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
-		
+
 		/**
 		 * Returns the link for loading cart header notes
 		 * @param  int    $linenbr Line #
@@ -54,7 +54,7 @@
 			$link = $bootstrap->openandclose('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
-		
+
 		/**
 		 * Generates dplus link depending on the Line #
 		 * @param  Order  $cart    CartQuote
@@ -65,7 +65,7 @@
 		public function generate_loaddplusnoteslink(Order $cart, $linenbr = '0') {
 			return intval($linenbr) ? $this->generate_loaddplusnoteslinkdetail($linenbr) : $this->generate_loaddplusnoteslinkheader($linenbr);
 		}
-		
+
 		/**
 		 * Returns URL for dplus notes for that Line #
 		 * @param  Order  $cart    CartQuote
@@ -79,7 +79,7 @@
 			$url->query->setData(array('action' => 'get-cart-notes', 'linenbr' => $linenbr));
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Is not implemented yet
 		 * @param  Order       $cart   CartQuote
@@ -89,7 +89,7 @@
 		public function generate_loaddocumentslink(Order $cart, OrderDetail $detail = null) {
 			// TODO
 		}
-		
+
 		/**
 		 * Is not implemented yet
 		 * @param  Order       $cart   CartQuote
@@ -99,7 +99,7 @@
 		public function generate_documentsrequesturl(Order $cart, OrderDetail $detail = null) {
 			// TODO
 		}
-		
+
 		/**
 		 * Returns HTML link to edit line
 		 * @param  Order       $cart   CartQuote
@@ -110,10 +110,10 @@
 		public function generate_detailvieweditlink(Order $cart, OrderDetail $detail) {
 			$bootstrap = new Contento();
 			$href = $this->generate_detailviewediturl($cart, $detail);
-			$icon = $bootstrap->openandclose('button', 'class=btn btn-md btn-warning', $bootstrap->createicon('glyphicon glyphicon-pencil'));
+			$icon = $bootstrap->openandclose('button', 'class=btn btn-sm btn-warning detail-line-icon', $bootstrap->createicon('glyphicon glyphicon-pencil'));
 			return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$cart->custid|aria-label=View Detail Line", $icon);
 		}
-		
+
 		/**
 		 * Returns URL to load edit detail
 		 * @param  Order       $cart   CartQuote
@@ -125,6 +125,20 @@
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = Dpluswire::wire('config')->pages->ajax."load/edit-detail/cart/";
 			$url->query->setData(array('line' => $detail->linenbr));
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns URL to remove detail
+		 * @param  Order       $cart   CartQuote
+		 * @param  OrderDetail $detail CartDetail
+		 * @return string              URL to load edit detail
+		 * @uses
+		 */
+		public function generate_detaildeleteurl(Order $cart, OrderDetail $detail) {
+			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url->path = Dpluswire::wire('config')->pages->cart."redir/";
+			$url->query->setData(array('action' => 'remove-line', 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
 	}

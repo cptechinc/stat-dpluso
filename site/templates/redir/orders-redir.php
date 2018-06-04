@@ -306,6 +306,7 @@
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'ITEMID' => $itemID, 'QTY' => "$qty", 'CUSTID' => $custID);
 			$session->loc = $input->post->page;
+			$session->editdetail = true;
 			break;
 		case 'add-multiple-items':
 			$ordn = $input->post->text('ordn');
@@ -352,13 +353,14 @@
 			$linenbr = $input->post->text('linenbr');
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
-			$orderdetail->set('whse', $input->post->text('whse'));
+			// $orderdetail->set('whse', $input->post->text('whse'));
 			if ($modules->isInstalled('QtyPerCase')) {
 				$qtypercase = $modules->get('QtyPerCase');
 				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
 			} else {
 				$qty = $input->post->text('qty');
 			}
+			$session->qty = $input->post->text('qty');
 			$qty = empty(trim($qty, '.')) ? 1 : $qty;
 			$orderdetail->set('qty', $qty);
 			$orderdetail->set('price', $input->post->text('price'));
@@ -428,6 +430,22 @@
 			} else {
 				$session->loc = $config->pages->edit."order/?ordn=".$ordn;
 			}
+			break;
+		case 'remove-line-get':
+			$ordn = $input->get->text('ordn');
+			$linenbr = $input->get->text('linenbr');
+			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
+			$orderdetail->set('qty', '0');
+			$session->sql = $orderdetail->update();
+			$custID = get_custidfromorder(session_id(), $ordn, false);
+			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'LINENO' => $linenbr, 'QTY' => '0', 'CUSTID' => $custID);
+
+			if ($input->post->page) {
+				$session->loc = $input->post->text('page');
+			} else {
+				$session->loc = $config->pages->edit."order/?ordn=".$ordn;
+			}
+			$session->editdetail = true;
 			break;
 		case 'unlock-order':
 			$ordn = $input->get->text('ordn');

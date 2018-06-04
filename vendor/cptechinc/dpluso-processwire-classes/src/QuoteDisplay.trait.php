@@ -16,7 +16,7 @@
 		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
 			$bootstrap = new Contento();
 			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
-			
+
 			if ($quote->can_edit()) {
 				$title = ($quote->has_notes()) ? "View and Create Quote Notes" : "Create Quote Notes";
 			} else {
@@ -25,7 +25,7 @@
 			$content = $bootstrap->createicon('material-icons', '&#xE0B9;') . ' ' . $title;
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-default load-notes|title=$title|data-modal=$this->modal", $content);
 		}
-		
+
 		/**
 		 * Returns URL load the dplus notes from
 		 * @param  Order  $quote    to use Quotenbr
@@ -38,7 +38,7 @@
 			$url->query->setData(array('action' => 'get-quote-notes', 'qnbr' => $quote->quotnbr, 'linenbr' => $linenbr));
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns HTML link to load documents from
 		 * @param  Order  $quote            Quote
@@ -52,7 +52,7 @@
 				return $this->generate_loadheaderdocumentslink($quote, $quotedetail);
 			}
 		}
-		
+
 		/**
 		 * Returns HTML link to load header documents from
 		 * @param  Order  $quote            Quote
@@ -64,14 +64,14 @@
 			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
 			$icon = $bootstrap->createicon('fa fa-file-text');
 			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
-			
+
 			if ($quote->has_documents()) {
 				return $bootstrap->openandclose('a', "href=$href|class=btn btn-primary load-sales-docs|role=button|title=Click to view Documents|$ajaxdata", $icon. ' Show Documents');
 			} else {
 				return $bootstrap->openandclose('a', "href=#|class=btn btn-default|title=No Documents Available", $icon. ' 0 Documents Found');
 			}
 		}
-		
+
 		/**
 		 * Returns HTML link to load detail documents from
 		 * @param  Order  $quote            Quote
@@ -90,10 +90,10 @@
 				return $bootstrap->openandclose('a', "href=#|class=h3 text-muted|title=No Documents Available", $icon);
 			}
 		}
-		
-		
+
+
 		/**
-		 * Sets up a common url function for getting documents request url, classes that have this trait 
+		 * Sets up a common url function for getting documents request url, classes that have this trait
 		 * will define generate_documentsrequesturl(Order $quote)
 		 * Not used as of 10/25/2017
 		 * @param  Order  $quote [description]
@@ -107,7 +107,7 @@
 			}
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns with the URL to edit the Quote
 		 * @param  Order  $quote Used for Quotenbr
@@ -118,7 +118,7 @@
 			$url->query->setData(array('action' => 'edit-quote', 'qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns link to Order the quote
 		 * @param  Order  $quote Used to get Quote Nbr
@@ -133,7 +133,7 @@
 			$icon = $bootstrap->createicon('glyphicon glyphicon-print');
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-sm btn-default", $icon." Send To Order");
 		}
-		
+
 		/**
 		 * Returns URL to push quote to Order
 		 * @param  Order  $quote Quotenbr
@@ -145,10 +145,10 @@
 			$url->query->setData(array('qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns HTML Link to view the print version of this quote
-		 * @param  Order  $quote 
+		 * @param  Order  $quote
 		 * @return string HTML link to view print version
 		 * @uses          $this->generate_viewprinturl($quote);
 		 */
@@ -158,7 +158,7 @@
 			$icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-print'));
 			return $bootstrap->openandclose('a', "href=$href|target=_blank", $icon." View Printable Quote");
 		}
-		
+
 		/**
 		 * Returns URL to view the print version
 		 * @param  Order  $quote Uses Quotenbr
@@ -170,7 +170,7 @@
 			$url->query->set('print', 'true');
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns URL to view the print page version
 		 * @param  Order  $quote Uses Quotenbr
@@ -184,7 +184,7 @@
 			$url->query->set('view', 'pdf');
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns URL to send email
 		 * @param  Order  $quote Uses Quotenbr
@@ -197,7 +197,7 @@
 			$url->query->set('referenceID', $this->sessionID);
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns HTML link to view linked user actions link
 		 * @param  Order  $quote for quotenbr
@@ -209,7 +209,7 @@
 			$icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-check'));
 			return $bootstrap->openandclose('a', "href=$href|target=_blank", $icon." View Associated Actions");
 		}
-		
+
 		/**
 		 * Returns URL to load linked user actions
 		 * @param  Order  $quote For quotelink
@@ -221,7 +221,7 @@
 			$url->query->setData(array('qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns HTML link to load the quote detail
 		 * @param  Order       $quote  For QuoteNbr
@@ -231,10 +231,10 @@
 		public function generate_viewdetaillink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new Contento();
 			$href = $this->generate_viewdetailurl($quote, $detail);
-			$icon = $bootstrap->createicon('glyphicon glyphicon-th-list');
-			return $bootstrap->openandclose('a', "href=$href|class=btn btn-xs btn-primary view-item-details|data-itemid=$detail->itemid|data-kit=$detail->kititemflag|data-modal=#ajax-modal", $icon);
+			$icon = $bootstrap->createicon('fa fa-info-circle');
+			return $bootstrap->openandclose('a', "href=$href|class=h3 view-item-details detail-line-icon|data-itemid=$detail->itemid|data-kit=$detail->kititemflag|data-modal=#ajax-modal", $icon);
 		}
-		
+
 		/**
 		 * Returns the URL to view the detail
 		 * @param  Order       $quote  For quotenbr
@@ -247,7 +247,7 @@
 			$url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Return String URL to orders redir to request order details
 		 * This is here for the use of getting the Print link
@@ -259,7 +259,7 @@
 			$url->query->setData(array('action' => 'load-quote-details', 'qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns the URL to view / edit the detail
 		 * @param  Order       $quote  for Quote Number
@@ -271,7 +271,7 @@
 			$url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns an array of QuoteDetail from Database
 		 * @param  Order  $quote for QuoteNbr
@@ -281,12 +281,12 @@
 		public function get_quotedetails(Order $quote, $debug = false) {
 			return get_quotedetails($this->sessionID, $quote->quotnbr, true, $debug);
 		}
-		
+
 		/* =============================================================
 			URL Helper Functions
 		============================================================ */
-		/** 
-		 * Makes the URL to the orders redirect page, 
+		/**
+		 * Makes the URL to the orders redirect page,
 		 * @return Purl\Url URL to REDIRECT page
 		 */
 		public function generate_quotesredirurl() {

@@ -1,9 +1,6 @@
 <div id="sales-order-details ">
-	<div class="form-group"><?php include $config->paths->content.'edit/orders/order-details/order-details.php'; ?></div>
-	<div class="text-center form-group">
-		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#item-lookup-modal">
-		    <span class="glyphicon glyphicon-plus"></span> Add Item
-		</button>
+	<div class="form-group">
+		<?php include $config->paths->content.'edit/orders/order-details/order-details.php'; ?>
 	</div>
 	<div class="row">
 		<div class="col-xs-3 col-sm-7"></div>

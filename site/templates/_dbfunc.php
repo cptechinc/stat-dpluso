@@ -1985,8 +1985,8 @@
 		}
 		$q->where('quotenbr', $detail->quotenbr);
 		$q->where('sessionid', $detail->sessionid);
-		$q->where('recno', $detail->recno);
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$q->where('linenbr', $detail->recno);
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery();
@@ -2558,9 +2558,9 @@
 
 	function get_custidfromcart($sessionID, $debug = false) {
 		$q = (new QueryBuilder())->table('carthed');
-		$q->field($q->expr('custid'));
+		$q->field('custid');
 		$q->where('sessionid', $sessionID);
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -2889,14 +2889,14 @@
 		$q = (new QueryBuilder())->table('ordrdet');
 		$q->mode('update');
 		foreach ($properties as $property) {
-			if ($detail != $originaldetail->$property) {
+			if ($detail->$property != $originaldetail->$property) {
 				$q->set($property, $detail->$property);
 			}
 		}
 		$q->where('orderno', $detail->orderno);
 		$q->where('sessionid', $detail->sessionid);
 		$q->where('linenbr', $detail->linenbr);
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery();
@@ -3674,7 +3674,7 @@
 	function get_bookingtotalsbyshipto($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
 		$q = (new QueryBuilder())->table('bookingc');
 		$q->where('custid', $custID);
-
+		
 		if (!empty($shipID)) {
 			$q->where('shiptoid', $shipID);
 		}

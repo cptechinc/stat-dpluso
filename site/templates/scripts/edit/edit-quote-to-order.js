@@ -1,13 +1,18 @@
 $(function() {
     $('.select-item').change(function() {
         var checkbox = $(this);
+        var form = $('#select-items-form');
+
         if (checkbox.is(':checked')) {
-            checkbox.closest('tr').removeClass('item-not-selected');
+            var input = '<input type="checkbox" class="hidden" name="linenbr[]" value="'+checkbox.val()+'" checked>;'
+            form.append(input);
+            checkbox.closest('.detail-line').removeClass('item-not-selected');
         } else {
-            checkbox.closest('tr').addClass('item-not-selected');
+            form.find("input[name='linenbr[]'][value='"+checkbox.val()+"']").detach();
+            checkbox.closest('.detail-line').addClass('item-not-selected');
         }
     });
-    
+
     $('#select-all').change(function() {
         var checkbox = $(this);
         if (checkbox.is(':checked')) {
@@ -17,7 +22,7 @@ $(function() {
             $('.select-item').prop('checked', false).change();
         }
     });
-    
+
     $("body").on("submit", "#select-items-form", function(e) {
         e.preventDefault();
         var form = $(this);
@@ -30,8 +35,8 @@ $(function() {
                 customClass: 'animated tada'
             });
         } else {
-            form.postform({}, function() { 
-                generateurl(function(url) { 
+            form.postform({}, function() {
+                generateurl(function(url) {
                     window.location.href = url;
                 });
             })

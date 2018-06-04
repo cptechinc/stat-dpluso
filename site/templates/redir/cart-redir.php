@@ -169,10 +169,11 @@
 		case 'quick-update-line':
 			$linenbr = $input->post->text('linenbr');
 			$cartdetail = CartDetail::load($sessionID, $linenbr);
-			$cartdetail->set('whse', $input->post->text('whse'));
+			$custID = CartQuote::get_cartcustid($sessionID);
+			// $cartdetail->set('whse', $input->post->text('whse'));
 			$cartdetail->set('qty', $qty);
 			$cartdetail->set('price', $input->post->text('price'));
-			$orderdetail->set('rshipdate', $input->post->text('rqstdate'));
+			$cartdetail->set('rshipdate', $input->post->text('rqstdate'));
 			$session->sql = $cartdetail->update();
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $linenbr);
 			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
@@ -210,18 +211,19 @@
 			$session->loc = $config->pages->cart;
 			break;
 		case 'remove-line':
-			$linenbr = $input->post->text('linenbr');
+			$linenbr = $input->get->text('line');
 			$cartdetail = CartDetail::load($sessionID, $linenbr);
 			$cartdetail->set('qty', '0');
 			$session->sql = $cartdetail->update();
 			$session->loc = $config->pages->cart;
 			$custID = get_custidfromcart(session_id());
-			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $input->post->text('linenbr'), 'QTY' => '0');
+			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'LINENO' => $linenbr, 'QTY' => '0');
 			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
 			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
 			break;
 		case 'empty-cart':
 			$data = array('DBNAME' => $config->dbName, 'EMPTYCART' => false);
+			$session->loc = $config->pages->cart;
 			break;
         case 'create-sales-order':
 			$data = array('DBNAME' => $config->dbName, 'CREATESO' => false);

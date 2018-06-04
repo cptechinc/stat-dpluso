@@ -1,7 +1,7 @@
 <hr class="detail-line-header">
 <div class="row detail-line-header">
 	<strong>
-		<div class="col-sm-9">
+		<div class="col-md-9">
 			<div class="row">
 				<div class="col-sm-4 sm-padding">Item / Description</div>
 				<div class="col-sm-1 text-left sm-padding">WH</div>
@@ -11,7 +11,7 @@
 				<div class="col-sm-2 sm-padding">Rqst Date</div>
 			</div>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-md-3">
 			<div class="row">
 				<div class="col-sm-6 sm-padding">Details</div>
 				<div class="col-sm-6 sm-padding">Edit</div>
@@ -29,7 +29,7 @@
 		<input type="hidden" name="linenbr" value="<?= $detail->linenbr; ?>">
 		<div>
 			<div class="row">
-				<div class="col-sm-9">
+				<div class="col-md-9">
 					<div class="row">
 						<div class="col-md-4 form-group sm-padding">
 							<span class="detail-line-field-name">Item/Description:</span>
@@ -76,7 +76,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-md-3">
 					<div class="row">
 						<div class="col-xs-6 sm-padding">
 							<h4 class="visible-xs-block">Details</h4>

@@ -1,7 +1,7 @@
 <hr class="detail-line-header">
 <div class="row detail-line-header">
 	<strong>
-		<div class="col-sm-9">
+		<div class="col-md-9 sm-padding">
 			<div class="row">
                 <div class="col-sm-1 sm-padding"><input type="checkbox" id="select-all">&nbsp;&nbsp;</div>
 				<div class="col-sm-3 sm-padding">Item / Description</div>
@@ -12,7 +12,7 @@
 				<div class="col-sm-2 sm-padding">Rqst Date</div>
 			</div>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-md-3 sm-padding">
 			<div class="row">
 				<div class="col-sm-6 sm-padding">Details</div>
 				<div class="col-sm-6 sm-padding">Edit</div>
@@ -30,7 +30,7 @@
 			<input type="hidden" name="linenbr" value="<?= $detail->linenbr; ?>">
 			<input type="hidden" name="page" value="<?= $page->fullURL->getUrl(); ?>">
 			<div class="row  detail-line">
-				<div class="col-sm-9">
+				<div class="col-md-9 sm-padding">
 					<div class="row">
 	                    <div class="col-sm-1 sm-padding">
 	                        <input type="checkbox" value="<?= $detail->linenbr; ?>" class="select-item" checked>
@@ -80,7 +80,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-md-3 sm-padding">
 					<div class="row">
 						<div class="col-xs-6 sm-padding">
 							<h4 class="visible-xs-block">Details</h4>

@@ -1,7 +1,7 @@
 <hr class="detail-line-header">
 <div class="row detail-line-header">
 	<strong>
-		<div class="col-sm-9">
+		<div class="col-md-9 sm-padding">
 			<div class="row">
 				<div class="col-sm-4 sm-padding">Item / Description</div>
 				<div class="col-sm-1 text-left sm-padding">WH</div>
@@ -11,7 +11,7 @@
 				<div class="col-sm-2 sm-padding">Rqst Date</div>
 			</div>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-md-3 sm-padding">
 			<div class="row">
 				<div class="col-sm-6 sm-padding">Details</div>
 				<div class="col-sm-6 sm-padding">Edit</div>
@@ -27,7 +27,7 @@
 		<input type="hidden" name="action" value="quick-update-line">
 		<input type="hidden" name="linenbr" value="<?= $detail->linenbr; ?>">
 		<div class="row">
-			<div class="col-sm-9 form-group">
+			<div class="col-md-9 form-group sm-padding">
 				<div class="row">
 					<div class="col-md-4 sm-padding form-group">
 						<span class="detail-line-field-name cart-item">Item/Description:</span>
@@ -74,7 +74,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-3 form-group">
+			<div class="col-md-3 form-group sm-padding">
 				<div class="row">
 					<div class="col-xs-6 sm-padding">
 						<h4 class="visible-xs-block">Details</h4>

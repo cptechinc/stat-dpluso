@@ -5,7 +5,12 @@
 	*
 	* */
 
-	$action = ($input->post->action ? $input->post->text('action') : $input->get->text('action'));
+	if ($input->requestMethod('POST')) {
+		$requestmethod = 'post';
+	} else {
+		$requestmethod = 'get';
+	}
+	$action = $input->$requestmethod->text('action');
 
 	// USED FOR MAINLY ORDER LISTING FUNCTIONS
 	$pagenumber = (!empty($input->get->page) ? $input->get->int('page') : 1);
@@ -295,13 +300,7 @@
 			break;
 		case 'add-to-order':
 			$itemID = $input->post->text('itemID');
-			if ($modules->isInstalled('QtyPerCase')) {
-				$qtypercase = $modules->get('QtyPerCase');
-				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
-			} else {
-				$qty = $input->post->text('qty');
-			}
-			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+			$qty = determine_qty($input, $requestmethod, $itemID); // TODO MAKE IN CART DETAIL
 			$ordn = $input->post->text('ordn');
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'SALEDET' => false, 'ORDERNO' => $ordn, 'ITEMID' => $itemID, 'QTY' => "$qty", 'CUSTID' => $custID);
@@ -354,14 +353,7 @@
 			$custID = get_custidfromorder(session_id(), $ordn);
 			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
 			// $orderdetail->set('whse', $input->post->text('whse'));
-			if ($modules->isInstalled('QtyPerCase')) {
-				$qtypercase = $modules->get('QtyPerCase');
-				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
-			} else {
-				$qty = $input->post->text('qty');
-			}
-			$session->qty = $input->post->text('qty');
-			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+			$qty = determine_qty($input, $requestmethod, $orderdetail->itemid); // TODO MAKE IN CART DETAIL
 			$orderdetail->set('qty', $qty);
 			$orderdetail->set('price', $input->post->text('price'));
 			$orderdetail->set('rshipdate', $input->post->text('rqstdate'));
@@ -381,13 +373,7 @@
 			$orderdetail = SalesOrderDetail::load(session_id(), $ordn, $linenbr);
 			$orderdetail->set('price', $input->post->text('price'));
 			$orderdetail->set('discpct', $input->post->text('discount'));
-			if ($modules->isInstalled('QtyPerCase')) {
-				$qtypercase = $modules->get('QtyPerCase');
-				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
-			} else {
-				$qty = $input->post->text('qty');
-			}
-			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+			$qty = determine_qty($input, $requestmethod, $orderdetail->itemid); // TODO MAKE IN CART DETAIL
 			$orderdetail->set('qty', $qty);
 			$orderdetail->set('rshipdate', $input->post->text('rqstdate'));
 			$orderdetail->set('whse', $input->post->text('whse'));

@@ -12,7 +12,12 @@
             $order = $orderdisplay->get_order();
             $page->title = 'Order #' . $ordn;
             $emailurl->query->set('printurl', $orderdisplay->generate_sendemailurl($order));
-			$page->body = $config->paths->content."print/orders/outline.php";
+
+			if ($modules->isInstalled('QtyPerCase')) {
+                $page->body = $config->paths->siteModules.'QtyPerCase/content/print/sales-order.php';
+            } else {
+                $page->body = $config->paths->content."print/orders/outline.php";
+            }
             break;
         case 'quote':
             $qnbr = $input->get->text('qnbr');
@@ -20,7 +25,12 @@
             $quote = $quotedisplay->get_quote();
             $page->title = 'Quote #' . $qnbr;
             $emailurl->query->set('printurl', $quotedisplay->generate_sendemailurl($quote));
-            $page->body = $config->paths->content."print/quotes/outline.php";
+            
+            if ($modules->isInstalled('QtyPerCase')) {
+                $page->body = $config->paths->siteModules.'QtyPerCase/content/print/quotes.php';
+            } else {
+                $page->body = $config->paths->content."print/quotes/outline.php";
+            }
             break;
     }
     

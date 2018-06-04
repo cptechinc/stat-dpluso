@@ -2,9 +2,13 @@
     $activetab = 'quotehead';
     if ($input->get->show) { $activetab = $input->get->text('show'); }
     $tabs = array(
-        'quotehead' => array('href' => 'quotehead', "id" => 'quotehead-link', 'text' => 'Quote Header', 'tabcontent' => 'edit/quotes/quotehead-form.php'),
-        'details' => array('href' => 'details', "id" => 'quotedetail-link', 'text' => 'Quote Details', 'tabcontent' => 'edit/quote-to-order/quote-details/details-page.php')
+        'quotehead' => array('href' => 'quotehead', "id" => 'quotehead-link', 'text' => 'Quote Header', 'tabcontent' => $config->paths->content.'edit/quotes/quotehead-form.php'),
+        'details' => array('href' => 'details', "id" => 'quotedetail-link', 'text' => 'Quote Details', $config->paths->content.'tabcontent' => 'edit/quote-to-order/quote-details/details-page.php')
     );
+
+    if ($modules->isInstalled('QtyPerCase')) {
+        $tabs['details']['tabcontent'] = $config->paths->siteModules.'QtyPerCase/content/edit/quote-to-order/details/details-page.php';
+    }
 ?>
 <?php if (!$editquotedisplay->canedit) : ?>
    <div class="row">
@@ -27,12 +31,12 @@
         <?php if ($tab == $tabs[$activetab]) : ?>
             <div class="tab-pane fade in active" id="<?= $tab['href']; ?>">
                 <br>
-                <?php include $config->paths->content.$tab['tabcontent']; ?>
+                <?php include $tab['tabcontent']; ?>
             </div>
         <?php else : ?>
             <div class="tab-pane fade" id="<?= $tab['href']; ?>">
                 <br>
-                <?php include $config->paths->content.$tab['tabcontent']; ?>
+                <?php include $tab['tabcontent']; ?>
             </div>
         <?php endif; ?>
     <?php endforeach; ?>

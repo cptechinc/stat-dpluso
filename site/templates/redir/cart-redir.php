@@ -6,41 +6,20 @@
 	*/
 
 	$custID = $shipID = '';
-	if ($input->post->action) {
-		$action = $input->post->text('action');
-		$itemID = $input->post->text('itemID');
 
-		if ($modules->isInstalled('QtyPerCase')) {
-			$qtypercase = $modules->get('QtyPerCase');
-			$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
-		} else {
-			$qty = $input->post->text('qty');
-		}
+	if ($input->requestMethod('POST')) {
+		$requestmethod = 'post';
 	} else {
-		$action = $input->get->text('action');
-		$itemID = $input->get->text('itemID');
-
-		if ($modules->isInstalled('QtyPerCase')) {
-			$qtypercase = $modules->get('QtyPerCase');
-			$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->get->text('bottle-qty'), $input->get->text('bottle-qty'));
-		} else {
-			$qty = $input->get->text('qty');
-		}
+		$requestmethod = 'get';
 	}
+	$action = $input->$requestmethod->text('action');
 
-	$qty = empty(trim($qty, '.')) ? 1 : $qty;
+	$custID = $input->$requestmethod->text('custID');
+	$shipID = $input->$requestmethod->text('shipID');
 
-	$custID = (!empty($input->post->custID) ? $input->post->text('custID') : $input->get->text('custID'));
-	$shipID = (!empty($input->post->shipID) ? $input->post->text('shipID') : $input->get->text('shipID'));
-	if (!empty($custID)) {$session->custID = $custID;}
-	if (!empty($shipID)) {$session->shipID = $shipID;}
-
-	if ($input->post->sessionID) {
-		$filename = $input->post->text('sessionID');
-		$sessionID = $input->post->text('sessionID');
-	} elseif ($input->get->sessionID) {
-		$filename = $input->get->text('sessionID');
-		$sessionID = $input->get->text('sessionID');
+	if ($input->$requestmethod->sessionID) {
+		$filename = $input->$requestmethod->text('sessionID');
+		$sessionID = $input->$requestmethod->text('sessionID');
 	} else {
 		$filename = session_id();
 		$sessionID = session_id();
@@ -108,6 +87,8 @@
 
     switch ($action) {
         case 'add-to-cart':
+			$itemID = $input->$requestmethod->text('itemID');
+			$qty = determine_qty($input, $requestmethod, $itemID); // TODO MAKE IN CART DETAIL
 			$data = array('DBNAME' => $config->dbName, 'CARTDET' => false, 'ITEMID' => $itemID, 'QTY' => "$qty");
 			$data['CUSTID'] = empty($custID) ? $config->defaultweb : $custID;
 			if (!empty($shipID)) {$data['SHIPTOID'] = $shipID; }
@@ -169,6 +150,7 @@
 		case 'quick-update-line':
 			$linenbr = $input->post->text('linenbr');
 			$cartdetail = CartDetail::load($sessionID, $linenbr);
+			$qty = determine_qty($input, $requestmethod, $cartdetail->itemid); // TODO MAKE IN CART DETAIL
 			$custID = CartQuote::get_cartcustid($sessionID);
 			// $cartdetail->set('whse', $input->post->text('whse'));
 			$cartdetail->set('qty', $qty);

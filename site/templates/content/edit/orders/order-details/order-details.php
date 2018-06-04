@@ -23,7 +23,7 @@
 
 <?php $order_details = $editorderdisplay->get_orderdetails($order) ?>
 <?php foreach ($order_details as $detail) : ?>
-	<form action="<?= $config->pages->orders.'redir/'; ?>" method="post" class="form-group">
+	<form action="<?= $config->pages->orders.'redir/'; ?>" method="post" class="form-group allow-enterkey-submit">
 		<input type="hidden" name="action" value="quick-update-line">
         <input type="hidden" name="ordn" value="<?= $ordn; ?>">
 		<input type="hidden" name="linenbr" value="<?= $detail->linenbr; ?>">

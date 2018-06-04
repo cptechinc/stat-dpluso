@@ -5,11 +5,14 @@
 	*
 	*/
 
-use Purl\Url;
+	if ($input->requestMethod('POST')) {
+		$requestmethod = 'post';
+	} else {
+		$requestmethod = 'get';
+	}
+	$action = $input->$requestmethod->text('action');
 
 
-	$action = ($input->post->action ? $input->post->text('action') : $input->get->text('action'));
-	$session->action = $action;
 	// USED FOR MAINLY ORDER LISTING FUNCTIONS
 	$pagenumber = (!empty($input->get->page) ? $input->get->int('page') : 1);
 	$sortaddon = (!empty($input->get->orderby) ? '&orderby=' . $input->get->text('orderby') : '');
@@ -219,13 +222,7 @@ use Purl\Url;
 		case 'add-to-quote':
 			$qnbr = $input->post->text('qnbr');
 			$itemID = $input->post->text('itemID');
-			if ($modules->isInstalled('QtyPerCase')) {
-				$qtypercase = $modules->get('QtyPerCase');
-				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
-			} else {
-				$qty = $input->post->text('qty');
-			}
-			$qty = empty(trim($qty, '.')) ? 1 : $qty;
+			$qty = determine_qty($input, $requestmethod, $itemID); // TODO MAKE IN CART DETAIL
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'ITEMID' => $itemID, 'QTY' => "$qty");
 			$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
 			$session->editdetail = true;
@@ -271,17 +268,9 @@ use Purl\Url;
 		case 'quick-update-line':
 			$qnbr = $input->post->text('qnbr');
 			$linenbr = $input->post->text('linenbr');
-			$custID = get_custidfromquote(session_id(), $qnbr);
-
-			if ($modules->isInstalled('QtyPerCase')) {
-				$qtypercase = $modules->get('QtyPerCase');
-				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
-			} else {
-				$qty = $input->post->text('qty');
-			}
-			$session->qty = $input->post->text('qty');
-			$qty = empty(trim($qty, '.')) ? 1 : $qty;
 			$quotedetail = QuoteDetail::load(session_id(), $qnbr, $linenbr);
+			$custID = get_custidfromquote(session_id(), $qnbr);
+			$qty = determine_qty($input, $requestmethod, $quotedetail->itemid); // TODO MAKE IN CART DETAIL
 			// $quotedetail->set('whse', $input->post->text('whse'));
 			$quotedetail->set('quotqty', $qty);
 			$quotedetail->set('ordrqty', $qty);
@@ -299,23 +288,11 @@ use Purl\Url;
 			$session->editdetail = true;
 			break;
 		case 'update-line':
-			if ($input->post) {
-				$qnbr = $input->post->text('qnbr');
-				$linenbr = $input->post->text('linenbr');
-			} else {
-				$qnbr = $input->get->text('qnbr');
-				$linenbr = $input->get->text('linenbr');
-			}
-
-			if ($modules->isInstalled('QtyPerCase')) {
-				$qtypercase = $modules->get('QtyPerCase');
-				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->post->text('bottle-qty'), $input->post->text('case-qty'));
-			} else {
-				$qty = $input->post->text('qty');
-			}
-			$qty = empty(trim($qty, '.')) ? 1 : $qty;
-
+			$qnbr = $input->$requestmethod->text('qnbr');
+			$linenbr = $input->$requestmethod->text('linenbr');
 			$quotedetail = QuoteDetail::load(session_id(), $qnbr, $linenbr);
+			$qty = determine_qty($input, $requestmethod, $quotedetail->itemid);
+
 			$quotedetail->set('quotprice', $input->post->text('price'));
 			$quotedetail->set('discpct', $input->post->text('discount'));
 			$quotedetail->set('quotqty', $qty);

@@ -276,6 +276,11 @@
 		border: none;
 		border-bottom: 1px solid #2c3e50;
 	}
+	input.underlined:focus {
+		background: transparent;
+		border: 3px solid #65cca9;
+		padding: 5px;
+	}
 
 	.form-control.underlined {
 		margin: 0;

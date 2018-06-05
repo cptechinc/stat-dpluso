@@ -102,7 +102,7 @@
 					</td>
 				</tr>
 			</table>
-			<div class="<?php if (!in_array($linedetail->spcord, $config->specialordercodes)) {echo 'hidden';} ?>">
+			<div class="<?php if (!in_array($linedetail->spcord, array_values($config->specialordercodes))) {echo 'hidden';} ?>">
 				<h4>Special Order Details</h4>
 				<table class="table table-bordered table-striped table-condensed">
 					<tr>

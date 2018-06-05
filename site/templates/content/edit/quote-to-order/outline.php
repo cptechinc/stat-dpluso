@@ -3,7 +3,7 @@
     if ($input->get->show) { $activetab = $input->get->text('show'); }
     $tabs = array(
         'quotehead' => array('href' => 'quotehead', "id" => 'quotehead-link', 'text' => 'Quote Header', 'tabcontent' => $config->paths->content.'edit/quotes/quotehead-form.php'),
-        'details' => array('href' => 'details', "id" => 'quotedetail-link', 'text' => 'Quote Details', $config->paths->content.'tabcontent' => 'edit/quote-to-order/quote-details/details-page.php')
+        'details' => array('href' => 'details', "id" => 'quotedetail-link', 'text' => 'Quote Details', 'tabcontent' => $config->paths->content.'edit/quote-to-order/quote-details/details-page.php')
     );
 
     if ($modules->isInstalled('QtyPerCase')) {

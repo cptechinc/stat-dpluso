@@ -1,4 +1,4 @@
-<form action="<?= $bookingspanel->pageurl->getUrl(); ?>" method="get" data-loadinto="#bookings-panel" data-focus="#bookings-panel" data-modal="#ajax-modal" class="orders-search-form">
+<form action="<?= $bookingspanel->pageurl->getUrl(); ?>" method="get" data-loadinto="#bookings-panel" data-focus="#bookings-panel" data-modal="#ajax-modal" class="orders-search-form allow-enterkey-submit">
 	<input type="hidden" name="filter" value="filter">
 	<div class="row">
 		<div class="col-sm-2">
@@ -6,7 +6,7 @@
 			<?php $name = 'bookdate[]'; $value = $bookingspanel->get_filtervalue('bookdate'); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">From Date </label>
-			
+
 			<?php $name = 'bookdate[]'; $value = $bookingspanel->get_filtervalue('bookdate', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>

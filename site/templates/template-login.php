@@ -17,7 +17,7 @@
 							<br>
 						<?php endif; ?>
 					<?php endif; ?>
-               		<form action="<?php echo $config->pages->account."redir/"; ?>" method="post">
+               		<form action="<?php echo $config->pages->account."redir/"; ?>" method="post" class="allow-enterkey-submit">
 						<input type="hidden" name="action" value="login">
 						<div class="input-group form-group">
 							<span class="input-group-addon not-round"><i class="glyphicon glyphicon-user"></i></span>

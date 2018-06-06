@@ -49,7 +49,7 @@
 			</div>
 		</div>
 		<div class="col-md-3 col-sm-3 hidden-print">
-			<form action="<?= $addtoform->action; ?>" method="post" id="<?= cleanforjs($item->itemid)."-form"; ?>">
+			<form action="<?= $addtoform->action; ?>" method="post" id="<?= cleanforjs($item->itemid)."-form"; ?>" class="allow-enterkey-submit">
 				<input type="hidden" name="action" value="<?= $addtoform->rediraction; ?>">
 				<input type="hidden" name="page" value="<?= $addtoform->returnpage; ?>">
 				<input type="hidden" name="itemID" value="<?= $item->itemid; ?>">

@@ -1,6 +1,6 @@
-<form action="<?= $quotepanel->pageurl->getUrl(); ?>" method="get" data-ordertype="quotes" data-loadinto="#quotes-panel" data-focus="#quotes-panel" data-modal="#ajax-modal" class="orders-search-form">
-    <input type="hidden" name="filter" value="filter"> 
-	
+<form action="<?= $quotepanel->pageurl->getUrl(); ?>" method="get" data-ordertype="quotes" data-loadinto="#quotes-panel" data-focus="#quotes-panel" data-modal="#ajax-modal" class="orders-search-form allow-enterkey-submit">
+    <input type="hidden" name="filter" value="filter">
+
 	<div class="row">
 		<div class="col-sm-2">
 			<h4>Quote # :</h4>

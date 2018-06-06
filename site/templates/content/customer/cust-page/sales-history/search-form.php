@@ -1,6 +1,6 @@
-<form action="<?= $orderpanel->pageurl->getUrl(); ?>" method="get" data-ordertype="sales-orders" data-loadinto="#cust-sales-history-panel" data-focus="#cust-sales-history-panel" data-modal="#ajax-modal" class="orders-search-form">
+<form action="<?= $orderpanel->pageurl->getUrl(); ?>" method="get" data-ordertype="sales-orders" data-loadinto="#cust-sales-history-panel" data-focus="#cust-sales-history-panel" data-modal="#ajax-modal" class="orders-search-form allow-enterkey-submit">
 	<input type="hidden" name="filter" value="filter">
-	
+
 	<div class="row">
 		<div class="col-sm-2">
 			<h4>Order #</h4>
@@ -31,7 +31,7 @@
 			<?php $name = 'orderdate[]'; $value = $orderpanel->get_filtervalue('orderdate'); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">From Date </label>
-			
+
 			<?php $name = 'orderdate[]'; $value = $orderpanel->get_filtervalue('orderdate', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>
@@ -41,7 +41,7 @@
 			<?php $name = 'invdate[]'; $value = $orderpanel->get_filtervalue('invdate'); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">From Date </label>
-			
+
 			<?php $name = 'invdate[]'; $value = $orderpanel->get_filtervalue('invdate', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>

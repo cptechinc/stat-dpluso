@@ -15,8 +15,6 @@ $(function() {
 		hidetoolbar();
     });
 
-	listener.simple_combo("n", function() {toggleshipto();});
-
 	$("body").on("submit", custlookupform, function(e) {
 		e.preventDefault();
 		var custID = $(this).find('.custID').val();
@@ -64,7 +62,7 @@ $(function() {
 			$('.show-notes').addClass('hidden');
 		}
 	});
-	
+
 	$("body").on("click", '.load-order-documents', function(e) {
 		e.preventDefault();
 		var custID = $(this).data('custid');
@@ -84,7 +82,7 @@ $(function() {
 			});
 		});
 	});
-	
+
 	$(window).resize(function() {
 		if ($(window).width() < 768) {
 			$('#show-toolbar').addClass('hidden');
@@ -92,7 +90,7 @@ $(function() {
 			$('#show-toolbar').removeClass('hidden');
 		}
 	});
-	
+
 	$('#contacts-div').on('shown.bs.collapse', function () {
 		if ($(this).data('tableloaded') === "no") {
 			$(this).data('tableloaded', "yes");
@@ -433,11 +431,11 @@ function choosecisaleshistoryitem(itemID) {
 
 function refreshshipto(shipID, custID) {
 	var href = URI(config.urls.customer.redir.ci_shiptoinfo).addQuery("custID", custID);
-	
+
 	if (shipID.trim() != '') {
 		href.addQuery('shipID', shipID);
 	}
-	
+
 	var location = href.toString();
 	window.location.href = location;
 }

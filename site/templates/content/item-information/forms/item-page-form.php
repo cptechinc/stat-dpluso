@@ -1,4 +1,4 @@
-<form action="<?php echo $config->pages->ajax."load/ii/search-results/modal/"; ?>" method="POST" id="ii-item-lookup">
+<form action="<?php echo $config->pages->ajax."load/ii/search-results/modal/"; ?>" method="POST" id="ii-item-lookup" class="allow-enterkey-submit">
     <input type="hidden" name="action" value="ii-item-lookup">
     <input type="hidden" name="custID" class="custID" value="<?= $custID; ?>">
     <input type="hidden" name="shipID" class="shipID" value="<?= $shipID; ?>">

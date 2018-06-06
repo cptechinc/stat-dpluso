@@ -6,7 +6,7 @@
     }
 
 ?>
-<form action="<?php echo $config->pages->products."redir/"; ?>" id="ii-sales-history-form" method="post">
+<form action="<?php echo $config->pages->products."redir/"; ?>" id="ii-sales-history-form" method="post" class="allow-enterkey-submit">
     <input type="hidden" name="action" value="ii-sales-history">
     <input type="hidden" name="itemID" value="<?php echo $itemID; ?>">
     <div class="row">

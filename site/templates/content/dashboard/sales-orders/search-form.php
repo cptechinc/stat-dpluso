@@ -1,18 +1,18 @@
-<form action="<?= $orderpanel->pageurl->getUrl(); ?>" method="get" data-ordertype="sales-orders" data-loadinto="#orders-panel" data-focus="#orders-panel" data-modal="#ajax-modal" class="orders-search-form">
+<form action="<?= $orderpanel->pageurl->getUrl(); ?>" method="get" data-ordertype="sales-orders" data-loadinto="#orders-panel" data-focus="#orders-panel" data-modal="#ajax-modal" class="orders-search-form allow-enterkey-submit">
 	<input type="hidden" name="filter" value="filter">
-	
+
 	<div class="row">
 		<div class="col-sm-2">
 			<h4>Order Status :</h4>
 			<label>New</label>
 			<input class="pull-right" type="checkbox" name="status[]" value="New" <?= ($orderpanel->has_filtervalue('status', 'New')) ? 'checked' : ''; ?>></br>
-			
+
 			<label>Invoice</label>
 			<input class="pull-right" type="checkbox" name="status[]" value="Invoice" <?= ($orderpanel->has_filtervalue('status', 'Invoice')) ? 'checked' : ''; ?>></br>
-			
+
 			<label>Pick</label>
 			<input class="pull-right" type="checkbox" name="status[]" value="Pick" <?= ($orderpanel->has_filtervalue('status', 'Pick')) ? 'checked' : ''; ?>></br>
-			
+
 			<label>Verify</label>
 			<input class="pull-right" type="checkbox" name="status[]" value="Verify" <?= ($orderpanel->has_filtervalue('status', 'Verify')) ? 'checked' : ''; ?>>
 		</div>
@@ -60,7 +60,7 @@
 			<?php $name = 'orderdate[]'; $value = $orderpanel->get_filtervalue('orderdate'); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">From Date </label>
-			
+
 			<?php $name = 'orderdate[]'; $value = $orderpanel->get_filtervalue('orderdate', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>

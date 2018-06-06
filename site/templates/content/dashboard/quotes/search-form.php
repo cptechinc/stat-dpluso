@@ -1,6 +1,6 @@
-<form action="<?= $quotepanel->pageurl->getUrl(); ?>" method="get" data-ordertype="quotes" data-loadinto="#quotes-panel" data-focus="#quotes-panel" data-modal="#ajax-modal" class="orders-search-form">
+<form action="<?= $quotepanel->pageurl->getUrl(); ?>" method="get" data-ordertype="quotes" data-loadinto="#quotes-panel" data-focus="#quotes-panel" data-modal="#ajax-modal" class="orders-search-form allow-enterkey-submit">
 	<input type="hidden" name="filter" value="filter">
-	
+
 	<div class="row">
 		<div class="col-sm-2">
 			<h4>Quote # :</h4>
@@ -42,7 +42,7 @@
 			<?php $name = 'quotdate[]'; $value = $quotepanel->get_filtervalue('quotdate'); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">From Date </label>
-			
+
 			<?php $name = 'quotdate[]'; $value = $quotepanel->get_filtervalue('quotdate', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>
@@ -52,7 +52,7 @@
 			<?php $name = 'revdate[]'; $value = $quotepanel->get_filtervalue('revdate'); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">From Date </label>
-			
+
 			<?php $name = 'revdate[]'; $value = $quotepanel->get_filtervalue('revdate', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>
@@ -62,7 +62,7 @@
 			<?php $name = 'expdate[]'; $value = $quotepanel->get_filtervalue('expdate'); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">From Date </label>
-			
+
 			<?php $name = 'expdate[]'; $value = $quotepanel->get_filtervalue('expdate', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>

@@ -5,7 +5,7 @@ if (trim($iiconfig['activity']['date-options']['start-date']) != '') {
     $date = date("m/d/y", strtotime("-".$iiconfig['activity']['date-options']['days-back']." day"));
 }
 ?>
-<form action="<?php echo $config->pages->products."redir/"; ?>" id="ii-item-activity-form" method="post">
+<form action="<?php echo $config->pages->products."redir/"; ?>" id="ii-item-activity-form" method="post" class="allow-enterkey-submit">
     <input type="hidden" name="action" value="ii-activity">
     <input type="hidden" name="itemID" value="<?php echo $itemID; ?>">
     <div class="row">

@@ -5,25 +5,25 @@
 		protected $title = 'Customer Screen';
 		protected $datafilename = 'cicustomer'; // iisaleshist.json
 		protected $testprefix = 'cicust'; // iish
-		
-		
+
+
 		public function generate_screen() {
 			$content = '';
-			
+
 			if (sizeof($this->json['data']) > 0) {
-				
+
 			} else {
-				$content = $page->bootstrap->createalert('warning', 'Information Not Available'); 
+				$content = $page->bootstrap->createalert('warning', 'Information Not Available');
 			} // END if (sizeof($this->json['data']) > 0)
 			return $content;
 		}
-		
+
 		public function generate_customertable(Customer $customer) {
 			$bootstrap = new Contento();
 			$tb = new Table("class=table table-striped table-bordered table-condensed table-excel");
 			foreach (array_keys($this->json['columns']['top']) as $column) {
 				if ($this->json['columns']['top'][$column]['heading'] == '' && $this->json['data']['top'][$column] == '') {
-					
+
 				} else {
 					$tb->tr();
 					$tb->td('', $this->json['columns']['top'][$column]['heading']);
@@ -40,16 +40,16 @@
 			}
 			return $tb->close();
 		}
-		
+
 		public function generate_shiptotable(Customer $customer) {
 			$bootstrap = new Contento();
 			$tb = new Table("class=table table-striped table-bordered table-condensed table-excel");
 			foreach (array_keys($this->json['columns']['top']) as $column) {
 				if ($this->json['columns']['top'][$column]['heading'] == '' && $this->json['data']['top'][$column] == '') {
-					
+
 				} else {
 					$tb->tr();
-					
+
 					if ($column == 'customerid') {
 						$attr = (!$customer->has_shipto()) ? 'value= |selected' : 'value= ';
 						$options = $bootstrap->option($attr, 'No Shipto Selected');
@@ -69,10 +69,10 @@
 			}
 			return $tb->close();
 		}
-		
+
 		public function generate_pageform(Customer $customer) {
 			$action = Dpluswire::wire('config')->pages->ajax."load/customers/cust-index/";
-			$form = new FormMaker("action=$action|method=POST|id=ci-cust-lookup");
+			$form = new FormMaker("action=$action|method=POST|id=ci-cust-lookup|class=allow-enterkey-submit");
 			$form->input("type=hidden|name=action|value=ci-item-lookup");
 			$form->input("type=hidden|name=shipID|class=shipID|value=$customer->shipID");
 			$form->input("type=hidden|name=nextshipID|class=nextshipID|value=".$customer->get_nextshiptoid());
@@ -82,12 +82,12 @@
 			$form->add($form->bootstrap->div('class=input-group custom-search-form', $input.$span));
 			return $form->finish();
 		}
-		
+
 		public function generate_tableleft() {
 			$tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
 			foreach (array_keys($this->json['columns']['left']) as $column) {
 				if ($this->json['columns']['left'][$column]['heading'] == '' && $this->json['data']['left'][$column] == '') {
-					
+
 				} else {
 					$tb->tr();
 					$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['left'][$column]['headingjustify']];
@@ -97,7 +97,7 @@
 			}
 			return $tb->close();
 		}
-		
+
 		public function generate_tableright() {
 			$tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
 			foreach (array('activity', 'saleshistory') as $section) {
@@ -119,7 +119,7 @@
 					$tb->tr('class=last-section-row')->td('colspan='.sizeof(array_keys($this->json['data']['right'][$section][$row])), '&nbsp;');
 				}
 			}
-			
+
 			foreach(array_keys($this->json['data']['right']['misc']) as $misc) {
 				if ($misc != 'rfml') {
 					$tb->tr();

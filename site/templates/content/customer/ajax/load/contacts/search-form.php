@@ -1,4 +1,4 @@
-<form action="<?= $config->pages->ajax."load/customers/contacts/"; ?>" method="POST" id="cust-contact-search-form">
+<form action="<?= $config->pages->ajax."load/customers/contacts/"; ?>" method="POST" id="cust-contact-search-form" class="allow-enterkey-submit">
 	<input type="hidden" name="custID" value="<?= $input->get->text('custID'); ?>">
 	<input type="hidden" name="shipID" value="<?= $input->get->text('shipID'); ?>">
     <div class="form-group">

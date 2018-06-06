@@ -13,34 +13,11 @@
 					<div id="shipto-sales-graph"></div>
 				</div>
 				<div class="col-sm-7">
-					<table class="table table-striped table-bordered table-condensed table-excel" id="legend-table">
-						<thead>
-							<tr>
-								<th>Color</th> <th>Shiptoid</th> <th>Name</th> <th>Times Sold</th> <th>Amount</th> <th>Last Sale Date</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ($topshiptos as $shipto) : ?>
-								<?php $location = Customer::load($customer->custid, $shipto['shiptoid']); ?>
-								<?php
-									if ($location) {
-										$data[] = $location->generate_piesalesdata($shipto['amountsold']);
-									} else {
-										$data[] = array(
-											'label' => $customer->custid . ' - ' . $shipto['shiptoid'],
-											'value' => $shipto['amountsold'],
-											'custid' => $customer->custid,
-											'shiptoid' => $shipto['shiptoid']
-										);
-									}
-								?>
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-condensed table-excel" id="legend-table">
+							<thead>
 								<tr>
-									<td id="<?= $shipto['shiptoid'].'-shipto'; ?>"></td>
-									<td><?= $shipto['shiptoid']; ?></td>
-									<td><?= $location ? $location->get_name() : 'Unknown Name'; ?></td>
-									<td class="text-right"><?= $shipto['timesold']; ?></td>
-									<td class="text-right">$ <?= $page->stringerbell->format_money($shipto['amountsold']); ?></td>
-									<td class="text-right"><?= $shipto['lastsaledate'] == 0 ? '' : DplusDateTime::format_date($shipto['lastsaledate']); ?></td>
+									<th>Color</th> <th>Shiptoid</th> <th>Name</th> <th>Times Sold</th> <th>Amount</th> <th>Last Sale Date</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -73,7 +50,7 @@
 				data: <?= json_encode($data); ?>,
 				colors: <?= json_encode(array_rand(array_flip($config->allowedcolors), 25)); ?>
 			});
-
+			
 			pie.options.data.forEach(function(label, i) {
 				var index = i;
 				if (pie.options.colors.length < 11) {
@@ -86,9 +63,6 @@
 				$('#legend-table').find('#'+label['shiptoid']+'-shipto').css('backgroundColor', pie.options.colors[index]);
 			});
 		<?php endif; ?>
-<<<<<<< HEAD
-=======
-
->>>>>>> 87a916f0... Merge pull request #164 from cptechinc/test-fixes
+		
 	});
 </script>

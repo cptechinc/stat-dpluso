@@ -2902,6 +2902,7 @@
 			return $q->generate_sqlquery();
 		} else {
 			if ($detail->has_changes()) {
+				echo $q->generate_sqlquery($q->params);
 				$sql->execute($q->params);
 			}
 			return $q->generate_sqlquery($q->params);
@@ -3674,7 +3675,7 @@
 	function get_bookingtotalsbyshipto($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
 		$q = (new QueryBuilder())->table('bookingc');
 		$q->where('custid', $custID);
-		
+
 		if (!empty($shipID)) {
 			$q->where('shiptoid', $shipID);
 		}

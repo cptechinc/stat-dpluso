@@ -156,8 +156,7 @@
 		 */
 		public function has_changes() {
 			$properties = array_keys(get_object_vars($this));
-			$detail = self::load($this->sessionid, $this->linenbr, $this->orderno, false);
-
+			$detail = self::load($this->sessionid, $this->orderno, $this->linenbr);
 			foreach ($properties as $property) {
 				if ($this->$property != $detail->$property) {
 					return true;

@@ -36,6 +36,7 @@ $(function() {
             });
         } else {
             form.postform({}, function() {
+                showajaxloading();
                 generateurl(function(url) {
                     window.location.href = url;
                 });

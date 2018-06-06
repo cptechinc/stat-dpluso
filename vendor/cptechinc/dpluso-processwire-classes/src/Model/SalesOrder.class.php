@@ -64,14 +64,34 @@
 		public function has_notes() {
 			return $this->hasnotes == 'Y' ? true : false;
 		}
-
+		
+		/**
+		 * Returns if the user can edit this order
+		 * 1. Checks if the Sales Orders can be edited at all
+		 * 2. Checks if the User has the permissions to edit orders
+		 * 3. Checks if Sales Order is able to be edited
+		 * 4. Checks if the Sales Order was just created
+		 * @return bool Can Order Be edited by user?
+		 * @uses DplusWire::wire('session')->createdorder
+		 */
 		public function can_edit() {
-			$config = Dpluswire::wire('pages')->get('/config/')->child("name=sales-orders");
-			$allowed = $config->allow_edit;
+			$config = DplusWire::wire('pages')->get('/config/')->child("name=sales-orders");
+			$config->allow_edit;
+			$user_permitted = has_dpluspermission(DplusWire::wire('user')->loginid, 'eso');
+			$can_edit = $this->editord == 'Y' ? true : false;
+			
+			// Can edit Sales Orders Config
 			if ($config->allow_edit) {
-				$allowed = has_dpluspermission(wire('user')->loginid, 'eso');
+				if ($user_permitted) {
+					return $can_edit;
+				} else {
+					return false;
+				}
+			} elseif ($this->orderno == DplusWire::wire('session')->get('createdorder')) {
+				return true;
+			} else {
+				return false;
 			}
-			return $allowed ? ($this->editord == 'Y' ? true : false) : false;
 		}
 
 		public function is_phoneintl() {

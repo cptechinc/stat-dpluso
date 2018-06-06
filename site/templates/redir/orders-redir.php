@@ -233,9 +233,10 @@
 			$data = array('DBNAME' => $config->dbName, 'ORDDOCS' => $ordn, 'CUSTID' => $custID);
 			break;
 		case 'edit-new-order':
-			if ($session->custID) { $custID = $session->custID; } else { $custID = $config->defaultweb; }
 			$ordn = get_createdordn(session_id());
+			$custID = get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'ORDRDET' => $ordn, 'CUSTID' => $custID, 'LOCK' => false);
+			$session->createdorder = $ordn;
 			$session->loc = $config->pages->edit.'order/?ordn=' . $ordn;
 			break;
 		case 'update-orderhead':
@@ -294,6 +295,7 @@
 			if ($input->post->exitorder) {
 				$session->loc = $config->pages->orders."redir/?action=unlock-order&ordn=$ordn";
 				$data['UNLOCK'] = false;
+				$session->remove('createdorder');
 			} else {
 				$session->loc = $config->pages->editorder."?ordn=$ordn";
 			}
@@ -436,6 +438,7 @@
 		case 'unlock-order':
 			$ordn = $input->get->text('ordn');
 			$data = array('DBNAME' => $config->dbName, 'UNLOCK' => false, 'ORDERNO' => $ordn);
+			$session->remove('createdorder');
 			$session->loc = $config->pages->confirmorder."?ordn=$ordn";
 			break;
 		default:

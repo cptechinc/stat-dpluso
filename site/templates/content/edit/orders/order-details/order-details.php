@@ -87,9 +87,11 @@
 
     					<div class="col-xs-6 sm-padding">
                             <h4 class="visible-xs-block">Edit</h4>
-							<button type="submit" name="button" class="btn btn-sm btn-info detail-line-icon" title="Save Changes">
-								<span class="fa fa-floppy-o"></span> <span class="sr-only">Save Line</span>
-							</button>
+							<?php if ($order->can_edit()) : ?>
+								<button type="submit" name="button" class="btn btn-sm btn-info detail-line-icon" title="Save Changes">
+									<span class="fa fa-floppy-o"></span> <span class="sr-only">Save Line</span>
+								</button>
+							<?php endif; ?>
                             <?= $editorderdisplay->generate_detailvieweditlink($order, $detail); ?>
                             <?= $editorderdisplay->generate_deletedetaillink($order, $detail); ?>
     					</div>

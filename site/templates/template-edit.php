@@ -19,6 +19,7 @@
 					$config->scripts->append(hashtemplatefile('scripts/edit/card-validate.js'));
 					$config->scripts->append(hashtemplatefile('scripts/edit/edit-orders.js'));
 					$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
+					$config->scripts->append(hashtemplatefile('scripts/edit/quick-entry.js'));
 					$page->body = $config->paths->content."edit/orders/outline.php";
 					$itemlookup->set_customer($order->custid, $order->shiptoid);
 					$itemlookup = $itemlookup->set_ordn($ordn);
@@ -39,6 +40,7 @@
 				$page->body = $config->paths->content."edit/quotes/outline.php";
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-quotes.js'));
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
+				$config->scripts->append(hashtemplatefile('scripts/edit/quick-entry.js'));
 				$itemlookup->set_customer($quote->custid, $quote->shiptoid);
 				$itemlookup = $itemlookup->set_qnbr($qnbr);
 				$formconfig = new FormFieldsConfig('quote');
@@ -57,6 +59,7 @@
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-quotes.js'));
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-quote-to-order.js'));
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
+				$config->scripts->append(hashtemplatefile('scripts/edit/quick-entry.js'));
 				$itemlookup->set_customer($quote->custid, $quote->shiptoid);
 				$itemlookup = $itemlookup->set_qnbr($qnbr);
 				$formconfig = new FormFieldsConfig('quote');

@@ -10,6 +10,7 @@
         $noteurl = $config->pages->notes.'redir/?action=get-cart-notes';
         $config->scripts->append(hashtemplatefile('scripts/pages/cart.js'));
     	$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
+        $config->scripts->append(hashtemplatefile('scripts/edit/quick-entry.js'));
     	$page->body = $config->paths->content.'cart/cart-outline.php';
     } else {
         $page->pagetitle = 'Choose a Customer';

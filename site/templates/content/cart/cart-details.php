@@ -23,9 +23,10 @@
 
 <?php $details = get_cartdetails(session_id(), true); ?>
 <?php foreach ($details as $detail) : ?>
-	<form action="<?= $config->pages->cart.'redir/'; ?>" method="post" class="form-group allow-enterkey-submit">
+	<form action="<?= $config->pages->cart.'redir/'; ?>" method="post" class="form-group detail allow-enterkey-submit">
 		<input type="hidden" name="action" value="quick-update-line">
 		<input type="hidden" name="linenbr" value="<?= $detail->linenbr; ?>">
+		<input type="hidden" name="min-price" value="<?= $detail->minprice; ?>">
 		<div class="row">
 			<div class="col-md-9 form-group sm-padding">
 				<div class="row">
@@ -42,26 +43,27 @@
 								<br> <small><div class="form-group"><?= $detail->desc1; ?></div></small>
 							<?php endif; ?>
 						</div>
+						<div class="response"></div>
 					</div>
 					<div class="col-md-1 sm-padding form-group">
 						<span class="detail-line-field-name">WH:</span>
-						<span class="detail-line-field numeric"><?= $detail->whse; ?></span>
+						<p class="form-control-static"><span class="detail-line-field numeric"><?= $detail->whse; ?></span></p>
 					</div>
 					<div class="col-md-1 sm-padding form-group">
 						<span class="detail-line-field-name">Qty:</span>
 						<span class="detail-line-field numeric">
-							<input class="form-control input-xs text-right underlined" type="text" size="6" name="qty" value="<?= $detail->qty + 0; ?>">
+							<input class="form-control input-xs text-right underlined calculates-price" type="text" size="6" name="qty" value="<?= $detail->qty + 0; ?>">
 						</span>
 					</div>
 					<div class="col-md-2 sm-padding form-group">
 						<span class="detail-line-field-name">Price:</span>
 						<span class="detail-line-field numeric">
-							<input class="form-control input-xs text-right underlined" type="text" size="10" name="price" value="<?= $page->stringerbell->format_money($detail->price); ?>">
+							<input class="form-control input-xs text-right underlined calculates-price" type="text" size="10" name="price" value="<?= $page->stringerbell->format_money($detail->price); ?>">
 						</span>
 					</div>
 					<div class="col-md-2 sm-padding form-group">
 						<span class="detail-line-field-name">Total:</span>
-						<span class="detail-line-field numeric">$ <?= $page->stringerbell->format_money($detail->totalprice); ?></span>
+						<p class="form-control-static"><span class="detail-line-field numeric ">$ <span class="total-price"><?= $page->stringerbell->format_money($detail->totalprice); ?></span></span></p>
 					</div>
 					<div class="col-md-2 sm-padding form-group">
 						<span class="detail-line-field-name">Rqst Date:</span>

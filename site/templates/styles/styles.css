@@ -289,6 +289,12 @@
 		padding-top: 10px;
 	}
 
+	input.price-error {
+		background: transparent;
+		border: 3px solid #FF0000;
+		padding: 5px;
+	}
+
 /*==============================================================
 	BILLING STYLES
 ==============================================================*/

@@ -10,6 +10,7 @@
 				<?php if ($user->loggedin) : ?>
 					<li class="welcome"><a href="#">Welcome, <?= $user->fullname ?></a> </li>
 				<?php endif; ?>
+				<li> <a href="#"><?= $appconfig->companydisplayname; ?></a> </li>
 
 				<li> <a href="<?= $config->pages->index; ?>"><i class="glyphicon glyphicon-home"></i> Home</a> </li>
 				<?php if ($config->cptechcustomer != 'stat') : ?>
@@ -34,11 +35,11 @@
 				<li class="divider"></li>
 
 				<?php if ($user->loggedin) : ?>
-				<li class="logout">
-					<a href="<?= $config->pages->account; ?>redir/?action=logout" class="logout">
-						<span class="glyphicon glyphicon-log-out"></span> Logout
-					</a>
-				</li>
+					<li class="logout">
+						<a href="<?= $config->pages->account; ?>redir/?action=logout" class="logout">
+							<span class="glyphicon glyphicon-log-out"></span> Logout
+						</a>
+					</li>
 				<?php endif; ?>
 			</ul>
 		</nav>

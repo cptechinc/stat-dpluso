@@ -17,7 +17,7 @@
         <table id="cust-index" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th width="100">CustID</th> <th>Customer Name</th> <th>Ship-To</th> <th>Location</th><th width="100">Phone</th>
+                    <th width="100">CustID</th> <th>Customer Name</th> <th>Ship-To</th> <th>Location</th><th width="100">Phone</th><th>Last Sale Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +33,7 @@
                             <td><?= $page->stringerbell->highlight($cust->shiptoid, $input->get->q); ?></td>
                             <td><?= $page->stringerbell->highlight($cust->generate_address(), $input->get->q); ?></td>
                             <td><a href="tel:<?= $cust->phone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->phone, $input->get->q); ?></a></td>
+                            <td class="text-right"><?= DplusDateTime::format_date($cust->get_lastsaledate($user->loginid)); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else : ?>

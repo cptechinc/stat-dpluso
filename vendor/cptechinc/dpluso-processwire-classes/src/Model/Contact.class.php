@@ -165,6 +165,10 @@
 		public function is_ackcontact() {
 			return ($this->ackcontact == 'Y') ? true : false;
 		}
+        
+        public function get_lastsaledate($userID = '', $debug = false) {
+            return get_lastsaledate($this->custid, $this->shiptoid, $userID, $debug);
+        }
 		
 		/* =============================================================
 			SETTER FUNCTIONS 

@@ -1,9 +1,9 @@
-<?php $contacts = search_customerbuyersendusers($user->loginid, $input->get->text('q'), $custID, $shipID); ?>
+<?php $contacts = search_customerbuyersendusers($custID, $shipID, $input->get->text('q')); ?>
 <div id="contact-results">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered" id="contacts-table">
-			<thead> 
-				<tr> <th>Shipto</th> <th>Name</th> <th>Title</th> <th>Phone</th> <th>Fax</th> <th>Email</th> <th>Contact Type</th> </tr> 
+			<thead>
+				<tr> <th>Shipto</th> <th>Name</th> <th>Title</th> <th>Phone</th> <th>Fax</th> <th>Email</th> <th>Contact Type</th> </tr>
 			</thead>
 			<tbody>
 				<?php foreach ($contacts as $contact) : ?>

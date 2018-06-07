@@ -1,7 +1,7 @@
 <?php
     function renderNavTree($items, $maxDepth = 3) {
     	// if we've been given just one item, convert it to an array of items
-    	// 
+    	//
     	if($items instanceof \Processwire\Page) $items = array($items);
     	// if there aren't any items to output, exit now
     	if(!count($items)) return;
@@ -29,28 +29,28 @@
     	// end our <ul> markup
     	echo "</div>";
     }
-    
+
     function generate_documentationmenu(\Processwire\Page $page, $maxdepth = 4) {
         $page = Processwire\wire('pages')->get('/documentation/');
-        
+
         if (Processwire\wire('page')->id == $page->id) {
             generate_documentationsubmenu($page, 1);
         } else {
             generate_documentationsubmenu($page, $maxdepth);
         }
     }
-    
+
     function generate_documentationsubmenu($items, $maxdepth) {
         if ($items instanceof \Processwire\Page) $items = array($items);
     	// if there aren't any items to output, exit now
     	if (!count($items)) return;
-        
+
         $parents = array();
         foreach(Processwire\wire('page')->parents as $parent) {
             $parents[] = $parent->id;
         }
-        
-        
+
+
         echo "<ul class='list-unstyled docs-nav'>";
     	// cycle through all the items
     	foreach ($items as $item) {
@@ -67,8 +67,8 @@
         			echo "<li><a href='$item->url'>$item->title</a></li>";
         		}
             }
-    		
-            
+
+
             if (in_array($item->id, $parents)) {
                 if ($item->hasChildren() && $maxdepth) {
         			generate_documentationsubmenu($item->children, $maxdepth-1);
@@ -78,7 +78,7 @@
         			generate_documentationsubmenu($item->children, $maxdepth-1);
         		}
             }
-            
+
     		// close the list item
     		//echo "</li>";
     	}
@@ -97,7 +97,7 @@
     	}
     	return $string;
      }
- 
+
      function ordinal($number) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
 		if ((($number % 100) >= 11) && (($number%100) <= 13))
@@ -122,7 +122,7 @@
                 break;
         }
     }
-	
+
 	function strToHex($string){ // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		$hex = '';
 		for ($i=0; $i<strlen($string); $i++){
@@ -140,7 +140,7 @@
 		}
 		return $string;
 	}
-	
+
 	function formatmoney($amt) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		return number_format($amt, 2, '.', ',');
 	}
@@ -153,23 +153,11 @@
 	function formatphone($number) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		return preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '$1-$2-$3', $number);
 	}
-	
+
 	function cleanforjs($str) {// DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		return urlencode(str_replace(' ', '-', str_replace('#', '', $str)));
 	}
 
-	function determine_qty(Processwire\WireInput $input, $requestmethod, $itemID) {
-        if (DplusWire::wire('modules')->isInstalled('QtyPerCase')) {
-            $qtypercase = DplusWire::wire('modules')->get('QtyPerCase');
-            if (!empty($itemID)) {
-                $qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->$requestmethod->text('bottle-qty'), $input->$requestmethod->text('case-qty'));
-            }
-        } else {
-            $qty = $input->$requestmethod->text('qty');
-        }
-        return $qty = empty(trim($qty, '.')) ? 1 : $qty;
-    }
-	
 /* =============================================================
    URL FUNCTIONS
  ============================================================ */
@@ -209,7 +197,7 @@
 		}
 		return $link;
 	}
-	
+
  /* =============================================================
    DB FUNCTIONS
  ============================================================ */
@@ -225,7 +213,7 @@
 		}
 		return $sql;
 	}
-	
+
 	function returnlimitstatement($limit, $page) {
 		if ($limit) {
 			if ($page > 1 ) {$start_point = ($page * $limit) - $limit; } else { $start_point = 0; }
@@ -348,7 +336,7 @@
 		$time = strval($hr) . $colon . $time[1].' '.$partofDay;
 		return $time;
 	}
-	
+
 /* =============================================================
   FILE FUNCTIONS
 ============================================================ */
@@ -371,7 +359,7 @@
 		fwrite($handle, $file);
 		fclose($handle);
 	}
-	
+
 	function writedataformultitems($data, $items, $qtys) {
 		for ($i = 0; $i < sizeof($items); $i++) {
 			$itemID = str_pad(Processwire\wire('sanitizer')->text($items[$i]), 30, ' ');
@@ -381,7 +369,7 @@
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * [convertfiletojson description]
 	 * @param  [string] $file [String that contains file location]
@@ -393,12 +381,12 @@
 		$json = utf8_clean($json);
 		return $json;
 	}
-	
+
 	function hashtemplatefile($filename) {
 		$hash = hash_file(Processwire\wire('config')->userAuthHashType, Processwire\wire('config')->paths->templates.$filename);
 		return Processwire\wire('config')->urls->templates.$filename.'?v='.$hash;
 	}
-	
+
 	function curl_redir($url) {
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
@@ -408,7 +396,7 @@
 		));
 		return curl_exec($curl);
 	}
-	
+
 	function curl_post($url, $fields) {
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
@@ -424,25 +412,25 @@
  /* =============================================================
    PROCESSWIRE USER FUNCTIONS
  ============================================================ */
-	function setupuser($sessionID) {
+	function setup_user($sessionID) {
 		$loginrecord = get_loginrecord($sessionID);
         $loginID = $loginrecord['loginid'];
-        $user = get_logmuser($loginID);
+        $user = LogmUser::load($loginID);
 		DplusWire::wire('user')->fullname = $loginrecord['loginname'];
 		DplusWire::wire('user')->loginid = $loginrecord['loginid'];
 		DplusWire::wire('user')->hascontactrestrictions = $loginrecord['restrictcustomer'];
 		DplusWire::wire('user')->hasrestrictions = $loginrecord['restrictuseraccess'];
 		DplusWire::wire('user')->salespersonid = $loginrecord['salespersonid'];
-    
+        DplusWire::wire('user')->addRole($user->get_dplusrole());
 	}
-    
+
     /**
     	 * Trigger a PHP error, warning, or notice. Automatically prepends 'CP-DPLUSO' for easier management. Note
     	 * that fatal errors (E_USER_ERROR) will prevent further processing.
-    	 * 
+    	 *
     	 * @param    string    $error          Error message (max 1024 characters)
     	 * @param    integer   $level          PHP error level, from PHP's E_USER constants
-    	 * 
+    	 *
     	 * @return   null
     	 */
     	function error($error, $level = E_USER_ERROR) {

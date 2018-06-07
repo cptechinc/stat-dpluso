@@ -2,11 +2,10 @@
 	include $config->paths->content."customer/ajax/load/index/search-index-form.php";
 	$custID = '';
 	$custlink = $config->pages->customer."redir/?action=ci-select";
-	
+
 	if ($input->get->q) {
-		$custresults = search_custindexpaged($user->loginid, $config->showonpage, $input->pageNum, $user->hascontactrestrictions, $input->get->text('q'),  false);
-		//$custresults = search_custindex_keyword_paged($user->loginid, $config->showonpage, $input->pageNum, $user->hascontactrestrictions, $input->get->text('q'),  false);
-		$resultscount = count_searchcustindex($user->loginid, $user->hascontactrestrictions, $input->get->text('q'), false);
+		$custresults = search_custindexpaged($input->get->text('q'), $config->showonpage, $input->pageNum);
+		$resultscount = count_searchcustindex($input->get->text('q'));
 	}
 ?>
 <div class="list-group" id="cust-results">

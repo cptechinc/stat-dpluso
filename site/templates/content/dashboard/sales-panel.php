@@ -1,5 +1,5 @@
 <?php
-	$customers = get_topxsellingcustomers(session_id(), 25);
+	$customers = get_topxsellingcustomers(25);
 	$data = array();
 ?>
 <div class="panel panel-primary not-round" id="customer-sales-panel">

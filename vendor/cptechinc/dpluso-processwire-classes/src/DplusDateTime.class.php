@@ -7,7 +7,7 @@
 		static $defaulttime = 'h:i A';
 		static $fulltimestring = 'YmdHisu';
 		static $shorttimestring = 'Hi';
-		
+
 	/**
 	 * [format_dplustime description]
 	 * @param  string $time          time string ex 16063372
@@ -19,7 +19,7 @@
 			$formatted = DateTime::createFromFormat($currentformat, $time);
 			return $formatted->format($desiredformat);
 		}
-		
+
 		/**
 		 * Formats Date
 		 * @param  string $date         date in whatever format provided
@@ -27,9 +27,9 @@
 		 * @return string               formatted result
 		 */
 		public static function format_date($date, $formatstring = 'm/d/Y') {
-			return (strtotime($date) == strtotime("12/31/1969")) ? '' : date($formatstring, strtotime($date));
+			return (strtotime($date) == strtotime("12/31/1969") || empty($date)) ? '' : date($formatstring, strtotime($date));
 		}
-		
+
 		/**
 		 * Subtract two dates from each other
 		 * after converting them into timestring

@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$config->yesnoarray = array('No' => 'N', 'Yes' => 'Y');
 	$config->buyertypes = array('P' => 'Primary', 'Y' => 'Yes', 'N' => 'No');
 	$config->nonstockitems = array('N');
@@ -28,3 +28,8 @@
 		'vi' => 'VI'
 	);
 	$config->specialordercodes = array('"special_order" => "S", "dropship" => "D"');
+
+	$config->roles = array(
+		'sales-rep' => 'slsrep',
+		'sales-manager' => 'slsmgr'
+	);

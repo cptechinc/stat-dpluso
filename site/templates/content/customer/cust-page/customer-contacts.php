@@ -1,10 +1,9 @@
-<?php $contacts = get_customercontacts($user->loginid, $user->hascontactrestrictions, $custID, false); ?>
 <div class="panel panel-primary not-round" id="contacts-panel">
     <div class="panel-heading not-round">
         <a href="#contacts-div" class="panel-link" data-parent="#contacts-panel" data-toggle="collapse" >
 			<i class="fa fa-address-book" aria-hidden="true"></i> &nbsp; Customer Contacts <span class="caret"></span>
 		</a> &nbsp;
-		<span class="badge"><?= count_customercontacts($user->loginid, $user->hascontactrestrictions, $custID, false); ?></span> 
+		<span class="badge"><?= $customer->count_contacts(); ?></span>
 		<a href="<?= $customer->generate_addcontacturl(); ?>" class="btn btn-info btn-xs pull-right hidden-print"><i class="fa fa-plus-square" aria-hidden="true"></i> <span class="sr-only">Add Contact</span></a>
     </div>
     <div id="contacts-div" class="collapse" data-tableloaded="no" data-shipid="<?= $shipID; ?>">
@@ -28,11 +27,11 @@
         </div>
         <div class="table-responsive">
             <table class="table table-striped table-bordered" id="contacts-table">
-                <thead> 
-					<tr> <th>Name</th> <th>Shipto</th> <th>Title</th> <th>Phone</th> <th>Email</th> <th>Contact Type</th> </tr> 
+                <thead>
+					<tr> <th>Name</th> <th>Shipto</th> <th>Title</th> <th>Phone</th> <th>Email</th> <th>Contact Type</th> </tr>
 				</thead>
                 <tbody>
-                    <?php foreach ($contacts as $contact) : ?>
+                    <?php foreach ($customer->get_contacts() as $contact) : ?>
                         <tr>
                             <td><a href="<?= $contact->generate_contacturl(); ?>"><?= $contact->contact; ?></a></td>
                             <td><a href="<?php $contact->generate_shiptourl();?>"><?= $contact->shiptoid; ?></a></td>

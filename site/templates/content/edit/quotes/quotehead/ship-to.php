@@ -4,7 +4,7 @@
     	<td class="control-label"><?= $formconfig->fields['fields']['shiptoid']['label']; ?><?= $formconfig->generate_asterisk('shiptoid'); ?><input type="hidden" id="shipto-id" value="<?= $quote->shiptoid; ?>"></td>
         <td>
         	<select class="form-control input-sm ordrhed <?= $formconfig->generate_showrequiredclass('shiptoid'); ?> shipto-select" name="shiptoid" data-custid="<?= $quote->custid; ?>">
-				<?php $shiptos = get_customershiptos($quote->custid, $user->loginid); ?>
+				<?php $shiptos = get_customershiptos($quote->custid); ?>
                 <?php foreach ($shiptos as $shipto) : ?>
 					<?php $selected =  ($shipto->shiptoid == $quote->shiptoid) ? 'selected' : ''; ?>
                     <option value="<?= $shipto->shiptoid;?>" <?= $selected; ?>><?= $shipto->shiptoid.' - '.$shipto->name; ?></option>

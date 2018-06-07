@@ -30,7 +30,9 @@
 	<div id="bookings-div" aria-expanded="true">
 		<?php if (sizeof($bookings)) : ?>
 			<div class="panel-body">
-				<button class="btn btn-primary toggle-order-search pull-right" type="button" data-toggle="collapse" data-target="#bookings-search-div" aria-expanded="false" aria-controls="bookings-search-div">Toggle Search <i class="fa fa-search" aria-hidden="true"></i></button>
+				<button class="btn btn-primary toggle-order-search pull-right" type="button" data-toggle="collapse" data-target="#bookings-search-div" aria-expanded="false" aria-controls="bookings-search-div">
+					Toggle Search <i class="fa fa-search" aria-hidden="true"></i>
+				</button>
 				<div id="bookings-search-div" class="<?= (!empty($bookingspanel->filters)) ? 'collapse' : ''; ?>">
 					<?php include $config->paths->content.'customer/cust-page/bookings/search-form.php'; ?>
 				</div>

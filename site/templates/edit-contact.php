@@ -1,13 +1,13 @@
-<?php 
+<?php
 	$custID = $input->get->text('custID');
 	$shipID = $input->get->text('shipID');
-	$contactID = $input->get->text('id');
+	$contactID = $input->get->text('contactID');
 	$contact = Contact::load($custID, $shipID, $contactID);
 	$primarycontact = Contact::load_primarycontact($custID, $shipID);
-	
+
 	if ($contact) {
-        if (can_accesscustomercontact($user->loginid, $user->hasrestrictions, $custID, $shipID, $contactID, false)) {
-			$page->title = "Editing " .$contact->contact . ", ".$contact->get_customername(); 
+        if ($contact->can_useraccess($user->loginid, $user->hasrestrictions, $custID, $shipID, $contactID, false)) {
+			$page->title = "Editing " .$contact->contact . ", ".$contact->get_customername();
 			$page->body = $config->paths->content.'customer/contact/edit-contact.php';
 			$config->scripts->append(hashtemplatefile('scripts/pages/contact-page.js'));
             if ($config->ajax) {

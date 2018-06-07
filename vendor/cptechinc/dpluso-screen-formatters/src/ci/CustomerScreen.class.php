@@ -53,7 +53,7 @@
 					if ($column == 'customerid') {
 						$attr = (!$customer->has_shipto()) ? 'value= |selected' : 'value= ';
 						$options = $bootstrap->option($attr, 'No Shipto Selected');
-						$shiptos = get_customershiptos($customer->custID, Dpluswire::wire('user')->loginid);
+						$shiptos = get_customershiptos($customer->custID);
 						foreach ($shiptos as $shipto) {
 							$show = $shipto->shiptoid.' '.$shipto->name.' - '.$shipto->city.', '.$shipto->state;
 							$options .= $bootstrap->option("value=$shipto->shiptoid", $show);

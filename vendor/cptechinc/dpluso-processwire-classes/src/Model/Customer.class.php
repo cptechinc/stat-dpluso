@@ -1,12 +1,12 @@
-<?php 
+<?php
 	/**
 	 * Class for dealing with Customers
 	 * Derived from the custindex Table
 	 */
     class Customer extends Contact {
-		
+
         /* =============================================================
-			GETTER FUNCTIONS 
+			GETTER FUNCTIONS
 		============================================================ */
 		/**
 		 * Returns the customer name or just return the custid
@@ -15,26 +15,28 @@
         public function get_name() {
             return (!empty($this->name)) ? $this->name : $this->custid;
         }
-        
+
 		/**
 		 * Return the number of shiptos this Customer has
 		 * it also takes in account if user has customer restrictions
-		 * @param  bool   $debug Whether to return Number or SQL Query
-		 * @return int    # of Shiptos or SQL Query
+		 * @param  string  $loginID  Login ID to count shiptos for
+		 * @param  bool    $debug    Whether to return Number or SQL Query
+		 * @return int               # of Shiptos or SQL Query
 		 */
-        public function get_shiptocount($debug = false) {
-            return count_shiptos($this->custid, DplusWire::wire('user')->loginid, $debug);
+        public function count_shiptos($loginID = '', $debug = false) {
+            return count_shiptos($this->custid, $loginID, $debug);
         }
-        
+
 		/**
 		 * Gets the next shiptoid for this Customer
 		 * if shiptoid is defined then we get the next one
 		 * if no next one, go to the first one
 		 * Used for CI page
+		 * @param  string $loginID Login ID 
 		 * @return string shiptoid
 		 */
-        public function get_nextshiptoid() {
-            $shiptos = get_customershiptos($this->custid, DplusWire::wire('user')->loginid);
+        public function get_nextshiptoid($loginID = '') {
+            $shiptos = get_customershiptos($this->custid, $loginID);
             if (sizeof($shiptos) < 1) {
                 return false;
             } else {
@@ -44,8 +46,8 @@
                             break;
                         }
                     }
-                    $i++; // Get the next 
-                    
+                    $i++; // Get the next
+
                     if ($i > sizeof($shiptos)) {
                         return $shiptos[0]->shiptoid;
                     } elseif ($i == sizeof($shiptos)) {
@@ -58,9 +60,58 @@
                 }
             }
         }
-        
+
+        /**
+         * Returns the number of contacts for this Customer
+         * @param  string $loginID User Login ID, Can be blank, will assume current user
+         * @param  bool   $debug   Run in debug? if true, will return SQL Query
+         * @return int             Number of Contacts
+         */
+        public function count_contacts($loginID = '', $debug = false) {
+            return count_customercontacts($this->custid, $loginID, $debug);
+        }
+
+        /**
+         * Returns the contacts for this Customer
+         * @param  string $loginID User Login ID, Can be blank, will assume current user
+         * @param  bool   $debug   Run in debug? if true, will return SQL Query
+         * @return array           Array of Contact
+         */
+        public function get_contacts($loginID = '', $debug = false) {
+            return get_customercontacts($this->custid, $loginID, $debug);
+        }
+
+        /**
+         * Returns amount sold for this customer, will default to current user if no ID supplied
+         * @param  string $loginID User Login
+         * @param  bool   $debug   Run in debug? If true, will return SQL Query
+         * @return float           Amount Sold
+         */
+        public function get_amountsold($loginID = '', $debug = false) {
+            return $debug ? get_custperm($this, $loginID, $debug) : (get_custperm($this, $loginID, $debug))['amountsold'];
+        }
+
+        /**
+         * Returns Number of Times sold (Last 12 Months) for this customer, will default to current user if no ID supplied
+         * @param  string $loginID User Login
+         * @param  bool   $debug   Run in debug? If true, will return SQL Query
+         * @return int           Number of Times sold
+         */
+        public function get_timesold($loginID = '', $debug = false) {
+            return $debug ? get_custperm($this, $loginID, $debug) : (get_custperm($this, $loginID, $debug))['timesold'];
+        }
+
+        /**
+         * Returns Last Sale Date for this customer, will default to current user if no ID supplied
+         * @param  string $loginID User Login
+         * @param  bool   $debug   Run in debug? If true, will return SQL Query
+         * @return string          Last Sale Date
+         */
+        public function get_lastsaledate($loginID = '', $debug = false) {
+            return $debug ? get_custperm($this, $loginID, $debug) : (get_custperm($this, $loginID, $debug))['lastsaledate'];
+        }
         /* =============================================================
-			CLASS FUNCTIONS 
+			CLASS FUNCTIONS
 		============================================================ */
 		/**
 		 * Generates Title for CI page
@@ -69,8 +120,8 @@
         public function generate_title() {
             return $this->get_name() . (($this->has_shipto()) ? ' Ship-to: ' . $this->shiptoid : '');
         }
-		
-		/** 
+
+		/**
 		 * Generates an array for the Sales Data for this Customer
 		 * so it can be used in Morris.js to draw up a pie chart
 		 * @param  float $value Amount
@@ -84,8 +135,7 @@
 				'shiptoid' => $this->shiptoid
 			);
 		}
-		
-		
+
 		/**
 		 * Return URL to the add Contact form
 		 * @return string  Add Contact URL
@@ -93,13 +143,13 @@
 		public function generate_addcontacturl() {
 			$url = new \Purl\Url(DplusWire::wire('config')->pages->contact.'add/');
             $url->query->set('custID', $this->custid);
-            
+
             if ($this->has_shipto()) {
                 $url->query->set('shipID', $this->shiptoid);
-            } 
+            }
             return $url->getUrl();
 		}
-        
+
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
@@ -114,7 +164,20 @@
         public static function load($custID, $shiptoID = '', $contactID = '', $debug = false) {
             return get_customer($custID, $shiptoID, $contactID, $debug);
         }
-		
+
+        /**
+         * Returns if User has access to customer
+         * @param  string $custID   Customer ID
+         * @param  string $shiptoID Customer shipto ID
+         * @param  string $contactID Contact ID
+         * @param  string $loginID  User Login ID
+         * @param  bool   $debug    Run in debug?
+         * @return bool             TRUE | FALSE | SQL QUERY
+         */
+        public static function can_useraccess($custID, $shiptoID = '', $contactID = '', $loginID = '', $debug = false) {
+            return can_accesscustomer($custID, $shiptoID, $loginID,  $debug);
+        }
+
 		/**
 		 * Changes customer's custid
 		 * @param  string $currentID current customerID
@@ -126,7 +189,7 @@
             $currentID = substr($currentID, 0, 6);
 			return change_custindexcustid($currentID, $newcustID, $debug). " - " . change_custpermcustid($currentID, $newcustID, $debug);
 		}
-		
+
 		/* =============================================================
 			STATIC FUNCTIONS
 		============================================================ */
@@ -142,8 +205,8 @@
 			$customer = self::load($custID, $shiptoID);
 			return $customer ? $customer->get_customername() : $custID;
 		}
-		
-		/** 
+
+		/**
 		 * Generates an array for the bookings Data for this Customer
 		 * so it can be used in Morris.js to draw up a pie chart
 		 * if customer can't be found, then return data with as much
@@ -155,7 +218,7 @@
 		 */
 		public static function generate_bookingsdata($custID, $shiptoID, $value) {
 			$customer = self::load($custID, $shiptoID);
-			
+
 			return array(
 				'label' => $customer ? $customer->get_name() : $custID,
 				'value' => $value,

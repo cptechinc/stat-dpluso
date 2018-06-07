@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Initialization file for template files
@@ -9,7 +9,7 @@
  * You can initialize anything you want to here. In the case of this beginner profile,
  * we are using it just to include another file with shared functions.
  *
- */	
+ */
 	include_once("./_func.php"); // include our shared functions
 	include_once("./_dbfunc.php");
 	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/src/utfport.php"); // UTF8 conversion library functions
@@ -22,7 +22,7 @@
 	if (!empty($config->filename) && $config->filename != '/') {
 		$page->fullURL->join($config->filename);
 	}
-	
+
 	$page->bootstrap = new Contento();
 	$page->stringerbell = new StringerBell();
 	$page->screenformatterfactory = new \ScreenFormatterFactory(session_id());
@@ -34,7 +34,7 @@
 	$config->styles->append('https://fonts.googleapis.com/icon?family=Material+Icons');
 	$config->styles->append(hashtemplatefile('styles/libraries.css'));
 	$config->styles->append(hashtemplatefile('styles/styles.css'));
-    
+
 	$config->scripts->append(hashtemplatefile('scripts/libraries.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/timepicker.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/key-listener.js'));
@@ -49,7 +49,7 @@
 	$user->loggedin = is_validlogin(session_id());
 
 	if ($user->loggedin) {
-		setupuser(session_id());
+		setup_user(session_id());
 	} elseif (strtolower($page->title) != 'login' && strtolower($page->title) != 'redir' && $page->template != 'template-print') {
 		header('location: ' . $config->pages->login);
 		exit;
@@ -58,7 +58,5 @@
 	if ($input->get->modal) {
 		$config->modal = true;
 	}
-	
+
 	$itemlookup = new ItemLookupModal();
-	
-	

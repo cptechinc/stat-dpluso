@@ -1,5 +1,7 @@
 <?php
 	use atk4\dsql\Query;
+	use atk4\dsql\Expression;
+
 /* =============================================================
 	LOGIN FUNCTIONS
 ============================================================ */
@@ -70,6 +72,26 @@
 		}
 	}
 
+	function get_custperm(Customer $customer, $loginID = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+
+		$q = (new QueryBuilder())->table('custperm');
+		$q->where('loginid', $user->get_custpermloginid());
+		$q->where('custid', $customer->custid);
+		if ($customer->has_shipto()) {
+			$q->where('shiptoid', $customer->shiptoid);
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetch(PDO::FETCH_ASSOC);
+		}
+	}
+
 	function count_custperm($userID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('custperm');
 		$q->field('COUNT(*)');
@@ -137,33 +159,24 @@
 		}
 	}
 
-	function can_accesscustomer($loginID, $restrictions, $custID, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custperm WHERE custid = :custID) t WHERE loginid = :loginID OR loginid = :shared");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true);
-			if ($debug) {
-				return returnsqlquery($sql->queryString, $switching, $withquotes);
-			} else {
-				$sql->execute($switching);
-				return $sql->fetchColumn();
-			}
-		} else {
-			return 1;
-		}
-	}
+	function can_accesscustomer($custID, $shiptoID = '', $loginID = '',  $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 
-	function can_accesscustomershipto($loginID, $restrictions, $custID, $shipID, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custperm WHERE custid = :custID AND shiptoid = :shipID) t WHERE loginid = :loginID OR loginid = :shared");
-			$switching = array(':custID' => $custID, ':shipID' => $shipID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true, true, true, true);
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
+			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
+			if (!empty($shiptoID)) {
+				$custquery->where('shiptoid', $shiptoID );
+			}
+
+			$q = (new QueryBuilder())->table($custquery, 'customerperm');
+			$q->field($q->expr('COUNT(*)'));
+			$q->where('loginid', 'in', [$loginID, DplusWire::wire('config')->sharedaccounts]);
+			$sql = DplusWire::wire('database')->prepare($q->render());
 			if ($debug) {
-				return returnsqlquery($sql->queryString, $switching, $withquotes);
+				return $q->generate_sqlquery($q->params);
 			} else {
-				$sql->execute($switching);
+				$sql->execute($q->params);
 				return $sql->fetchColumn();
 			}
 		} else {
@@ -232,10 +245,20 @@
 		}
 	}
 
-	function count_shiptos($custID, $loginID, $debug = false) { // TODO use QueryBuilder
+	/**
+	 * Returns the number of shiptos for that customer
+	 * filtering by loginID by providing it or defaulting to current user
+	 * @param  string $custID  Customer ID
+	 * @param  string $loginID LoginID to filter access to customer's shiptos
+	 * @param  bool   $debug   Run in debug? If true, the SQL Query will be returned
+	 * @return int             Shipto count | SQL Query
+	 */
+	function count_shiptos($custID, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
 			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID)->where('shiptoid', '!=', '');
 			$q = (new QueryBuilder())->table($custquery, 'custpermcust');
 			$q->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
@@ -265,11 +288,21 @@
 		}
 	}
 
-	function get_customershiptos($custID, $loginID, $debug = false) { // TODO use QueryBuilder
+	/**
+	 * Returns an array of Shiptos (Customer objects) that the User has access to
+	 * LoginID can be provided or it will default to the current user
+	 * @param  string $custID  Customer ID
+	 * @param  string $loginID Provided LoginID, if blank, it will default to current user
+	 * @param  bool   $debug   Run in debug?
+	 * @return array           Shiptos that the User has access to
+	 */
+	function get_customershiptos($custID, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
 		$q = (new QueryBuilder())->table('custindex');
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
 			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID)->where('shiptoid', '!=', '');
 			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust');
 			$permquery->field('custid, shiptoid');
@@ -290,15 +323,25 @@
 		}
 	}
 
-	function get_topxsellingshiptos($sessionID, $custID, $count, $debug = false) {
-		$loginID = (Dpluswire::wire('user')->hascontactrestrictions) ? Processwire\wire('user')->loginid : 'admin';
+	/**
+	 * Returns an array of shiptos (custperm array) that the user has access to
+	 * @param  string $custID  Customer ID
+	 * @param  int    $limit   How many records to return?
+	 * @param  string $loginID User Login ID, if blank will use current user
+	 * @param  bool   $debug   Run in debug? If so, will return SQL Query
+	 * @return array           Custperm Shipto records
+	 */
+	function get_topxsellingshiptos($custID, $limit, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+
 		$q = (new QueryBuilder())->table('custperm');
-		$q->where('loginid', $loginID);
+		$q->where('loginid', $user->get_custpermloginid());
 		$q->where('custid', $custID);
 		$q->where('shiptoid', '!=', '');
-		$q->limit($count);
+		$q->limit($limit);
 		$q->order('amountsold DESC');
-		$sql = Dpluswire::wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -308,22 +351,31 @@
 		}
 	}
 
-	function count_customercontacts($loginID, $restrictions, $custID, $debug = false) {
-		$SHARED_ACCOUNTS = Dpluswire::wire('config')->sharedaccounts;
+	/**
+	 * Counts the number of Contacts the loginID can access
+	 * @param  string $custID  Customer ID
+	 * @param  string $loginID User Login ID if blank, will default to current user
+	 * @param  bool   $debug   Run in debug? If true will return SQL Query
+	 * @return int             Number of contacts for that Customer
+	 */
+	function count_customercontacts($custID, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+
 		$q = (new QueryBuilder())->table('custindex');
 		$q->field('COUNT(*)');
 
-		if ($restrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
 			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
 			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust');
 			$permquery->field('custid, shiptoid');
-			$permquery->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
+			$permquery->where('loginid', [$loginID, DplusWire::wire('config')->sharedaccounts]);
 			$q->where('(custid, shiptoid)','in', $permquery);
 		} else {
 			$q->where('custid', $custID);
 		}
 
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -333,11 +385,21 @@
 		}
 	}
 
-	function get_customercontacts($loginID, $restrictions, $custID, $debug = false) {
-		$SHARED_ACCOUNTS = Dpluswire::wire('config')->sharedaccounts;
+	/**
+	 * Returns the Contacts the loginID can access
+	 * @param  string $custID  Customer ID
+	 * @param  string $loginID User Login ID if blank, will default to current user
+	 * @param  bool   $debug   Run in debug? If true will return SQL Query
+	 * @return array             array of contacts for that Customer
+	 */
+	function get_customercontacts($custID, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
+
 		$q = (new QueryBuilder())->table('custindex');
 
-		if ($restrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
 			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
 			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust');
 			$permquery->field('custid, shiptoid');
@@ -347,7 +409,7 @@
 			$q->where('custid', $custID);
 		}
 
-		$sql = Dpluswire::wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -358,19 +420,31 @@
 		}
 	}
 
-	function can_accesscustomercontact($loginID, $restrictions, $custID, $shipID, $contactID, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM (SELECT * FROM custperm WHERE custid = :custID) t WHERE loginid = :loginID OR loginid = :shared) AND shiptoid = :shipID AND contact = :contactID");
-			$switching = array(':custID' => $custID, ':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS, ':shipID' => $shipID, ':contactID' => $contactID);
-			$withquotes = array(true, true, true, true, true);
+	function can_accesscustomercontact($custID, $shiptoID, $contactID, $loginID, $debug) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
+
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
+			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
+			$permquery = (new QueryBuilder())->table($custquery, 'custpermcust')->field('custid, shiptoid');
+			$permquery->where('loginid', 'in', [$loginID, $SHARED_ACCOUNTS]);
+			$q = (new QueryBuilder())->table('custindex');
+			$q->field($q->expr('COUNT(*)'));
+			$q->where('(custid, shiptoid)','in', $permquery);
+			$q->where('shiptoid', $shiptoID);
+			$q->where('contact', $contactID);
+			$sql = DplusWire::wire('database')->prepare($q->render());
+
+			if ($debug) {
+				return $q->generate_sqlquery($q->params);
+			} else {
+				$sql->execute($q->params);
+				return $sql->fetchColumn();
+			}
 		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE custid = :custID AND shiptoid = :shipID AND contact = :contactID");
-			$switching = array(':custID' => $custID, ':shipID' => $shipID, ':contactID' => $contactID);
-			$withquotes = array(true, true, true);
+			return 1;
 		}
-		$sql->execute($switching);
-		if ($debug) { return returnsqlquery($sql->queryString, $switching, $withquotes); } else { if ($sql->fetchColumn() > 0){return true;} else {return false; } }
 	}
 
 	function get_customercontact($custID, $shiptoID = '', $contactID = '', $debug = false) {
@@ -408,7 +482,7 @@
 			$q->where('shiptoid', $shiptoID);
 		}
 		$q->where('buyingcontact', 'P');
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -419,11 +493,21 @@
 		}
 	}
 
-	function get_customerbuyersendusers($loginID, $custID, $shiptoID = false, $debug = false) {
+	/**
+	 * Get End Users and Buyers [array of objects (Contact)] for a Customer that a User has access to
+	 * @param  string $loginID  User LoginID, if blank, will use current user ID
+	 * @param  string $custID   Customer ID
+	 * @param  string $shiptoID Customer Shipto ID
+	 * @param  bool   $debug    Run in debug? If so, will return SQL Query
+	 * @return array            array of objects (Contact)
+	 */
+	function get_customerbuyersendusers($custID, $shiptoID = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
 		$q = (new QueryBuilder())->table('custindex');
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers)  {
 			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
 			if (!empty($shiptoID)) {
 				$custquery->where('shiptoid', $shiptoID);
@@ -440,7 +524,6 @@
 		}
 		$q->where('buyingcontact', '!=', 'N');
 		$q->where('certcontact', 'Y');
-
 		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
@@ -451,13 +534,24 @@
 			return $sql->fetchAll();
 		}
 	}
-
-	function search_customerbuyersendusers($loginID, $query, $custID, $shiptoID = false, $debug = false) {
+	/**
+	 * Returns the results of a search of a Customer's End Users and Buyers and the results
+	 * are filtered to the contacts the User can see
+	 * @param  string $custID   Customer ID
+	 * @param  string $shiptoID Customer Shipto ID
+	 * @param  string $query    Search Query
+	 * @param  string $loginID  User Login ID, if blank, it will use current user
+	 * @param  bool   $debug    Run in Debug?
+	 * @return array            Contact objects
+	 */
+	function search_customerbuyersendusers($custID, $shiptoID = '', $query, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
-		$search = '%'.$query.'%';
+		$search = QueryBuilder::generate_searchkeyword($query);
 		$q = (new QueryBuilder())->table('custindex');
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
 			$custquery = (new QueryBuilder())->table('custperm')->where('custid', $custID);
 			if (!empty($shiptoID)) {
 				$custquery->where('shiptoid', $shiptoID);
@@ -525,124 +619,161 @@
 /* =============================================================
 	CUST INDEX FUNCTIONS
 ============================================================ */
-	function get_distinctcustindexpaged($loginID, $limit = 10, $page = 1, $restrictions, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		$limiting = returnlimitstatement($limit, $page);
+	function get_distinctcustindexpaged($limit = 10, $page = 1, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
 
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE custid IN (SELECT DISTINCT(custid) FROM custperm WHERE loginid = :loginID OR loginid = :shared) GROUP BY custid ".$limiting);
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT * FROM custindex WHERE shiptoid = '' GROUP BY custid " . $limiting);
-			$switching = array(); $withquotes = array();
+		$q = (new QueryBuilder())->table('custindex');
+
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
+			$custpermquery = (new QueryBuilder())->table('custperm');
+			$custpermquery->field($q->expr('DISTINCT(custid)'));
+			$custpermquery->where('loginid', 'in', [$loginID, $SHARED_ACCOUNTS]);
+
+			$q->where('custid','in', $custpermquery);
 		}
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$q->group('custid');
+
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
 			return $sql->fetchAll();
 		}
 	}
 
-	function count_distinctcustindex($loginID, $restrictions, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		if ($restrictions) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(DISTINCT(custid)) FROM custindex WHERE custid IN (SELECT DISTINCT(custid) FROM custperm WHERE loginid = :loginID OR loginid = :shared)");
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS);
-			$withquotes = array(true, true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(DISTINCT(custid)) FROM custindex WHERE shiptoid = ''");
-			$switching = array(); $withquotes = array();
+	function count_distinctcustindex($loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
+		$q = (new QueryBuilder())->table('custindex');
+		$q->field($q->expr('COUNT(DISTINCT(custid))'));
+
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
+			$custpermquery = (new QueryBuilder())->table('custperm');
+			$custpermquery->field($q->expr('DISTINCT(custid)'));
+			$custpermquery->where('loginid', 'in', [$loginID, $SHARED_ACCOUNTS]);
+			$q->where('custid','in', $custpermquery);
 		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
-	function search_custindexpaged($loginID, $limit = 10, $page = 1, $restrictions, $keyword, $debug) {
+	function search_custindexpaged($keyword, $limit = 10, $page = 1, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
-		$limiting = returnlimitstatement($limit, $page);
-		$query = addslashes($keyword);
-		$search = '%'.str_replace(' ', '%', str_replace('-', '', $query)).'%';
+
+		$search = '%'.str_replace(' ', '%', str_replace('-', '', addslashes($keyword))).'%';
 		$q = (new QueryBuilder())->table('custindex');
 
-		if ($restrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
 			$permquery = (new QueryBuilder())->table('custperm');
 			$permquery->field('custid, shiptoid');
 			$permquery->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
 			$q->where('(custid, shiptoid)','in', $permquery);
-		} 
+		}
+
 		$fieldstring = implode(", ' ', ", array_keys(Contact::generate_classarray()));
 
 		$q->where($q->expr("UCASE(REPLACE(CONCAT($fieldstring), '-', '')) LIKE UCASE([])", [$search]));
 		$q->limit($limit, $q->generate_offset($page, $limit));
 
 		if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
+			$q->order($q->expr('custid <> []', [$search]));
 			$q->group('custid, shiptoid');
-			$q->order($q->expr('custid <> []', [$query]));
 		} elseif (DplusWire::wire('config')->cptechcustomer == 'stat') {
 			$q->group('custid');
 		} else {
-			$q->order($q->expr('custid <> []', [$query]));
+			$q->order($q->expr('custid <> []', [$search]));
 		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {
 			$sql->execute($q->params);
-			$sql->setFetchMode(PDO::FETCH_CLASS, 'Contact');
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'Customer');
 			return $sql->fetchAll();
 		}
 	}
 
-	function count_searchcustindex($loginID, $restrictions, $keyword, $debug) {
-		$SHARED_ACCOUNTS = Processwire\wire('config')->sharedaccounts;
-		$search = '%'.str_replace(' ', '%', str_replace('-', '', $keyword)).'%';
+	/**
+	 * Returns the Number of custindex records that match the search
+	 * and filters it by user permissions
+	 * @param  string $query   Search Query
+	 * @param  string $loginID User Login ID, if blank, will use current User
+	 * @param  bool   $debug   Run in debug? If so, Return SQL Query
+	 * @return int             Number of custindex records that match the search | SQL Query
+	 */
+	function count_searchcustindex($query, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;
+		$search = QueryBuilder::generate_searchkeyword($query);
+		$groupedcustindexquery = (new QueryBuilder())->table('custindex')->group('custid, shiptoid');
 
-		if ($restrictions) {
-			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex GROUP BY custid, shiptoid) t WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search)");
-			} elseif (Processwire\wire('config')->cptechcustomer == 'stat') {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex) t WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search)");
+		$q = new QueryBuilder();
+		$q->field($q->expr('COUNT(*)'));
+
+		// CHECK if Users has restrictions by Application Config, then User permissions
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] && DplusWire::wire('pages')->get('/config/')->restrict_allowedcustomers) {
+			$custpermquery = (new QueryBuilder())->table('custperm')->field('custid, shiptoid')->where('loginid', [$loginID, $SHARED_ACCOUNTS]);
+
+			if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
+				$q->table($groupedcustindexquery, 'custgrouped');
 			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE (custid, shiptoid) IN (SELECT custid, shiptoid FROM custperm WHERE loginid = :loginID OR loginid = :shared) AND UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search)");
+				$q->table('custindex');
 			}
-			$switching = array(':loginID' => $loginID, ':shared' => $SHARED_ACCOUNTS, ':search' => $search);
-			$withquotes = array(true, true, true, true);
+
+			$q->where('(custid, shiptoid)','in', $custpermquery);
 		} else {
-			if (Processwire\wire('config')->cptechcustomer == 'stempf') {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex GROUP BY custid, shiptoid) t WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search)");
-			} elseif (wire('config')->cptechcustomer == 'stat') {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM (SELECT * FROM custindex) t WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search)");
+			if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
+				$q->table($groupedcustindexquery, 'custgrouped');
 			} else {
-				$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM custindex WHERE UCASE(REPLACE(CONCAT(custid, ' ', name, ' ', shiptoid, ' ', addr1, ' ', city, ' ', state, ' ', zip, ' ', phone, ' ', contact, ' ', source, ' ', extension), '-', '')) LIKE UCASE(:search)");
+				$q->table('custindex');
 			}
-			$switching = array(':search' => $search); $withquotes = array(true);
 		}
+		$fieldstring = implode(", ' ', ", array_keys(Contact::generate_classarray()));
+
+		$q->where($q->expr("UCASE(REPLACE(CONCAT($fieldstring), '-', '')) LIKE UCASE([])", [$search]));
+
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
-	function get_topxsellingcustomers($sessionID, $numberofcustomers, $debug = false) {
-		$loginID = (Processwire\wire('user')->hascontactrestrictions) ? Processwire\wire('user')->loginid : 'admin';
+	/**
+	 * Get the X number of Top Selling Customers
+	 * @param  int    $limit    [description]
+	 * @param  string $loginID  User Login ID either provided, or current User
+	 * @param  bool   $debug    Run in debug? If true, return SQL Query
+	 * @return array            Top Selling Customers
+	 */
+	function get_topxsellingcustomers(int $limit, $loginID = '',  $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$login = (LogmUser::load($loginID))->get_custpermloginid();
 		$q = (new QueryBuilder())->table('custperm');
-		$q->where('loginid', $loginID);
+		$q->where('loginid', $login);
 		$q->where('shiptoid', '');
-		$q->limit($numberofcustomers);
+		$q->limit($limit);
 		$q->order('amountsold DESC');
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -1190,15 +1321,42 @@
 		}
 	}
 
-	function count_usersaleshistory($sessionID, $filter = false, $filtertypes = false, $debug = false) {
+	/**
+	 * Returns the number of Orders in Sales History that meets
+	 * the filtered criteria for the User provided
+	 * @param  array   $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string  $loginID     User Login ID, if blank, will use the current User
+	 * @param  bool    $debug       Run in debug? If so, return SQL Query
+	 * @return int                  Number of Orders that meet filter requirements
+	 */
+	function count_usersaleshistory($filter = false, $filterable = false, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('COUNT(*)');
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$sql = DplusWire::wire('database')->prepare($q->render());
 
@@ -1210,14 +1368,44 @@
 		}
 	}
 
-	function get_usersaleshistory($sessionID, $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	/**
+	 * Returns an array of Sales History Records that meet the filter criteria
+	 * for the User
+	 * @param  int    $limit       Number of Records to return
+	 * @param  int    $page        Page Number to start from
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID       User Login ID, if blank, will use the current User
+	 * @param  bool   $useclass      Return records as a SalesOrderHistory object? (or array)
+	 * @param  bool   $debug         Run in debug?
+	 * @return array                 array of SalesOrderHistory objects | array of sales history orders as arrays
+	 */
+	function get_usersaleshistory($limit = 10, $page = 1, $filter = false, $filterable = false, $loginID = '', $useclass = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$sql = DplusWire::wire('database')->prepare($q->render());
@@ -1234,13 +1422,47 @@
 		}
 	}
 
-	function get_usersaleshistoryorderby($sessionID, $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	/**
+	 * Returns an array of Sales History Records (sorted) that meet the filter criteria
+	 * for the User
+	 * @param  int    $limit       Number of Records to return
+	 * @param  int    $page        Page Number to start from
+	 * @param  string $sortrule    Sort Rule ASC | DESC
+	 * @param  string $orderby     Column to sort on
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID       User Login ID, if blank, will use the current User
+	 * @param  bool   $useclass      Return records as a SalesOrderHistory object? (or array)
+	 * @param  bool   $debug         Run in debug?
+	 * @return array                 array of SalesOrderHistory objects | array of sales history orders as arrays
+	 */
+	function get_usersaleshistoryorderby($limit = 10, $page = 1, $sortrule = 'ASC', $orderby, $filter = false, $filterable = false, $loginID = '', $useclass = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+
 		$q = (new QueryBuilder())->table('saleshist');
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$q->order($orderby .' '. $sortrule);
 		$q->limit($limit, $q->generate_offset($page, $limit));
@@ -1259,16 +1481,47 @@
 		}
 	}
 
-	function get_usersaleshistoryinvoicedate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	/**
+	 * Returns an array of Sales History Records (sorted by invoice date) that meet the filter criteria
+	 * for the User
+	 * @param  int    $limit       Number of Records to return
+	 * @param  int    $page        Page Number to start from
+	 * @param  string $sortrule    Sort Rule ASC | DESC
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID     User Login ID, if blank, will use the current User
+	 * @param  bool   $useclass    Return records as a SalesOrderHistory object? (or array)
+	 * @param  bool   $debug       Run in debug?
+	 * @return array                 array of SalesOrderHistory objects | array of sales history orders as arrays
+	 */
+	function get_usersaleshistoryinvoicedate($limit = 10, $page = 1, $sortrule, $filter = false, $filterable = false, $loginID = '', $useclass = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
 		$q->field($q->expr("STR_TO_DATE(invdate, '%Y%m%d') as dateofinvoice"));
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$q->order('dateofinvoice ' . $sortrule);
 		$q->limit($limit, $q->generate_offset($page, $limit));
@@ -1285,16 +1538,47 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
-
-	function get_usersaleshistoryorderdate($sessionID, $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	/**
+	 * Returns an array of Sales History Records (sorted by invoice date) that meet the filter criteria
+	 * for the User
+	 * @param  int    $limit       Number of Records to return
+	 * @param  int    $page        Page Number to start from
+	 * @param  string $sortrule    Sort Rule ASC | DESC
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID     User Login ID, if blank, will use the current User
+	 * @param  bool   $useclass    Return records as a SalesOrderHistory object? (or array)
+	 * @param  bool   $debug       Run in debug?
+	 * @return array               array of SalesOrderHistory objects | array of sales history orders as arrays
+	 */
+	function get_usersaleshistoryorderdate($limit = 10, $page = 1, $sortrule, $filter = false, $filterable = false, $loginID = '', $useclass = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
 		$q->field($q->expr("STR_TO_DATE(orderdate, '%Y%m%d') as dateoforder"));
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$q->order('dateoforder ' . $sortrule);
 		$q->limit($limit, $q->generate_offset($page, $limit));
@@ -1312,7 +1596,36 @@
 		}
 	}
 
-	function count_customersaleshistory($sessionID, $custID, $shiptoID = '', $filter = false, $filtertypes = false, $debug = false) {
+	/**
+	 * Returns the Number of Sales History orders that meet the filter criteria
+	 * for the User
+	 * @param  string $custID      Customer ID
+	 * @param  string $shiptoID    Customer Shipto ID
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID     User Login ID, if blank, will use the current User
+	 * @param  bool   $debug       Run in debug?
+	 * @return int                 Number of Sales History Records
+	 */
+	function count_customersaleshistory($custID, $shiptoID = '', $filter = false, $filterable = false, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('COUNT(*)');
 		$q->where('custid', $custID);
@@ -1321,11 +1634,11 @@
 			$q->where('shiptoid', $shiptoID);
 		}
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 
 		$sql = DplusWire::wire('database')->prepare($q->render());
@@ -1338,18 +1651,50 @@
 		}
 	}
 
-	function get_customersaleshistory($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	/**
+	 * Returns an array of Sales History orders for a Customer that meet the filter criteria
+	 * for that User
+	 * @param  string $custID    Customer ID
+	 * @param  string $shiptoID  Customer Shipto ID
+	 * @param  int    $limit     Number of Records to return
+	 * @param  int    $page      Page to start offset from
+	 * @param  array  $filter    Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID    User Login ID, if blank, will use the current User
+	 * @param  bool   $useclass   Return records as a SalesOrderHistory object? (or array)
+	 * @param  bool   $debug      Run in debug?
+	 * @return array              array of SalesOrderHistory objects | array of sales history orders as arrays
+	 */
+	function get_customersaleshistory($custID, $shiptoID = '', $limit = 10, $page = 1, $filter = false, $filterable = false, $loginID = '', $useclass = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->where('custid', $custID);
 
 		if (!empty($shiptoID)) {
 			$q->where('shiptoid', $shiptoID);
 		}
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$q->limit($limit, $q->generate_offset($page, $limit));
 		$sql = DplusWire::wire('database')->prepare($q->render());
@@ -1366,18 +1711,52 @@
 		}
 	}
 
-	function get_customersaleshistoryorderby($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	/**
+	 * Returns an array of Sales History orders (sorted by a column) for a Customer that meet the filter criteria
+	 * for that User
+	 * @param  string $custID      Customer ID
+	 * @param  string $shiptoID    Customer Shipto ID
+	 * @param  int    $limit       Number of Records to return
+	 * @param  int    $page        Page Number to start offset from
+	 * @param  string $sortrule    Sort Rule ASC | DESC
+	 * @param  string $orderby     Column to sort on
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID    User Login ID, if blank, will use the current User
+	 * @param  bool   $useclass   Return records as a SalesOrderHistory object? (or array)
+	 * @param  bool   $debug      Run in debug?
+	 * @return array             array of SalesOrderHistory objects | array of sales history orders as arrays
+	 */
+	function get_customersaleshistoryorderby($custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $orderby, $filter = false, $filterable = false, $loginID = '', $useclass = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->where('custid', $custID);
 
 		if (!empty($shiptoID)) {
 			$q->where('shiptoid', $shiptoID);
 		}
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$q->order($orderby .' '. $sortrule);
 		$q->limit($limit, $q->generate_offset($page, $limit));
@@ -1395,7 +1774,40 @@
 		}
 	}
 
-	function get_customersaleshistoryinvoicedate($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	/**
+	 * Returns an array of Sales History orders (sorted by invoice date) for a Customer that meet the filter criteria
+	 * for that User
+	 * @param  string $custID      Customer ID
+	 * @param  string $shiptoID    Customer Shipto ID
+	 * @param  int    $limit       Number of Records to return
+	 * @param  int    $page        Page Number to start offset from
+	 * @param  string $sortrule    Sort Rule ASC | DESC
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID    User Login ID, if blank, will use the current User
+	 * @param  bool   $useclass   Return records as a SalesOrderHistory object? (or array)
+	 * @param  bool   $debug      Run in debug?
+	 * @return array             array of SalesOrderHistory objects | array of sales history orders as arrays
+	 */
+	function get_customersaleshistoryinvoicedate($custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filterable = false, $loginID= '', $useclass = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
 		$q->field($q->expr("STR_TO_DATE(invdate, '%Y%m%d') as dateofinvoice"));
@@ -1404,11 +1816,11 @@
 		if (!empty($shiptoID)) {
 			$q->where('shiptoid', $shiptoID);
 		}
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$q->order('dateofinvoice ' . $sortrule);
 		$q->limit($limit, $q->generate_offset($page, $limit));
@@ -1426,7 +1838,38 @@
 		}
 	}
 
-	function get_customersaleshistoryorderdate($sessionID, $custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filtertypes = false, $useclass = false, $debug = false) {
+	/**
+	 * Returns an array of Sales History orders (sorted by order date) for a Customer that meet the filter criteria
+	 * for that User
+	 * @param  string $custID      Customer ID
+	 * @param  string $shiptoID    Customer Shipto ID
+	 * @param  int    $limit       Number of Records to return
+	 * @param  int    $page        Page Number to start offset from
+	 * @param  string $sortrule    Sort Rule ASC | DESC
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $loginID    User Login ID, if blank, will use the current User
+	 * @param  bool   $useclass   Return records as a SalesOrderHistory object? (or array)
+	 * @param  bool   $debug      Run in debug?
+	 * @return array             array of SalesOrderHistory objects | array of sales history orders as arrays
+	 */
+	function get_customersaleshistoryorderdate($custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filterable = false, $loginID = '', $useclass = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
 		$q->field($q->expr("STR_TO_DATE(orderdate, '%Y%m%d') as dateoforder"));
@@ -1435,11 +1878,11 @@
 		if (!empty($shiptoID)) {
 			$q->where('shiptoid', $shiptoID);
 		}
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
-			$q->generate_filters($filter, $filtertypes);
+			$q->generate_filters($filter, $filterable);
 		}
 		$q->order('dateoforder ' . $sortrule);
 		$q->limit($limit, $q->generate_offset($page, $limit));
@@ -3402,12 +3845,59 @@
 	/* =============================================================
 		LOGM FUNCTIONS
 	============================================================ */
-	function count_todaysbookings($sessionID, $custID = false, $shiptoID = false, $debug = false) {
+	/**
+	 * Return the Number of bookings made that day, for a salesrep, if need be
+	 * @param  string $custID    Customer ID
+	 * @param  string $shiptoID  Customer Shipto ID
+	 * @param  string $loginID   User Login ID, if blank, will use the current User
+	 * @param  bool   $debug     Run in debug?
+	 * @return int               Number of bookings made for that day
+	 * @uses User Roles
+	 */
+	function count_todaysbookings($custID = false, $shiptoID = false, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingd');
 		$q->field('COUNT(*)');
 		$q->where('bookdate', date('Ymd'));
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
+			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
+		}
+
+		if (!empty($custID)) {
+			$q->where('custid', $custID);
+			if (!empty($shiptoID)) {
+				$q->where('shiptoid', $shiptoID);
+			}
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+
+	/**
+	 * Get today's booking amount for a User
+	 * @param  string $custID   Customer ID
+	 * @param  string $shiptoID Customer Shipto ID
+	 * @param  string $loginID  User Login ID, IF blank, will use current User
+	 * @param  bool   $debug    Run in debug? If so, will return SQL
+	 * @return float            Booking Amount for today
+	 */
+	function get_todaysbookingsamount($custID = '', $shiptoID = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+
+		$q = (new QueryBuilder())->table('bookingd');
+		$q->field('SUM(netamount)');
+		$q->where('bookdate', date('Ymd'));
+
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3428,10 +3918,21 @@
 		}
 	}
 
-	function get_userbookings($sessionID, $filter, $filtertypes, $interval = '', $debug = false) {
+	/**
+	 * Returns Bookings for that user based on permissions/roles
+	 * @param  array  $filter       array of filter
+	 * @param  array  $filtertypes  array of filters by their keys and the way to filter them
+	 * @param  string $interval     Interval of time ex. month|day
+	 * @param  string $loginID      User Login ID, if blank, will use current user
+	 * @param  bool   $debug        Run in debug? If so, return SQL Query
+	 * @return array                Of booking total records {custid, amount}
+	 */
+	function get_userbookings($filter, $filtertypes, $interval = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingr');
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3459,10 +3960,21 @@
 		}
 	}
 
-	function get_bookingtotalsbycustomer($sessionID, $filter, $filtertypes, $interval = '', $debug = false) {
+	/**
+	 * Returns Booking Totals by customer for that user based on permissions/roles
+	 * @param  array  $filter       array of filter
+	 * @param  array  $filtertypes  array of filters by their keys and the way to filter them
+	 * @param  string $interval     Interval of time ex. month|day
+	 * @param  string $loginID      User Login ID, if blank, will use current user
+	 * @param  bool   $debug        Run in debug? If so, return SQL Query
+	 * @return array                Of booking total records {custid, amount}
+	 */
+	function get_bookingtotalsbycustomer($filter, $filtertypes, $interval = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingc');
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3480,12 +3992,11 @@
 				$q->group('bookdate');
 				break;
 		}
-
 		$q->field('name');
 		$q->join('custindex.custid', 'bookingc.custid', 'left outer');
 		$q->where('custindex.shiptoid', '');
-
 		$sql = DplusWire::wire('database')->prepare($q->render());
+
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {
@@ -3494,13 +4005,24 @@
 		}
 	}
 
-	function count_daybookingordernumbers($sessionID, $date, $custID = false, $shiptoID = false, $debug = false) {
+	/**
+	 * Returns Number of booked Sales Order Numbers for a day
+	 * @param  string $date     Datetime string usually in m/d/Y format
+	 * @param  string $custID   Customer ID
+	 * @param  string $shiptoID Customer Shipto ID
+	 * @param  string $loginID  User Login ID, if blank, will use current User
+	 * @param  bool   $debug    Run debug? If so, will return SQL Query
+	 * @return int              Number of booking Orders
+	 */
+	function count_daybookingordernumbers($date, $custID = '', $shiptoID = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingd');
 		$q->field($q->expr('COUNT(DISTINCT(salesordernbr))'));
 
 		$q->where('bookdate', date('Ymd', strtotime($date)));
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3521,7 +4043,18 @@
 		}
 	}
 
-	function get_daybookingordernumbers($sessionID, $date, $custID = false, $shiptoID = false, $debug = false) {
+	/**
+	 * Returns an array of the Sales Orders for that day
+	 * @param  string $date     Datetime string, usually in m/d/Y
+	 * @param  bool   $custID   Customer ID
+	 * @param  bool   $shiptoID Customer Shipto ID
+	 * @param  string $loginID  User Login ID, if blank, will use current User
+	 * @param  bool   $debug    Run debug? If so, will return SQL Query
+	 * @return array            Sales Orders for that day
+	 */
+	function get_daybookingordernumbers($date, $custID = false, $shiptoID = false, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingd');
 		$q->field($q->expr('DISTINCT(salesordernbr)'));
 		$q->field('bookdate');
@@ -3529,7 +4062,7 @@
 		$q->field('shiptoid');
 		$q->where('bookdate', date('Ymd', strtotime($date)));
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3550,12 +4083,26 @@
 		}
 	}
 
-	function get_bookingdayorderdetails($sessionID, $ordn, $date, $custID = false, $shiptoID = false, $debug = false) {
+	/**
+	 * Return the detail lines for a booking on a specific date
+	 * @param  string $ordn     Sales Order Number
+	 * @param  string $date     Datetime string, usually in m/d/Y
+	 * @param  bool   $custID   Customer ID
+	 * @param  bool   $shiptoID Customer Shipto ID
+	 * @param  string $loginID  User Login ID, if blank, will use current User
+	 * @param  bool   $debug    Run debug? If so, will return SQL Query
+	 * @return array            Sales Order Detail Lines ex. {bookdate, custid, shiptoid, salesorderbase, origorderline, itemid, salesordernbr, salesperson1,
+	 * 			                                             b4qty, b4price, b4uom, afterqty
+	 *                                                       afterprice, afteruom, netamount, createdate, createtime }
+	 */
+	function get_bookingdayorderdetails($ordn, $date, $custID = false, $shiptoID = false, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingd');
 		$q->where('bookdate', date('Ymd', strtotime($date)));
 		$q->where('salesordernbr', $ordn);
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3576,18 +4123,48 @@
 		}
 	}
 
-	function get_customerbookings($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
+	/**
+	 * Returns an array of customer booking records for a salesrep
+	 * if User is a sales rep
+	 * @param  string $custID     Customer ID
+	 * @param  string $shipID     Customer Shipto ID
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	 * ex. array(
+	 * 	'ordertotal' => array (123.64, 465.78)
+	 * )
+	 * @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	 * ex. array(
+	 * 	'ordertotal' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'numeric',
+	 * 		'label' => 'Order Total'
+	 * 	),
+	 * 	'orderdate' => array(
+	 * 		'querytype' => 'between',
+	 * 		'datatype' => 'date',
+	 * 		'date-format' => 'Ymd',
+	 * 		'label' => 'order-date'
+	 * 	)
+	 * )
+	 * @param  string $interval   Interval of time ex. day | month
+	 * @param  string $loginID    User Login ID, if blank, will use the current User
+	 * @param  bool   $debug      Run in debug? If so, return SQL Query
+	 * @return array              Booking records (array)
+	 */
+	function get_customerbookings($custID, $shipID, $filter = false, $filterable = false, $interval = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingc');
 		$q->where('custid', $custID);
+
 		if (!empty($shipID)) {
 			$q->where('shiptoid', $shipID);
 		}
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
 		}
-
-		$q->generate_filters($filter, $filtertypes);
+		$q->generate_filters($filter, $filterable);
 
 		switch ($interval) {
 			case 'month':
@@ -3601,8 +4178,8 @@
 				$q->group('bookdate');
 				break;
 		}
-
 		$sql = DplusWire::wire('database')->prepare($q->render());
+
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {
@@ -3611,13 +4188,24 @@
 		}
 	}
 
-	function get_customerdaybookingordernumbers($sessionID, $date, $custID, $shipID, $debug = false) {
+	/**
+	 * Returns an array of Booking Sales Orders for that day that the User has access to
+	 * @param  string $date     Datetime usually in m/d/Y
+	 * @param  string $custID   Customer ID
+	 * @param  string $shipID   Customer Shipto ID
+	 * @param  string $loginID  User Login ID, if blank, will use the current User
+	 * @param  bool   $debug    Run in debug? If so, return SQL Query
+	 * @return array            Booking Sales Orders for that day
+	 */
+	function get_customerdaybookingordernumbers($date, $custID, $shipID = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingd');
 		$q->field($q->expr('DISTINCT(salesordernbr)'));
 		$q->field('bookdate');
 		$q->where('bookdate', date('Ymd', strtotime($date)));
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3636,13 +4224,24 @@
 		}
 	}
 
-	function count_customerdaybookingordernumbers($sessionID, $date, $custID, $shipID, $debug = false) {
+	/**
+	 * Return Number of Customer Booking Sales Order Numbers that the User has access to
+	 * @param  string $date    Datetime usually in m/d/Y
+	 * @param  string $custID  Customer ID
+	 * @param  string $shipID  Customer Shipto ID
+	 * @param  string $loginID User Login ID, if blank, will use the current User
+	 * @param  bool   $debug   Run in debug? If so, return SQL Query
+	 * @return int             Number of Customer Booking Sales ORder Numbers
+	 */
+	function count_customerdaybookingordernumbers($date, $custID, $shipID = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingd');
 		$q->field($q->expr('COUNT(DISTINCT(salesordernbr))'));
 
 		$q->where('bookdate', date('Ymd', strtotime($date)));
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesperson1', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3661,13 +4260,24 @@
 		}
 	}
 
-	function count_customertodaysbookings($sessionID, $custID, $shipID, $debug = false) {
+	/**
+	 * Return the Number of Customer bookings
+	 * that the User has access to
+	 * @param  string $custID  Customer ID
+	 * @param  string $shipID  Customer Shipto ID
+	 * @param  string $loginID User Login ID, if blank, will use the current User
+	 * @param  bool   $debug   Run in debug? If so, return SQL Query
+	 * @return int             Number of Customer bookings
+	 * @uses User dplusrole
+	 */
+	function count_customertodaysbookings($custID, $shipID, $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingc');
 		$q->field('COUNT(*)');
-
 		$q->where('bookdate', date('Ymd'));
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
 		}
 
@@ -3686,19 +4296,86 @@
 		}
 	}
 
-	function get_bookingtotalsbyshipto($sessionID, $custID, $shipID, $filter, $filtertypes, $interval = '', $debug = false) {
+	/**
+	 * Return the Customers booking total for today that the User has access to
+	 * @param  string $custID  Customer ID
+	 * @param  string $shipID  Customer Shipto ID
+	 * @param  string $loginID User Login ID, if blank, will use the current User
+	 * @param  bool   $debug   Run in debug?
+	 * @return float           booking total
+	 * @uses User dplusrole
+	 */
+	function get_customertodaybookingamount($custID, $shipID = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('bookingc');
+		$q->field('SUM(amount)');
+
+		$q->where('bookdate', date('Ymd'));
+
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
+			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
+		}
+
 		$q->where('custid', $custID);
 
 		if (!empty($shipID)) {
 			$q->where('shiptoid', $shipID);
 		}
 
-		if (DplusWire::wire('user')->hascontactrestrictions) {
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+
+	/**
+	 * Returns Booking Records for each Customer Shipto
+	 * that the User has access to
+	 * @param  string $custID      Customer ID
+	 * @param  string $shipID      Customer Shipto ID
+	 * @param  array  $filter      Array that contains the column and the values to filter for
+	*  ex. array(
+	* 	 'ordertotal' => array (123.64, 465.78)
+	*  )
+	* @param  array   $filterable  Array that contains the filterable columns as keys, and the rules needed
+	* ex. array(
+	* 	'ordertotal' => array(
+	* 		'querytype' => 'between',
+	* 		'datatype' => 'numeric',
+	* 		'label' => 'Order Total'
+	* 	),
+	* 	'orderdate' => array(
+	* 		'querytype' => 'between',
+	* 		'datatype' => 'date',
+	* 		'date-format' => 'Ymd',
+	* 		'label' => 'order-date'
+	* 	)
+	* )
+	 * @param  string $interval    Interval of time ex. month|day
+	 * @param  string $loginID     User Login ID, if blank, will use the current User
+	 * @param  bool   $debug       Run in debug?
+	 * @return array               Customer Shipto Booking Records
+	 */
+	function get_bookingtotalsbyshipto($custID, $shipID, $filter, $filterable, $interval = '', $loginID = '', $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
+		$q = (new QueryBuilder())->table('bookingc');
+
+		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
 		}
 
-		$q->generate_filters($filter, $filtertypes);
+		$q->where('custid', $custID);
+		if (!empty($shipID)) {
+			$q->where('shiptoid', $shipID);
+		}
+
+		$q->generate_filters($filter, $filterable);
 
 		switch ($interval) {
 			case 'month':

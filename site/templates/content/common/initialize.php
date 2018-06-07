@@ -1,5 +1,6 @@
 <?php
 	include_once($config->paths->templates."configs/dpluso-config.php");
+	include_once($config->paths->templates."configs/user-roles-config.php");
 	$appconfig = $pages->get('/config/');
 	
 	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/vendor/autoload.php");

@@ -5,25 +5,25 @@
 		protected $title = 'Customer Shipto Screen';
 		protected $datafilename = 'cishiptoinfo'; // iisaleshist.json
 		protected $testprefix = 'cicust'; // iish
-		
+
 		public function generate_customertable(Customer $customer) {
 			$tableformatter = new CI_CustomerScreen($this->sessionID);
 			$tableformatter->process_json();
 			return $tableformatter->generate_customertable($customer);
 		}
-		
+
 		public function generate_shiptotable(Customer $customer) {
 			$bootstrap = new Contento();
 			$tb = new Table("class=table table-striped table-bordered table-condensed table-excel");
 			foreach (array_keys($this->json['columns']['top']) as $column) {
 				if ($this->json['columns']['top'][$column]['heading'] == '' && $this->json['data']['top'][$column] == '') {
-					
+
 				} else {
 					$tb->tr();
 					$tb->td('', $this->json['columns']['top'][$column]['heading']);
 					if ($column == 'shiptoid') {
 						$options = $bootstrap->option('value= ', 'No Shipto Selected');
-						$shiptos = get_customershiptos($customer->custID, Processwire\wire('user')->loginid);
+						$shiptos = get_customershiptos($customer->custID);
 						foreach ($shiptos as $shipto) {
 							$show = $shipto->shiptoid.' '.$shipto->name.' - '.$shipto->city.', '.$shipto->state;
 							$attr = ($shipto->shiptoid == $customer->shipID) ? "value=$shipto->shiptoid|selected" : "value=$shipto->shiptoid";
@@ -40,10 +40,10 @@
 			$tb->tr()->td('colspan=2|class=text-center', $bootstrap->a("href=$href|class=btn btn-primary", 'Clear Shipto'));
 			return $tb->close();
 		}
-		
+
 		public function generate_tableright() {
 			$tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
-			
+
 			foreach (array('activity', 'saleshistory') as $section) {
 				$tb->tablesection('thead');
 				$tb->tr();
@@ -61,7 +61,7 @@
 				}
 				$tb->tr('class=last-section-row')->td('colspan='.sizeof(array_keys($this->json['data']['right'][$section][$row])), '&nbsp;');
 			}
-			
+
 			foreach(array('rfml', 'dateentered', 'lastsaledate') as $misc) {
 				$tb->tr();
 				$class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$misc]['headingjustify']];

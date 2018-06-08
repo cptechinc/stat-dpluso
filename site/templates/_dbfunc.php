@@ -1871,6 +1871,8 @@
 	 * @return array             array of SalesOrderHistory objects | array of sales history orders as arrays
 	 */
 	function get_customersaleshistoryorderdate($custID, $shiptoID = '', $limit = 10, $page = 1, $sortrule, $filter = false, $filterable = false, $loginID = '', $useclass = false, $debug = false) {
+		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
 		$q->field($q->expr("STR_TO_DATE(orderdate, '%Y%m%d') as dateoforder"));

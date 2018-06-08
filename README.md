@@ -65,6 +65,8 @@ and log in to the Processwire, click on Setup -> Export. Name it dpluso, get a z
 ## Developer
  For git commits use this [guide](https://github.com/sparkbox/standard/tree/master/style/git)
 
+## Domains & Subdomains
+* For domain access to work properly you must add the domain / subdomain to the `$config->httpHosts` array.
 
 
 

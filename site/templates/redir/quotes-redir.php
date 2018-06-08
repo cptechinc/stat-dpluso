@@ -275,6 +275,7 @@
 			$quotedetail->set('quotqty', $qty);
 			$quotedetail->set('ordrqty', $qty);
 			$quotedetail->set('quotprice', $input->post->text('price'));
+			$quotedetail->set('ordrprice', $input->post->text('price'));
 			$quotedetail->set('rshipdate', $input->post->text('rqstdate'));
 			$session->sql = $quotedetail->update();
 
@@ -294,6 +295,7 @@
 			$qty = determine_qty($input, $requestmethod, $quotedetail->itemid);
 
 			$quotedetail->set('quotprice', $input->post->text('price'));
+			$quotedetail->set('ordrprice', $input->post->text('price'));
 			$quotedetail->set('discpct', $input->post->text('discount'));
 			$quotedetail->set('quotqty', $qty);
 			$quotedetail->set('ordrqty', $qty);

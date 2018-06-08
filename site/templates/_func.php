@@ -1,104 +1,104 @@
 <?php
-    function renderNavTree($items, $maxDepth = 3) {
-    	// if we've been given just one item, convert it to an array of items
-    	//
-    	if($items instanceof \Processwire\Page) $items = array($items);
-    	// if there aren't any items to output, exit now
-    	if(!count($items)) return;
-    	// $out is where we store the markup we are creating in this function
-    	// start our <ul> markup
-    	echo "<div class='list-group'>";
-    	// cycle through all the items
-    	foreach($items as $item) {
-    		// markup for the list item...
-    		// if current item is the same as the page being viewed, add a "current" class to it
-    		// markup for the link
-    		if($item->id == Processwire\wire('page')->id) {
-    			echo "<a href='$item->url' class='list-group-item bg-primary'>$item->title</a>";
-    		} else {
-    			echo "<a href='$item->url' class='list-group-item'>$item->title</a>";
-    		}
-    		// if the item has children and we're allowed to output tree navigation (maxDepth)
-    		// then call this same function again for the item's children
-    		if($item->hasChildren() && $maxDepth) {
-    			renderNavTree($item->children, $maxDepth-1);
-    		}
-    		// close the list item
-    		//echo "</li>";
-    	}
-    	// end our <ul> markup
-    	echo "</div>";
-    }
+	function renderNavTree($items, $maxDepth = 3) {
+		// if we've been given just one item, convert it to an array of items
+		//
+		if($items instanceof \Processwire\Page) $items = array($items);
+		// if there aren't any items to output, exit now
+		if(!count($items)) return;
+		// $out is where we store the markup we are creating in this function
+		// start our <ul> markup
+		echo "<div class='list-group'>";
+		// cycle through all the items
+		foreach($items as $item) {
+			// markup for the list item...
+			// if current item is the same as the page being viewed, add a "current" class to it
+			// markup for the link
+			if($item->id == Processwire\wire('page')->id) {
+				echo "<a href='$item->url' class='list-group-item bg-primary'>$item->title</a>";
+			} else {
+				echo "<a href='$item->url' class='list-group-item'>$item->title</a>";
+			}
+			// if the item has children and we're allowed to output tree navigation (maxDepth)
+			// then call this same function again for the item's children
+			if($item->hasChildren() && $maxDepth) {
+				renderNavTree($item->children, $maxDepth-1);
+			}
+			// close the list item
+			//echo "</li>";
+		}
+		// end our <ul> markup
+		echo "</div>";
+	}
 
-    function generate_documentationmenu(\Processwire\Page $page, $maxdepth = 4) {
-        $page = Processwire\wire('pages')->get('/documentation/');
+	function generate_documentationmenu(\Processwire\Page $page, $maxdepth = 4) {
+		$page = Processwire\wire('pages')->get('/documentation/');
 
-        if (Processwire\wire('page')->id == $page->id) {
-            generate_documentationsubmenu($page, 1);
-        } else {
-            generate_documentationsubmenu($page, $maxdepth);
-        }
-    }
+		if (Processwire\wire('page')->id == $page->id) {
+			generate_documentationsubmenu($page, 1);
+		} else {
+			generate_documentationsubmenu($page, $maxdepth);
+		}
+	}
 
-    function generate_documentationsubmenu($items, $maxdepth) {
-        if ($items instanceof \Processwire\Page) $items = array($items);
-    	// if there aren't any items to output, exit now
-    	if (!count($items)) return;
+	function generate_documentationsubmenu($items, $maxdepth) {
+		if ($items instanceof \Processwire\Page) $items = array($items);
+		// if there aren't any items to output, exit now
+		if (!count($items)) return;
 
-        $parents = array();
-        foreach(Processwire\wire('page')->parents as $parent) {
-            $parents[] = $parent->id;
-        }
-
-
-        echo "<ul class='list-unstyled docs-nav'>";
-    	// cycle through all the items
-    	foreach ($items as $item) {
-    		// markup for the list item...
-    		// if current item is the same as the page being viewed, add a "current" class to it
-    		// markup for the link
-    		if ($item->dplusfunction == '' || has_dpluspermission(Processwire\wire('user')->loginid, $item->dplusfunction)) {
-                if ($item->id == Processwire\wire('page')->id) {
-        			echo "<li class='active'>$item->title</li>";
-                    $parents[] = $item->id;
-        		} elseif (in_array($item->id, $parents)) {
-                    echo "<li class='active'>$item->title</li>";
-                } else {
-        			echo "<li><a href='$item->url'>$item->title</a></li>";
-        		}
-            }
+		$parents = array();
+		foreach(Processwire\wire('page')->parents as $parent) {
+			$parents[] = $parent->id;
+		}
 
 
-            if (in_array($item->id, $parents)) {
-                if ($item->hasChildren() && $maxdepth) {
-        			generate_documentationsubmenu($item->children, $maxdepth-1);
-        		}
-            } elseif ($maxdepth == 1) {
-                if ($item->hasChildren() && $maxdepth) {
-        			generate_documentationsubmenu($item->children, $maxdepth-1);
-        		}
-            }
+		echo "<ul class='list-unstyled docs-nav'>";
+		// cycle through all the items
+		foreach ($items as $item) {
+			// markup for the list item...
+			// if current item is the same as the page being viewed, add a "current" class to it
+			// markup for the link
+			if ($item->dplusfunction == '' || has_dpluspermission(Processwire\wire('user')->loginid, $item->dplusfunction)) {
+				if ($item->id == Processwire\wire('page')->id) {
+					echo "<li class='active'>$item->title</li>";
+					$parents[] = $item->id;
+				} elseif (in_array($item->id, $parents)) {
+					echo "<li class='active'>$item->title</li>";
+				} else {
+					echo "<li><a href='$item->url'>$item->title</a></li>";
+				}
+			}
 
-    		// close the list item
-    		//echo "</li>";
-    	}
-    	// end our <ul> markup
-    	echo "</ul>";
-    }
+
+			if (in_array($item->id, $parents)) {
+				if ($item->hasChildren() && $maxdepth) {
+					generate_documentationsubmenu($item->children, $maxdepth-1);
+				}
+			} elseif ($maxdepth == 1) {
+				if ($item->hasChildren() && $maxdepth) {
+					generate_documentationsubmenu($item->children, $maxdepth-1);
+				}
+			}
+
+			// close the list item
+			//echo "</li>";
+		}
+		// end our <ul> markup
+		echo "</ul>";
+	}
 /* =============================================================
    STRING FUNCTIONS
  ============================================================ */
-     function latin_to_utf($string) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
-    	$encode = array("â€¢" => '&bull;', "â„¢" => '&trade;', "â€" => '&prime;');
-    	foreach ($encode as $key => $value) {
-    		if (strpos($string, $key) !== false) {
-    			$string = str_replace($key, $value, $string);
-    		}
-    	}
-    	return $string;
-     }
+	 function latin_to_utf($string) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
+		$encode = array("â€¢" => '&bull;', "â„¢" => '&trade;', "â€" => '&prime;');
+		foreach ($encode as $key => $value) {
+			if (strpos($string, $key) !== false) {
+				$string = str_replace($key, $value, $string);
+			}
+		}
+		return $string;
+	 }
 
-     function ordinal($number) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
+	 function ordinal($number) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
 		if ((($number % 100) >= 11) && (($number%100) <= 13))
 			return $number. 'th';
@@ -106,22 +106,22 @@
 			return $number. $ends[$number % 10];
 	}
 
-    function ordinalword($number) { // DEPRECATED 3/5/18
-        switch ($number) {
-            case '1':
-                return 'first';
-                break;
-            case '2':
-                return 'second';
-                break;
-            case '3':
-                return 'third';
-                break;
-            case '4':
-                return 'fourth';
-                break;
-        }
-    }
+	function ordinalword($number) { // DEPRECATED 3/5/18
+		switch ($number) {
+			case '1':
+				return 'first';
+				break;
+			case '2':
+				return 'second';
+				break;
+			case '3':
+				return 'third';
+				break;
+			case '4':
+				return 'fourth';
+				break;
+		}
+	}
 
 	function strToHex($string){ // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		$hex = '';
@@ -157,6 +157,18 @@
 	function cleanforjs($str) {// DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		return urlencode(str_replace(' ', '-', str_replace('#', '', $str)));
 	}
+	
+	function determine_qty(Processwire\WireInput $input, $requestmethod, $itemID) {
+		if (DplusWire::wire('modules')->isInstalled('QtyPerCase')) {
+			$qtypercase = DplusWire::wire('modules')->get('QtyPerCase');
+			if (!empty($itemID)) {
+				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->$requestmethod->text('bottle-qty'), $input->$requestmethod->text('case-qty'));
+			}
+		} else {
+			$qty = $input->$requestmethod->text('qty');
+		}
+	}
+	   
 
 /* =============================================================
    URL FUNCTIONS
@@ -222,6 +234,7 @@
 			return "";
 		}
 	}
+	
 	/**
 	 * [returnpreppedquery description]
 	 * @param  [array] $originalarray [Key-Valued array with original record column values]
@@ -414,26 +427,26 @@
  ============================================================ */
 	function setup_user($sessionID) {
 		$loginrecord = get_loginrecord($sessionID);
-        $loginID = $loginrecord['loginid'];
-        $user = LogmUser::load($loginID);
+		$loginID = $loginrecord['loginid'];
+		$user = LogmUser::load($loginID);
 		DplusWire::wire('user')->fullname = $loginrecord['loginname'];
 		DplusWire::wire('user')->loginid = $loginrecord['loginid'];
 		DplusWire::wire('user')->hascontactrestrictions = $loginrecord['restrictcustomer'];
 		DplusWire::wire('user')->hasrestrictions = $loginrecord['restrictuseraccess'];
 		DplusWire::wire('user')->salespersonid = $loginrecord['salespersonid'];
-        DplusWire::wire('user')->addRole($user->get_dplusrole());
+		DplusWire::wire('user')->addRole($user->get_dplusrole());
 	}
 
-    /**
-    	 * Trigger a PHP error, warning, or notice. Automatically prepends 'CP-DPLUSO' for easier management. Note
-    	 * that fatal errors (E_USER_ERROR) will prevent further processing.
-    	 *
-    	 * @param    string    $error          Error message (max 1024 characters)
-    	 * @param    int   $level          PHP error level, from PHP's E_USER constants
-    	 * @return   null
-    	 */
-    	function error($error, $level = E_USER_ERROR) {
-    		$error = (strpos($error, 'CP-DPLUSO: ') !== 0 ? 'CP-DPLUSO: ' . $error : $error);
-    		trigger_error($error, $level);
-    		return;
-    	}
+	/**
+		 * Trigger a PHP error, warning, or notice. Automatically prepends 'CP-DPLUSO' for easier management. Note
+		 * that fatal errors (E_USER_ERROR) will prevent further processing.
+		 *
+		 * @param    string    $error          Error message (max 1024 characters)
+		 * @param    int   $level          PHP error level, from PHP's E_USER constants
+		 * @return   null
+		 */
+		function error($error, $level = E_USER_ERROR) {
+			$error = (strpos($error, 'CP-DPLUSO: ') !== 0 ? 'CP-DPLUSO: ' . $error : $error);
+			trigger_error($error, $level);
+			return;
+		}

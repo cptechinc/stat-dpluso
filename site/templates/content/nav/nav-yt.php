@@ -21,8 +21,8 @@
 			<?php if (!$config->debug) : ?>
             	<a class="navbar-brand" href="#">TESTING - DEBUG</a>
             <?php else : ?>
-				<img class="header-logo hidden-xs" id="header-logo" src="<?php echo $config->urls->files; ?>images/dplus.png" height="50">
-				<img class="header-logo hidden-sm hidden-md hidden-lg" id="header-logo" src="<?php echo $config->urls->files; ?>images/dplus-short.png" height="50">
+				<img class="header-logo hidden-xs" id="header-logo" src="<?= $config->urls->files; ?>images/dplus.png" height="50">
+				<img class="header-logo hidden-sm hidden-md hidden-lg" id="header-logo" src="<?= $config->urls->files; ?>images/dplus-short.png" height="50">
             <?php endif; ?>
 			<img src="<?= $appconfig->companylogo->url; ?>" alt="<?= $appconfig->companydisplayname.' logo'; ?>" height="60" class="hidden-sm hidden-md hidden-lg pull-right">
 		</div>

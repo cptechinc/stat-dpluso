@@ -113,10 +113,10 @@
 		 * @return string path/to/image
 		 */
         public function generate_imagesrc() {
-            if (file_exists(wire('config')->imagefiledirectory.$this->image)) {
-                return Processwire\wire('config')->imagedirectory.$this->image;
+            if (file_exists(DplusWire::wire('config')->imagefiledirectory.$this->image)) {
+                return DplusWire::wire('config')->imagedirectory.$this->image;
             } else {
-                return Processwire\wire('config')->imagedirectory.wire('config')->imagenotfound;
+                return DplusWire::wire('config')->imagedirectory.DplusWire::wire('config')->imagenotfound;
             }
         }
 
@@ -126,7 +126,7 @@
 		 * @return string         II Load URL
 		 */
         public function generate_iiselecturl($custID = false) {
-            $url = new \Purl\Url(wire('config')->pages->products."redir/?action=ii-select");
+            $url = new \Purl\Url(DplusWire::wire('config')->pages->products."redir/?action=ii-select");
             if (!empty($custID)) $url->query->set('custID', $custID);
             $url->query->set('itemID', $this->itemid);
             return $url->getUrl();

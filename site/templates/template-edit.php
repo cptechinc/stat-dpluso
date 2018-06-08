@@ -1,6 +1,5 @@
 <?php
-	$page->useractionpanelfactory = new UserActionPanelFactory($user->loginid, $page->fullURL);
-
+	
 	switch ($page->name) { //$page->name is what we are editing
 		case 'order':
 			if ($input->get->ordn) {

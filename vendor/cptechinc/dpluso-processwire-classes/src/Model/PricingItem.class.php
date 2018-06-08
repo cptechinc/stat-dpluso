@@ -1,4 +1,4 @@
-<?php 
+<?php
 	/**
 	 * Class for Items from the Pricing table
 	 */
@@ -7,7 +7,7 @@
 		use MagicMethodTraits;
 		use CreateFromObjectArrayTraits;
 		use CreateClassArrayTraits;
-		
+
 		protected $sessionid;
 		protected $recno;
 		protected $date;
@@ -75,7 +75,7 @@
 		protected $supercedes;
 		/**
 		 * If Item is Active
-		 * @var string 
+		 * @var string
 		 * (A)ctive | (D)elete when empty | (I)nactive
 		 */
         protected $activestatus;
@@ -85,43 +85,43 @@
 			'vendorID' => 'vendorid'
 		);
 		protected $historyfields = array('lastsold', 'lastqty', 'lastprice');
-		
+
 		/* =============================================================
-			CONSTRUCTOR FUNCTIONS 
+			CONSTRUCTOR FUNCTIONS
 		============================================================ */
 		/**
 		 * When item is loaded,
 		 */
 		public function __construct() {
-			$this->image = (file_exists(Dpluswire::wire('config')->imagefiledirectory.$this->image)) ? $this->image : 'notavailable.png';
+			$this->image = (file_exists(DplusWire::wire('config')->imagefiledirectory.$this->image)) ? $this->image : 'notavailable.png';
 		}
-		
+
 		/* =============================================================
 			GETTER FUNCTIONS
 			Some are Handled by MagicMethodTraits
 		============================================================ */
 		/**
 		 * Checks if there's sales history for the Pricing Item from the database
-		 * @param  bool $debug if true it will return the SQL statement used, 
+		 * @param  bool $debug if true it will return the SQL statement used,
 		 * if not it will return the result from the query execution
 		 */
 		public function has_saleshistory($debug = false) {
 			return count_itemhistory($this->sessionid, $this->itemid, $debug);
 		}
-		
+
 		/**
 		* Returns an array of item availability records
-		* @param  bool $debug if true it will return the SQL statement used, 
+		* @param  bool $debug if true it will return the SQL statement used,
 		* if not it will return the result from the query execution
 		*/
 		public function get_availability($debug = false) {
 			return get_itemavailability($this->sessionid, $this->itemid, $debug);
 		}
-		
+
 		/**
 		 * Returns the customer history $field value
 		 * @param  string  $field [description]
-		 * @param  bool $debug if true it will return the SQL statement used, 
+		 * @param  bool $debug if true it will return the SQL statement used,
 		 * if not it will return the field value from the query execution
 		 */
 		public function history($field, $debug = false) {
@@ -129,21 +129,21 @@
 				return get_itemhistoryfield($this->sessionid, $this->itemid, $field, $debug);
 			}
 		}
-		
+
 		/**
 		 * Checks if Item image exists if not use the image not found
 		 * @return string path/to/image
 		 */
         public function generate_imagesrc() {
-            if (file_exists(Dpluswire::wire('config')->imagefiledirectory.$this->image)) {
-                return Dpluswire::wire('config')->imagedirectory.$this->image;
+            if (file_exists(DplusWire::wire('config')->imagefiledirectory.$this->image)) {
+                return DplusWire::wire('config')->imagedirectory.$this->image;
             } else {
-                return Dpluswire::wire('config')->imagedirectory.Dpluswire::wire('config')->imagenotfound;
+                return DplusWire::wire('config')->imagedirectory.DplusWire::wire('config')->imagenotfound;
             }
         }
-		
+
 		/* =============================================================
-			GENERATE ARRAY FUNCTIONS 
+			GENERATE ARRAY FUNCTIONS
 			The following are defined CreateClassArrayTraits
 			public static function generate_classarray()
 			public function _toArray()
@@ -161,7 +161,7 @@
 			unset($array['historyfields']);
 			return $array;
 		}
-		
+
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */

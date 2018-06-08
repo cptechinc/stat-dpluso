@@ -27,7 +27,7 @@
 		 * @return string               formatted result
 		 */
 		public static function format_date($date, $formatstring = 'm/d/Y') {
-			return (strtotime($date) == strtotime("12/31/1969") || empty($date)) ? '' : date($formatstring, strtotime($date));
+			return (strtotime($date) == strtotime("12/31/1969") || strtotime($date) == strtotime("0000-00-00 00:00:00")) ? '' : date($formatstring, strtotime($date));
 		}
 
 		/**

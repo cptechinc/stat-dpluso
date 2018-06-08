@@ -187,6 +187,54 @@ $(document).ready(function() {
 				$(this).closest('tr').addClass('has-error');
 			}
         });
+
+		$("body").on("submit", ".form-ajax", function(e) {
+			e.preventDefault();
+			var form = $(this);
+			var formurl = URI(form.attr('action'));
+			var focus = form.data('focus');
+			var loadinto = form.data('loadinto');
+			var querystring = formurl.query() + "&"+ form.serialize();
+			formurl.query(querystring).query(cleanparams).normalizeQuery();
+			href = formurl.toString();
+			var queries = URI.parseQuery(formurl.search())
+			console.log(queries);
+			console.log(href);
+
+			$(loadinto).loadin(href, function() {
+				if (focus.length > 0) {
+					$('html, body').animate({scrollTop: $(focus).offset().top - 60}, 1000);
+				}
+			});
+		});
+
+		$("body").on("submit", ".actions-filter", function(e) {
+			e.preventDefault();
+			var form = $(this);
+			var formurl = URI(form.attr('action'));
+			formurl.removeQuery(/^completed/);
+			formurl.removeQuery(/^assignedto/);
+			var focus = form.data('focus');
+			var loadinto = form.data('loadinto');
+			var querystring = formurl.query() + "&"+ form.serialize();
+			formurl.query(querystring).query(cleanparams).normalizeQuery();
+			href = formurl.toString();
+
+			$(loadinto).loadin(href, function() {
+				if (focus.length > 0) {
+					$('html, body').animate({scrollTop: $(focus).offset().top - 60}, 1000);
+				}
+			});
+		});
+		
+		$("body").on('keypress', 'form input', function(e) {
+			if ($(this).closest('form').hasClass('allow-enterkey-submit')) {
+				return true;
+			} else {
+				return e.which !== 13;
+			}
+		});
+		
 	/*==============================================================
 	  AJAX LOAD FUNCTIONS
 	=============================================================*/
@@ -209,12 +257,16 @@ $(document).ready(function() {
 				init_bootstraptoggle();
 			});
 		});
+<<<<<<< HEAD
 		$("body").on("click", ".stuff", function(e) {
 		e.preventDefault();
 			console.log('clicked');
 			alert('sfd');
 			
 		}); 
+=======
+
+>>>>>>> 462dccf2f... Merge pull request #177 from cptechinc/actions-reporting
 		$("body").on("click", ".load-and-show", function(e) {
 			e.preventDefault();
 			showajaxloading();
@@ -810,8 +862,8 @@ $(document).ready(function() {
 				cancelButtonClass: 'btn btn-sm btn-danger',
 				inputClass: 'form-control',
 				inputOptions: {
-					'tasks': 'Task',
-					'notes': 'Note'
+					'task': 'Task',
+					'note': 'Note'
 				},
 				inputPlaceholder: 'Select Action Type',
 				showCancelButton: true,
@@ -826,27 +878,13 @@ $(document).ready(function() {
 				}
 			}).then(function (result) {
 				var regexhref = button.attr('href');
-				var href = URI(regexhref.replace(/{replace}/g, result)).addQuery('modal', 'modal').toString();
+				var href = URI(regexhref).addQuery('type', result).addQuery('modal', 'modal').toString();
 				var modal = button.data('modal');
 				var loadinto =  modal+" .modal-content";
 				$(loadinto).loadin(href, function() {
 					$(modal).resizemodal('lg').modal();
 				});
 			}).catch(swal.noop);
-		});
-
-		$("body").on("click", ".load-action", function(e) {
-			e.preventDefault();
-			var button = $(this);
-			var ajaxloader = new ajaxloadedmodal(button);
-			showajaxloading();
-			ajaxloader.modal = config.modals.ajax;
-			wait(500, function() {
-				$(ajaxloader.loadinto).loadin(ajaxloader.url, function() {
-					hideajaxloading();
-					$(ajaxloader.modal).resizemodal('lg').modal();
-				});
-			});
 		});
 
 		$("body").on("click", ".complete-action", function(e) {
@@ -961,22 +999,6 @@ $(document).ready(function() {
 							wait(200, function() {
 								$(elementreload + " .actions-refresh").click();
 								$(modal).modal('hide');
-								if (config.appconfig.cptechcustomer != 'stempf') {
-									swal({
-										title: "Your "+json.response.actiontype+" was created!",
-										text: "Would you like to create an action for this "+json.response.actiontype+"?",
-										type: "success",
-										showCancelButton: true,
-										confirmButtonText: "Yes, Create Action",
-									}).then(function () {
-										swal.close();
-										var href = new URI($('#actions-panel .add-action').attr('href')).addQuery('actionID', json.response.actionid).toString();
-										console.log(href);
-										$('#actions-panel .add-action').attr('href', href).click();
-										href = URI(href).removeQuery('actionID').toString();
-										$('#actions-panel .add-action').attr('href', href);
-									}).catch(swal.noop);
-								}
 							});
 						}
 					});
@@ -992,31 +1014,31 @@ $(document).ready(function() {
 	/*==============================================================
 		EDIT LINE ITEM FUNCTIONS
 	=============================================================*/
-		$(".page").on("click", ".update-line", function(e) {
-			e.preventDefault();
-			showajaxloading();
-			var url = URI($(this).attr('href')).addQuery('modal', 'modal').toString();
-			var itemID = $(this).data('itemid');
-			var custID = $(this).data('custid');
-			var modal = config.modals.ajax;
-			var loadinto = modal + " .modal-content";
-			if ($.inArray(itemID, config.products.nonstockitems) > -1) {
-				console.log('skipping item get');
+	$(".page").on("click", ".update-line", function(e) {
+		e.preventDefault();
+		showajaxloading();
+		var url = URI($(this).attr('href')).addQuery('modal', 'modal').toString();
+		var itemID = $(this).data('itemid');
+		var custID = $(this).data('custid');
+		var modal = config.modals.ajax;
+		var loadinto = modal + " .modal-content";
+		if ($.inArray(itemID, config.products.nonstockitems) > -1) {
+			console.log('skipping item get');
+			$(loadinto).loadin(url, function() {
+				hideajaxloading();
+				$(modal).resizemodal('xl').modal();
+			});
+		} else {
+			edit_itempricing(itemID, custID,  function() {
 				$(loadinto).loadin(url, function() {
 					hideajaxloading();
 					$(modal).resizemodal('xl').modal();
+					set_childheightequaltoparent('.row.row-bordered', '.grid-item');
+					$('.item-form').height($('.item-information').actual('height'));
 				});
-			} else {
-				edit_itempricing(itemID, custID,  function() {
-					$(loadinto).loadin(url, function() {
-						hideajaxloading();
-						$(modal).resizemodal('xl').modal();
-						set_childheightequaltoparent('.row.row-bordered', '.grid-item');
-						$('.item-form').height($('.item-information').actual('height'));
-					});
-				});
-			}
-		});
+			});
+		}
+	});
 });
 
 /*==============================================================
@@ -1359,7 +1381,6 @@ $(document).ready(function() {
 		} else {
 			key = e.which; //firefox      
 		}
-		return (key != 13);
 	}
 
 	function init_datepicker() {

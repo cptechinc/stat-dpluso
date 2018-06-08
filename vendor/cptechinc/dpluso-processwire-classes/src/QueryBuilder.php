@@ -30,7 +30,8 @@
             'left',
             'inner',
             'outer',
-            'right'
+            'right',
+            'like'
         );
 
         /**
@@ -80,12 +81,12 @@
 		 * @uses
 		 */
 		public function generate_dateformat($filter, $filtertypes) {
-			$find = array('m', 'd', 'Y');
+			$find = array('m', 'd', 'Y', 'H', 'i', 's');
 			$format = isset($filtertypes[$filter]['date-format']) ? $filtertypes[$filter]['date-format'] : 'm/d/Y';
 			$sqlformat = $format;
 
 			foreach ($find as $code) {
-				$sqlformat = str_replace($code, '%'.$code, $sqlformat);
+				$sqlformat = str_replace($code, "%$code", $sqlformat);
 			}
 			return $sqlformat;
 		}
@@ -97,16 +98,34 @@
 						$filtervalue = array_values(array_filter($filtervalue, 'strlen'));
 
 						if (sizeof($filtervalue) == 1) {
-                            $this->where($filter, $filtervalue[0]);
-                        } else {
-                            if ($filtertypes[$filter]['datatype'] == 'date') {
+                            if ($filtertypes[$filter]['datatype'] == 'mysql-date') {
+								$this->where($this->expr("DATE($filter) = STR_TO_DATE([], '%m/%d/%Y')", $filtervalue));
+                            } elseif ($filtertypes[$filter]['datatype'] == 'date') {
 								$dateformat = $this->generate_dateformat($filter, $filtertypes);
-								$this->where($this->expr("STR_TO_DATE($filter, '$dateformat') between STR_TO_DATE([], '%m/%d/%Y') and STR_TO_DATE([], '%m/%d/%Y')", $filtervalue));
+								$this->where($this->expr("STR_TO_DATE($filter, '$dateformat') BETWEEN STR_TO_DATE([], '%m/%d/%Y') AND STR_TO_DATE([], '%m/%d/%Y')", $filtervalue));
                             } else if ($filtertypes[$filter]['datatype'] == 'numeric') {
+                            	$this->where($this->expr("$filter = CAST([] AS DECIMAL) ", $filtervalue));
+							} else {
+                                $this->where($filter, $filtervalue[0]);
+                            }
+                        } else {
+							if ($filtertypes[$filter]['datatype'] == 'mysql-date') {
+                                $dateformat = $this->generate_dateformat($filter, $filtertypes);
+								$this->where($this->expr("STR_TO_DATE($filter, '$dateformat') BETWEEN STR_TO_DATE([], '%m/%d/%Y') AND STR_TO_DATE([], '%m/%d/%Y')", $filtervalue));
+                            } elseif ($filtertypes[$filter]['datatype'] == 'date') {
+								$dateformat = $this->generate_dateformat($filter, $filtertypes);
+								$this->where($this->expr("STR_TO_DATE($filter, '$dateformat') BETWEEN STR_TO_DATE([], '%m/%d/%Y') AND STR_TO_DATE([], '%m/%d/%Y')", $filtervalue));
+                            } else if ($filtertypes[$filter]['datatype'] == 'numeric') {
+<<<<<<< HEAD
+                            	$this->where($this->expr("$filter BETWEEN CAST([] as DECIMAL) AND CAST([] AS DECIMAL)", $filtervalue));
+							} else {
+                                $this->where($this->expr("$filter BETWEEN [] AND []", $filtervalue));
+=======
                                 //$this->where($this->expr("$filter between CAST([] as UNSIGNED) and CAST([] as UNSIGNED)", $filtervalue));
                             	$this->where($this->expr("$filter between CAST([] as DECIMAL) and CAST([] as DECIMAL)", $filtervalue));
 							} else {
                                 $this->where($this->expr("$filter between [] and []", $filtervalue));
+>>>>>>> master
                             }
                         }
                         break;

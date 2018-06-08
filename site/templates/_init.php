@@ -15,6 +15,7 @@
 	include_once($config->paths->vendor."cptechinc/dpluso-processwire-classes/src/utfport.php"); // UTF8 conversion library functions
 	include_once($config->paths->content."common/initialize.php");  // includes class files
 	include_once($config->paths->templates."_init.js.php");  // includes class files
+
 	$session->sessionName = session_name();
 
 	$page->fullURL = new \Purl\Url($page->httpUrl);
@@ -33,6 +34,7 @@
 	$config->styles->append(hashtemplatefile('styles/bootstrap.min.css'));
 	$config->styles->append('https://fonts.googleapis.com/icon?family=Material+Icons');
 	$config->styles->append(hashtemplatefile('styles/libraries.css'));
+	$config->styles->append(hashtemplatefile('styles/libs/bootstrap-select.css'));
 	$config->styles->append(hashtemplatefile('styles/styles.css'));
 
 	$config->scripts->append(hashtemplatefile('scripts/libraries.js'));
@@ -41,8 +43,10 @@
 	$config->scripts->append(hashtemplatefile('scripts/libs/datatables.js'));
 	$config->scripts->append(hashtemplatefile('scripts/libs/datatables-datetime.js'));
 	$config->scripts->append(hashtemplatefile('scripts/classes.js'));
+	$config->scripts->append(hashtemplatefile('scripts/libs/bootstrap-select.js'));
 	$config->scripts->append(hashtemplatefile('scripts/scripts.js'));
 	$config->scripts->append(hashtemplatefile('scripts/dplus-notes.js'));
+
 
 	//$config->scripts->append($config->urls->modules . 'Inputfield/InputfieldCKEditor/ckeditor-4.6.1/ckeditor.js'));
 
@@ -58,5 +62,7 @@
 	if ($input->get->modal) {
 		$config->modal = true;
 	}
-
+	if ($input->get->json) {
+		$config->json = true;
+	}
 	$itemlookup = new ItemLookupModal();

@@ -3,7 +3,7 @@
           <?php if ($toolbar) : ?>
 			   <div class="row">
 					<div class="col-xs-12">
-						<button id="show-toolbar" class="btn btn-rounded btn-success show-toolbar hidden" type="button">
+						<button id="show-toolbar" class="btn btn-rounded btn-success show-toolbar hidden-md hidden-lg" type="button">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>
 					</div>

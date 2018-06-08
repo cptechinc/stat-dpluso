@@ -1,4 +1,4 @@
-<?php 
+<?php
     $config->pages->index = $config->urls->root;
     $config->pages->account = $config->urls->root . 'user/account/';
     $config->pages->login = $config->urls->root . 'user/account/login/';
@@ -33,6 +33,8 @@
     $config->pages->orders = $config->urls->root . 'user/orders/';
     $config->pages->quotes = $config->urls->root . 'user/quotes/';
     $config->pages->actions = $config->urls->root . 'activity/';
+	$config->pages->activity = $config->urls->root . 'activity/';
+    $config->pages->useractions = $config->urls->root . 'activity/user-actions/';
     $config->pages->documentation = $config->urls->root . "documentation/";
     $config->pages->documentstorage = $config->documentstorage;
     $config->pages->vendor = $config->urls->root . "vendors/";

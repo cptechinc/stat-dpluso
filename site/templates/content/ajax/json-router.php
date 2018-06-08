@@ -34,7 +34,7 @@
             include $config->paths->content."ajax/json/vi-json-router.php";
             break;
         case 'load-action';
-            include $config->paths->content."actions/load-action-json.php";
+            include $config->paths->content."user-actions/crud/read/json.php";
             break;
         case 'vendor-shipfrom':
             include $config->paths->content."ajax/json/vendor-shipfrom.php";

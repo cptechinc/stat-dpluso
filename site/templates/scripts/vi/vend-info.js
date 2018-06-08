@@ -30,7 +30,7 @@ $(function() {
 			$(modal).resizemodal('lg').modal();
 		});
 	});
-	
+
 	$("body").on("submit", '#vi-purchase-history-form', function(e) {
 		e.preventDefault();
 		var formid = '#'+$(this).attr('id');
@@ -52,7 +52,7 @@ $(function() {
 			});
 		});
 	});
-	
+
 	$("body").on("change", "select#shownotes", function(event) {
 		event.preventDefault();
 		var select = $(this);
@@ -63,20 +63,12 @@ $(function() {
 			$('.show-notes').addClass('hidden');
 		}
 	});
-	
-	$(window).resize(function() {
-		if ($(window).width() < 768) {
-			$('#show-toolbar').addClass('hidden');
-		} else {
-			$('#show-toolbar').removeClass('hidden');
-		}
-	});
 });
 
     // ADD LINE BELOW under vendorID to buttons that pull from both... also addQuery to href in function
     // var shipfromID = $(vendlookupform + " .shipfromID").val();
 
-function payment() { 
+function payment() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -91,7 +83,7 @@ function payment() {
 	});
 }
 
-function openinv() { 
+function openinv() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -107,7 +99,7 @@ function openinv() {
 	});
 }
 
-function purchasehist() { 
+function purchasehist() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var shipfromID = $(vendlookupform + " .shipfromID").val();
 	var modal = config.modals.ajax;
@@ -121,7 +113,7 @@ function purchasehist() {
 	});
 }
 
-function shipfrom() { 
+function shipfrom() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -158,7 +150,7 @@ function shipfrom() {
     });
 }
 
-function purchaseorder() { 
+function purchaseorder() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -173,7 +165,7 @@ function purchaseorder() {
 	});
 }
 
-function contact() { 
+function contact() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -188,7 +180,7 @@ function contact() {
 	});
 }
 
-function notes() { 
+function notes() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -230,7 +222,7 @@ function choosevicostingitem(itemID) {
 	});
 }
 
-function unreleased() { 
+function unreleased() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -245,7 +237,7 @@ function unreleased() {
 	});
 }
 
-function uninvoiced() { 
+function uninvoiced() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -260,7 +252,7 @@ function uninvoiced() {
 	});
 }
 
-function monthsummary() { 
+function monthsummary() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";
@@ -275,7 +267,7 @@ function monthsummary() {
 	});
 }
 
-function docview() { 
+function docview() {
 	var vendorID = $(vendlookupform + " .vendorID").val();
 	var modal = config.modals.ajax;
 	var loadinto =  modal+" .modal-content";

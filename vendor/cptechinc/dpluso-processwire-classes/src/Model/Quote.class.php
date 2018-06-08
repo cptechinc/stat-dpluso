@@ -1,9 +1,9 @@
-<?php 
+<?php
 	/**
 	 * Class for dealing with Quotes from quotehed
 	 */
 	class Quote extends Order {
-		protected $quotnbr; 
+		protected $quotnbr;
 		protected $careof;
 		protected $revdate;
 		protected $expdate;
@@ -15,18 +15,18 @@
 		protected $cost_total;
 		protected $margin_amt;
 		protected $margin_pct;
-		
+
 		//FOR SQL
 		protected $quotedate;
 		protected $reviewdate;
 		protected $expiredate;
-				
+
 		/* =============================================================
 			GETTER FUNCTIONS
 		============================================================ */
 		/**
 		 * Returns if Quote has Documents
-		 * @return bool 
+		 * @return bool
 		 */
 		public function has_documents() {
 			//return $this->hasdocuments == 'Y' ? true : false;
@@ -36,13 +36,13 @@
 		public function has_notes() {
 			return $this->hasnotes == 'Y' ? true : count_qnotes($this->sessionid, $this->quotnbr, '0', Qnote::get_qnotetype('quote'));
 		}
-		
+
 		/**
 		 * Returns if Quote is Editable
 		 * @return bool Based on Config
 		 */
 		public function can_edit() {
-			$quoteconfig = Dpluswire::wire('pages')->get('/config/')->child('name=quotes');
+			$quoteconfig = DplusWire::wire('pages')->get('/config/')->child('name=quotes');
 			return $quoteconfig->allow_edit;
 		}
 
@@ -51,7 +51,7 @@
 		// }
 
 		/* =============================================================
-			GENERATE ARRAY FUNCTIONS 
+			GENERATE ARRAY FUNCTIONS
 			The following are defined CreateClassArrayTraits
 			public static function generate_classarray()
 			public function _toArray()
@@ -80,7 +80,7 @@
 		public static function load($sessionID, $qnbr) {
 			return get_quotehead($sessionID, $qnbr, true, false);
 		}
-		
+
 		/**
 		 * Updates the Quote in the Database
 		 * @param  bool $debug Whether or Query is Executed
@@ -89,16 +89,16 @@
 		public function update($debug = false) {
 			return edit_quotehead($this->sessionid, $this->quotnbr, $this, $debug);
 		}
-		
+
 		/**
 		 * Checks if changes have been made by
 		 * comparing it to the original Quote
-		 * @return bool 
+		 * @return bool
 		 */
 		public function has_changes() {
 			$properties = array_keys(get_object_vars($this));
 			$quote = Quote::load($this->sessionid, $this->quotnbr);
-			
+
 			foreach ($properties as $property) {
 				if ($this->$property != $quote->$property) {
 					return true;

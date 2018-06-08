@@ -205,7 +205,7 @@
 		 */
 		public function generate_viewlinkeduseractionsurl(Order $order) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->actions."all/load/list/salesorder/";
+			$url->path = DplusWire::wire('config')->pages->useractions;
 			$url->query->setData(array('ordn' => $order->orderno));
 			return $url->getUrl();
 		}

@@ -429,8 +429,7 @@
     	 * that fatal errors (E_USER_ERROR) will prevent further processing.
     	 *
     	 * @param    string    $error          Error message (max 1024 characters)
-    	 * @param    integer   $level          PHP error level, from PHP's E_USER constants
-    	 *
+    	 * @param    int   $level          PHP error level, from PHP's E_USER constants
     	 * @return   null
     	 */
     	function error($error, $level = E_USER_ERROR) {

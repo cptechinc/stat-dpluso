@@ -1,4 +1,4 @@
-<?php 
+<?php
 	/**
 	 * Class for Dealing with Sales Orders from ordrhead
 	 */
@@ -37,30 +37,30 @@
 		protected $srcdatethru;
 		protected $prntfmt;
 		protected $prntfmtdisp;
-		
+
 		// Properties needed by MYSQL to sort
 		protected $dateoforder;
-		
-		
+
+
 		/* =============================================================
-			GETTER FUNCTIONS 
+			GETTER FUNCTIONS
 		============================================================ */
 		/**
 		 * Returns if Sales Order has Documents
-		 * @return bool 
+		 * @return bool
 		 */
 		public function has_documents() {
 			return $this->hasdocuments == 'Y' ? true : false;
 		}
-		
+
 		/**
 		 * Returns if Sales Order has tracking
-		 * @return bool 
+		 * @return bool
 		 */
 		public function has_tracking() {
 			return $this->hastracking == 'Y' ? true : false;
 		}
-		
+
 		public function has_notes() {
 			return $this->hasnotes == 'Y' ? true : false;
 		}
@@ -97,9 +97,9 @@
 		public function is_phoneintl() {
 			return $this->phintl == 'Y' ? true : false;
 		}
-		
+
 		/* =============================================================
-			GENERATE ARRAY FUNCTIONS 
+			GENERATE ARRAY FUNCTIONS
 			The following are defined CreateClassArrayTraits
 			public static function generate_classarray()
 			public function _toArray()
@@ -115,7 +115,7 @@
 		public static function remove_nondbkeys($array) {
 			return $array;
 		}
-		
+
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
@@ -123,14 +123,14 @@
 		 * Returns SalesOrder from ordrhed
 		 * @param  string $sessionID Session ID
 		 * @param  string $ordn      Sales Order #
-		 * @param  bool   $debug     Whether Sales Order or SQL Query for the Order is returned 
+		 * @param  bool   $debug     Whether Sales Order or SQL Query for the Order is returned
 		 * @return SalesOrder        Or SQL QUERY
 		 * @uses Read (CRUD)
 		 */
 		public static function load($sessionID, $ordn, $debug = false) {
 			return get_orderhead($sessionID, $ordn, true, $debug);
 		}
-		
+
 		/**
 		 * Updates the Sales Order in the ordrhed table
 		 * @param  bool   $debug Whether or not SQL Query is Executed
@@ -140,7 +140,7 @@
 		public function update($debug = false) {
 			return edit_orderhead($this->sessionid, $this->orderno, $this, $debug);
 		}
-		
+
 		/**
 		 * Updates the Payment Information Sales Order in the ordrhed table
 		 * @param  bool   $debug Whether or not SQL Query is Executed
@@ -150,7 +150,7 @@
 		public function update_payment($debug = false) {
 			return edit_orderhead_credit($sessionID, $this->orderno, $this->paytype, $this->cardnumber, $this->cardexpire, $this->cardcode, $debug) ;
 		}
-		
+
 		/**
 		 * Checks for changes by comparing it to original
 		 * @return bool Changes Made Or Not
@@ -159,7 +159,7 @@
 		public function has_changes() {
 			$properties = array_keys(get_object_vars($this));
 			$order = SalesOrder::load($this->sessionid, $this->orderno);
-			
+
 			foreach ($properties as $property) {
 				if ($this->$property != $order->$property) {
 					return true;

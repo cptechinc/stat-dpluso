@@ -453,7 +453,11 @@
 	.table.item-pricing th { width: 100px; }
 	#ii-stock-results { max-height: 600px; overflow-y: scroll; }
 	#ii-results { max-height: 600px; overflow-y: scroll; min-height: 400px;}
-	.modal-body.modal-results {max-height: 600px; overflow-y: scroll; min-height: 400px;}
+	.modal-body.modal-results {max-height: 800px; overflow-y: scroll; min-height: 400px;}
+	@media screen and (max-width: 768px) {
+		.modal-body.modal-results {max-height: 600px;}
+	}
+
 	.table .no-bottom { margin-bottom: 0px; }
 	.last-section-row {border-top: 2px solid black;}
 	.last-row-bottom {border-bottom: 2px solid black;}
@@ -519,3 +523,13 @@
 +=============================================================*/
 	.bookings-table-div {max-height: 600px; overflow-y: scroll;}
 	.cust-bookings-table-div {max-height: 400px; overflow-y: scroll;}
+
+/*==============================================================
+   CALENDAR STYLES
+ =============================================================*/
+	.day {height: 150px; }
+	.day .day-number {padding-bottom: 10px; }
+	.day.active .day-number {font-weight: bold;}
+
+	.day .action-bar { }
+	.day .day-list {height: 80px;}

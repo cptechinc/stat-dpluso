@@ -86,9 +86,9 @@
 	*		FAX=$fax
 	*		EMAIL=$email
 	*		CELLPHONE=$cellphone
-	*		ARCONTACT= Y | N ** ONLY BILLTO 
-	*		DUNCONTACT= Y | N ** ONLY BILLTO 
-	*		ACKCONTACT= Y | N ** ONLY BILLTO 
+	*		ARCONTACT= Y | N ** ONLY BILLTO
+	*		DUNCONTACT= Y | N ** ONLY BILLTO
+	*		ACKCONTACT= Y | N ** ONLY BILLTO
 	*		BUYCONTACT= P | Y | N
 	*		CERCONTACT= Y | N
 	*		break;
@@ -141,7 +141,7 @@
 	*		SHIPID=$shipID
 	*		break;
 	*	case 'ci-documents':
-	*		DOCVIEW 
+	*		DOCVIEW
 	*		FLD1CD=CU
 	*		FLD1DATA=$custID
 	*		FLD1DESC=$custname
@@ -226,7 +226,7 @@
 			$customer->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
 			$customer->set('ackcontact', $input->post->text('ackcontact') == 'Y' ? "Y" : "N");
 			$customer->create();
-			
+
 			$shipto = Contact::create_fromobject($customer);
 			$shipto->set('shiptoid', '1');
 			$shipto->set('source', 'CS');
@@ -248,7 +248,7 @@
 			$customer->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
 			$customer->set('ackcontact', "N");
 			$shipto->create();
-			
+
 			$data = array(
 				'DBNAME' => $config->dbName,
 				'NEWCUSTOMER' => false,
@@ -295,8 +295,8 @@
 			$custID = get_createdordn(session_id());
 			$session->sql = Customer::change_custid(session_id(), $custID);
 			$session->loc = $config->pages->custinfo."$custID/";
-			
-			if (!empty($shipID)) { 
+
+			if (!empty($shipID)) {
 				$session->loc = $config->pages->custinfo."$custID/shipto-$shipID/";
 				$data = array('DBNAME' => $config->dbName, 'CISHIPTOINFO' => false, 'CUSTID' => $custID, 'SHIPID' => $shipID);
 			} else {
@@ -305,7 +305,7 @@
 			break;
 		case 'load-customer':
 			$session->loc = $config->pages->custinfo."$custID/";
-			if (!empty($shipID)) { 
+			if (!empty($shipID)) {
 				$session->loc = $config->pages->custinfo."$custID/shipto-$shipID/";
 				$data = array('DBNAME' => $config->dbName, 'CISHIPTOINFO' => false, 'CUSTID' => $custID, 'SHIPID' => $shipID);
 			} else {
@@ -343,17 +343,17 @@
 			$contact->set('certcontact', $input->post->text('cercontact') == 'Y' ? "Y" : "N");
 			$contact->set('ackcontact', $input->post->text('ackcontact') == 'Y' ? "Y" : "N");
 			$contact->create();
-			
+
 			$data = array(
-				'DBNAME' => $config->dbName, 
-				'ADDCONTACT' => false, 
-				'CUSTID' => $custID, 
-				'SHIPID' => $shipID, 
+				'DBNAME' => $config->dbName,
+				'ADDCONTACT' => false,
+				'CUSTID' => $custID,
+				'SHIPID' => $shipID,
 				'CONTACT' => $contact->contact,
 				'TITLE' => $contact->title,
-				'PHONE' => str_replace('-', '', $contact->phone), 
+				'PHONE' => str_replace('-', '', $contact->phone),
 				'EXTENSION' => $contact->extension,
-				'FAX' => str_replace('-', '', $contact->faxnbr), 
+				'FAX' => str_replace('-', '', $contact->faxnbr),
 				'EMAIL' => $contact->email,
 				'CELLPHONE' => str_replace('-', '', $contact->cellphone),
 				'ARCONTACT' => $contact->arcontact,
@@ -368,7 +368,7 @@
 			$shipID = $input->post->text('shipID');
 			$contactID = $input->post->text('contactID');
 			$newcontactID = $input->post->text('contact-name');
-			
+
 			$contact = Contact::load($custID, $shipID, $contactID, false);
 			$contact->set('title', $input->post->text('contact-title'));
 			$contact->set('phone', $input->post->text('contact-phone'));
@@ -381,24 +381,24 @@
 			$contact->set('buyingcontact', $input->post->text('buycontact'));
 			$contact->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
 			$contact->set('ackcontact', $input->post->text('ackcontact') == 'Y' ? "Y" : "N");
-			
+
 			$session->sql = $contact->update();
 			if ($newcontactID != $contact->contact) {
-				$session->sql = $contact->change_contactid($newcontactID);
+				$session->sql .= "<br>" . $contact->change_contactid($newcontactID);
 				$contact->set('contact', $newcontactID);
 			}
-			
+
 			$data = array(
-				'DBNAME' => $config->dbName, 
-				'EDITCONTACT' => false, 
-				'CUSTID' => $custID, 
-				'SHIPID' => $shipID, 
-				'CONTACT' => $contactID, 
-				'NAME' => $contact->contact, 
+				'DBNAME' => $config->dbName,
+				'EDITCONTACT' => false,
+				'CUSTID' => $custID,
+				'SHIPID' => $shipID,
+				'CONTACT' => $contactID,
+				'NAME' => $contact->contact,
 				'TITLE' => $contact->title,
-				'PHONE' => str_replace('-', '', $contact->phone), 
+				'PHONE' => str_replace('-', '', $contact->phone),
 				'EXTENSION' => $contact->extension,
-				'FAX' => str_replace('-', '', $contact->faxnbr), 
+				'FAX' => str_replace('-', '', $contact->faxnbr),
 				'EMAIL' => $contact->email,
 				'CELLPHONE' => str_replace('-', '', $contact->cellphone),
 				'ARCONTACT' => $contact->arcontact,
@@ -408,14 +408,20 @@
 				'CERCONTACT' => $contact->certcontact
 			);
 			$returnpage = new \Purl\Url($input->post->text('page'));
-			$returnpage->query->set('id', $contact->contact);
+			$returnpage->query->set('contactID', $contact->contact);
 
-			$oldlinks = array('customerlink' => $custID, 'shiptolink' => $shipID, 'contactlink' => $contactID);
-			$newlinks = array('customerlink' => $custID, 'shiptolink' => $shipID, 'contactlink' => $contact->contact);
-			
+			$oldlinks = new UserAction();
+			$oldlinks->set('customerlink', $custID);
+			$oldlinks->set('shiptolink', $shipID);
+
+			$newlinks = UserAction::create_fromobject($oldlinks);
+			$newlinks->set('contactlink', $contact->contact);
+
+			$oldlinks->set('contactlink', $contactID);
+
 			if ($contactID != $contact->contact) {
-				$session->sql .= "<br>" . update_useractionlinks($oldlinks, $newlinks, $oldlinks, true);
-				update_useractionlinks($oldlinks, $newlinks, $oldlinks, false);
+				$session->sql .= "<br>" . update_useractionlinks($oldlinks, $newlinks, true);
+				update_useractionlinks($oldlinks, $newlinks);
 			}
 			$session->loc = $returnpage->getUrl();
 			break;

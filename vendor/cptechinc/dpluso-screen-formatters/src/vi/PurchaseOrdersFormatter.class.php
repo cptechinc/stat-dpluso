@@ -10,12 +10,12 @@
 			"header" => "Header",
 			"detail" => "Detail"
 		);
-		
+
         public function generate_screen() {
             $bootstrap = new Contento();
             $content = '';
 			$this->generate_tableblueprint();
-		    
+
             $tb = new Table('class=table table-striped table-bordered table-condensed table-excel|id=purchase-orders');
         	$tb->tablesection('thead');
         		for ($x = 1; $x < $this->tableblueprint['header']['maxrows'] + 1; $x++) {
@@ -24,7 +24,7 @@
         			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
         				if (isset($this->tableblueprint['header']['rows'][$x]['columns'][$i])) {
         					$column = $this->tableblueprint['header']['rows'][$x]['columns'][$i];
-        					$class = Processwire\wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['headingjustify']];
+        					$class = DplusWire::wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['headingjustify']];
         					$colspan = $column['col-length'];
         					$tb->th("colspan=$colspan|class=$class", $column['label']);
         				} else {
@@ -36,14 +36,14 @@
 						$columncount += $colspan;
         			}
         		}
-        		
+
         		for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
         			$tb->tr();
 					$columncount = 0;
         			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
         				if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
         					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-        					$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
+        					$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
         					$colspan = $column['col-length'];
         					$tb->th("colspan=$colspan|class=$class", $column['label']);
         				} else {
@@ -55,7 +55,7 @@
 						$columncount += $colspan;
         			}
         		}
-        		
+
         	$tb->closetablesection('thead');
         	$tb->tablesection('tbody');
                 foreach($this->json['data']['purchaseorders'] as $order) {
@@ -65,7 +65,7 @@
         				for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
         					if (isset($this->tableblueprint['header']['rows'][$x]['columns'][$i])) {
         						$column = $this->tableblueprint['header']['rows'][$x]['columns'][$i];
-        						$class = Processwire\wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
+        						$class = DplusWire::wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
         						$colspan = $column['col-length'];
         						$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $order, $column);
         						$tb->td("colspan=$colspan|class=$class", $celldata);
@@ -78,7 +78,7 @@
 							$columncount += $colspan;
         				}
         			}
-					
+
         			foreach ($order['details'] as $detail) {
         				for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
         	                $tb->tr();
@@ -86,7 +86,7 @@
         	                for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
         	                    if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
         	                        $column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-        	                        $class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+        	                        $class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
         	                        $colspan = $column['col-length'];
         	                        $celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $detail, $column);
         	                        $tb->td("colspan=$colspan|class=$class", $celldata);
@@ -100,7 +100,7 @@
         	                }
         	            }
                 	}
-				
+
 					$pototals = $order['pototals'];
 					for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
 						$tb->tr();
@@ -108,7 +108,7 @@
 						for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 							if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
 								$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-								$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+								$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
 								$colspan = $column['id'] == "Purchase Order Number" ? 2 : $column['col-length'];
 								$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $pototals, $column);
 								$tb->td("colspan=$colspan|class=$class", $celldata);
@@ -122,7 +122,7 @@
 						}
 					}
 				}
-                
+
                 $vendortotal = $this->json['data']['vendortotals'];
     			for ($x = 1; $x < $this->tableblueprint['detail']['maxrows'] + 1; $x++) {
     				$tb->tr('class=totals');
@@ -130,7 +130,7 @@
     				for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
     					if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
     						$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-    						$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+    						$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
     						$colspan = $column['id'] == "Line Number" ? 2 : $column['col-length'];
     						$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $vendortotal, $column);
     						$tb->td("colspan=$colspan|class=$class", $celldata);
@@ -146,7 +146,7 @@
         	$tb->closetablesection('tbody');
         	return $tb->close();
         }
-		
+
 		public function generate_javascript() {
 			$bootstrap = new Contento();
 			$content = $bootstrap->open('script', '');

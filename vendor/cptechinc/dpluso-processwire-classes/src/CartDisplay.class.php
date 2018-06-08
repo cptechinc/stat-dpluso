@@ -75,7 +75,7 @@
 		 */
 		public function generate_dplusnotesrequesturl(Order $cart, $linenbr) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Dpluswire::wire('config')->pages->notes."redir/";
+			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-cart-notes', 'linenbr' => $linenbr));
 			return $url->getUrl();
 		}
@@ -105,7 +105,6 @@
 		 * @param  Order       $cart   CartQuote
 		 * @param  OrderDetail $detail CartDetail
 		 * @return string              HTML Link
-		 * @uses
 		 */
 		public function generate_detailvieweditlink(Order $cart, OrderDetail $detail) {
 			$bootstrap = new Contento();
@@ -119,11 +118,10 @@
 		 * @param  Order       $cart   CartQuote
 		 * @param  OrderDetail $detail CartDetail
 		 * @return string              URL to load edit detail
-		 * @uses
 		 */
 		public function generate_detailviewediturl(Order $cart, OrderDetail $detail) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = Dpluswire::wire('config')->pages->ajax."load/edit-detail/cart/";
+			$url->path = DplusWire::wire('config')->pages->ajax."load/edit-detail/cart/";
 			$url->query->setData(array('line' => $detail->linenbr));
 			return $url->getUrl();
 		}

@@ -34,11 +34,11 @@
 					</tr>
 					
 					<tr>
-						<td class="control-label">Name</td>
-						<td><?php echo $contact->contact; ?></td>
+						<td class="control-label">Name:</td>
+						<td><?= $contact->contact; ?></td>
 					</tr>
 					<tr>
-						<td>Title:</td>
+						<td class="control-label">Title:</td>
 						<td><?= $contact->title; ?></td> 
 					</tr>
 					<tr>
@@ -133,7 +133,7 @@
 							<td><input class="form-control input-sm required" name="contact-name" value="<?= $contact->contact; ?>"></td>
 						</tr>
 						<tr> 
-							<td>Title:</td>
+							<td class="control-label">Title:</td>
 							<td><input type="text" class="form-control input-sm" name="contact-title" value="<?= $contact->title; ?>"></td>
 						</tr>
 						<tr>

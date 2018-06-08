@@ -213,7 +213,7 @@
             if ($this->has_shipto()) {
                 $url->query->set('shipID', $this->shiptoid);
             }
-            $url->query->set('id', $this->contact);
+            $url->query->set('contactID', $this->contact);
             return $url->getUrl();
         }
 
@@ -328,7 +328,7 @@
 			if ($this->is_buyingcontact()) {
 				$title = $this->is_primarybuyer() ? 'Primary Buyer' : 'Buyer';
 			} elseif ($this->is_certcontact()) {
-				if (Dpluswire::wire('config')->dpluscustomer == 'stat') {
+				if (DplusWire::wire('config')->dpluscustomer == 'stat') {
 					$title = 'End User';
 				}
 			}

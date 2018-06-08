@@ -1,4 +1,4 @@
-<?php 
+<?php
     $showcost = $appconfig->show_cost;
 
     if (!$showcost) {
@@ -6,19 +6,22 @@
             $showcost = $users->get("name=".$user->loginid)->hasPermission('can-view-cost');
         }
     }
-    
+
     $config->js('pwuser', [
         'permissions' => [
             'show_cost' => $showcost
         ]
     ]);
-    
+
     $config->js('pwconfig', [
         'appconfig' => [
             'cptechcustomer' => $config->cptechcustomer,
 			'ii' => [
 				'option_kitorbom' => $appconfig->child('name=item-information')->option_kitorbom->value,
-			]
+			],
+            'useractions' => [
+                'types' => UserAction::$types
+            ]
         ],
         'edit' => [
             'pricing' => [

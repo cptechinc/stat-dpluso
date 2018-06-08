@@ -34,7 +34,7 @@
 					}
 				}
 			}
-			if (has_dpluspermission(Dpluswire::wire('user')->loginid, 'eso') || has_dpluspermission(Dpluswire::wire('user')->loginid, 'eqo')) {
+			if (has_dpluspermission(DplusWire::wire('user')->loginid, 'eso') || has_dpluspermission(DplusWire::wire('user')->loginid, 'eqo')) {
 				$button = $bootstrap->button('type=button|class=btn btn-primary|data-toggle=modal|data-target=#item-lookup-modal', $bootstrap->createicon('glyphicon glyphicon-plus'). ' Item Entry');
 				$tb->tr()->td('colspan=2', $bootstrap->p('class=text-center', $button));
 			}
@@ -90,7 +90,7 @@
 
 				} else {
 					$tb->tr();
-					$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['left'][$column]['headingjustify']];
+					$class = DplusWire::wire('config')->textjustify[$this->json['columns']['left'][$column]['headingjustify']];
 					$tb->td("class=$class", $this->json['columns']['left'][$column]['heading']);
 					$tb->td('', TableScreenMaker::generate_celldata($this->json['data']['left'], $column));
 				}
@@ -105,14 +105,14 @@
 					$tb->tablesection('thead');
 					$tb->tr();
 					foreach ($this->json['columns']['right'][$section] as $column) {
-						$class = Dpluswire::wire('config')->textjustify[$column['headingjustify']];
+						$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
 						$tb->th("class=$class", $column['heading']);
 					}
 					$tb->closetablesection('thead');
 					foreach (array_keys($this->json['data']['right'][$section]) as $row) {
 						$tb->tr();
 						foreach (array_keys($this->json['data']['right'][$section][$row]) as $column) {
-							$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
+							$class = DplusWire::wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
 							$tb->td("class=$class", $this->json['data']['right'][$section][$row][$column]);
 						}
 					}
@@ -123,9 +123,9 @@
 			foreach(array_keys($this->json['data']['right']['misc']) as $misc) {
 				if ($misc != 'rfml') {
 					$tb->tr();
-					$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['headingjustify']];
+					$class = DplusWire::wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['headingjustify']];
 					$tb->td("class=$class", $this->json['columns']['right']['misc'][$misc]['heading']);
-					$class = Dpluswire::wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['datajustify']];
+					$class = DplusWire::wire('config')->textjustify[$this->json['columns']['right']['misc'][$misc]['datajustify']];
 					$tb->td("class=$class", $this->json['data']['right']['misc'][$misc])->td();
 				}
 			}

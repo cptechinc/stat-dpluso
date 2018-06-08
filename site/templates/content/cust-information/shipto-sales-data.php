@@ -1,5 +1,5 @@
 <?php 
-	$topshiptos = get_topxsellingshiptos(session_id(), $customer->custid, 25);
+	$topshiptos = get_topxsellingshiptos($customer->custid, 25);
 	$data = array();
 ?>
 <div class="panel panel-primary not-round" id="shipto-sales-panel">

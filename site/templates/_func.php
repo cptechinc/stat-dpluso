@@ -167,6 +167,7 @@
 		} else {
 			$qty = $input->$requestmethod->text('qty');
 		}
+		return $qty;
 	}
 	   
 

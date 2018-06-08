@@ -771,7 +771,7 @@
 
 				$content .= $bootstrap->div('class=day-list', $list);
 
-				if ($this->count_dayallactions($date) || $this->count_dayrescheduledtasks($date) || $this->count_dayscheduledtasks($date)) {
+				if ($this->count_dayallactions($date) || $this->count_daynotes($date) || $this->count_dayrescheduledtasks($date) || $this->count_dayscheduledtasks($date)) {
 					$href = $this->generate_dayviewurl($date);
 					$ajaxdata = $this->generate_ajaxdataforcontento();
 					$content .= $bootstrap->div('class=action-bar', $bootstrap->a("href=$href|class=btn btn-xs btn-block btn-primary load-link|$ajaxdata", 'View Actions'));

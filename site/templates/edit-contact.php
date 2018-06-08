@@ -6,7 +6,7 @@
 	$primarycontact = Contact::load_primarycontact($custID, $shipID);
 
 	if ($contact) {
-        if ($contact->can_useraccess($user->loginid, $user->hasrestrictions, $custID, $shipID, $contactID, false)) {
+        if (Contact::can_useraccess($custID, $shipID, $contactID)) {
 			$page->title = "Editing " .$contact->contact . ", ".$contact->get_customername();
 			$page->body = $config->paths->content.'customer/contact/edit-contact.php';
 			$config->scripts->append(hashtemplatefile('scripts/pages/contact-page.js'));

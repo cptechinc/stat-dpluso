@@ -420,7 +420,7 @@
 		}
 	}
 
-	function can_accesscustomercontact($custID, $shiptoID, $contactID, $loginID, $debug) {
+	function can_accesscustomercontact($custID, $shiptoID, $contactID, $loginID = '', $debug = false) {
 		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
 		$user = LogmUser::load($loginID);
 		$SHARED_ACCOUNTS = DplusWire::wire('config')->sharedaccounts;

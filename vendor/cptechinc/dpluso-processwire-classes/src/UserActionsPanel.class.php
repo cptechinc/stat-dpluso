@@ -307,6 +307,9 @@
 				$url->query->set('month', $monthyear);
 				$url->query->remove('day');
 			}
+			$url->query->remove('completed');
+			$url->query->remove('actiontype');
+			$url->query->remove('duedate');
 			return $url->getUrl();
 		}
 
@@ -335,6 +338,7 @@
 			$url = new Purl\Url($this->generate_refreshurl());
 			$url->query->set('view', 'day');
 			$url->query->set('day', $date);
+			$url->query->remove('month');
 			return $url->getUrl();
 		}
 
@@ -350,6 +354,7 @@
 			$url->query->set('actiontype', 'task');
 			$url->query->set('duedate', $date);
 			$url->query->set('completed', 'Y||R');
+			$url->query->remove('datecreated');
 			return $url->getUrl();
 		}
 
@@ -463,8 +468,33 @@
 		 */
 		public function get_daytasks($day, $debug = false) {
 			$filters = $this->filters;
+			unset($filters['datecreated']);
 			$filters['actiontype'] = array('task');
 			return get_dayallactions($day, $filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * Returns UserActions [type=task] that meet the $this->filter criteria
+		 * @param  string $day   Date time string usually formatted (m/d/Y)
+		 * @param  bool   $debug Whether to return array of UserActions | SQL Query
+		 * @return array         array of UserActions | SQL Query
+		 */
+		public function get_daypriorincompletetasks($day, $debug = false) {
+			$filters = $this->filters;
+			$filters['completed'] = array('');
+			return get_daypriorincompletetasks($day, $filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * Returns the number UserActions [type=task] that meet the $this->filter criteria
+		 * @param  string $day   Date time string usually formatted (m/d/Y)
+		 * @param  bool   $debug Whether to return array of UserActions | SQL Query
+		 * @return int           Number of tasks
+		 */
+		public function count_daypriorincompletetasks($day, $debug = false) {
+			$filters = $this->filters;
+			$filters['completed'] = array('');
+			return count_daypriorincompletetasks($day, $filters, $this->filterable, $debug);
 		}
 
 		/**
@@ -476,6 +506,7 @@
 		public function count_dayscheduledtasks($day, $debug = false) {
 			$filters = $this->filters;
 			unset($filters['completed']);
+			unset($filters['datecreated']);
 			$filters['duedate'] = array($day);
 			$filters['actiontype'] = array('task');
 			return count_dayallactions($day, $filters, $this->filterable, $debug);
@@ -494,6 +525,20 @@
 			$filters['dateupdated'] = array($day);
 			return count_dayallactions($day, $filters, $this->filterable, $debug);
 		}
+		
+		/**
+		 * Returns of the number of UserActions[type=task] that were due that day, but were rescheduled
+		 * @param  string  $day  Date time string usually formatted (m/d/Y)
+		 * @param  bool   $debug Whether to return Number | SQL Query
+		 * @return int           Number of Tasks that were due that day, but were rescheduled | SQL Query
+		 */
+		public function count_daytasksduebutrescheduled($day, $debug = false) {
+			$filters = $this->filters;
+			$filters['actiontype'] = array('task');
+			$filters['completed'] = array('R');
+			$filters['duedate'] = array($day);
+			return count_dayallactions($day, $filters, $this->filterable, $debug);
+		}
 
 		/**
 		 * Returns of the number of UserActions[type=task] completed that day
@@ -506,6 +551,19 @@
 			$filters['actiontype'] = array('task');
 			$filters['completed'] = array('Y');
 			$filters['datecompleted'] = array($day);
+			return count_dayallactions($day, $filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * Returns of the number of UserActions[type=task] that were not completed
+		 * @param  string  $day  Date time string usually formatted (m/d/Y)
+		 * @param  bool   $debug Whether to return Number or SQL Query
+		 * @return int           Number of Tasks inomplete that day | SQL Query
+		 */
+		public function count_dayincompletedtasks($day, $debug = false) {
+			$filters = $this->filters;
+			$filters['actiontype'] = array('task');
+			$filters['completed'] = array('');
 			return count_dayallactions($day, $filters, $this->filterable, $debug);
 		}
 
@@ -760,11 +818,23 @@
 				}
 
 				if ($this->count_dayscheduledtasks($date)) {
-					$listitems .= $bootstrap->li('role=presentation', 'Tasks '.$bootstrap->span('class=badge pull-right', $this->count_dayscheduledtasks($date)).'<br>');
+					//$listitems .= $bootstrap->li('role=presentation', 'Tasks '.$bootstrap->span('class=pull-right', $this->count_dayscheduledtasks($date)).'<br>');
 				}
-
+				
+				if ($this->count_dayincompletedtasks($date)) {
+					$listitems .= $bootstrap->li('role=presentation|class=bg-warning', 'Incomplete'.$bootstrap->span('class=pull-right', $this->count_dayincompletedtasks($date)).'<br>');
+				}
+				
+				if ($this->count_daytasksduebutrescheduled($date)) {
+					$listitems .= $bootstrap->li('role=presentation|class=bg-info', 'Rescheduled'.$bootstrap->span('class=pull-right', $this->count_daytasksduebutrescheduled($date)).'<br>');
+				}
+				
+				if ($this->count_daycompletedtasks($date)) {
+					$listitems .= $bootstrap->li('role=presentation|class=bg-warning', 'Incomplete'.$bootstrap->span('class=pull-right', $this->count_daycompletedtasks($date)).'<br>');
+				}
+				
 				if ($this->count_dayrescheduledtasks($date)) {
-					$listitems .= $bootstrap->li('role=presentation', 'Tasks Rescheduled'.$bootstrap->span('class=badge bg-info pull-right', $this->count_dayrescheduledtasks($date)).'<br>');
+					$listitems .= $bootstrap->li('role=presentation', 'Tasks Rescheduled this day'.$bootstrap->span('class=badge bg-info pull-right', $this->count_dayrescheduledtasks($date)).'<br>');
 				}
 
 				$list = $bootstrap->ul('class=list-unstyled', $listitems);

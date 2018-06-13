@@ -2867,6 +2867,42 @@
 			return $sql->fetchAll();
 		}
 	}
+	
+	function get_daypriorincompletetasks($day, $filters, $filterable, $debug = false) {
+		$q = (new QueryBuilder())->table('useractions');
+		$q->where('actiontype', 'task');
+		$q->where($q->expr('DATE(duedate)'), '<=', $q->expr("STR_TO_DATE([], [])", [$day, $q->generate_dateformat('duedate', $filterable)]));
+		$q->order('duedate', 'ASC');
+
+		$q->generate_filters($filters, $filterable);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'UserAction');
+			return $sql->fetchAll();
+		}
+	}
+	
+	function count_daypriorincompletetasks($day, $filters, $filterable, $debug = false) {
+		$q = (new QueryBuilder())->table('useractions');
+		$q->field($q->expr('COUNT(*)'));
+		$q->where('actiontype', 'task');
+		$q->where($q->expr('DATE(duedate)'), '<=', $q->expr("STR_TO_DATE([], [])", [$day, $q->generate_dateformat('duedate', $filterable)]));
+		$q->order('duedate', 'ASC');
+
+		$q->generate_filters($filters, $filterable);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
 
 	function get_useraction($id, $debug = false) {
 		$q = (new QueryBuilder())->table('useractions');

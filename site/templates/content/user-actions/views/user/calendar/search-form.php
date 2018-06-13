@@ -2,7 +2,7 @@
     <input type="hidden" name="filter" value="filter">
     <input type="hidden" name="view" value="calendar">
 
-    <label class="control-label">Go to Month</label> &nbsp; &nbsp;
+    <label class="control-label">Month: </label> &nbsp; &nbsp;
     <div class="input-group date" style="width: 180px;">
         <?php $name = 'month'; $value = ''; ?>
         <?php include $config->paths->content."common/date-picker.php"; ?>

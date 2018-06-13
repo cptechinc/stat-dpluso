@@ -42,20 +42,24 @@
 	</div>
 	</br>
 	<div class="<?= $input->get->filter ? '' : 'collapse'; ?> form-group" id="<?= $actionpanel->panelID.'-filter'; ?>">
-		<div class="form-group">
-			<form action="<?= $actionpanel->generate_refreshurl(); ?>" class="form-ajax form-inline display-inline-block form-group" data-loadinto="<?= $actionpanel->loadinto; ?>" data-focus="<?= $actionpanel->focus; ?>">
-				<input type="hidden" name="filter" value="filter">
-				<input type="hidden" name="view" value="day">
-				<label class="control-label">Date: </label> &nbsp; &nbsp;
-				<div class="input-group date" style="width: 180px;">
-					<?php $name = 'day'; $value = ''; ?>
-					<?php include $config->paths->content."common/date-picker.php"; ?>
-				</div>
-				<button type="submit" class="btn btn-sm btn-success">Go</button>&nbsp; &nbsp;
-			</form>
-			<?php include $config->paths->content."user-actions/views/$actionpanel->paneltype/calendar/search-form.php"; ?>
+		<div class="row">
+			<div class="col-sm-7 form-group">
+				<form action="<?= $actionpanel->generate_refreshurl(); ?>" class="form-ajax form-inline display-inline-block form-group" data-loadinto="<?= $actionpanel->loadinto; ?>" data-focus="<?= $actionpanel->focus; ?>">
+					<input type="hidden" name="filter" value="filter">
+					<input type="hidden" name="view" value="day">
+					<label class="control-label">Date: </label> &nbsp; &nbsp;
+					<div class="input-group date" style="width: 180px;">
+						<?php $name = 'day'; $value = $input->get->day ? $input->get->text('day') : ''; ?>
+						<?php include $config->paths->content."common/date-picker.php"; ?>
+					</div>
+					<button type="submit" class="btn btn-sm btn-success">Go</button>&nbsp; &nbsp;
+				</form>
+				<?php include $config->paths->content."user-actions/views/$actionpanel->paneltype/calendar/search-form.php"; ?>
+			</div>
+			<div class="col-sm-5 form-group">
+				<?php include $config->paths->content."user-actions/views/$actionpanel->paneltype/calendar/select-user-form.php"; ?>
+			</div>
 		</div>
-		<?php include $config->paths->content."user-actions/views/$actionpanel->paneltype/calendar/select-user-form.php"; ?>
 	</div>
 	<?= $actionpanel->generate_calendar($month, $year);?>
 </div>

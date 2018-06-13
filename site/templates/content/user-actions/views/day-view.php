@@ -1,9 +1,5 @@
 <?php
-	if ($input->get->day) {
-		$day = $input->get->text('day');
-	} else {
-		$day = date('m/d/Y');
-	}
+	$day = $input->get->day ? $input->get->text('day') : date('m/d/Y');
 ?>
 <div class="panel-body">
 	<h3><?= date('l, M jS Y', strtotime($day)); ?></h3>
@@ -22,7 +18,7 @@
 				<input type="hidden" name="filter" value="filter">
 				<label class="control-label">Go to Date</label> &nbsp; &nbsp;
 				<div class="input-group date" style="width: 180px;">
-					<?php $name = 'day'; $value = ''; ?>
+					<?php $name = 'day'; $value = $input->get->day ? $input->get->text('day') : ''; ?>
 					<?php include $config->paths->content."common/date-picker.php"; ?>
 				</div>
 				<button type="submit" class="btn btn-sm btn-success">Go</button>
@@ -36,11 +32,7 @@
 		<?php include $config->paths->content."user-actions/views/$actionpanel->paneltype/day/search-form.php"; ?>
 	</div>
 	<div class="row">
-		<div class="col-sm-6">
-			<h3>&nbsp;</h3>
-			<?php include $config->paths->content."user-actions/views/$actionpanel->paneltype/day/tables/$actionpanel->actiontype.php"; ?>
-		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-4">
 			<h3>Overview</h3>
 			<table class="table table-condensed table-striped table-bordered">
 				<tr>
@@ -55,9 +47,15 @@
 					<td>Tasks Completed</td> <td><?= $actionpanel->count_daycompletedtasks($day); ?></td>
 				</tr>
 				<tr>
-					<td>Tasks Rescheduled</td> <td><?= $actionpanel->count_dayrescheduledtasks($day); ?></td>
+					<td>Tasks Rescheduled on <?= date('m/d/Y', strtotime($day)); ?></td> <td><?= $actionpanel->count_dayrescheduledtasks($day); ?></td>
 				</tr>
 			</table>
+		</div>
+		<div class="col-sm-8">
+			<h3 aria-hidden="true">&nbsp;</h3>
+			<div class="actions-table-div">
+				<?php include $config->paths->content."user-actions/views/$actionpanel->paneltype/day/tables/$actionpanel->actiontype.php"; ?>
+			</div>
 		</div>
 	</div>
 </div>

@@ -8,7 +8,7 @@
                     <?php foreach ($salespersoncodes as $salespersoncode) : ?>
                         <?php $selected = ($actionpanel->has_filtervalue('assignedto', $salespersonjson['data'][$salespersoncode]['splogin'])) ? 'selected' : ''; ?>
                         <?php if (!empty($salespersonjson['data'][$salespersoncode]['splogin'])) : ?>
-                            <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>" <?= $selected; ?>><?= $salespersoncode.' - '.$salespersonjson['data'][$salespersoncode]['spname']; ?></option>
+                            <option value="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>" data-subtext="<?= $salespersonjson['data'][$salespersoncode]['splogin']; ?>" <?= $selected; ?>><?= $salespersonjson['data'][$salespersoncode]['spname']; ?></option>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </select>

@@ -214,7 +214,7 @@
 			$customer->set('city', $input->post->text('billto-city'));
 			$customer->set('state', $input->post->text('billto-state'));
 			$customer->set('zip', $input->post->text('billto-zip'));
-			$customer->set('contact', $input->post->text('contact-name'));
+			$customer->set('contact', !empty($input->post->text('contact-name')) ? $input->post->text('contact-name') : $customer->name);
 			$customer->set('phone', $input->post->text('contact-phone'));
 			$customer->set('extension', $input->post->text('contact-ext'));
 			$customer->set('faxnbr', $input->post->text('contact-fax'));
@@ -230,13 +230,13 @@
 			$shipto = Contact::create_fromobject($customer);
 			$shipto->set('shiptoid', '1');
 			$shipto->set('source', 'CS');
-			$shipto->set('name', $input->post->text('shipto-name') ? $input->post->text('shipto-name') : $customer->name);
+			$shipto->set('name', !empty($input->post->text('shipto-name')) ? $input->post->text('shipto-name') : $customer->name);
 			$shipto->set('addr1', $input->post->text('shipto-address'));
 			$shipto->set('addr2', $input->post->text('shipto-address2'));
 			$shipto->set('city', $input->post->text('shipto-city'));
 			$shipto->set('state', $input->post->text('shipto-state'));
 			$shipto->set('zip', $input->post->text('shipto-zip'));
-			$shipto->set('contact', $input->post->text('contact-name'));
+			$shipto->set('contact', !empty($input->post->text('contact-name')) ? $input->post->text('contact-name') : $shipto->name);
 			$shipto->set('phone', $input->post->text('contact-phone'));
 			$shipto->set('extension', $input->post->text('contact-ext'));
 			$shipto->set('faxnbr', $input->post->text('contact-fax'));

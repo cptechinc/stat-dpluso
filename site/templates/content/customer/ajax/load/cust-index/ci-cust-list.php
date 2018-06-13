@@ -33,7 +33,7 @@
                             <td><?= $page->stringerbell->highlight($cust->shiptoid, $input->get->q); ?></td>
                             <td><?= $page->stringerbell->highlight($cust->generate_address(), $input->get->q); ?></td>
                             <td><a href="tel:<?= $cust->phone; ?>" title="Click To Call"><?= $page->stringerbell->highlight($cust->phone, $input->get->q); ?></a></td>
-                            <td class="text-right"><?= DplusDateTime::format_date($cust->get_lastsaledate($user->loginid)); ?></td>
+                            <td class="text-right"><?= empty($cust->get_lastsaledate($user->loginid)) ? 'N/A' : DplusDateTime::format_date($cust->get_lastsaledate($user->loginid)); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else : ?>

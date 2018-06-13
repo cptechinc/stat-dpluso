@@ -227,3 +227,7 @@
 			);
 		}
     }
+
+	class NonExistingCustomer extends Customer {
+        public $name = 'Not Available';
+    }

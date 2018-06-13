@@ -213,6 +213,22 @@
             $url->query->set('contactID', $this->contact);
             return $url->getUrl();
         }
+        
+        /**
+		 * Generates URL to the edit contact page
+		 * @return string Contact Page URL
+		 */
+        public function generate_contactediturl() {
+            $url = new \Purl\Url(DplusWire::wire('config')->pages->contact);
+            $url->path->add('edit');
+            $url->query->set('custID', $this->custid);
+
+            if ($this->has_shipto()) {
+                $url->query->set('shipID', $this->shiptoid);
+            }
+            $url->query->set('contactID', $this->contact);
+            return $url->getUrl();
+        }
 
 		/**
 		 * Generates the load customer URL to get to the CI PAGE

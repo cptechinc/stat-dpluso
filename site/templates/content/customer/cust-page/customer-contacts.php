@@ -28,7 +28,7 @@
         <div class="table-responsive">
             <table class="table table-striped table-bordered" id="contacts-table">
                 <thead>
-					<tr> <th>Name</th> <th>Shipto</th> <th>Title</th> <th>Phone</th> <th>Email</th> <th>Contact Type</th> </tr>
+					<tr> <th>Name</th> <th>Shipto</th> <th>Title</th> <th>Phone</th> <th>Email</th> <th>Contact Type</th> <th>Edit</th> </tr>
 				</thead>
                 <tbody>
                     <?php foreach ($customer->get_contacts() as $contact) : ?>
@@ -42,10 +42,15 @@
 							</td>
                             <td><a href="<?= $contact->generate_contactmethodurl('email'); ?>"><?= $contact->email; ?></td>
                             <td><?= $contact->source; ?></td>
+                            <td>
+                                <a href="<?= $contact->generate_contactediturl(); ?>" class="btn btn-sm btn-warning">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> <span class="sr-only">Edit Contact</span>
+                                </a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
-                <tfoot> <tr>  <th>Name</th> <th>Shipto</th> <th>Phone</th> <th>Email</th> <th>Address</th> <th>Contact Type</th> </tr> </tfoot>
+                <tfoot> <tr>  <th>Name</th> <th>Shipto</th> <th>Phone</th> <th>Email</th> <th>Address</th> <th>Contact Type</th> <th>Edit</th> </tr> </tfoot>
             </table>
         </div>
     </div>

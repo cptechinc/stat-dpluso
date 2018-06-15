@@ -1,3 +1,9 @@
+<div class="form-group">
+	<a href="<?= $contact->generate_customerurl(); ?>" class="btn btn-primary"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Go To <?= $contact->get_customername()."'s"; ?> Page </a>
+</div>
+<div class="form-group">
+	<a href="<?= $contact->generate_contacturl(); ?>" class="btn btn-success"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Go To <?= $contact->contact."'s"; ?> Page </a>
+</div>
 <div class="row">
 	<div class="col-sm-6">
 		<div class="panel panel-primary not-round">
@@ -14,8 +20,8 @@
 					</td>
 				</tr>
 				<?php if ($contact->has_shipto()) : ?>
-					<tr> 
-						<td>Shipto ID:</td> 
+					<tr>
+						<td>Shipto ID:</td>
 						<td><a href="<?= $contact->generate_shiptourl(); ?>" target="_blank"><?= $contact->shiptoid; ?> <i class="glyphicon glyphicon-share" aria-hidden="true"></i></a></td>
 					</tr>
 				<?php endif; ?>
@@ -27,14 +33,14 @@
 						<?= $contact->city . ', ' . $contact->state . ' ' . $contact->zip; ?>
 					</td>
 				</tr>
-				
+
 				<tr>
 					<td class="control-label">Name:</td>
 					<td><?= $contact->contact; ?></td>
 				</tr>
 				<tr>
 					<td class="control-label">Title:</td>
-					<td><?= $contact->title; ?></td> 
+					<td><?= $contact->title; ?></td>
 				</tr>
 				<tr>
 					<td class="control-label">Email</td>
@@ -107,8 +113,8 @@
 						</td>
 					</tr>
 					<?php if ($contact->has_shipto()) : ?>
-						<tr> 
-							<td>Shipto ID:</td> 
+						<tr>
+							<td>Shipto ID:</td>
 							<td><a href="<?= $contact->generate_shiptourl(); ?>" target="_blank"><?= $contact->shiptoid; ?> <i class="glyphicon glyphicon-share" aria-hidden="true"></i></a></td>
 						</tr>
 					<?php endif; ?>
@@ -120,12 +126,12 @@
 							<?= $contact->city . ', ' . $contact->state . ' ' . $contact->zip; ?>
 						</td>
 					</tr>
-					
+
 					<tr>
 						<td class="control-label">Name</td>
 						<td><input class="form-control input-sm required" name="contact-name" value="<?= $contact->contact; ?>"></td>
 					</tr>
-					<tr> 
+					<tr>
 						<td class="control-label">Title:</td>
 						<td><input type="text" class="form-control input-sm" name="contact-title" value="<?= $contact->title; ?>"></td>
 					</tr>

@@ -1,6 +1,7 @@
-<form action="<?= $config->pages->cart.'redir/'; ?>" method="post" class="quick-entry-add allow-enterkey-submit" id="quick-entry-add" data-validated="">
-	<input type="hidden" name="action" value="add-to-cart">
-	<input type="hidden" name="custID" value="<?= $custID; ?>">
+<form action="<?= $config->pages->orders.'redir/'; ?>" method="post" class="quick-entry-add allow-enterkey-submit" id="quick-entry-add" data-validated="">
+	<input type="hidden" name="action" value="add-to-order">
+	<input type="hidden" name="ordn" value="<?= $order->orderno; ?>">
+	<input type="hidden" name="custID" value="<?= $order->custid; ?>">
 	<div class="row">
 		<div class="col-xs-9 sm-padding">
 			<div class="col-md-4 form-group sm-padding">
@@ -32,7 +33,9 @@
 				</a>
 			</div>
 		</div>
-		<div class="col-xs-3 col-sm-3 sm-padding"> </div>
+		<div class="col-xs-3 col-sm-3 sm-padding">
+
+		</div>
 	</div>
 
 	</br>

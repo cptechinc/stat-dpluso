@@ -2,12 +2,13 @@
     if ($input->get->itemID) {
         $itemID = $input->get->text('itemID');
         $custID = $input->get->text('custID');
-        $valid = XRefItem::load($itemID, $custID);
+        $item = XRefItem::load($itemID, $custID);
 
-        if ($valid) {
+        if ($item) {
             $response = array (
                 'error' => false,
-                'exists' => true
+                'exists' => true,
+                'itemID' => $item->itemid
             );
         } else {
             if (empty($custID)) {

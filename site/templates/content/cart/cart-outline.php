@@ -27,5 +27,9 @@
 	</a>
 <?php endif; ?>
 <a href="<?= $config->pages->cart.'redir/?action=empty-cart'; ?>" class="btn btn-primary">
+	<span class="fa-stack fa-md" aria-hidden="true">
+		<i class="fa fa-bars fa-stack-1x"></i>
+		<i class="fa fa-file-o fa-stack-2x"></i>
+	</span>
 	new Quick Entry
 </a>

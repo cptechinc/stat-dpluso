@@ -222,7 +222,7 @@
 		case 'add-to-quote':
 			$qnbr = $input->post->text('qnbr');
 			$itemID = $input->post->text('itemID');
-			$qty = determine_qty($input, $requestmethod, $itemID); // TODO MAKE IN CART DETAIL
+			$qty = determine_qty($input, $requestmethod, $itemID);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'ITEMID' => $itemID, 'QTY' => "$qty");
 			$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
 			$session->editdetail = true;

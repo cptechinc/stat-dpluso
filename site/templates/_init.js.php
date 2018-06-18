@@ -132,6 +132,7 @@
                 ],
     			'redir' => [
     				'getitempricing' => $config->pages->products."redir/?action=get-item-price",
+                    'itemsearch' => $config->pages->products."redir/?action=item-search",
     				'ii_select' => $config->pages->products."redir/?action=ii-select",
     				'ii_pricing' => $config->pages->products."redir/?action=ii-pricing",
                     'ii_costing' => $config->pages->products."redir/?action=ii-costing",
@@ -173,6 +174,7 @@
     		],
     		'load' => [
     			'productresults' => $config->pages->ajaxload."products/item-search-results/",
+                'quickentry_searchresults' => $config->pages->ajaxload."products/quick-entry-search/",
     			'editdetail' => $config->pages->ajaxload."edit-detail/", //DEPRECATED
     		],
             'vendor' => [

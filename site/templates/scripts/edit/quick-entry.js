@@ -23,4 +23,66 @@ $(function() {
             }
         }
     });
+
+    $("body").on("submit", ".quick-entry-add", function(e) {
+        var form = $(this);
+        var itemsearch = form.find('input[name=itemID]').val();
+        var custID = form.find('input[name=custID]').val();
+        var qtyfield = form.find('input[name=qty]');
+
+        if (form.attr('data-validated') != itemsearch) {
+            e.preventDefault();
+            var searchurl = URI(config.urls.json.validateitemid).addQuery('itemID', itemsearch).toString();
+            $.getJSON(searchurl, function(json) {
+                if (json.exists) {
+                    var validitemid = json.itemID;
+                    form.attr('data-validated', validitemid);
+                    form.find('input[name=itemID]').val(validitemid);
+                    form.submit();
+                } else {
+                    swal ({
+                        title: 'Item not found.',
+                        text: itemsearch + ' cannot be found.',
+                        type: 'warning',
+                        confirmButtonClass: 'btn btn-sm btn-success',
+                        cancelButtonClass: 'btn btn-sm btn-danger',
+                        showCancelButton: true,
+                        confirmButtonText: 'Make Dplus search?'
+                    }).then(function (result) {
+                        var productsearchurl = URI(config.urls.products.redir.itemsearch).addQuery('q', itemsearch).addQuery('custID', custID).toString();
+                        var productresultsurl = URI(config.urls.load.quickentry_searchresults).addQuery('q', itemsearch).toString();
+                        showajaxloading();
+                        dplusrequest(productsearchurl, function() {
+                            form.find('.results').loadin(productresultsurl, function() {
+                                hideajaxloading();
+                                if (focus.length > 0) {
+                                    $('html, body').animate({scrollTop: $(focus).offset().top - 60}, 1000);
+                                }
+                            });
+                        });
+                    }).catch(swal.noop);
+                }
+            });
+        } else if (qtyfield.val() == '') {
+            e.preventDefault();
+            qtyfield.parent().addClass('has-error');
+            qtyfield.focus();
+        } else {
+            showajaxloading();
+            form.postform({formdata: false, jsoncallback: false, action: false}, function() {
+                window.location.reload(true);
+            });
+        }
+    });
+
+    $("body").on("click", ".qe-item-results", function(e) {
+        e.preventDefault();
+        var item = $(this);
+        var itemID = item.data('itemid');
+        var form = $(".quick-entry-add");
+        form.find('input[name=itemID]').val(itemID);
+        form.find('.results').empty();
+        form.attr('data-validated', itemID);
+        form.submit();
+    });
 });

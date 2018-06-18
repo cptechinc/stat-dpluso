@@ -42,7 +42,7 @@
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
-<?php if ($session->editdetail) : ?>
+<?php if ($session->editdetail && !$config->ajax) : ?>
     <script>
         $(function() {
             $('#quotedetail-link').click();

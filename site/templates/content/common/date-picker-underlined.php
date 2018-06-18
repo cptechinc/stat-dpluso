@@ -1,5 +1,5 @@
 <div class="input-group datepicker">
-	<input class="form-control input-sm date-input underlined" name="<?php echo $name; ?>" type="text" value="<?php echo $value; ?>" />
+	<input class="form-control input-sm date-input text-right underlined" name="<?php echo $name; ?>" type="text" value="<?php echo $value; ?>" />
 	<div class="input-group-btn">
 		<div class="dropdown-toggle" data-toggle="dropdown"></div>
 		<div class="dropdown-menu dropdown-menu-right datepicker-calendar-wrapper dropdown-toggle" role="menu">

@@ -48,6 +48,9 @@
 			$page->title = 'Choose a Vendor';
 			$page->body = $config->paths->content.'products/vendor/choose-vendor.php';
 			break;
+		case 'quick-entry-search':
+			$page->body = $config->paths->content.'products/ajax/load/quick-entry-search-results.php';
+			break;
     }
 
 

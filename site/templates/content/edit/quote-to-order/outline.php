@@ -44,16 +44,14 @@
 
 <br>
 <?php if (!$editquotedisplay->canedit) : ?>
-   <a href="<?php echo $editquote['unlock-url']; ?>" class="btn btn-block btn-success save-unlock-order">Finished with quote</a>
-   <br>
-   <a href="<?php echo $editquote['unlock-url']; ?>" class="btn btn-block btn-warning">Discard Changes, unlock quote</a>
+   <?= $editquotedisplay->generate_confirmationlink($quote); ?>
 <?php endif; ?>
 
-<?php if ($session->{'edit-detail'}) : ?>
+<?php if ($session->editdetail && !$config->ajax) : ?>
     <script>
         $(function() {
             $('#quotedetail-link').click();
         })
     </script>
-    <?php $session->remove('edit-detail'); ?>
+    <?php $session->remove('editdetail'); ?>
 <?php endif; ?>

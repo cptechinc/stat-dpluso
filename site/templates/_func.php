@@ -157,7 +157,7 @@
 	function cleanforjs($str) {// DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
 		return urlencode(str_replace(' ', '-', str_replace('#', '', $str)));
 	}
-	
+
 	function determine_qty(Processwire\WireInput $input, $requestmethod, $itemID) {
 		if (DplusWire::wire('modules')->isInstalled('QtyPerCase')) {
 			$qtypercase = DplusWire::wire('modules')->get('QtyPerCase');
@@ -165,11 +165,12 @@
 				$qty = $qtypercase->generate_qtyfromcasebottle($itemID, $input->$requestmethod->text('bottle-qty'), $input->$requestmethod->text('case-qty'));
 			}
 		} else {
-			$qty = $input->$requestmethod->text('qty');
+			$qty = !empty($input->$requestmethod->text('qty')) ? $input->$requestmethod->text('qty') : 1;
+
 		}
 		return $qty;
 	}
-	   
+
 
 /* =============================================================
    URL FUNCTIONS
@@ -235,7 +236,7 @@
 			return "";
 		}
 	}
-	
+
 	/**
 	 * [returnpreppedquery description]
 	 * @param  [array] $originalarray [Key-Valued array with original record column values]

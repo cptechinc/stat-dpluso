@@ -2,15 +2,13 @@
 <div class="row detail-line-header">
 	<strong>
 		<div class="col-md-9 sm-padding">
-			<div class="row">
-                <div class="col-sm-1 sm-padding"><input type="checkbox" id="select-all">&nbsp;&nbsp;</div>
-				<div class="col-sm-3 sm-padding">Item / Description</div>
-				<div class="col-sm-1 text-left sm-padding">WH</div>
-				<div class="col-sm-1 text-right ">Qty</div>
-				<div class="col-sm-2 text-center sm-padding">Price</div>
-				<div class="col-sm-2 sm-padding">Total</div>
-				<div class="col-sm-2 sm-padding">Rqst Date</div>
-			</div>
+            <div class="col-sm-1 sm-padding"><input type="checkbox" id="select-all">&nbsp;&nbsp;</div>
+			<div class="col-sm-3 sm-padding">Item / Description</div>
+			<div class="col-sm-1 text-left sm-padding">WH</div>
+			<div class="col-sm-1 text-right ">Qty</div>
+			<div class="col-sm-2 text-center sm-padding">Price</div>
+			<div class="col-sm-2 sm-padding">Total</div>
+			<div class="col-sm-2 sm-padding">Rqst Date</div>
 		</div>
 		<div class="col-md-3 sm-padding">
 			<div class="row">
@@ -32,54 +30,52 @@
 			<input type="hidden" name="min-price" value="<?= $detail->minprice; ?>">
 			<div class="row detail-line">
 				<div class="col-md-9 sm-padding">
-					<div class="row">
-	                    <div class="col-sm-1 sm-padding">
-	                        <input type="checkbox" value="<?= $detail->linenbr; ?>" class="select-item" checked>
-	                    </div>
-						<div class="col-sm-3 form-group sm-padding">
-	                        <span class="detail-line-field-name cart-item">Item/Description:</span>
-							<div>
-								<?php if ($detail->has_error()) : ?>
-									<div class="btn-sm btn-danger">
-									  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <strong>Error!</strong> <?= $detail->errormsg; ?>
-									</div>
-								<?php else : ?>
-									<?= $detail->itemid; ?>
-									<?= (strlen($detail->vendoritemid)) ? $detail->vendoritemid : ''; ?>
-									<br> <small><?= $detail->desc1; ?></small>
-								<?php endif; ?>
-							</div>
-							<div class="response"></div>
-						</div>
-						<div class="col-md-1 form-group sm-padding">
-							<span class="detail-line-field-name">WH:</span>
-							<p class="form-control-static"><span class="detail-line-field numeric"><?= $detail->whse; ?></span></p>
-						</div>
-						<div class="col-md-1 form-group sm-padding">
-							<span class="detail-line-field-name">Qty:</span>
-							<span class="detail-line-field numeric">
-								<input class="form-control input-xs text-right underlined calculates-price" type="text" size="6" name="qty" value="<?= $detail->quotqty + 0; ?>">
-							</span>
-						</div>
-						<div class="col-md-2 form-group sm-padding">
-							<span class="detail-line-field-name">Price:</span>
-							<span class="detail-line-field numeric">
-								<input class="form-control input-xs text-right underlined calculates-price" type="text" size="10" name="price" value="<?= $page->stringerbell->format_money($detail->quotprice); ?>">
-							</span>
-						</div>
-						<div class="col-md-2 form-group sm-padding">
-							<span class="detail-line-field-name">Total:</span>
-							<p class="form-control-static"><span class="detail-line-field numeric">$ <span class="total-price"><?= $page->stringerbell->format_money($detail->quotqty * $detail->quotprice); ?></span></span></p>
-						</div>
-						<div class="col-md-2 form-group sm-padding">
-							<span class="detail-line-field-name">Rqst Date:</span>
-							<span class="detail-line-field numeric">
-								<div class="input-group date">
-									<?php $name = 'rqstdate'; $value = $detail->rshipdate; ?>
-									<?php include $config->paths->content."common/date-picker-underlined.php"; ?>
+                    <div class="col-sm-1 sm-padding">
+                        <input type="checkbox" value="<?= $detail->linenbr; ?>" class="select-item" checked>
+                    </div>
+					<div class="col-sm-3 form-group sm-padding">
+                        <span class="detail-line-field-name cart-item">Item/Description:</span>
+						<div>
+							<?php if ($detail->has_error()) : ?>
+								<div class="btn-sm btn-danger">
+								  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <strong>Error!</strong> <?= $detail->errormsg; ?>
 								</div>
-							</span>
+							<?php else : ?>
+								<?= $detail->itemid; ?>
+								<?= (strlen($detail->vendoritemid)) ? $detail->vendoritemid : ''; ?>
+								<br> <small class="description-small"><?= $detail->desc1; ?></small>
+							<?php endif; ?>
 						</div>
+						<div class="response"></div>
+					</div>
+					<div class="col-md-1 form-group sm-padding">
+						<span class="detail-line-field-name">WH:</span>
+						<p class="form-control-static"><span class="detail-line-field numeric"><?= $detail->whse; ?></span></p>
+					</div>
+					<div class="col-md-1 form-group sm-padding">
+						<span class="detail-line-field-name">Qty:</span>
+						<span class="detail-line-field numeric">
+							<input class="form-control input-xs text-right underlined calculates-price" type="text" size="6" name="qty" value="<?= $detail->quotqty + 0; ?>">
+						</span>
+					</div>
+					<div class="col-md-2 form-group sm-padding">
+						<span class="detail-line-field-name">Price:</span>
+						<span class="detail-line-field numeric">
+							<input class="form-control input-xs text-right underlined calculates-price" type="text" size="10" name="price" value="<?= $page->stringerbell->format_money($detail->quotprice); ?>">
+						</span>
+					</div>
+					<div class="col-md-2 form-group sm-padding">
+						<span class="detail-line-field-name">Total:</span>
+						<p class="form-control-static text-right"><span class="detail-line-field numeric">$ <span class="total-price"><?= $page->stringerbell->format_money($detail->quotqty * $detail->quotprice); ?></span></span></p>
+					</div>
+					<div class="col-md-2 form-group sm-padding">
+						<span class="detail-line-field-name">Rqst Date:</span>
+						<span class="detail-line-field numeric">
+							<div class="input-group date">
+								<?php $name = 'rqstdate'; $value = $detail->rshipdate; ?>
+								<?php include $config->paths->content."common/date-picker-underlined.php"; ?>
+							</div>
+						</span>
 					</div>
 				</div>
 				<div class="col-md-3 sm-padding">
@@ -104,8 +100,4 @@
 		</form>
 	<?php endforeach; ?>
 </div>
-<div class="form-group">
-	<button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#item-lookup-modal">
-		<span class="glyphicon glyphicon-search" aria-hidden="true"></span> &nbsp; Search Items
-	</button>
-</div>
+<?php include $config->paths->content.'edit/quote-to-order/quote-details/add-quick-entry.php'; ?>

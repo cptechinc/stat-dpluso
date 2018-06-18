@@ -57,6 +57,7 @@
 				$page->body = $config->paths->content."user-actions/crud/read/$type.php";
 			} else {
 				if ($input->get->ordn) {
+					$ordn = $input->get->text('ordn');
 					$actionpanel = new SalesOrderActionsPanel(session_id(), $page->fullURL, $input, $config->ajax);
 					$actionpanel->set_ordn($input->get->text('ordn'));
 					$page->body = $config->paths->content.'user-actions/user-actions-panel.php';
@@ -66,10 +67,15 @@
 					$actionpanel->set_qnbr($qnbr);
 					$page->body = $config->paths->content.'user-actions/user-actions-panel.php';
 				} elseif ($input->get->contactID) {
+					$custID = $input->get->text('custID');
+					$shipID = $input->get->text('shipID');
+					$contactID = $input->get->text('contactID');
 					$actionpanel = new ContactActionsPanel(session_id(), $page->fullURL, $input, $config->ajax);
 					$actionpanel->set_contact($input->get->text('custID'), $input->get->text('shiptoID'), $input->get->text('contactID'));
 					$page->body = $config->paths->content.'user-actions/user-actions-panel.php';
 				} elseif ($input->get->custID) {
+					$custID = $input->get->text('custID');
+					$shipID = $input->get->text('shipID');
 					$actionpanel = new CustomerActionsPanel(session_id(), $page->fullURL, $input, $config->ajax);
 					$actionpanel->set_customer($input->get->text('custID'), $input->get->text('shiptoID'));
 					$page->body = $config->paths->content.'user-actions/user-actions-panel.php';

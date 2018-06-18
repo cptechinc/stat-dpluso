@@ -2,7 +2,7 @@
     <input type="hidden" name="filter" value="filter">
     <div class="row">
         <div class="col-sm-3 form-group">
-            <?php if (!$user->hasrestrictions) : ?>
+            <?php if ($appconfig->allow_changeuserview) : ?>
                 <h4 id="actions-assignedto">Assigned To</h4>
                 <select name="assignedto[]" class="selectpicker show-tick form-control input-sm" aria-labelledby="#actions-assignedto" data-style="btn-default btn-sm" multiple>
                     <?php foreach ($salespersoncodes as $salespersoncode) : ?>

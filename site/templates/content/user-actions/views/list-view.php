@@ -1,19 +1,17 @@
 <div>
 	<div class="panel-body">
-		<form action="<?= $actionpanel->pageurl->getUrl(); ?>" method="GET">
+		<form action="<?= $actionpanel->generate_clearfilterurl(); ?>" method="GET" class="form-ajax" data-loadinto="<?= $actionpanel->loadinto; ?>" data-focus="<?= $actionpanel->focus; ?>">
 			<input type="hidden" name="filter" value="filter">
 			<div class="row">
 				<div class="col-sm-2 form-group">
-					<h4>Action Type</h4>
-					<?php $types = $pages->get('/config/actions/types/')->children(); ?>
-					<?php foreach ($types as $type) : ?>
-						<?php $checked = $actionpanel->has_filtervalue('actiontype', $type->name) ? 'checked' : ''; ?>
-						<label><?= ucfirst($type->name); ?></label>
-						<input class="pull-right" type="checkbox" name="actiontype[]" value="<?= $type->name; ?>" <?= $checked; ?>><br>
-					<?php endforeach; ?>
-				</div>
+		            <h4>Action Type(s)</h4>
+		            <?php foreach ($appconfig->child('name=actions')->child('name=types')->children() as $actiontype) : ?>
+		                <label><?= $actiontype->title; ?></label>
+		    			<input class="pull-right" type="checkbox" name="actiontype[]" value="<?= $actiontype->name; ?>" <?= ($actionpanel->has_filtervalue('actiontype', $actiontype->name)) ? 'checked' : ''; ?>></br>
+		            <?php endforeach; ?>
+		        </div>
 				<div class="col-sm-2 form-group">
-					<?php if (!$user->hasrestrictions) : ?>
+					<?php if ($appconfig->child('name=actions')->allow_changeuserview) : ?>
 						<h4 id="actions-assignedto">Assigned To</h4>
 						<select name="assignedto" class="selectpicker show-tick form-control input-sm" aria-labelledby="#actions-assignedto" data-style="btn-default btn-sm" multiple>
 							<?php foreach ($salespersoncodes as $salespersoncode) : ?>

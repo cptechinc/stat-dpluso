@@ -1,4 +1,3 @@
-<?= $task->actiontype; ?>
 <table class="table table-bordered table-striped">
 	<tr>
 		<td>Task ID:</td> <td><?= $task->id; ?></td>

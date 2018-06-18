@@ -32,7 +32,7 @@
 		 * if shiptoid is defined then we get the next one
 		 * if no next one, go to the first one
 		 * Used for CI page
-		 * @param  string $loginID Login ID 
+		 * @param  string $loginID Login ID
 		 * @return string shiptoid
 		 */
         public function get_nextshiptoid($loginID = '') {
@@ -158,7 +158,7 @@
 		 * @param  string $custID    CustomerID
 		 * @param  string $shiptoID  Shipto ID (can be blank)
 		 * @param  string $contactID Contact ID (can be blank)
-		 * @param  bool   $debug Determines if Query Runs and if Customer Object is returned or SQL Query
+		 * @param  bool   $debug     Determines if Query Runs and if Customer Object is returned or SQL Query
 		 * @return Customer
 		 */
         public static function load($custID, $shiptoID = '', $contactID = '', $debug = false) {

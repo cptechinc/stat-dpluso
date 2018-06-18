@@ -332,6 +332,7 @@
 			$contact->set('shiptoid', $shipID);
 			$contact->set_contacttype();
 			$contact->set('contact', $input->post->text('contact-name'));
+			$contact->set('title', $input->post->text('contact-title'));
 			$contact->set('phone', $input->post->text('contact-phone'));
 			$contact->set('extension', $input->post->text('contact-extension'));
 			$contact->set('faxnbr', $input->post->text('contact-fax'));
@@ -340,7 +341,7 @@
 			$contact->set('arcontact', $input->post->text('arcontact') == 'Y' ? "Y" : "N");
 			$contact->set('dunningcontact', $input->post->text('duncontact') == 'Y' ? "Y" : "N");
 			$contact->set('buyingcontact', $input->post->text('buycontact'));
-			$contact->set('certcontact', $input->post->text('cercontact') == 'Y' ? "Y" : "N");
+			$contact->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
 			$contact->set('ackcontact', $input->post->text('ackcontact') == 'Y' ? "Y" : "N");
 			$contact->create();
 

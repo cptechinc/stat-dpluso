@@ -1,10 +1,9 @@
 <div class="row">
 	<div class="col-sm-6">
 		<form action="<?= $config->pages->customer.'redir/'; ?>" method="post">
-			<input type="hidden" name="action" value="edit-contact">
+			<input type="hidden" name="action" value="add-contact">
 			<input type="hidden" name="custID" value="<?= $custID; ?>">
 			<input type="hidden" name="shipID" value="<?= $shipID; ?>">
-			<input type="hidden" name="contactID" value="<?= $contactID; ?>">
 			<input type="hidden" name="page" value="<?= $page->fullURL; ?>">
 			<table class="table table-striped table-bordered table-condensed">
 				<tbody>
@@ -39,13 +38,17 @@
 					<tr class="<?= $customer->has_shipto() ? 'hidden' : ''; ?>">
 						<td class="control-label">AR Contact</td>
 						<td>
-							<?= $page->bootstrap->select('class=form-control input-sm|name=arcontact', array_flip($config->yesnoarray), 'N'); ?>
+							<?php $attr = "class=form-control input-sm|name=arcontact"; ?>
+							<?php $attr .= ((LogmUser::load($user->loginid))->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) ? '|disabled' : ''; ?>
+							<?= $page->bootstrap->select("$attr", array_flip($config->yesnoarray), 'N'); ?>
 						</td>
 					</tr>
 					<tr class="<?= $customer->has_shipto() ? 'hidden' : ''; ?>">
 						<td class="control-label">Dunning Contact</td>
 						<td>
-							<?= $page->bootstrap->select('class=form-control input-sm|name=dunningcontact', array_flip($config->yesnoarray), 'N'); ?>
+							<?php $attr = "class=form-control input-sm|name=dunningcontact"; ?>
+							<?php $attr .= ((LogmUser::load($user->loginid))->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) ? '|disabled' : ''; ?>
+							<?= $page->bootstrap->select($attr, array_flip($config->yesnoarray), 'N'); ?>
 						</td>
 					</tr>
 					<tr <?= $customer->has_shipto() ? 'hidden' : ''; ?>>
@@ -60,7 +63,7 @@
 						<?php else : ?>
 							<td class="control-label">Buying Contact</td>
 						<?php endif; ?>
-						
+
 						<td>
 							<?= $page->bootstrap->select('class=form-control input-sm|name=buycontact', $config->buyertypes, 'N'); ?>
 						</td>
@@ -71,7 +74,7 @@
 						<?php else : ?>
 							<td class="control-label">Certificate Contact</td>
 						<?php endif; ?>
-						
+
 						<td>
 							<?= $page->bootstrap->select('class=form-control input-sm|name=certcontact', array_flip($config->yesnoarray), 'N'); ?>
 						</td>

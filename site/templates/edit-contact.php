@@ -7,18 +7,16 @@
 
 	if ($contact) {
         if (Contact::can_useraccess($custID, $shipID, $contactID)) {
-			$page->title = "Editing " .$contact->contact . ", ".$contact->get_customername();
-			$page->body = $config->paths->content.'customer/contact/edit-contact.php';
-			$config->scripts->append(hashtemplatefile('scripts/pages/contact-page.js'));
-            if ($config->ajax) {
-        		if ($config->modal) {
-        			include $config->paths->content."common/modals/include-ajax-modal.php";
-        		} else {
-        			include $page->body;
-        		}
-        	} else {
-        		include $config->paths->content."common/include-page.php";
-        	}
+			if ($contact->can_edit()) {
+				$page->title = "Editing " .$contact->contact . ", ".$contact->get_customername();
+				$page->body = $config->paths->content.'customer/contact/edit-contact.php';
+				$config->scripts->append(hashtemplatefile('scripts/pages/contact-page.js'));
+	            include $config->paths->content."common/include-page.php";
+			} else {
+				$page->title = "Error";
+	            $page->body = "You can't edit this contact $custID $shipID $contactID";
+	            include $config->paths->templates."basic-page.php";
+			}
         } else {
             $page->title = "Error";
             $page->body = "You don't have access to this contact";

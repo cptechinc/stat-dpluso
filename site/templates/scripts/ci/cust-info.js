@@ -96,7 +96,7 @@ $(function() {
 			$(this).data('tableloaded', "yes");
 			var table = $('#contacts-table').DataTable({
 				"columnDefs": [
-					{ "targets": [ 5 ], "visible": false, "bRegex": true, "bSmart": false },
+					{ "targets": [ 6 ], "visible": false, "bRegex": true, "bSmart": false },
 				]
 			});
 
@@ -109,13 +109,15 @@ $(function() {
 					table.columns( 1 ).search('').draw();
 				}
 			});
+
 			$('#limit-cc').change(function() {
 				if ($(this).is(':checked')) {
-					table.columns( 5 ).search("^" + 'CC' + "$", true, false, true).draw();
+					table.columns( 6 ).search("^" + 'CC' + "$", true, false, true).draw();
 				} else {
-					table.columns( 5 ).search('').draw();
+					table.columns( 6 ).search('').draw();
 				}
 			});
+
 			if ($(this).data('shipid') !== '') {
 				$('#limit-shiptos').bootstrapToggle('on');
 			}

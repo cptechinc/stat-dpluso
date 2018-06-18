@@ -92,7 +92,7 @@
 		 * @return string admin | $this->loginid
 		 */
 		public function get_custpermloginid() {
-			return $this->get_dplusrole() == DplusWire::wire('config')->roles['sales-manager'] ? 'admin' : $this->loginid;
+			return $this->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] ? $this->loginid : 'admin';
 		}
 
 		/**

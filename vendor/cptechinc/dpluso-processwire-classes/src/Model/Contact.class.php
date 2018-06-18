@@ -96,7 +96,7 @@
 
         /**
          * Returns if Contact has a shiptoid
-         * @return bool [description]
+         * @return bool Has shiptoid?
          */
         public function has_shipto() {
             return (!empty($this->shiptoid));
@@ -104,7 +104,7 @@
 
         /**
          * Returns if contact has phone extension
-         * @return bool [description]
+         * @return bool Has Phone Extension?
          */
         public function has_extension() {
             return (!empty($this->extension)) ? true : false;
@@ -112,7 +112,7 @@
 
 		/**
          * Returns if contact has cell phone
-         * @return bool [description]
+         * @return bool Has Cellphone Number?
          */
         public function has_cellphone() {
             return (!empty($this->cellphone)) ? true : false;
@@ -120,7 +120,7 @@
 
 		/**
 		 * Returns if Contact is the AR Contact
-		 * @return bool
+		 * @return bool is AR contact?
 		 */
 		public function is_arcontact() {
 			return ($this->arcontact == 'Y') ? true : false;
@@ -128,7 +128,7 @@
 
 		/**
 		 * Returns if Contact is the Dunning Contact
-		 * @return bool
+		 * @return bool is dunning contact?
 		 */
 		public function is_dunningcontact() {
 			return ($this->dunning == 'Y') ? true : false;
@@ -136,7 +136,7 @@
 
 		/**
 		 * Returns if Contact is a buying Contact
-		 * @return bool
+		 * @return bool is buying contact?
 		 */
 		public function is_buyingcontact() {
 			return ($this->buyingcontact == 'Y' || $this->buyingcontact == 'P') ? true : false;
@@ -144,7 +144,7 @@
 
 		/**
 		 * Returns if Contact is the Primary Buyer Contact
-		 * @return bool
+		 * @return bool is this contact the primary buyer?
 		 */
 		public function is_primarybuyer() {
 			return ($this->buyingcontact == 'P') ? true : false;
@@ -153,7 +153,7 @@
 		/**
 		 * Returns if Contact is the Certificate Contact
 		 * At Stat it's the End User
-		 * @return bool
+		 * @return bool is this the Cert contact or End user?
 		 */
 		public function is_certcontact() {
 			return ($this->certcontact == 'Y') ? true : false;
@@ -161,13 +161,29 @@
 
 		/**
 		 * Returns if Contact is the Acknowledgment Contact
-		 * @return bool
+		 * @return bool Is this the Acknowledgement Contact
 		 */
 		public function is_ackcontact() {
 			return ($this->ackcontact == 'Y') ? true : false;
 		}
-        
-		
+
+        /**
+         * Returns if User can edit this contact
+         * @param  string $loginID User loginID
+         * @return bool          Does the user have the right permissions to edit this contact
+         */
+        public function can_edit($loginID = '') {
+            $loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+    		$user = LogmUser::load($loginID);
+
+            if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
+                return ($this->is_ackcontact() || $this->is_certcontact() || $this->is_buyingcontact()) ? true : false;
+            } else {
+                return true;
+            }
+        }
+
+
 		/* =============================================================
 			SETTER FUNCTIONS
 		============================================================ */
@@ -213,20 +229,14 @@
             $url->query->set('contactID', $this->contact);
             return $url->getUrl();
         }
-        
+
         /**
 		 * Generates URL to the edit contact page
 		 * @return string Contact Page URL
 		 */
         public function generate_contactediturl() {
-            $url = new \Purl\Url(DplusWire::wire('config')->pages->contact);
+            $url = new \Purl\Url($this->generate_contacturl());
             $url->path->add('edit');
-            $url->query->set('custID', $this->custid);
-
-            if ($this->has_shipto()) {
-                $url->query->set('shipID', $this->shiptoid);
-            }
-            $url->query->set('contactID', $this->contact);
             return $url->getUrl();
         }
 
@@ -354,12 +364,24 @@
 		/**
 		 * Creates a new contact in the database
 		 * Custid is trimmed to match the character length in the Cobol Dplus
+		 * Checks if custperm records exist by using Customer::can_useraccess
 		 * @param  bool $debug Determines if query will execute and if SQL is returned or Contact object
 		 * @return Contact         OR SQL QUERY
 		 */
 		public function create($debug = false) {
             $this->custid = substr($this->custid, 0, 6);
-			return insert_customerindexrecord($this, $debug) . " - " . insert_custperm($this, $debug);
+
+            $sql = insert_customerindexrecord($this, true) . " <br> " . insert_custperm($this, true);
+
+            if ($debug) {
+                return $sql;
+            } else {
+                insert_customerindexrecord($this);
+                if (!Customer::can_useraccess($this->custid, $this->shiptoid)) {
+                    insert_custperm($this);
+                }
+                return $sql;
+            }
 		}
 
 		/**

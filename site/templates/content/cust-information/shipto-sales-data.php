@@ -50,7 +50,7 @@
 				data: <?= json_encode($data); ?>,
 				colors: <?= json_encode(array_rand(array_flip($config->allowedcolors), 25)); ?>
 			});
-			
+
 			pie.options.data.forEach(function(label, i) {
 				var index = i;
 				if (pie.options.colors.length < 11) {
@@ -63,6 +63,6 @@
 				$('#legend-table').find('#'+label['shiptoid']+'-shipto').css('backgroundColor', pie.options.colors[index]);
 			});
 		<?php endif; ?>
-		
+
 	});
 </script>

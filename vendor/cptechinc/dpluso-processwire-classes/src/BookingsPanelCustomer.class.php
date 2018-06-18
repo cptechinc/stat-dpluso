@@ -61,7 +61,7 @@
 		 * @return int              Amount booked today
 		 */
 		 public function get_todaysbookingamount($loginID = '', $debug = false) {
- 			return get_customertodaybookingamount($this->sessionID, $this->custID, $this->shipID, $debug);
+ 			return get_customertodaybookingamount($this->custID, $this->shipID, $loginID, $debug);
  		}
 
 		/**

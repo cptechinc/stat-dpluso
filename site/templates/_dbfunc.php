@@ -107,7 +107,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	function get_lastsaledate($custID, $shiptoID = '', $userID = '',  $debug = false) {
 		$q = (new QueryBuilder())->table('custperm');
 		$q->field('lastsaledate');
@@ -795,17 +795,18 @@
 		}
 	}
 
-	function insert_customerindexrecord(Contact $customer, $debug = false) {
-		$properties = array_keys($customer->_toArray());
+	function insert_customerindexrecord(Contact $contact, $debug = false) {
+		$contact->set('recno', get_maxcustindexrecnbr() + 1);
+		$properties = array_keys($contact->_toArray());
 		$q = (new QueryBuilder())->table('custindex');
 		$q->mode('insert');
 
 		foreach ($properties as $property) {
-			if (!empty($customer->$property)) {
-				$q->set($property, $customer->$property);
+			if (!empty($contact->$property)) {
+				$q->set($property, $contact->$property);
 			}
 		}
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery();
@@ -864,7 +865,7 @@
 	function get_maxcustindexrecnbr($debug = false) {
 		$q = (new QueryBuilder())->table('custindex');
 		$q->field($q->expr('MAX(recno)'));
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 		if ($debug) {
 			return $q->generate_sqlquery();
 		} else {
@@ -2867,7 +2868,7 @@
 			return $sql->fetchAll();
 		}
 	}
-	
+
 	function get_daypriorincompletetasks($day, $filters, $filterable, $debug = false) {
 		$q = (new QueryBuilder())->table('useractions');
 		$q->where('actiontype', 'task');
@@ -2885,7 +2886,7 @@
 			return $sql->fetchAll();
 		}
 	}
-	
+
 	function count_daypriorincompletetasks($day, $filters, $filterable, $debug = false) {
 		$q = (new QueryBuilder())->table('useractions');
 		$q->field($q->expr('COUNT(*)'));

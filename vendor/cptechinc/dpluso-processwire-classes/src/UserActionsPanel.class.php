@@ -600,29 +600,37 @@
 		============================================================ */
 		public function generate_filter(ProcessWire\WireInput $input) {
 			$this->generate_defaultfilter($input);
-
+			
+			// IF NO CHOSEN TASK STATE THEN DEFAULT TO INCOMPLETES
 			if (!isset($this->filters['completed'])) {
 				$this->filters['completed'] = array('');
 			}
-
+			
+			// IF ASSIGNED USERS AREN'T BEING PROVIDED, THEN DEFAULT TO CURRENT USER
 			if (!isset($this->filters['assignedto'])) {
 				$this->filters['assignedto'] = array(DplusWire::wire('user')->loginid);
 			}
-
+			
+			
 			if (isset($this->filters['datecreated'])) {
-				if (empty($this->filters['datecreated'][1])) {
-					$this->filters['datecreated'][1] = $this->filters['datecreated'][0];
-				}
-
+				// PUT DATE CREATED IN THE THROUGH PART OF THE FILTER
+				
 				if (empty($this->filters['datecreated'][0])) {
 					unset($this->filters['datecreated']);
 				}
 			}
-
+			
 			if (isset($this->filters['datecompleted'])) {
-				$this->filters['completed'] = array('Y');
-				if (empty($this->filters['datecompleted'][1])) {
-					$this->filters['datecompleted'][1] = $this->filters['datecreated'][0];
+				if (!empty($this->filters['datecompleted'][0])) {
+					$this->filters['completed'] = array('Y');
+				}
+				
+				if (empty($this->filters['datecompleted'][1]) && !empty($this->filters['datecompleted'][0])) {
+					//$this->filters['datecompleted'][1] = $this->filters['datecompleted'][0];
+				}
+				
+				if (empty($this->filters['datecompleted'][0])) {
+					unset($this->filters['datecompleted']);
 				}
 			}
 

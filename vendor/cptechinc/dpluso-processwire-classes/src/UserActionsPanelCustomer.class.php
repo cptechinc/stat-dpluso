@@ -80,6 +80,13 @@
 		 * @var ProcessWire/WireInput
 		 */
 		protected $input;
+		
+		/**
+		 * What kind of view to start with
+		 * day | calendar | list
+		 * @var string
+		 */
+		protected $view = 'list';
 
 
 		/* =============================================================

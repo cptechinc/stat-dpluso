@@ -241,23 +241,8 @@
 		 * @return string icon + label
 		 */
 		public function generate_actionsubtypedescription() {
-			switch ($this->actiontype) {
-				case 'task':
-					$subpage = DplusWire::wire('pages')->get("/config/actions/types/{$this->actiontype}s/$this->actionsubtype/");
-					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
-					break;
-				case 'note':
-					$subpage = DplusWire::wire('pages')->get("/config/actions/types/{$this->actiontype}s/$this->actionsubtype/");
-					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
-					break;
-				/* case 'actions': // DEPRECATED 02/21/2018
-					$subpage = DplusWire::wire('pages')->get("/activity/$this->actiontype/$this->actionsubtype/");
-					return $subpage->subtypeicon.' '.$subpage->actionsubtypelabel;
-					break; */
-				default:
-					return '';
-					break;
-			}
+			$page = DplusWire::wire('pages')->get("/config/actions/types/$this->actiontype/$this->actionsubtype");
+			return ($page instanceof NullPage) ? '' : $page->subtypeicon.' '.$page->actionsubtypelabel;
 		}
 
 		/**

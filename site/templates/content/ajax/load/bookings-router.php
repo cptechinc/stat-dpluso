@@ -1,6 +1,6 @@
 <?php
 	$filteron = $input->urlSegment(2);
-		
+
 	switch ($filteron) {
 		case 'customer':
 			$custID = $sanitizer->text($input->urlSegment(3));
@@ -12,14 +12,14 @@
 			}
 			$customer = Customer::load($custID, $shipID);
 			$page->title = $customer->get_customername() . " bookings";
-			$page->body = $config->paths->content.'customer/cust-page/bookings-panel.php';
+			$page->body = $config->paths->content.'customer/cust-page/bookings/bookings-panel.php';
 			break;
 		case 'sales-orders':
 			$date = DplusDateTime::format_date($input->get->text('date'));
 			$custID = $input->get->text('custID');
 			$shipID = $input->get->text('shipID');
-			
-			
+
+
 			if (!empty($input->get->custID)) {
 				$customer = Customer::load($custID, $shipID);
 				$page->title = "Viewing bookings for {$customer->get_customername()} made on $date";
@@ -28,8 +28,8 @@
 				$page->title = "Viewing bookings made on $date";
 				$page->body = $config->paths->content.'dashboard/bookings/sales-orders-by-day.php';
 			}
-			
-			
+
+
 			break;
 		case 'sales-order':
 			$ordn = $input->get->text('ordn');

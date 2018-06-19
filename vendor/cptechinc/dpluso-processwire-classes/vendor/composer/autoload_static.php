@@ -14,6 +14,8 @@ class ComposerStaticInitf9c34235226de117fa23ba132ae64d6f
         '37f14f34aaba400ed3b1f27dc8c22515' => __DIR__ . '/../..' . '/src/traits/ThrowError.trait.php',
         'b863590895f481ceb8285e38fd229ee7' => __DIR__ . '/../..' . '/src/traits/MagicMethods.trait.php',
         'f5009746d9e3c4810b7260550777b79e' => __DIR__ . '/../..' . '/src/traits/Filterable.trait.php',
+        '9fb69174218135c2d9ec29627989c03e' => __DIR__ . '/../..' . '/src/helpers/HTMLWriter.class.php',
+        '68d84f97221f5e4d98778ca00b28b054' => __DIR__ . '/../..' . '/src/helpers/HTMLMaker.class.php',
         '7b7bc955fba3a7e831daa452678417b2' => __DIR__ . '/../..' . '/src/Model/Vendor.class.php',
         '16549aec784a66a31e2f46525b4e1d36' => __DIR__ . '/../..' . '/src/Model/Contact.class.php',
         '34090432ba33ef4a6717b80199aa69f2' => __DIR__ . '/../..' . '/src/Model/Customer.class.php',

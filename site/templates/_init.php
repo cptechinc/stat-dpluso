@@ -26,6 +26,7 @@
 
 	$page->bootstrap = new Contento();
 	$page->stringerbell = new StringerBell();
+	$page->htmlwriter = new HTMLWriter();
 	$page->screenformatterfactory = new \ScreenFormatterFactory(session_id());
 
 	$page->querystring = $querystring = $page->fullURL->query;

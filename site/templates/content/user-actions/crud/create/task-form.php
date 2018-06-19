@@ -31,8 +31,7 @@
 						<td class="control-label">Due Date</td>
 						<td>
 							<div class="input-group date" style="width: 180px;">
-								<?php $name = 'duedate'; $value = ''; ?>
-								<?php include $config->paths->content."common/date-picker.php"; ?>
+								<?= $page->htmlwriter->datepicker($class = 'form-control input-sm required', $name = 'duedate'); ?>
 							</div>
 						</td>
 					</tr>

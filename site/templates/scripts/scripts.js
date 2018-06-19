@@ -983,6 +983,7 @@ $(document).ready(function() {
 			var action = form.attr('action');
 			var elementreload = form.data('refresh');
 			var isformcomplete = form.formiscomplete('tr');
+			
 			if (isformcomplete) {
 				$(formid).postform({formdata: false, jsoncallback: true, action: false}, function(json) {
 					$.notify({

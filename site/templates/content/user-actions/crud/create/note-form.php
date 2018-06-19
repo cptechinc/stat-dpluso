@@ -2,7 +2,7 @@
 	$editactiondisplay = new EditUserActionsDisplay($page->fullURL);
 	$note->set('actiontype', 'note');
 ?>
-<form action="<?= $config->pages->useractions."add/"; ?>" method="POST" id="new-action-form" data-refresh="#actions-panel" data-modal="#ajax-modal" onKeyPress="return disable_enterkey(event)">
+<form action="<?= $config->pages->useractions."add/"; ?>" method="POST" id="new-action-form" data-refresh="#actions-panel" data-modal="#ajax-modal">
     <input type="hidden" name="action" value="create-note">
     <input type="hidden" name="customerlink" value="<?= $note->customerlink; ?>">
     <input type="hidden" name="shiptolink" value="<?= $note->shiptolink; ?>">

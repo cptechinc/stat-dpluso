@@ -30,7 +30,7 @@
 										<tr>
 											<td id="<?= $customer['custid'].'-cust'; ?>"></td>
 											<td>
-												<a href="<?= $cust->generate_ciloadurl(); ?>" class="btn btn-primary btn-sm"><?= $customer['custid']; ?></a>
+												<a href="<?= $cust->generate_ciloadurl(); ?>" class="btn btn-primary btn-block btn-sm"><?= $customer['custid']; ?></a>
 											</td>
 											<td><?= $cust->get_name(); ?></td>
 											<td class="text-right">$ <?= $page->stringerbell->format_money($customer['amountsold']); ?></td>

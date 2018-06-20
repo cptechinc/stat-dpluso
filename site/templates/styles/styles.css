@@ -444,6 +444,7 @@
 	DASHBOARD STYLES
 ==============================================================*/
 	#salesdata-div {max-height: 500px; overflow-y: scroll;}
+	#cust-sales-graph {margin-top: 28%; margin-left: 8%;}
 
 /*==============================================================
 	ITEM INFORMATION STYLES

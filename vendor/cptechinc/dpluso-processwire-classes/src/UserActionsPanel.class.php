@@ -472,7 +472,7 @@
 			$filters['actiontype'] = array('task');
 			return get_dayallactions($day, $filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * Returns UserActions [type=task] that meet the $this->filter criteria
 		 * @param  string $day   Date time string usually formatted (m/d/Y)
@@ -484,7 +484,7 @@
 			$filters['completed'] = array('');
 			return get_daypriorincompletetasks($day, $filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * Returns the number UserActions [type=task] that meet the $this->filter criteria
 		 * @param  string $day   Date time string usually formatted (m/d/Y)
@@ -525,7 +525,7 @@
 			$filters['dateupdated'] = array($day);
 			return count_dayallactions($day, $filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * Returns of the number of UserActions[type=task] that were due that day, but were rescheduled
 		 * @param  string  $day  Date time string usually formatted (m/d/Y)
@@ -553,7 +553,7 @@
 			$filters['datecompleted'] = array($day);
 			return count_dayallactions($day, $filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * Returns of the number of UserActions[type=task] that were not completed
 		 * @param  string  $day  Date time string usually formatted (m/d/Y)
@@ -600,35 +600,35 @@
 		============================================================ */
 		public function generate_filter(ProcessWire\WireInput $input) {
 			$this->generate_defaultfilter($input);
-			
+
 			// IF NO CHOSEN TASK STATE THEN DEFAULT TO INCOMPLETES
 			if (!isset($this->filters['completed'])) {
 				$this->filters['completed'] = array('');
 			}
-			
+
 			// IF ASSIGNED USERS AREN'T BEING PROVIDED, THEN DEFAULT TO CURRENT USER
 			if (!isset($this->filters['assignedto'])) {
 				$this->filters['assignedto'] = array(DplusWire::wire('user')->loginid);
 			}
-			
-			
+
+
 			if (isset($this->filters['datecreated'])) {
 				// PUT DATE CREATED IN THE THROUGH PART OF THE FILTER
-				
+
 				if (empty($this->filters['datecreated'][0])) {
 					unset($this->filters['datecreated']);
 				}
 			}
-			
+
 			if (isset($this->filters['datecompleted'])) {
 				if (!empty($this->filters['datecompleted'][0])) {
 					$this->filters['completed'] = array('Y');
 				}
-				
+
 				if (empty($this->filters['datecompleted'][1]) && !empty($this->filters['datecompleted'][0])) {
 					//$this->filters['datecompleted'][1] = $this->filters['datecompleted'][0];
 				}
-				
+
 				if (empty($this->filters['datecompleted'][0])) {
 					unset($this->filters['datecompleted']);
 				}
@@ -822,27 +822,28 @@
 				}
 
 				if ($this->count_daynotes($date)) {
-					$listitems .= $bootstrap->li('role=presentation', 'Notes '.$bootstrap->span('class=badge pull-right', $this->count_daynotes($date)).'<br>');
+					$listitems .= $bootstrap->li('role=presentation', '&nbsp;&nbsp;Notes '.$bootstrap->span('class=badge pull-right', $this->count_daynotes($date)).'<br>');
 				}
 
 				if ($this->count_dayscheduledtasks($date)) {
 					//$listitems .= $bootstrap->li('role=presentation', 'Tasks '.$bootstrap->span('class=pull-right', $this->count_dayscheduledtasks($date)).'<br>');
 				}
-				
+
 				if ($this->count_dayincompletedtasks($date)) {
-					$listitems .= $bootstrap->li('role=presentation|class=bg-warning', 'Incomplete'.$bootstrap->span('class=pull-right', $this->count_dayincompletedtasks($date)).'<br>');
+					$listitems .= $bootstrap->li('role=presentation|class=bg-warning', '&nbsp;&nbsp;Incomplete'.$bootstrap->span('class=badge bg-warning pull-right', $this->count_dayincompletedtasks($date)).'<br>');
 				}
-				
+
 				if ($this->count_daytasksduebutrescheduled($date)) {
-					$listitems .= $bootstrap->li('role=presentation|class=bg-info', 'Rescheduled'.$bootstrap->span('class=pull-right', $this->count_daytasksduebutrescheduled($date)).'<br>');
+					$listitems .= $bootstrap->li('role=presentation|class=bg-info', '&nbsp;&nbsp;Rescheduled'.$bootstrap->span('class=badge bg-info pull-right', $this->count_daytasksduebutrescheduled($date)).'<br>');
 				}
-				
+
 				if ($this->count_daycompletedtasks($date)) {
 					$listitems .= $bootstrap->li('role=presentation|class=bg-warning', 'Incomplete'.$bootstrap->span('class=pull-right', $this->count_daycompletedtasks($date)).'<br>');
+					$listitems .= $bootstrap->li('role=presentation|class=bg-success', '&nbsp;&nbsp;Completed'.$bootstrap->span('class=badge bg-success pull-right', $this->count_daycompletedtasks($date)).'<br>');
 				}
-				
+
 				if ($this->count_dayrescheduledtasks($date)) {
-					$listitems .= $bootstrap->li('role=presentation', 'Tasks Rescheduled this day'.$bootstrap->span('class=badge bg-info pull-right', $this->count_dayrescheduledtasks($date)).'<br>');
+					$listitems .= $bootstrap->li('role=presentation', '&nbsp;&nbsp;Resched on this day'.$bootstrap->span('class=badge bg-info pull-right', $this->count_dayrescheduledtasks($date)).'<br>');
 				}
 
 				$list = $bootstrap->ul('class=list-unstyled', $listitems);

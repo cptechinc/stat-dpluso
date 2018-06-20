@@ -17,7 +17,7 @@
 				<td><?= $order->custpo; ?></td>
 				<td>
 					<a href="<?= $orderpanel->generate_customershiptourl($order); ?>"><?= $order->shiptoid; ?></a>
-					<?= $orderpanel->generate_shiptopopover($order); ?>
+					<span class="pull-right"><?= $orderpanel->generate_shiptopopover($order); ?></span>
 				</td>
 				<td align="right">$ <?= formatmoney($order->ordertotal); ?></td>
 				<td align="right"><?= $order->orderdate; ?></td>

@@ -18,10 +18,12 @@
 		if ($tableformatter->json['error']) {
 			echo $page->bootstrap->createalert('warning', $tableformatter->json['errormsg']);
 		} else {
+			$session->itemid = $tableformatter->json['itemid'];
 			$print = $input->get->text('view') == 'print' ? true : false;
 			$tableformatter->set_printpage($print);
 			echo $tableformatter->generate_screen();
             echo $tableformatter->generate_javascript();
+			$session->remove('itemid');
 		}
 	} else {
 		echo $page->bootstrap->createalert('warning', 'Information Not Available');

@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * Formatter for II Item Usage Screen
+     * Not Formattable
+     */
      class II_ItemUsageScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-usage'; 
@@ -8,7 +12,7 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
+            PUBLIC FUNCTIONS
        	============================================================ */
         public function generate_screen() {
             $bootstrap = new Contento();
@@ -136,6 +140,10 @@
 			return $content;
 		}
         
+        /**
+         * Returns an HTML Table with Item Information
+         * @return string HTML Table with Item Information
+         */
         public function generate_iteminfotable() {
             $bootstrap = new Contento();
             if ($this->json['error']) {
@@ -151,15 +159,18 @@
         }
         
         /* =============================================================
-          CLASS FUNCTIONS
+            CLASS FUNCTIONS
        	============================================================ */
-        
+        /**
+         * Returns an HTML Table with Sales Usage Data
+         * @return string HTML Table with Item Information
+         */
         protected function generate_salesusagetable() {
             $tb = new Table('class=table table-striped table-bordered table-condensed table-excel no-bottom');
             $tb->tablesection('thead');
             $tb->tr();
             foreach  ($this->json['columns']['sales usage'] as $column) {
-                $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+                $class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
                 $tb->th("class=$class", $column['heading']);
             }
             $tb->closetablesection('thead');
@@ -168,7 +179,7 @@
             foreach ($this->json['data']['sales usage'] as $salesusage)  {
                 $tb->tr();
                 foreach (array_keys($this->json['columns']['sales usage']) as $column) {
-                    $class = Processwire\wire('config')->textjustify[$this->json['columns']['sales usage'][$column]['datajustify']];
+                    $class = DplusWire::wire('config')->textjustify[$this->json['columns']['sales usage'][$column]['datajustify']];
                     $tb->td("class=$class", $salesusage[$column]);
                 }
             }
@@ -176,6 +187,11 @@
             return $tb->close();
         }
         
+        /**
+         * Returns HTML for the Warehouse Data
+         * @param  string $whse Warehouse ID
+         * @return string       HTML for the Warehouse Data
+         */
         protected function generate_warehousediv($whse) {
             $bootstrap = new Contento();
             $heading = $bootstrap->h3('', $this->json['data']['24month'][$whse]['whse name']);
@@ -195,13 +211,18 @@
             }
         }
         
+        /**
+         * Returns an HTML table with Warehouse Item Data
+         * @param  string $whse Warehouse ID
+         * @return string       HTML table with Warehouse Item Data
+         */
         protected function generate_warehousetable($whse) {
             $bootstrap = new Contento();
             $tb = new Table("class=table table-striped table-bordered table-condensed table-excel no-bottom|id=$whse");
             $tb->tablesection('thead');
             $tb->tr();
             foreach  ($this->json['columns']['24month'] as $column) {
-                $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+                $class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
                 $tb->th("class=$class", $column['heading']);
             }
             $tb->closetablesection('thead');
@@ -210,7 +231,7 @@
                     $tb->tr();
                     foreach (array_keys($this->json['columns']['24month']) as $column) {
                         $month['month'] = ($month['month'] == 'Current') ? date('Y-m-01') : date('Y-m-01', strtotime(str_replace(' ', ' 20', $month['month'])));
-                        $class = Processwire\wire('config')->textjustify[$this->json['columns']['24month'][$column]['datajustify']];
+                        $class = DplusWire::wire('config')->textjustify[$this->json['columns']['24month'][$column]['datajustify']];
                         $tb->td("class=$class", $month[$column]);
                     }
                 }

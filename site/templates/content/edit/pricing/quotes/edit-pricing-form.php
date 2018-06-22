@@ -17,18 +17,18 @@
     <input type="hidden" class="action" name="action" value="update-line">
     <input type="hidden" name="qnbr" value="<?= $qnbr; ?>">
 	<input type="hidden" name="itemID" value="<?= $linedetail->itemid; ?>">
-    <input type="hidden" class="listprice" value="<?= formatmoney($linedetail->listprice); ?>">
+    <input type="hidden" class="listprice" value="<?= $page->stringerbell->format_money($linedetail->listprice); ?>">
     <input type="hidden" class="linenumber" name="linenbr" value="<?= $linedetail->linenbr; ?>">
-    <input type="hidden" class="originalprice" value="<?= formatmoney($linedetail->quotprice); ?>">
-    <input type="hidden" class="discountprice" value="<?= formatmoney($linedetail->quotprice); ?>">
-    <input type="hidden" class="cost" value="<?= formatmoney($linedetail->quotcost); ?>">
-	<input type="hidden" class="minprice" value="<?= formatmoney($linedetail->minprice); ?>">
+    <input type="hidden" class="originalprice" value="<?= $page->stringerbell->format_money($linedetail->quotprice); ?>">
+    <input type="hidden" class="discountprice" value="<?= $page->stringerbell->format_money($linedetail->quotprice); ?>">
+    <input type="hidden" class="cost" value="<?= $page->stringerbell->format_money($linedetail->quotcost); ?>">
+	<input type="hidden" class="minprice" value="<?= $page->stringerbell->format_money($linedetail->minprice); ?>">
     <input type="hidden" class="calculate-from" value="percent">
     <?php if (!$appconfig->child('name=sales-orders')->allowdiscount): ?>
-        <input type="hidden" class="discpct" name="discount" value="<?= formatmoney($linedetail->discpct); ?>">
+        <input type="hidden" class="discpct" name="discount" value="<?= $page->stringerbell->format_money($linedetail->discpct); ?>">
     <?php endif; ?>
     <?php if (!$appconfig->allow_changeprice) : ?>
-        <input type="hidden" name="price" value="<?= formatmoney($linedetail->price); ?>">
+        <input type="hidden" name="price" value="<?= $page->stringerbell->format_money($linedetail->price); ?>">
     <?php endif; ?>
     <div class="row">
     	<div class="col-sm-8 item-information">

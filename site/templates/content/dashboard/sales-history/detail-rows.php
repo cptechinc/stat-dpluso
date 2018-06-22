@@ -20,7 +20,7 @@
 			<?= $detail->desc1. ' ' . $detail->desc2 ; ?>
 		</td>
 		<td class="text-right"><?= intval($detail->qty); ?></td>
-		<td class="text-right">$ <?= formatmoney($detail->price); ?></td>
+		<td class="text-right">$ <?= $page->stringerbell->format_money($detail->price); ?></td>
 		<td class="text-right"><?= intval($detail->qtybackord); ?></td> 
 		<td class="text-right"><?= intval($detail->qtyshipped); ?></td>
 		<td><?= $orderpanel->generate_loaddplusnoteslink($order, $detail->linenbr); ?></td> 

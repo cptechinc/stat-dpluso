@@ -1,4 +1,7 @@
 <?php
+	/**
+	 * Abstract file to build Screen classes from and to provide properties and methods
+	 */
 	abstract class TableScreenMaker {
 		use ThrowErrorTrait;
 
@@ -118,10 +121,11 @@
 		/**
 		 * Constructor
 		 * @param string $sessionID Session ID
+		 * @param string $userID    User ID
 		 */
-		public function __construct($sessionID) {
+		public function __construct($sessionID, $userID = '') {
 			$this->sessionID = $sessionID;
-			$this->userID = DplusWire::wire('user')->loginid;
+			$this->userID = !empty($userID) ? $userID : DplusWire::wire('user')->loginid;
 			$this->load_filepath();
 		}
 
@@ -145,6 +149,14 @@
 		 */
 		public function set_printpage($forprint = false) {
 			$this->forprint = $forprint;
+		}
+		
+		/**
+		 * Sets the userID property
+		 * @param string $userID User ID
+		 */
+		public function set_userID($userID) {
+			$this->userID = $userID;
 		}
 
 		/* =============================================================

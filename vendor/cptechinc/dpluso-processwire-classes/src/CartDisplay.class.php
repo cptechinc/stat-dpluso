@@ -20,7 +20,7 @@
 		 * @return CartQuote  or SQL Query
 		 */
 		public function get_cartquote($debug = false) {
-			return $this->cart = get_carthead($this->sessionID, true, $debug);
+			return $this->cart = CartQuote::load($this->sessionID, $debug);
 		}
 
 		/**

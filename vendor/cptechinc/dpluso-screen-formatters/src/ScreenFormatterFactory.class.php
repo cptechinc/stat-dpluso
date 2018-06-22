@@ -1,6 +1,18 @@
 <?php
+    /**
+     * Factory to load all the Screen Formatters
+     */
     class ScreenFormatterFactory {
+        /**
+         * Session Identifier
+         * @var string
+         */
         protected $sessionID;
+        
+        /**
+         * Formatter Array with code as the key and the NAme as the value
+         * @var array
+         */
         protected $formatters = array(
             'ii-sales-history' => 'II_SalesHistoryFormatter',
             'ii-sales-orders' => 'II_SalesOrdersFormatter',
@@ -49,10 +61,19 @@
 			'item-kitcomponents' => 'Item_ItemKitComponents'
         );
         
+        /**
+         * Constructor
+         * @param string $sessionID Session Identifier
+         */
         public function __construct($sessionID) {
             $this->sessionID = $sessionID;
         }
         
+        /**
+         * Returns Screen formatter object of the type provided
+         * @param  string $type Formatter Type
+         * @return TableScreenMaker       Screen object
+         */
         public function generate_screenformatter($type) {
             if (in_array($type, array_keys($this->formatters))) {
                 return new $this->formatters[$type]($this->sessionID);
@@ -62,10 +83,15 @@
             }
         }
         
+        /**
+         * Throws Error
+         * @param  string $error Error Message
+         * @param  int    $level Error Level
+         * @return void
+         */
         protected function error($error, $level = E_USER_ERROR) {
 			$error = (strpos($error, 'DPLUSO[SCREEN-FORMATTER]: ') !== 0 ? 'DPLUSO[SCREEN-FORMATTER]: ' . $error : $error);
 			trigger_error($error, $level);
 			return;
 		}
     } 
- ?>

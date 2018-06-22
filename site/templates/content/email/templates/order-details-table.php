@@ -12,8 +12,8 @@
             $tb->tr();
             $tb->td('', $detail['itemid']);
             $tb->td('', $detail['qty']);
-            $tb->td('', formatmoney($detail['price']). ' / '. $detail['uom']);
-            $tb->td('class="text-right"', formatmoney($detail['totalprice']));
+            $tb->td('', $page->stringerbell->format_money($detail['price']). ' / '. $detail['uom']);
+            $tb->td('class="text-right"', $page->stringerbell->format_money($detail['totalprice']));
         }
         $tb->tr();
         $tb->td('colspan=2', 'Tax');

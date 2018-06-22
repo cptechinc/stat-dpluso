@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * Formatter for II Item Documents Screen
+     * Not Formattable
+     */
      class II_ItemDocumentScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-document'; 
@@ -8,9 +12,8 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
-       	============================================================ */
-        
+            PUBLIC FUNCTIONS
+        ============================================================ */
         public function generate_screen() {
             $bootstrap = new Contento();
             $columns = array_keys($this->json['columns']);
@@ -20,7 +23,7 @@
             $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($columns as $column) {
-                    $class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['headingjustify']];
+                    $class = DplusWire::wire('config')->textjustify[$this->json['columns'][$column]['headingjustify']];
                     $tb->th("class=$class", $this->json['columns'][$column]['heading']);
                 }
                 $tb->th('', "Load Document");
@@ -30,7 +33,7 @@
                     $class = $doc;
                     $tb->tr("class=$class");
                     foreach ($columns as $column) {
-                        $class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+                        $class = DplusWire::wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
                         $tb->td("class=$class", $this->json['data'][$doc][$column]);
                     }
                     $button = $bootstrap->openandclose('button', "type=button|class=btn btn-sm btn-primary load-doc|data-doc=$doc", '<i class="fa fa-file-o" aria-hidden="true"></i> Load');

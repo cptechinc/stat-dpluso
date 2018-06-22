@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * Formatter for VI Purchase Orders Screen
+	 * Formattable
+	 */
 	class VI_PurchaseOrdersFormatter extends TableScreenFormatter {
         protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'vi-purchase-orders'; // ii-sales-history
@@ -10,7 +14,10 @@
 			"header" => "Header",
 			"detail" => "Detail"
 		);
-
+		
+		/* =============================================================
+            PUBLIC FUNCTIONS
+       	============================================================= */
         public function generate_screen() {
             $bootstrap = new Contento();
             $content = '';

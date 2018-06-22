@@ -1,11 +1,18 @@
 <?php
+	/**
+	 * Formatter for CI Customer Shipto Screen
+	 * Formattable
+	 */
 	class CI_CustomerShiptoScreen extends CI_CustomerScreen {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ci-customer-shipto-page'; // ii-sales-history
 		protected $title = 'Customer Shipto Screen';
 		protected $datafilename = 'cishiptoinfo'; // iisaleshist.json
 		protected $testprefix = 'cicust'; // iish
-
+		
+		/* =============================================================
+            PUBLIC FUNCTIONS
+        ============================================================ */
 		public function generate_customertable(Customer $customer) {
 			$tableformatter = new CI_CustomerScreen($this->sessionID);
 			$tableformatter->process_json();
@@ -36,7 +43,7 @@
 					}
 				}
 			}
-			$href = Processwire\wire('config')->pages->custinfo.$customer->custID.'/';
+			$href = DplusWire::wire('config')->pages->custinfo.$customer->custID.'/';
 			$tb->tr()->td('colspan=2|class=text-center', $bootstrap->a("href=$href|class=btn btn-primary", 'Clear Shipto'));
 			return $tb->close();
 		}
@@ -48,14 +55,14 @@
 				$tb->tablesection('thead');
 				$tb->tr();
 				foreach ($this->json['columns']['right'][$section] as $column) {
-					$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+					$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
 					$tb->th("class=$class", $column['heading']);
 				}
 				$tb->closetablesection('thead');
 				foreach (array_keys($this->json['data']['right'][$section]) as $row) {
 					$tb->tr();
 					foreach (array_keys($this->json['data']['right'][$section][$row]) as $column) {
-						$class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
+						$class = DplusWire::wire('config')->textjustify[$this->json['columns']['right'][$section][$column]['datajustify']];
 						$tb->td("class=$class", $this->json['data']['right'][$section][$row][$column]);
 					}
 				}
@@ -64,9 +71,9 @@
 
 			foreach(array('rfml', 'dateentered', 'lastsaledate') as $misc) {
 				$tb->tr();
-				$class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$misc]['headingjustify']];
+				$class = DplusWire::wire('config')->textjustify[$this->json['columns']['right'][$misc]['headingjustify']];
 				$tb->td("class=$class", $this->json['columns']['right'][$misc]['heading']);
-				$class = Processwire\wire('config')->textjustify[$this->json['columns']['right'][$misc]['datajustify']];
+				$class = DplusWire::wire('config')->textjustify[$this->json['columns']['right'][$misc]['datajustify']];
 				$tb->td("class=$class", $this->json['data']['right'][$misc])->td();
 			}
 			return $tb->close();

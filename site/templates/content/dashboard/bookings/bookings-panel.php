@@ -2,6 +2,7 @@
 	$bookingspanel = new BookingsPanel(session_id(), $page->fullURL, '#ajax-modal', 'data-loadinto=#bookings-panel|data-focus=#bookings-panel');
 	$bookingspanel->generate_filter($input);
 	$bookings = $bookingspanel->get_bookings();
+	$bookingdata = array();
 	
 	foreach ($bookings as $booking) {
 		$bookdata = array(
@@ -14,6 +15,7 @@
 		}
 		$bookingdata[] = $bookdata;
 	}
+	$page->has_bookings = empty($bookingdata) ? false : true;
 ?>
 <div class="panel panel-primary not-round" id="bookings-panel">
 	<div class="panel-heading not-round" id="bookings-panel">
@@ -57,8 +59,3 @@
 		</div>
 	</div>
 </div>
-<?php 
-	if (!empty($bookingdata)) {
-		include $config->paths->content."dashboard/bookings/bookings-line-chart.js.php";
-	}
-?>

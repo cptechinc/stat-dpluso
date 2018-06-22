@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * Formatter for Item Pricing Screen
+     * Not Formattable
+     */
      class II_ItemPricingScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-pricing'; 
@@ -8,7 +12,7 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
+            PUBLIC FUNCTIONS
        	============================================================ */
         public function generate_screen() {
             $bootstrap = new Contento();
@@ -34,12 +38,19 @@
             return $content;
         }
         
+        /* =============================================================
+            CLASS FUNCTIONS
+       	============================================================ */
+        /**
+         * Returns the Derived Pricing Table
+         * @return string HTML Derived Pricing Table
+         */
         protected function generate_derivedpricingtable() {
             $tb = new Table('class=table table-striped table-condensed table-excel');
         	$tb->tablesection('thead');
         		$tb->tr();
         		foreach($this->json['columns']['pricing derived from'] as $column) {
-        			$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+        			$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
         			$tb->th("class=$class", $column['heading']);
         		}
         	$tb->closetablesection('thead');
@@ -47,7 +58,7 @@
         		foreach ($this->json['data']['pricing derived from'] as $derivedpricing) {
         			$tb->tr();
         			foreach(array_keys($this->json['columns']['pricing derived from']) as $column) {
-        				$class = Processwire\wire('config')->textjustify[$this->json['columns']['pricing derived from'][$column]['datajustify']];
+        				$class = DplusWire::wire('config')->textjustify[$this->json['columns']['pricing derived from'][$column]['datajustify']];
         				$tb->td("class=$class", $derivedpricing[$column]);
         			}
         		}
@@ -55,12 +66,16 @@
         	return $tb->close();
         }
         
+        /**
+         * Returns the Customer Pricing Table
+         * @return string HTML customer pricing table
+         */
         protected function generate_customerpricingtable() {
             $tb = new Table('class=table table-striped table-condensed table-excel');
         	$tb->tablesection('thead');
         		$tb->tr();
         		foreach($this->json['columns']['customer pricing'] as $column) {
-        			$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+        			$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
         			$tb->th("class=$class", $column['heading']);
         		}
         	$tb->closetablesection('thead');
@@ -68,7 +83,7 @@
         		foreach ($this->json['data']['customer pricing']['cust breaks'] as $customerpricing) {
         			$tb->tr();
         			foreach(array_keys($this->json['columns']['customer pricing']) as $column) {
-        				$class = Processwire\wire('config')->textjustify[$this->json['columns']['customer pricing'][$column]['datajustify']];
+        				$class = DplusWire::wire('config')->textjustify[$this->json['columns']['customer pricing'][$column]['datajustify']];
         				$tb->td("class=$class", $customerpricing[$column]);
         			}
         		}
@@ -76,13 +91,17 @@
         	return $tb->close();
         }
         
+        /**
+         * Returns HTML Table for Standard Pricing
+         * @return string HTML Table for Standard Pricing
+         */
         protected function generate_standardpricingtable() {
             $bootstrap = new Contento();
             $tb = new Table('class=table table-striped table-condensed table-excel');
         	$tb->tablesection('thead');
         		$tb->tr();
         		foreach($this->json['columns']['standard pricing'] as $column) {
-        			$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+        			$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
         			$tb->th("class=$class", $column['heading']);
         		}
         	$tb->closetablesection('thead');
@@ -93,7 +112,7 @@
         		foreach ($this->json['data']['standard pricing']['standard breaks'] as $standardpricing) {
         			$tb->tr();
         			foreach(array_keys($this->json['columns']['standard pricing']) as $column) {
-        				$class = Processwire\wire('config')->textjustify[$this->json['columns']['standard pricing'][$column]['datajustify']];
+        				$class = DplusWire::wire('config')->textjustify[$this->json['columns']['standard pricing'][$column]['datajustify']];
         				$tb->td("class=$class", $standardpricing[$column]);
         			}
         		}
@@ -101,6 +120,10 @@
         	return $tb->close();
         }
         
+        /**
+         * Returns HTML Table for Item Summary
+         * @return string HTML Table for Item Summary
+         */
         protected function generate_itemtable() {
             $bootstrap = new Contento();
             $tb = new Table('class=table table-striped table-condensed table-excel');
@@ -118,16 +141,4 @@
         		$tb->td('colspan=2', $this->json['cust price code']." - ".$this->json['cust price desc']);
         	return $tb->close();
         }
-        
-        public function generate_javascript() {
-			$bootstrap = new Contento();
-			$content = $bootstrap->open('script', '');
-				$content .= "\n";
-                // TODO
-				$content .= "\n";
-			$content .= $bootstrap->close('script');
-			return $content;
-		}
-        
-
     }

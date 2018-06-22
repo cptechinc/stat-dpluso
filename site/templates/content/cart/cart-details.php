@@ -19,7 +19,7 @@
 </div>
 <hr>
 
-<?php $details = get_cartdetails(session_id(), true); ?>
+<?php $details = get_cartdetails(session_id()); ?>
 <?php foreach ($details as $detail) : ?>
 	<form action="<?= $config->pages->cart.'redir/'; ?>" method="post" class="form-group detail allow-enterkey-submit">
 		<input type="hidden" name="action" value="quick-update-line">

@@ -9,7 +9,6 @@
 			$L = $config->pages->login;
 		} else {
 			$L = $config->pages->index;
-			setcookie("session", strToHex(session_id()), time()+86400, "/", "",  0);
 		}
 	}
 	header("location: ". $L);

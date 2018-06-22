@@ -197,10 +197,9 @@
 	*
 	**/
 
-
 	switch ($action) {
 		case 'add-customer':
-			$customer = new Contact();
+			$customer = new Customer();
 			$customer->set('custid', session_id());
 			$customer->set('splogin1', $input->post->text('salesperson1'));
 			$customer->set('splogin2',  $input->post->text('salesperson2'));
@@ -226,8 +225,9 @@
 			$customer->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
 			$customer->set('ackcontact', $input->post->text('ackcontact') == 'Y' ? "Y" : "N");
 			$customer->create();
+			$customer->create_custpermpermission($user->loginid);
 
-			$shipto = Contact::create_fromobject($customer);
+			$shipto = Customer::create_fromobject($customer);
 			$shipto->set('shiptoid', '1');
 			$shipto->set('source', 'CS');
 			$shipto->set('name', !empty($input->post->text('shipto-name')) ? $input->post->text('shipto-name') : $customer->name);
@@ -242,13 +242,14 @@
 			$shipto->set('faxnbr', $input->post->text('contact-fax'));
 			$shipto->set('email', $input->post->text('contact-email'));
 			$shipto->set('recno', get_maxcustindexrecnbr() + 1);
-			$customer->set('arcontact', "N");
-			$customer->set('dunningcontact', "N");
-			$customer->set('buyingcontact', $input->post->text('buycontact'));
-			$customer->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
-			$customer->set('ackcontact', "N");
+			$shipto->set('arcontact', "N");
+			$shipto->set('dunningcontact', "N");
+			$shipto->set('buyingcontact', $input->post->text('buycontact'));
+			$shipto->set('certcontact', $input->post->text('certcontact') == 'Y' ? "Y" : "N");
+			$shipto->set('ackcontact', "N");  
 			$shipto->create();
-
+			$shipto->create_custpermpermission($user->loginid);
+			
 			$data = array(
 				'DBNAME' => $config->dbName,
 				'NEWCUSTOMER' => false,
@@ -293,7 +294,12 @@
 			break;
 		case 'load-new-customer':
 			$custID = get_createdordn(session_id());
+			$customer = Customer::load($custID);
+			$shipto = Customer::load($custID, '1');
 			$session->sql = Customer::change_custid(session_id(), $custID);
+			$customer->create_custpermpermission($user->loginid);
+			$shipto->create_custpermpermission($user->loginid);
+			
 			$session->loc = $config->pages->custinfo."$custID/";
 
 			if (!empty($shipID)) {
@@ -315,9 +321,10 @@
 		case 'shop-as-customer':
 			$session->custID = $custID;
 			$data = array('DBNAME' => $config->dbName, 'CARTCUST' => false, 'CUSTID' => $custID);
-			$session->{'new-shopping-customer'} = get_customername($custID);
             if (!empty($shipID)) {$data['SHIPID'] = $shipID; $session->shipID = $shipID; }
-			if (!count_carthead(session_id(), false)) { $session->sql = insert_carthead(session_id(), $custID, $shipID, false);}
+			if (!has_carthead(session_id())) { 
+				$session->sql = insert_carthead(session_id(), $custID, $shipID);
+			}
 			if ($input->post->page) {
 				$session->loc = $input->post->text('page');
 			} elseif ($input->get->page) {

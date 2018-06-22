@@ -48,8 +48,4 @@
 			$tb->closetablesection('tbody');
 			return $bootstrap->div('class=table-responsive', $tb->close());
         }
-        
-        public function generate_javascript() {
-			return '';
-		}
     }

@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * Formatter for CI Customer Screen
+	 * Formattable
+	 */
 	class CI_CustomerScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ci-customer-page'; // ii-sales-history
@@ -6,18 +10,18 @@
 		protected $datafilename = 'cicustomer'; // iisaleshist.json
 		protected $testprefix = 'cicust'; // iish
 
-
+		/* =============================================================
+            PUBLIC FUNCTIONS
+        ============================================================ */
 		public function generate_screen() {
-			$content = '';
-
-			if (sizeof($this->json['data']) > 0) {
-
-			} else {
-				$content = $page->bootstrap->createalert('warning', 'Information Not Available');
-			} // END if (sizeof($this->json['data']) > 0)
-			return $content;
+			return empty($this->json['data']) ? $page->bootstrap->createalert('warning', 'Information Not Available') : '';
 		}
-
+		
+		/**
+		 * Returns HTML table with Customer data
+		 * @param  Customer $customer Customer
+		 * @return string             HTML table with Customer data
+		 */
 		public function generate_customertable(Customer $customer) {
 			$bootstrap = new Contento();
 			$tb = new Table("class=table table-striped table-bordered table-condensed table-excel");
@@ -40,7 +44,12 @@
 			}
 			return $tb->close();
 		}
-
+		
+		/**
+		 * Returns HTML table with Customer Shipto data
+		 * @param  Customer $customer Customer
+		 * @return string             HTML table with Customer Shipto data
+		 */
 		public function generate_shiptotable(Customer $customer) {
 			$bootstrap = new Contento();
 			$tb = new Table("class=table table-striped table-bordered table-condensed table-excel");
@@ -69,9 +78,14 @@
 			}
 			return $tb->close();
 		}
-
+		
+		/**
+		 * Returns HTML form for the Customer Page
+		 * @param  Customer $customer Customer
+		 * @return string             HTML form for the Customer Page
+		 */
 		public function generate_pageform(Customer $customer) {
-			$action = Dpluswire::wire('config')->pages->ajax."load/customers/cust-index/";
+			$action = DplusWire::wire('config')->pages->ajax."load/customers/cust-index/";
 			$form = new FormMaker("action=$action|method=POST|id=ci-cust-lookup|class=allow-enterkey-submit");
 			$form->input("type=hidden|name=action|value=ci-item-lookup");
 			$form->input("type=hidden|name=shipID|class=shipID|value=$customer->shipID");
@@ -82,7 +96,11 @@
 			$form->add($form->bootstrap->div('class=input-group custom-search-form', $input.$span));
 			return $form->finish();
 		}
-
+		
+		/**
+		 * Returns HTML table with the formattted field definitions for the left column
+		 * @return string  HTML table with the formattted field definitions for the left column
+		 */
 		public function generate_tableleft() {
 			$tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
 			foreach (array_keys($this->json['columns']['left']) as $column) {
@@ -97,9 +115,14 @@
 			}
 			return $tb->close();
 		}
-
+		
+		/**
+		 * Returns HTML table with the formattted field definitions for the right column
+		 * @return string  HTML table with the formattted field definitions for the right column
+		 */
 		public function generate_tableright() {
 			$tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
+			
 			foreach (array('activity', 'saleshistory') as $section) {
 				if ($section != 'rfml') {
 					$tb->tablesection('thead');

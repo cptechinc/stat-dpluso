@@ -1,19 +1,26 @@
 <?php 
+    /**
+     * Formatter Item Requirements Screens
+     * Not Formattable
+     */
      class II_ItemRequirementsScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-stock'; 
 		protected $title = 'Item Stock by Warehouse';
 		protected $datafilename = 'iirequire'; 
 		protected $testprefix = 'iireq';
-
 		protected $datasections = array();
+        /**
+         * Requirements Screen Types
+         * @var array
+         */
         protected $screentypes = array(
             "REQ" => "requirements", 
             "AVL" => 'available'
         );
         
         /* =============================================================
-          PUBLIC FUNCTIONS
+            PUBLIC FUNCTIONS
        	============================================================ */
         public function generate_screen() {
             $bootstrap = new Contento();
@@ -23,7 +30,7 @@
 			$tb->tablesection('thead');
 				$tb->tr();
 				foreach($this->json['columns'] as $column) {
-					$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+					$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
                     if (!empty($column['heading'])){
                         $tb->th("class=$class", $column['heading']);
                     }
@@ -33,7 +40,7 @@
 				foreach($this->json['data']['orders'] as $order) {
 					$tb->tr();
 					foreach(array_keys($this->json['columns']) as $column) {
-						$class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+						$class = DplusWire::wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
                         if (!empty($this->json['columns'][$column]['heading'])){
                             $tb->td("class=$class", $order[$column]);
                         }
@@ -44,11 +51,18 @@
             return $content;
         }
         
-        function generate_warehouseform() {
+        /* =============================================================
+            PROTECTED FUNCTIONS
+       	============================================================ */
+        /**
+         * Returns HTML form for the warehouse
+         * @return string HTML form for the warehouse
+         */
+        protected function generate_warehouseform() {
             $bootstrap = new Contento();
-	        $whsejson = json_decode(file_get_contents(Processwire\wire('config')->companyfiles."json/whsetbl.json"), true);
+	        $whsejson = json_decode(file_get_contents(DplusWire::wire('config')->companyfiles."json/whsetbl.json"), true);
             $warehouses = array_keys($whsejson['data']);
-            $reloadpage = Processwire\wire('config')->ajax ? 'true' : 'false';
+            $reloadpage = DplusWire::wire('config')->ajax ? 'true' : 'false';
             $itemID = $this->json['itemid'];
             $warehouseID = $this->json['whse'];
             $screen = $this->json['reqavl'];

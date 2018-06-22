@@ -409,24 +409,12 @@
 		/**
 		 * Creates a new contact in the database
 		 * Custid is trimmed to match the character length in the Cobol Dplus
-		 * Checks if custperm records exist by using Customer::can_useraccess
 		 * @param  bool $debug Determines if query will execute and if SQL is returned or Contact object
 		 * @return Contact         OR SQL QUERY
 		 */
 		public function create($debug = false) {
             $this->custid = substr($this->custid, 0, 6);
-
-            $sql = insert_customerindexrecord($this, true) . " <br> " . insert_custperm($this, true);
-
-            if ($debug) {
-                return $sql;
-            } else {
-                insert_customerindexrecord($this);
-                if (!Customer::can_useraccess($this->custid, $this->shiptoid)) {
-                    insert_custperm($this);
-                }
-                return $sql;
-            }
+            return insert_customerindexrecord($this, $debug);
 		}
 
 		/**

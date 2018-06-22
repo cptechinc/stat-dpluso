@@ -88,63 +88,6 @@
 /* =============================================================
    STRING FUNCTIONS
  ============================================================ */
-	 function latin_to_utf($string) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
-		$encode = array("â€¢" => '&bull;', "â„¢" => '&trade;', "â€" => '&prime;');
-		foreach ($encode as $key => $value) {
-			if (strpos($string, $key) !== false) {
-				$string = str_replace($key, $value, $string);
-			}
-		}
-		return $string;
-	 }
-
-	 function ordinal($number) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
-		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
-		if ((($number % 100) >= 11) && (($number%100) <= 13))
-			return $number. 'th';
-		else
-			return $number. $ends[$number % 10];
-	}
-
-	function ordinalword($number) { // DEPRECATED 3/5/18
-		switch ($number) {
-			case '1':
-				return 'first';
-				break;
-			case '2':
-				return 'second';
-				break;
-			case '3':
-				return 'third';
-				break;
-			case '4':
-				return 'fourth';
-				break;
-		}
-	}
-
-	function strToHex($string){ // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
-		$hex = '';
-		for ($i=0; $i<strlen($string); $i++){
-			$ord = ord($string[$i]);
-			$hexCode = dechex($ord);
-			$hex .= substr('0'.$hexCode, -2);
-		}
-		return strToUpper($hex);
-	}
-
-	function hexToStr($hex){ // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
-		$string = '';
-		for ($i = 0; $i < strlen($hex)-1; $i+=2){
-			$string .= chr(hexdec($hex[$i].$hex[$i+1]));
-		}
-		return $string;
-	}
-
-	function formatmoney($amt) { // DEPRECATED 3/5/2018 MOVED TO Stringer.class.php
-		return number_format($amt, 2, '.', ',');
-	}
-
 	function formatnumber($number, $beforedecimal, $afterdecimal) { // DEPRECATED 3/5/2018
 		$array = explode('.', $number);
 		return str_pad($array[0], $beforedecimal, '0', STR_PAD_LEFT) . '.' . str_pad($array[1], $afterdecimal, '0', STR_PAD_RIGHT);
@@ -433,8 +376,7 @@
 		$user = LogmUser::load($loginID);
 		DplusWire::wire('user')->fullname = $loginrecord['loginname'];
 		DplusWire::wire('user')->loginid = $loginrecord['loginid'];
-		DplusWire::wire('user')->hascontactrestrictions = $loginrecord['restrictcustomer'];
-		DplusWire::wire('user')->hasrestrictions = $loginrecord['restrictuseraccess'];
+		DplusWire::wire('user')->has_customerrestrictions = $loginrecord['restrictcustomers'];
 		DplusWire::wire('user')->salespersonid = $loginrecord['salespersonid'];
 		DplusWire::wire('user')->addRole($user->get_dplusrole());
 	}

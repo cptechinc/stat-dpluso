@@ -4,7 +4,9 @@
 	 * Derived from the custindex Table
 	 */
     class Customer extends Contact {
-
+        use CreateFromObjectArrayTraits;
+		use CreateClassArrayTraits;
+        
         /* =============================================================
 			GETTER FUNCTIONS
 		============================================================ */
@@ -153,6 +155,18 @@
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
+        /**
+         * Inserts custperm record for user
+         * @param  string $loginID User Login ID
+         * @param  bool   $debug   Run in debug?
+         * @return string          SQL Query
+         */
+        public function create_custpermpermission($loginID = '', $debug = false) {
+            if (!can_accesscustomer($this->custid, $this->shiptoid, $loginID)) {
+                insert_custperm($this, LogmUser::get_toplevelcustpermloginid(), $debug);
+                return insert_custperm($this, $loginID, $debug);
+            }
+        }
 		/**
 		 * Loads an object with this class using the parameters as provided
 		 * @param  string $custID    CustomerID

@@ -91,7 +91,7 @@
 		 * @source _dbfunc.php
 		 */
 		public static function load($sessionID, $debug = false) {
-			return get_carthead($sessionID, true, $debug);
+			return get_carthead($sessionID, $debug);
 		}
 
 		public function update($debug = false) {

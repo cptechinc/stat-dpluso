@@ -1,4 +1,4 @@
-<?php $carthead = get_carthead(session_id(), false); ?>
+<?php $carthead = get_carthead(session_id()); ?>
 <?php
 	if ($modules->isInstalled('QtyPerCase')) {
 		include $config->paths->siteModules.'QtyPerCase/content/cart/cart-details.php';

@@ -94,6 +94,14 @@
 		public function get_custpermloginid() {
 			return $this->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] ? $this->loginid : 'admin';
 		}
+		
+		/**
+		 * Returns the custperm loginid that Anything above a salesrep uses
+		 * @return string LoginID
+		 */
+		public static function get_toplevelcustpermloginid() {
+			return 'admin';
+		}
 
 		/**
 		 * Loads an object of this class

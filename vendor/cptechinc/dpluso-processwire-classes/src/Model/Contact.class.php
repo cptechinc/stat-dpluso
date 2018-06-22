@@ -168,6 +168,51 @@
 		}
 
         /**
+		 * Returns AR Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the AR Contact
+		 */
+		public function get_arcontact() {
+            return !empty($this->arcontact) ? $this->arcontact : 'N';
+        }
+
+        /**
+		 * Returns Dunning Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the Dunning Contact
+		 */
+		public function get_dunningcontact() {
+            return !empty($this->dunningcontact) ? $this->dunningcontact : 'N';
+        }
+
+        /**
+		 * Returns Buying Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the Buying Contact
+		 */
+		public function get_buyingcontact() {
+            return !empty($this->buyingcontact) ? $this->buyingcontact : 'N';
+        }
+
+        /**
+		 * Returns Certificate Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the Certificate Contact
+		 */
+		public function get_certcontact() {
+            return !empty($this->certcontact) ? $this->certcontact : 'N';
+        }
+
+        /**
+		 * Returns Acknowledgement Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the Acknowledgement Contact
+		 */
+		public function get_ackcontact() {
+            return !empty($this->ackcontact) ? $this->ackcontact : 'N';
+        }
+
+        /**
          * Returns if User can edit this contact
          * @param  string $loginID User loginID
          * @return bool          Does the user have the right permissions to edit this contact

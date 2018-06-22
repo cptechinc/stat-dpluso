@@ -19,8 +19,8 @@
                     </td>
                 </tr>
     			<?php if ($contact->has_shipto()) : ?>
-                    <tr> 
-                        <td>Shipto ID:</td> 
+                    <tr>
+                        <td>Shipto ID:</td>
                         <td><a href="<?= $contact->generate_shiptourl(); ?>" target="_blank"><?= $contact->shiptoid; ?> <i class="glyphicon glyphicon-share" aria-hidden="true"></i></a></td>
                     </tr>
                 <?php endif; ?>
@@ -57,25 +57,25 @@
                 <tr class="<?= $contact->has_shipto() ? 'hidden' : ''; ?>">
         			<td class="control-label">AR Contact</td>
         			<td>
-        				<?= array_flip($config->yesnoarray)[$contact->arcontact]; ?>
+                        <?= array_flip($config->yesnoarray)[$contact->arcontact]; ?>
         			</td>
         		</tr>
                 <tr class="<?= $contact->has_shipto() ? 'hidden' : ''; ?>">
         			<td class="control-label">Dunning Contact</td>
         			<td>
-        				<?= array_flip($config->yesnoarray)[$contact->dunningcontact]; ?>
+                        <?= array_flip($config->yesnoarray)[$contact->dunningcontact]; ?>
         			</td>
         		</tr>
                 <tr class="<?= $contact->has_shipto() ? 'hidden' : ''; ?>">
         			<td class="control-label">Acknowledgement Contact</td>
         			<td>
-        				<?= array_flip($config->yesnoarray)[$contact->ackcontact]; ?>
+                        <?= array_flip($config->yesnoarray)[$contact->ackcontact]; ?>
         			</td>
         		</tr>
         		<tr>
         			<td class="control-label">Buying Contact</td>
         			<td>
-        				<?= $config->buyertypes[$contact->buyingcontact]; ?>
+                        <?= $config->buyertypes[$contact->buyingcontact]; ?>
         			</td>
         		</tr>
         		<tr>
@@ -85,7 +85,7 @@
         				<td class="control-label">Certificate Contact</td>
         			<?php endif; ?>
         			<td>
-        				<?= array_flip($config->yesnoarray)[$contact->certcontact]; ?>
+                        <?= array_flip($config->yesnoarray)[$contact->certcontact]; ?>
         			</td>
         		</tr>
             </tbody>

@@ -57,6 +57,7 @@
 					'sessionID' => $sessionID
 				));
 				curl_redir($url->getUrl());
+				$pdfmaker->process();
 	            break;
 	    }
     }

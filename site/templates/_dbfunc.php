@@ -3666,7 +3666,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-
+	
 	/**
 	 * Returns the Item Description from the cross reference table
 	 * @param  string $itemID Item ID / Part Number
@@ -3680,26 +3680,6 @@
 		$q->limit(1);
 		$sql = DplusWire::wire('database')->prepare($q->render());
 
-	function validateitemid($itemID, $custID, $debug) {
-		if (empty($custID)) {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE UCASE(itemid) = UCASE(:itemID) AND originid = 'I'");
-			$switching = array(':itemID' => $itemID); $withquotes = array(true);
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE (originid = (:custID) AND UCASE(refitemid) = UCASE(:itemID)) OR (UCASE(itemid) = UCASE(:itemID) AND origintype = 'I')");
-			$switching = array(':itemID' => $itemID, ':custID' => $custID); $withquotes = array(true, true);
-		}
-
-		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
-		} else {
-			$sql->execute($switching);
-			return $sql->fetchColumn();
-		}
-	}
-
-	function getitemdescription($itemID, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT desc1 FROM itemsearch WHERE itemid = :itemid LIMIT 1");
-		$switching = array(':itemid' => $itemID); $withquotes = array(true);
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {
@@ -3707,7 +3687,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-
+	
 	/**
 	 * Returns the record number for the next item
 	 * @param  string $itemID     Item ID / Part Number
@@ -3729,7 +3709,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-
+	
 	/**
 	 * Returns the itemID for the record with the provided recno
 	 * @param  int    $recno      Record Number

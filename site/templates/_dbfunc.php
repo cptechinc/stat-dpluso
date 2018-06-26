@@ -16,7 +16,7 @@
 		$q->field($q->expr("IF(validlogin = 'Y', 1, 0)"));
 		$q->where('sessionid', $sessionID);
 		$sql = DplusWire::wire('database')->prepare($q->render());
-		
+
 		if ($debug) {
 			return $q->generate_sqlquery();
 		} else {
@@ -24,7 +24,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Returns Error Message for Session
 	 * @param  string $sessionID Session Identifier
@@ -36,7 +36,7 @@
 		$q->field('errormsg');
 		$q->where('sessionid', $sessionID);
 		$sql = DplusWire::wire('database')->prepare($q->render());
-		
+
 		if ($debug) {
 			return $q->generate_sqlquery();
 		} else {
@@ -44,7 +44,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Returns record for the session's Login
 	 * @param  string $sessionID Session Identifier
@@ -57,7 +57,7 @@
 		$q->field($q->expr("logperm.*"));
 		$q->where('sessionid', $sessionID);
 		$sql = DplusWire::wire('database')->prepare($q->render());
-		
+
 		if ($debug) {
 			return $q->generate_sqlquery();
 		} else {
@@ -65,12 +65,12 @@
 			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}
-	
+
 /* =============================================================
 	LOGMPERM FUNCTIONS
 ============================================================ */
 	/**
-	 * Returns the Order Number / Quote Number created 
+	 * Returns the Order Number / Quote Number created
 	 * @param  string $sessionID Session Identifier
 	 * @param  bool   $debug     Run in debug? IF so return SQL Query
 	 * @return string            Dplus (Order / Quote) Number
@@ -133,10 +133,10 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Returns Customer Perm Record
-	 * Used for getting fields like amount sold, last sale date specific to a salesrep, or even overall 
+	 * Used for getting fields like amount sold, last sale date specific to a salesrep, or even overall
 	 * @param  Customer $customer   Customer object, with customer properties like shiptoid
 	 * @param  string   $loginID    User Login ID if blank, will use current user's login
 	 * @param  bool     $debug      Run in debug? IF so return SQL Query
@@ -161,7 +161,7 @@
 			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}
-	
+
 	/**
 	 * Returns the number of records in the custperm table
 	 * @param  string   $userID User Login ID
@@ -184,7 +184,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Insert custperm record
 	 * @param  Customer $customer Customer Object with properties needed such as salesper1, custid, shiptoid
@@ -229,7 +229,7 @@
 	}
 
 	function can_accesscustomer($custID, $shiptoID = '', $loginID = '', $debug = false) {
-		
+
 		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
 		$user = LogmUser::load($loginID);
 
@@ -243,7 +243,7 @@
 			$q->field($q->expr('COUNT(*)'));
 			$q->where('loginid', 'in', [$loginID, DplusWire::wire('config')->sharedaccounts]);
 			$sql = DplusWire::wire('database')->prepare($q->render());
-			
+
 			if ($debug) {
 				return $q->generate_sqlquery($q->params);
 			} else {
@@ -842,7 +842,7 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
-	
+
 	/**
 	 * Inserts record into custindex table
 	 * @param  Contact $contact The Contact object you will add
@@ -870,7 +870,7 @@
 			return $q->generate_sqlquery($q->params);
 		}
 	}
-	
+
 	/**
 	 * Updates the contact record in the custindex table
 	 * @param  Contact $contact Contact to update
@@ -901,7 +901,7 @@
 			return $q->generate_sqlquery($q->params);
 		}
 	}
-	
+
 	/**
 	 * Updates the contact Name / ID in the custindex table for that contact
 	 * @param  Contact $contact   Customer Contact
@@ -929,7 +929,7 @@
 			return $q->generate_sqlquery($q->params);
 		}
 	}
-	
+
 	/**
 	 * Get the last record number (recno) from the custindex table
 	 * @param  bool   $debug Run in debug?
@@ -947,7 +947,7 @@
 		}
 	}
 	/**
-	 * Change custindex Customer ID 
+	 * Change custindex Customer ID
 	 * // NOTE Usually used for new customers, once dplus custid is provided
 	 * @param  string $originalcustID Current Customer ID
 	 * @param  string $newcustID      new Customer ID (Provided by Dplus)
@@ -969,7 +969,7 @@
 	}
 
 /* =============================================================
-	ORDERS FUNCTIONS 
+	ORDERS FUNCTIONS
 ============================================================ */
 	function count_userorders($sessionID, $filter = false, $filtertypes = false, $debug = false) {
 		$q = (new QueryBuilder())->table('ordrhed');
@@ -1273,7 +1273,7 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
-	
+
 	/**
 	 * Returns the order number locked by this session
 	 * @param  string $sessionID Session Identifier
@@ -1286,7 +1286,7 @@
 		$q->where('sessionid', $sessionID);
 		$q->limit(1);
 		$sql = DplusWire::wire('database')->prepare($q->render());
-		
+
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {
@@ -3209,7 +3209,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Returns the carthead record for this session
 	 * @param  string $sessionID Session Identifier
@@ -3229,7 +3229,7 @@
 			return $sql->fetch();
 		}
 	}
-	
+
 	/**
 	 * Returns the number of Cart Items for this session
 	 * @param  string $sessionID Session Identifier
@@ -3249,7 +3249,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Returns an array of CartDetails
 	 * @param  string $sessionID Session Identifier
@@ -3273,7 +3273,7 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
-	
+
 	/**
 	 * Return the CartDetail for this session and Line Number
 	 * @param  string     $sessionID Session Identifier
@@ -3295,7 +3295,7 @@
 			return $sql->fetch();
 		}
 	}
-	
+
 	/**
 	 * Inserts new carthead record
 	 * @param  string $sessionID Session Identifier
@@ -3321,7 +3321,7 @@
 			return $q->generate_sqlquery($q->params);
 		}
 	}
-	
+
 	/**
 	 * Updates the CartDetail record (cartdet) in the database
 	 * @param  string     $sessionID Session Identifier
@@ -3352,7 +3352,7 @@
 			return $q->generate_sqlquery($q->params);
 		}
 	}
-	
+
 	/**
 	 * Inserts CartDetail (cartdet) record into database
 	 * @param  string     $sessionID Session Identifier
@@ -3668,6 +3668,19 @@
 		}
 	}
 
+	/**
+	 * Returns the Item Description from the cross reference table
+	 * @param  string $itemID Item ID / Part Number
+	 * @param  bool   $debug  Run in debug? If so, return SQL Query
+	 * @return string         Item Description
+	 */
+	function get_xrefitemdescription($itemID, $debug = false) {
+		$q = (new QueryBuilder())->table('itemsearch');
+		$q->field('desc1');
+		$q->where('itemid', $itemID);
+		$q->limit(1);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
 	function validateitemid($itemID, $custID, $debug) {
 		if (empty($custID)) {
 			$sql = Processwire\wire('database')->prepare("SELECT COUNT(*) FROM itemsearch WHERE UCASE(itemid) = UCASE(:itemID) AND originid = 'I'");
@@ -3689,35 +3702,51 @@
 		$sql = Processwire\wire('database')->prepare("SELECT desc1 FROM itemsearch WHERE itemid = :itemid LIMIT 1");
 		$switching = array(':itemid' => $itemID); $withquotes = array(true);
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
-	function getnextrecno($itemID, $nextorprev, $debug) {
-		if ($nextorprev == 'next') {
-			$sql = Processwire\wire('database')->prepare("SELECT MAX(recno) + 1 FROM itemsearch WHERE itemid = :itemid");
-		} else {
-			$sql = Processwire\wire('database')->prepare("SELECT MIN(recno) - 1 FROM itemsearch WHERE itemid = :itemid");
-		}
-		$switching = array(':itemid' => $itemID); $withquotes = array(true);
+	/**
+	 * Returns the record number for the next item
+	 * @param  string $itemID     Item ID / Part Number
+	 * @param  string $nextorprev Next or (prev)iou Record
+	 * @param  bool   $debug      Run in debug? If so return SQL query
+	 * @return int                Record Number
+	 */
+	function get_nextitemrecno($itemID, $nextorprev, $debug = false) {
+		$q = (new QueryBuilder())->table('itemsearch');
+		$expression = $nextorprev == 'next' ? "MAX(recno) + 1" : "MIN(recno) - 1";
+		$q->field($q->expr($expression));
+		$q->where('itemid', $itemID);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
 
-	function getitembyrecno($recno, $debug) {
-		$sql = Processwire\wire('database')->prepare("SELECT itemid FROM itemsearch WHERE recno = :recno");
-		$switching = array(':recno' => $recno); $withquotes = array(true);
+	/**
+	 * Returns the itemID for the record with the provided recno
+	 * @param  int    $recno      Record Number
+	 * @param  bool   $debug      Run in debug? If so return SQL query
+	 * @return string             Item Id
+	 */
+	function get_itemidbyrecno($recno, $debug = false) {
+		$q = (new QueryBuilder())->table('itemsearch');
+		$q->field('itemid');
+		$q->where('recno', $recno);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
 		if ($debug) {
-			return returnsqlquery($sql->queryString, $switching, $withquotes);
+			return $q->generate_sqlquery($q->params);
 		} else {
-			$sql->execute($switching);
+			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
 	}
@@ -3766,19 +3795,20 @@
 	 */
 	function get_formatter($userID, $formatter, $debug = false) {
 		$q = (new QueryBuilder())->table('tableformatter');
+		$q->field('data');
 		$q->where('user', $userID);
 		$q->where('formattertype', $formatter);
 		$q->limit(1);
 		$sql = DplusWire::wire('database')->prepare($q->render());
-		
+
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
 		} else {
 			$sql->execute($q->params);
 			return $sql->fetchColumn();
 		}
-	} 
-	
+	}
+
 	/**
 	 * Returns if user has a formatter saved for that formatter type
 	 * @param  string $userID    User ID
@@ -3800,7 +3830,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Get the max id for that user and that formatter type
 	 * // NOTE used to check if newly created formatter is more than the last saved one
@@ -3823,7 +3853,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Updates the formatter for that user
 	 * @param  string $userID    User ID
@@ -3847,7 +3877,7 @@
 			return array('sql' => $q->generate_sqlquery($q->params), 'success' => $sql->rowCount() ? true : false, 'updated' => $sql->rowCount() ? true : false, 'querytype' => 'update');
 		}
 	}
-		
+
 	/**
 	 * Creates the formatter for that user
 	 * @param  string $userID    User ID

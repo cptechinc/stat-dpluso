@@ -19,6 +19,7 @@
             PUBLIC FUNCTIONS
        	============================================================ */
         public function generate_screen() {
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajaxload."ii/ii-documents/quote/");
             $bootstrap = new Contento();
             $content = '';
 			$this->generate_tableblueprint();
@@ -59,7 +60,15 @@
             						$colspan = $column['col-length'];
             						$celldata = strlen($column['label']) ? '<b>'.$column['label'].'</b>: ' : '';
             						$celldata .= TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $quote, $column);
-            						$tb->td("colspan=$colspan|class=$class", $celldata);
+									
+									if ($i == 1 && !empty($quote["Quote ID"])) {
+										$qnbr = $quote["Quote ID"];
+										$itemID = $this->json['itemid'];
+										$url->query->setData(array('itemID' => $this->json['itemid'], 'qnbr' => $qnbr, 'returnpage' => urlencode(DplusWire::wire('page')->fullURL->getUrl())));
+										$href = $url->getUrl();
+										$celldata .= "&nbsp; " . $bootstrap->openandclose('a', "href=$href|class=load-quote-documents|title=Load Quote Documents|aria-label=Load Quote Documents|data-qnbr=$qnbr|data-itemid=$itemID|data-type=ii-quotes", $bootstrap->createicon('fa fa-file-text'));
+									}
+									$tb->td("colspan=$colspan|class=$class", $celldata);
             					} else {
 									if ($columncount < $this->tableblueprint['cols']) {
 										$colspan = 1;

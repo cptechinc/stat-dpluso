@@ -82,6 +82,46 @@ $(function() {
 			});
 		});
 	});
+	
+	$("body").on("click", '.load-order-documents', function(e) {
+		e.preventDefault();
+		var custID = $(this).data('custid');
+		var modal = config.modals.ajax;
+        var loadinto =  modal+" .modal-content";
+		var ordn = $(this).data('ordn');
+		var type = $(this).data('type');
+		var href = URI($(this).attr('href')).addQuery('modal', 'modal').toString();
+		showajaxloading();
+		ci_getorderdocuments(custID, ordn, type, function() {
+			wait(500, function() {
+				$(loadinto).loadin(href, function() {
+					console.log(href); hideajaxloading();
+					$(modal).find('.modal-body').addClass('modal-results');
+					$(modal).resizemodal('lg').modal();
+				});
+			});
+		});
+	});
+	
+	$("body").on("click", '.load-quote-documents', function(e) {
+		e.preventDefault();
+		var custID = $(this).data('custid');
+		var modal = config.modals.ajax;
+        var loadinto =  modal+" .modal-content";
+		var qnbr = $(this).data('qnbr');
+		var type = $(this).data('type');
+		var href = URI($(this).attr('href')).addQuery('modal', 'modal').toString();
+		showajaxloading();
+		ci_getquotedocuments(custID, qnbr, type, function() {
+			wait(500, function() {
+				$(loadinto).loadin(href, function() {
+					console.log(href); hideajaxloading();
+					$(modal).find('.modal-body').addClass('modal-results');
+					$(modal).resizemodal('lg').modal();
+				});
+			});
+		});
+	});
 
 	$(window).resize(function() {
 		if ($(window).width() < 768) {

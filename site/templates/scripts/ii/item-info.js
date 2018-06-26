@@ -128,6 +128,26 @@ $(function() {
 			});
 		});
 	});
+	
+	$("body").on("click", '.load-quote-documents', function(e) {
+		e.preventDefault();
+		var itemID = $(this).data('itemid');
+		var modal = config.modals.ajax;
+        var loadinto =  modal+" .modal-content";
+		var qnbr = $(this).data('qnbr');
+		var type = $(this).data('type');
+		var href = URI($(this).attr('href')).addQuery('modal', 'modal').toString();
+		showajaxloading();
+		ii_getquotedocuments(itemID, qnbr, type, function() {
+			wait(500, function() {
+				$(loadinto).loadin(href, function() {
+					console.log(href); hideajaxloading();
+					$(modal).find('.modal-body').addClass('modal-results');
+					$(modal).resizemodal('lg').modal();
+				});
+			});
+		});
+	});
 
 	$("body").on("focus", '.ii-item-search', function() {
 		listener.stop_listening();

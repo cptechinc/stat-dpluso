@@ -60,6 +60,7 @@
         				'ci_credit' => $config->pages->ajaxload."ci/ci-credit/",
         				'ci_openinvoices' => $config->pages->ajaxload."ci/ci-open-invoices/",
                         'ci_orderdocuments' => $config->pages->ajaxload."ci/ci-documents/order/",
+                        'ci_quotedocuments' => $config->pages->ajaxload."ci/ci-documents/quote/",
         				'ci_paymenthistory' => $config->pages->ajaxload."ci/ci-payment-history/",
         				'ci_quotes' => $config->pages->ajaxload."ci/ci-quotes/",
                         'ci_salesorders' => $config->pages->ajaxload."ci/ci-sales-orders/",
@@ -83,6 +84,7 @@
     				'ci_credit' => $config->pages->customer."redir/?action=ci-credit",
     				'ci_openinvoices' => $config->pages->customer."redir/?action=ci-open-invoices",
                     'ci_orderdocuments' => $config->pages->customer."redir/?action=ci-order-documents",
+                    'ci_quotedocuments' => $config->pages->customer."redir/?action=ci-quote-documents",
     				'ci_paymenthistory' => $config->pages->customer."redir/?action=ci-payments",
     				'ci_quotes' => $config->pages->customer."redir/?action=ci-quotes",
                     'ci_salesorders' => $config->pages->customer."redir/?action=ci-sales-orders",
@@ -124,7 +126,8 @@
             			'ii_stock' => $config->pages->ajaxload."ii/ii-stock/",
             			'ii_substitutes' => $config->pages->ajaxload."ii/ii-substitutes/",
             			'ii_documents' => $config->pages->ajaxload."ii/ii-documents/",
-                        'ii_order_documents' => $config->pages->ajaxload."ii/ii-documents/order/"
+                        'ii_order_documents' => $config->pages->ajaxload."ii/ii-documents/order/",
+                        'ii_quote_documents' => $config->pages->ajaxload."ii/ii-documents/quote/"
                     ],
                     'json' => [
                         'ii_moveitemdoc' => $config->pages->ajaxjson."ii/ii-move-document/",
@@ -156,6 +159,7 @@
     				'ii_substitutes' => $config->pages->products."redir/?action=ii-substitutes",
     				'ii_documents' => $config->pages->products."redir/?action=ii-documents",
                     'ii_order_documents' => $config->pages->products."redir/?action=ii-order-documents",
+                    'ii_quote_documents' => $config->pages->products."redir/?action=ii-quote-documents"
     			]
     		],
     		'json' => [

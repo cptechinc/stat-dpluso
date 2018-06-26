@@ -24,7 +24,11 @@
 
 	function ci_getorderdocuments(custID, ordn, type, callback) {
 		var url = config.urls.customer.redir.ci_orderdocuments+"&ordn="+urlencode(ordn)+'&type='+urlencode(type);
-		console.log(url);
+		$.get(url, function() { callback();});
+	}
+	
+	function ci_getquotedocuments(custID, qnbr, type, callback) {
+		var url = config.urls.customer.redir.ci_quotedocuments+"&qnbr="+urlencode(qnbr)+'&type='+urlencode(type);
 		$.get(url, function() { callback();});
 	}
 

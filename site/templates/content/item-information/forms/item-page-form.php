@@ -10,6 +10,6 @@
             </span>
         </div>
     </div>
-    <input type="hidden" class="prev-itemID" value="<?php echo getitembyrecno(getnextrecno($input->get->text('itemID'), "prev", false), false); ?>">
-	<input type="hidden" class="next-itemID" value="<?php echo getitembyrecno(getnextrecno($input->get->text('itemID'), "next", false), false); ?>">
+    <input type="hidden" class="prev-itemID" value="<?= XRefItem::get_nextorpreviousitemid($input->get->text('itemID'), 'prev'); ?>">
+	<input type="hidden" class="next-itemID" value="<?= XRefItem::get_nextorpreviousitemid($input->get->text('itemID'), 'next'); ?>">
 </form>

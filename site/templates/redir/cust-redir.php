@@ -476,6 +476,12 @@
 			$data = array('DBNAME' => $config->dbName, 'DOCVIEW' => false, 'FLD1CD' => $config->documentstoragetypes[$type], 'FLD1DATA' => $ordn);
 			$session->loc = $config->pages->index;
 			break;
+		case 'ci-quote-documents':
+			$qnbr = $input->get->text('qnbr');
+			$type = $input->get->text('type');
+			$data = array('DBNAME' => $config->dbName, 'DOCVIEW' => false, 'FLD1CD' => $config->documentstoragetypes[$type], 'FLD1DATA' => $qnbr);
+			$session->loc = $config->pages->index;
+			break;
 		case 'ci-standing-orders':
 			$shipID = $input->get->text('shipID');
 			$data = array('DBNAME' => $config->dbName, 'CISTANDORDR' => false, 'CUSTID' => $custID, 'SHIPID' => $shipID);

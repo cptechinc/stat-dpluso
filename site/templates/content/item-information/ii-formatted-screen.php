@@ -18,7 +18,7 @@
 		if ($tableformatter->json['error']) {
 			echo $page->bootstrap->createalert('warning', $tableformatter->json['errormsg']);
 		} else {
-			$session->itemid = $tableformatter->json['itemid'];
+			$session->itemid = isset($tableformatter->json['itemid']) ? $tableformatter->json['itemid'] : $input->get->text('itemid');
 			$print = $input->get->text('view') == 'print' ? true : false;
 			$tableformatter->set_printpage($print);
 			echo $tableformatter->generate_screen();

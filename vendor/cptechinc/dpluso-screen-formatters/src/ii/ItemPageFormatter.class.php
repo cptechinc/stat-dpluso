@@ -71,8 +71,8 @@
 							$form->span('class=input-group-btn', $button);
 						$form->close('div');
 					$form->close('div');
-					$form->input('type=hidden|class=prev-itemID|value='.getitembyrecno(getnextrecno($itemID, "prev", false), false));
-					$form->input('type=hidden|class=next-itemID|value='.getitembyrecno(getnextrecno($itemID, "next", false), false));
+					$form->input('type=hidden|class=prev-itemID|value='.XRefItem::get_nextorpreviousitemid($itemID, "prev"));
+					$form->input('type=hidden|class=next-itemID|value='.XRefItem::get_nextorpreviousitemid($itemID, "next"));
 					$celldata = $form->finish();
 				} else {
 					$celldata = Table::generatejsoncelldata($this->fields['data']['header'][$column['id']]['type'], $this->json['data'], $column);
@@ -127,7 +127,7 @@
 					)
 				)
 			);
-
+			
 			for ($i = 1; $i < 5; $i++) {
 				foreach(array_keys($this->formatter['header']['columns']) as $column) {
 					if ($this->formatter['header']['columns'][$column]['column'] == $i) {

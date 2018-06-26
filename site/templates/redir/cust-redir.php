@@ -294,9 +294,9 @@
 			break;
 		case 'load-new-customer':
 			$custID = get_createdordn(session_id());
+			$session->sql = Customer::change_custid(session_id(), $custID);
 			$customer = Customer::load($custID);
 			$shipto = Customer::load($custID, '1');
-			$session->sql = Customer::change_custid(session_id(), $custID);
 			$customer->create_custpermpermission($user->loginid);
 			$shipto->create_custpermpermission($user->loginid);
 			

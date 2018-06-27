@@ -62,7 +62,7 @@
 				<input type="hidden" name="recnbr" class="recnbr" value="">
 				<input type="hidden" name="notepage" class="notepage" value="<?= $config->filename; ?>">
 				<span class="help-block"></span>
-				<?php if (Qnote::can_write(session_id(), Qnote::get_qnotetype('quote'), $qnbr, $linenbr)) : ?>
+				<?php if (Qnote::can_write(session_id(), Qnote::get_qnotetype('quotes'), $qnbr, $linenbr)) : ?>
 					<button type="submit" id="submit-note" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> Save Changes</button>
 					&nbsp; &nbsp;
 					<?php if (100 == 1) : //TODO ?>

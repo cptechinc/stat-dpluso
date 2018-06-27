@@ -229,7 +229,6 @@
 	}
 
 	function can_accesscustomer($custID, $shiptoID = '', $loginID = '', $debug = false) {
-
 		$loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
 		$user = LogmUser::load($loginID);
 

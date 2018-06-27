@@ -96,7 +96,7 @@
 			return is_ordersaleshistory($ordn, $debug);
 		}
 		
-		public static function read_custid($ordn, $debug) {
+		public static function get_custid($ordn, $debug = false) {
 			return get_custidfromsaleshistory($ordn, $debug);
 		}
 	}

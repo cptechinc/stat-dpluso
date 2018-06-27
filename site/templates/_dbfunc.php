@@ -1279,7 +1279,7 @@
 	 * @param  bool   $debug     Run in debug? If so return SQL Query
 	 * @return string            Order Number
 	 */
-	function get_lockedordn($sessionID, $debug) {
+	function get_lockedordn($sessionID, $debug = false) {
 		$q = (new QueryBuilder())->table('orddocs');
 		$q->field('orderno');
 		$q->where('sessionid', $sessionID);

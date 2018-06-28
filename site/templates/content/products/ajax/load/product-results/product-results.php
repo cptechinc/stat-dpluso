@@ -20,7 +20,7 @@
             $qnbr = $sanitizer->text($input->get->qnbr);
             $addtoform->action = $config->pages->quotes."redir/";
             $addtoform->rediraction = 'add-to-quote';
-            $addtoform->returnpage = $config->pages->edit."quote/?qnbr=".$qnbr;
+            $addtoform->returnpage = $input->get->order ? $config->pages->edit."quote-to-order/?qnbr=$qnbr" : $config->pages->edit."quote/?qnbr=$qnbr";
             break;
     }
     $items = get_itemsearchresults(session_id(), $config->showonpage, $input->pageNum());

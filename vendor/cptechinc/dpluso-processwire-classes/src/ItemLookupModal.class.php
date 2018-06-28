@@ -5,6 +5,8 @@
 	 */
 	class ItemLookupModal {
 		use ThrowErrorTrait;
+		use MagicMethodTraits;
+		
 		/**
 		 * Type
 		 * Used for description
@@ -203,6 +205,12 @@
 		 */
 		protected $qnbr;
 		
+		/**
+		 * Is this Quote to Order?
+		 * @var bool
+		 */
+		protected $to_order  = false;
+		
 		/* =============================================================
 			CONSTRUCTOR FUNCTIONS
 		============================================================= */
@@ -224,6 +232,10 @@
 		public function generate_resultsurl() {
 			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
+			
+			if ($this->to_order) {
+				$url->query->set('order', 'true');
+			}
 			return $url->getUrl();
 		}
 		
@@ -234,6 +246,9 @@
 		public function generate_nonstockformurl() {
 			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
+			if ($this->to_order) {
+				$url->query->set('order', 'true');
+			}
 			return $url->getUrl();
 		}
 		
@@ -244,6 +259,9 @@
 		public function generate_addmultipleurl() {
 			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
+			if ($this->to_order) {
+				$url->query->set('order', 'true');
+			}
 			return $url->getUrl();
 		}
 	}

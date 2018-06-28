@@ -33,7 +33,7 @@
     <div class="row">
     	<div class="col-sm-8 item-information">
     		<div class="jumbotron item-detail-heading"> <div> <h4>Item Info</h4> </div> </div>
-            <?php include $config->paths->content."edit/pricing/item-info.php"; ?>
+            <?php //include $config->paths->content."edit/pricing/item-info.php"; ?>
 
             <br><br>
             <div class="row">

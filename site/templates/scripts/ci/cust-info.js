@@ -177,8 +177,7 @@ function shipto() { //CAN BE USED IF SHIPTO IS DEFINED
 														.toString();
 	showajaxloading();
 	$.getJSON(config.urls.customer.ci.json.ci_shiptolist, function( json ) {
-		console.log(json.data.length);
-		if (json.data.length == 1) {
+		if (json.data) {
 			loadshipto(custID, json.data[0].shipid);
 		} else {
 			$(loadinto).loadin(href, function() {

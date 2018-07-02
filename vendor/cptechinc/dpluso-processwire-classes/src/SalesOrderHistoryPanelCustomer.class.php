@@ -20,7 +20,7 @@
 				'datatype' => 'char',
 				'label' => 'Order #'
 			),
-			'ordertotal' => array(
+			'total_order' => array(
 				'querytype' => 'between',
 				'datatype' => 'numeric',
 				'label' => 'Order Total'
@@ -31,7 +31,7 @@
 				'date-format' => 'Ymd',
 				'label' => 'Order Date'
 			),
-			'invdate' => array(
+			'invoice_date' => array(
 				'querytype' => 'between',
 				'datatype' => 'date',
 				'date-format' => 'Ymd',
@@ -52,7 +52,7 @@
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
 					$orders = get_customersaleshistoryorderdate($this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				} elseif ($this->tablesorter->orderby == 'invdate') {
+				} elseif ($this->tablesorter->orderby == 'invoice_date') {
 					$orders = get_customersaleshistoryinvoicedate($this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
 				} else {
 					$orders = get_customersaleshistoryorderby($this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $loginID, $useclass, $debug);
@@ -101,23 +101,23 @@
 				}
 			}
 
-			if (isset($this->filters['invdate'])) {
-				if (empty($this->filters['invdate'][0])) {
-					$this->filters['invdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invdate', $this->custID, $this->shipID)));
+			if (isset($this->filters['invoice_date'])) {
+				if (empty($this->filters['invoice_date'][0])) {
+					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invoice_date', $this->custID, $this->shipID)));
 				}
 
-				if (empty($this->filters['invdate'][1])) {
-					$this->filters['invdate'][1] = date('m/d/Y');
+				if (empty($this->filters['invoice_date'][1])) {
+					$this->filters['invoice_date'][1] = date('m/d/Y');
 				}
 			}
 
-			if (isset($this->filters['ordertotal'])) {
-				if (!strlen($this->filters['ordertotal'][0])) {
-					$this->filters['ordertotal'][0] = '0.00';
+			if (isset($this->filters['total_order'])) {
+				if (!strlen($this->filters['total_order'][0])) {
+					$this->filters['total_order'][0] = '0.00';
 				}
 
-				if (!strlen($this->filters['ordertotal'][1])) {
-					$this->filters['ordertotal'][1] = get_maxordertotal($this->sessionID, $this->custID, $this->shipID);
+				if (!strlen($this->filters['total_order'][1])) {
+					$this->filters['total_order'][1] = get_maxtotal_order($this->sessionID, $this->custID, $this->shipID);
 				}
 			}
 		}

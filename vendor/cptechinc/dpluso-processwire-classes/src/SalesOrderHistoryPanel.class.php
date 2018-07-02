@@ -22,7 +22,7 @@
 				'datatype' => 'char',
 				'label' => 'Order #'
 			),
-			'ordertotal' => array(
+			'total_order' => array(
 				'querytype' => 'between',
 				'datatype' => 'numeric',
 				'label' => 'Order Total'
@@ -33,7 +33,7 @@
 				'date-format' => 'Ymd',
 				'label' => 'Order Date'
 			),
-			'invdate' => array(
+			'invoice_date' => array(
 				'querytype' => 'between',
 				'datatype' => 'date',
 				'date-format' => 'Ymd',
@@ -65,7 +65,7 @@
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'orderdate') {
 					$orders = get_usersaleshistoryorderdate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				} elseif ($this->tablesorter->orderby == 'invdate') {
+				} elseif ($this->tablesorter->orderby == 'invoice_date') {
 					$orders = get_usersaleshistoryinvoicedate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
 				} else {
 					$orders = get_usersaleshistoryorderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $loginID, $useclass, $debug);
@@ -193,25 +193,25 @@
 				}
 			}
 
-			if (isset($this->filters['invdate'])) {
-				if (empty($this->filters['invdate'][0])) {
-					$this->filters['invdate'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invdate')));
+			if (isset($this->filters['invoice_date'])) {
+				if (empty($this->filters['invoice_date'][0])) {
+					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invoice_date')));
 				}
 
-				if (empty($this->filters['invdate'][1])) {
-					$this->filters['invdate'][1] = date('m/d/Y');
+				if (empty($this->filters['invoice_date'][1])) {
+					$this->filters['invoice_date'][1] = date('m/d/Y');
 				}
 			}
 
-			if (isset($this->filters['ordertotal'])) {
-				if (!strlen($this->filters['ordertotal'][0])) {
-					$this->filters['ordertotal'][0] = '0.00';
+			if (isset($this->filters['total_order'])) {
+				if (!strlen($this->filters['total_order'][0])) {
+					$this->filters['total_order'][0] = '0.00';
 				}
 
-				for ($i = 0; $i < (sizeof($this->filters['ordertotal']) + 1); $i++) {
-					if (isset($this->filters['ordertotal'][$i])) {
-						if (strlen($this->filters['ordertotal'][$i])) {
-							$this->filters['ordertotal'][$i] = number_format($this->filters['ordertotal'][$i], 2, '.', '');
+				for ($i = 0; $i < (sizeof($this->filters['total_order']) + 1); $i++) {
+					if (isset($this->filters['total_order'][$i])) {
+						if (strlen($this->filters['total_order'][$i])) {
+							$this->filters['total_order'][$i] = number_format($this->filters['total_order'][$i], 2, '.', '');
 						}
 					}
 				}

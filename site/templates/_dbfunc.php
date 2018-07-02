@@ -1361,7 +1361,7 @@
 
 	function get_maxsaleshistoryordertotal($sessionID, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MAX(ordertotal)"));
+		$q->field($q->expr("MAX(total_order)"));
 		if ($custID) {
 			$q->where('custid', $custID);
 		}
@@ -1379,7 +1379,7 @@
 
 	function get_minsaleshistoryordertotal($sessionID, $custID = false, $shipID = false, $debug = false) {
 		$q = (new QueryBuilder())->table('saleshist');
-		$q->field($q->expr("MIN(ordertotal)"));
+		$q->field($q->expr("MIN(total_order)"));
 		if ($custID) {
 			$q->where('custid', $custID);
 		}
@@ -1589,7 +1589,7 @@
 		$user = LogmUser::load($loginID);
 		$q = (new QueryBuilder())->table('saleshist');
 		$q->field('saleshist.*');
-		$q->field($q->expr("STR_TO_DATE(invdate, '%Y%m%d') as dateofinvoice"));
+		$q->field($q->expr("STR_TO_DATE(invoice_date, '%Y%m%d') as dateofinvoice"));
 
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('sp1', DplusWire::wire('user')->salespersonid);

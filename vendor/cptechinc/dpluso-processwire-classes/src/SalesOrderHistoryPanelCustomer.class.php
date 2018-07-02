@@ -36,6 +36,11 @@
 				'datatype' => 'date',
 				'date-format' => 'Ymd',
 				'label' => 'Invoice Date'
+			),
+			'salesperson_1' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Sales Person 1'
 			)
 		);
 

@@ -141,7 +141,7 @@
 			break;
 		case 'get-order-details':
 			$ordn = $input->get->text('ordn');
-			$custID = SalesOrderHistory::is_saleshistory($ordn) ? SalesOrderHistory::get_custid($ordn) : get_custidfromorder(session_id(), $ordn);
+			$custID = SalesOrderHistory::is_saleshistory($ordn) ? SalesOrderHistory::find_custid($ordn) : get_custidfromorder(session_id(), $ordn);
 			$data = array('DBNAME' => $config->dbName, 'ORDRDET' => $ordn, 'CUSTID' => $custID);
 
 			if ($input->get->lock) {

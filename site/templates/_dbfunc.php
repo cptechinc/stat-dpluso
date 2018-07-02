@@ -264,7 +264,7 @@
 		} else {
 			$q->where('source', Contact::$types['customer']);
 		}
-
+		
 		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
@@ -1427,7 +1427,7 @@
 		$q->field('COUNT(*)');
 
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1476,7 +1476,7 @@
 		$q = (new QueryBuilder())->table('saleshist');
 
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1533,7 +1533,7 @@
 		$q = (new QueryBuilder())->table('saleshist');
 
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1592,7 +1592,7 @@
 		$q->field($q->expr("STR_TO_DATE(invoice_date, '%Y%m%d') as dateofinvoice"));
 
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1649,7 +1649,7 @@
 		$q->field($q->expr("STR_TO_DATE(orderdate, '%Y%m%d') as dateoforder"));
 
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1709,7 +1709,7 @@
 		}
 
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1765,7 +1765,7 @@
 			$q->where('shiptoid', $shiptoID);
 		}
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1827,7 +1827,7 @@
 			$q->where('shiptoid', $shiptoID);
 		}
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1891,7 +1891,7 @@
 			$q->where('shiptoid', $shiptoID);
 		}
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);
@@ -1955,7 +1955,7 @@
 			$q->where('shiptoid', $shiptoID);
 		}
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
-			$q->where('sp1', DplusWire::wire('user')->salespersonid);
+			$q->where('salesperson_1', DplusWire::wire('user')->salespersonid);
 		}
 		if (!empty($filter)) {
 			$q->generate_filters($filter, $filterable);

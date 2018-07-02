@@ -43,6 +43,11 @@
 				'querytype' => 'in',
 				'datatype' => 'char',
 				'label' => 'Status'
+			),
+			'salesperson_1' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Sales Person 1'
 			)
 		);
 
@@ -178,7 +183,7 @@
 			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->createicon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->openandclose('span', 'class=sr-only', 'Submit Reorder'));
 			return $form->finish();
 		}
-
+		
 		public function generate_filter(ProcessWire\WireInput $input) {
 			$stringerbell = new StringerBell();
 			$this->generate_defaultfilter($input);

@@ -176,7 +176,20 @@
 		 * @return Customer
 		 */
         public static function load($custID, $shiptoID = '', $contactID = '', $debug = false) {
-            return get_customer($custID, $shiptoID, $contactID, $debug);
+            if ($debug) {
+                return get_customer($custID, $shiptoID, $contactID, $debug);
+            } else {
+                $customer = get_customer($custID, $shiptoID, $contactID, $debug);
+                
+                if (empty($customer)) {
+                    $customer = new NonExistingCustomer();
+                    $customer->set('custid', $custID);
+                    $customer->set('shiptoid', $shiptoID);
+                    $customer->set('contact', $contactID);
+                }
+                return $customer;
+            }
+            
         }
 
         /**
@@ -232,7 +245,7 @@
 		 */
 		public static function generate_bookingsdata($custID, $shiptoID, $value) {
 			$customer = self::load($custID, $shiptoID);
-
+            
 			return array(
 				'label' => $customer ? $customer->get_name() : $custID,
 				'value' => $value,

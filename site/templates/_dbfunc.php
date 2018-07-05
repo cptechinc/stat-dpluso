@@ -3760,15 +3760,37 @@
 	 */
 	function get_xrefitem($itemID, $custID = '', $vendorID = '', $debug = false) {
 		$q = (new QueryBuilder())->table('itemsearch');
-		$q->where('itemid', $itemID);
-
+		$itemquery = (new QueryBuilder())->table('itemsearch');
+		$itemquery->field('itemid');
+		$itemquery->where('itemid', $itemID);
+		$itemquery->where('origintype', ['I', 'L']); // ITEMID found by the ITEMID, or by short item lookup // NOTE USED at Stempf
+		
 		if (!empty($custID)) {
-			$q->where('origintype', 'C');
-			$q->where('originid', $custID);
-		}
-		if (!empty($vendorID)) {
-			$q->where('origintype', 'V');
-			$q->where('originid', $vendorID);
+			$custquery = (new QueryBuilder())->table('itemsearch');
+			$custquery->field('itemid');
+			$custquery->where('itemid', $itemID);
+			$custquery->where('origintype', 'C');
+			$custquery->where('originID', $custID);
+			$q->where(
+				$q
+				->orExpr()
+				->where('itemid', 'in', $itemquery)
+				->where('itemid', 'in', $custquery)
+			);
+		} elseif (!empty($vendorID)) {
+			$vendquery = (new QueryBuilder())->table('itemsearch');
+			$vendquery->field('itemid');
+			$vendquery->where('itemid', $itemID);
+			$vendquery-->where('origintype', 'V');
+			$vendquery-->where('originID', $vendorID);
+			$q->where(
+				$q
+				->orExpr()
+				->where('itemid', 'in', $itemquery)
+				->where('itemid', 'in', $vendquery)
+			);
+		} else {
+			$q->where('itemid', $itemID);
 		}
 		$q->limit(1);
 		$sql = DplusWire::wire('database')->prepare($q->render());

@@ -186,7 +186,7 @@
 		============================================================ */
 		/**
 		 * Returns an object with XrefItem Class after
-		 * inputing the crossreferences as needed
+		 * inputing the cross references as needed
 		 * @param  string  $itemID   Item ID / Part #
 		 * @param  mixed   $custID   Customer ID to use Cross-reference or false
 		 * @param  mixed   $vendorID Vendor ID to use Cross-reference or false

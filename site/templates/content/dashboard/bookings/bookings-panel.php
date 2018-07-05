@@ -58,4 +58,9 @@
 			</div>
 		</div>
 	</div>
+	<?php 
+		if ($config->ajax) {
+			include $config->paths->content."dashboard/bookings/bookings-line-chart.js.php";
+		}
+	?>
 </div>

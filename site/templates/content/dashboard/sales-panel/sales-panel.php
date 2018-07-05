@@ -2,8 +2,6 @@
 	$customers = get_topxsellingcustomers(25);
 	$data = array();
 	$page->has_salesdata = sizeof($customers);
-	
-	echo get_topxsellingcustomers(25, false, true);
 ?>
 <div class="panel panel-primary not-round" id="customer-sales-panel">
 	<div class="panel-heading not-round" id="customer-sale-panel-heading">

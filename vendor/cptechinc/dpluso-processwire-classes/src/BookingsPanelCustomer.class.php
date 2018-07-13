@@ -71,7 +71,7 @@
 		 * @return array            Totals by shipto
 		 */
 		public function get_bookingtotalsbyshipto($loginID = '', $debug = false) {
-			$bookings = get_bookingtotalsbyshipto($this->shipID, $this->filters, $this->filterable, $this->interval, $loginID, $debug);
+			$bookings = get_bookingtotalsbyshipto($this->custID, $this->shipID, $this->filters, $this->filterable, $this->interval, $loginID, $debug);
 			return $debug ? $bookings : $this->bookings = $bookings;
 		}
 

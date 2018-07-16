@@ -175,6 +175,7 @@
 		case 'update-line':
 			$linenbr = $input->post->text('linenbr');
 			$cartdetail = CartDetail::load($sessionID, $linenbr);
+			$qty = determine_qty($input, $requestmethod, $cartdetail->itemid); // TODO MAKE IN CART DETAIL
 			$cartdetail->set('price', $input->post->text('price'));
 			$cartdetail->set('discpct', $input->post->text('discount'));
 			$cartdetail->set('qty', $qty);

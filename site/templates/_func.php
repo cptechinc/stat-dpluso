@@ -345,6 +345,11 @@
 		$hash = hash_file(Processwire\wire('config')->userAuthHashType, Processwire\wire('config')->paths->templates.$filename);
 		return Processwire\wire('config')->urls->templates.$filename.'?v='.$hash;
 	}
+	
+	function hash_modulefile($filename) {
+		$hash = hash_file(DplusWire::wire('config')->userAuthHashType, DplusWire::wire('config')->paths->siteModules.$filename);
+		return DplusWire::wire('config')->urls->siteModules.$filename.'?v='.$hash;
+	}
 
 	function curl_redir($url) {
 		$curl = curl_init();

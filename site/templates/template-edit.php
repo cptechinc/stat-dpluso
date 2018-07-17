@@ -68,5 +68,10 @@
 			throw new Wire404Exception();
 			break;
 	}
-	$config->scripts->append(hashtemplatefile('scripts/edit/quick-entry.js'));
+	
+	if ($modules->isInstalled('QtyPerCase')) {
+		$config->scripts->append(hash_modulefile('QtyPerCase/js/quick-entry.js'));
+	} else {
+		$config->scripts->append(hashtemplatefile('scripts/edit/quick-entry.js'));
+	}
 	include ($config->paths->content.'edit/include-edit-page.php');

@@ -3,6 +3,7 @@
 	$date = $input->get->text('date');
 	$details = $bookingspanel->get_bookingdayorderdetails($ordn, $date);
 ?>
+<?= $bookingspanel->generate_viewsalesordersbydaybacklink($date); ?>
 <div class="table-responsive">
 	<table class="table table-bordered table-condensed table-striped">
 		<thead> 

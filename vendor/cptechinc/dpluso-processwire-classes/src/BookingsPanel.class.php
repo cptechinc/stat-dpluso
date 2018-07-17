@@ -125,7 +125,7 @@
 		 * @return array            bookingd records | SQL Query
 		 */
 		public function get_daybookingordernumbers($date, $loginID = '', $debug = false) {
-			return get_daybookingordernumbers($this->sessionID, $date, false, false, $loginID, $debug);
+			return get_daybookingordernumbers($date, $custID = false, $shiptoID = false, $loginID, $debug);
 		}
 
 		/**
@@ -291,7 +291,7 @@
 				}
 
 				if (!isset($this->filters['bookdate'])) {
-					$this->generate_defaultfilter();
+					$this->generate_defaultfilter($input);
 				}
 			}
 		}
@@ -326,11 +326,12 @@
 		/**
 		 * Defines the filter for default
 		 * Goes back one year
-		 * @param  string $interval Allows to defined interval
+		 * @param  ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 * @param  string                $interval Allows to defined interval
 		 * @return void
 		 */
-		protected function generate_defaultfilter($interval = '') {
-			if (!empty($inteval)) {
+		protected function generate_defaultfilter(ProcessWire\WireInput $input, $interval = '') {
+			if (!empty($interval)) {
 				$this->set_interval($interval);
 			}
 
@@ -393,7 +394,21 @@
 			$href = $this->generate_viewsalesordersbydayurl($date);
 			$icon = $bootstrap->createicon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Orders");
+			return $bootstrap->openandclose('a', "href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon View Sales Orders");
+		}
+		
+		/**
+		 * Returns HTML Link to view the days booked sales orders
+		 * @param  string $date Date for viewing bookings
+		 * @return string       HTML Link to view booked sales orders
+		 * @uses   $this->generate_viewsalesordersbydayurl($date)
+		 */
+		public function generate_viewsalesordersbydaybacklink($date) {
+			$bootstrap = new Contento();
+			$href = $this->generate_viewsalesordersbydayurl($date);
+			$icon = $bootstrap->createicon('fa fa-arrow-circle-left');
+			$ajaxdata = "data-modal=$this->modal";
+			return $bootstrap->openandclose('a', "href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon Back to Bookings on $date");
 		}
 
 		/**
@@ -424,5 +439,36 @@
 			$icon = $bootstrap->createicon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
 			return $bootstrap->openandclose('a', "href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
+		}
+		
+		/**
+		 * Returns URL to view bookings for that month
+		 * @param  string $date Date usually in m/d/Y format
+		 * @return string       URL to view bookings for that month
+		 */
+		public function generate_viewmonthurl($date) {
+			$firstofmonth = date('m/01/Y', strtotime($date));
+			$daysinmonth = cal_days_in_month(CAL_GREGORIAN, date('m', strtotime($date)), date('Y', strtotime($date)));
+			$lastofmonth = date("m/$daysinmonth/Y", strtotime($date));
+			
+			$url = new Purl\Url($this->pageurl->getUrl());
+			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/";
+			$url->query = '';
+			$url->query->set('filter', 'filter');
+			$url->query->set('bookdate', "$firstofmonth|$lastofmonth");
+			return $url->getUrl();
+		}
+		
+		/**
+		 * Creates HTML link to view bookings for that month
+		 * @param  string $date Date usually in m/d/Y format
+		 * @return string       HTML Link
+		 */
+		public function generate_viewmonthlink($date) {
+			$bootstrap = new HTMLWriter();
+			$href = $this->generate_viewmonthurl($date);
+			$ajaxdata = $this->generate_ajaxdataforcontento();
+			$monthyear = DplusDateTime::format_date($date, 'F Y');
+			return $bootstrap->a("href=$href|class=load-and-show|$ajaxdata|title=View $monthyear bookings", "$monthyear");
 		}
 	}

@@ -6,7 +6,7 @@
 		<?php foreach ($bookings as $booking) : ?>
 			<tr>
 				<td>
-					<?= DplusDateTime::format_date($booking['bookdate'], 'F Y'); ?>
+					<?= $bookingspanel->generate_viewmonthlink($booking['bookdate']); ?>
 				</td>
 				<td class="text-right">$ <?= $page->stringerbell->format_money($booking['amount']); ?></td>
 			</tr>

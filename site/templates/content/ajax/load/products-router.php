@@ -49,7 +49,11 @@
 			$page->body = $config->paths->content.'products/vendor/choose-vendor.php';
 			break;
 		case 'quick-entry-search':
-			$page->body = $config->paths->content.'products/ajax/load/quick-entry-search-results.php';
+			if ($modules->isInstalled('QtyPerCase')) {
+				$page->body = $config->paths->siteModules.'QtyPerCase/content/item-search/quick-entry-search-results.php';
+			} else {
+				$page->body = $config->paths->content.'products/ajax/load/quick-entry-search-results.php';
+			}
 			break;
     }
 

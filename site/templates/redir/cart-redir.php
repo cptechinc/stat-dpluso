@@ -124,7 +124,16 @@
 			$itemids = $input->post->itemID;
 			$qtys = $input->post->qty;
 			$data = array("DBNAME=$config->dbName", 'CARTADDMULTIPLE', "CUSTID=$custID");
-			$data = writedataformultitems($data, $itemids, $qtys);
+			
+			if (DplusWire::wire('modules')->isInstalled('QtyPerCase')) {
+				$case_qtys = $input->post->{'case-qty'};
+				$bottle_qtys = $input->post->{'bottle-qty'};
+				$qtypercase = DplusWire::wire('modules')->get('QtyPerCase');
+				$data = $qtypercase->generate_multipleitemdata($data, $itemids, $case_qtys, $bottle_qtys);
+			} else {
+				$qtys = $input->post->qty;
+				$data = writedataformultitems($data, $itemids, $qtys);
+			}
             $session->addtocart = sizeof($itemIDs);
             $session->loc = $config->pages->cart;
 			break;

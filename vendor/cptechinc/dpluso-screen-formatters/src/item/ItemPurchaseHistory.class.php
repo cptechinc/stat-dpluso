@@ -39,8 +39,4 @@
 			$tb->closetablesection('tbody');
 			return $tb->close();
         }
-        
-        public function generate_javascript() {
-			return '';
-		}
     }

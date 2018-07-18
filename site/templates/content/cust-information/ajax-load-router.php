@@ -58,6 +58,9 @@
                 case 'order':
                     $page->title = "Order #" . $input->get->text('ordn'). ' Documents';
                     break;
+                case 'quote':
+                    $page->title = "Quote #" . $input->get->text('qnbr'). ' Documents';
+                    break;
                 default:
                     $page->title = get_customername($custID) . ' Documents';
                     break;

@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * Formatter for II Item Notes Screen
+     * Not Formattable
+     */
      class II_ItemNotesScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-notes'; 
@@ -8,7 +12,7 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
+            PUBLIC FUNCTIONS
        	============================================================ */
         public function generate_screen() {
             $bootstrap = new Contento();
@@ -21,21 +25,19 @@
             return $content;
         }
         
-        public function generate_javascript() {
-			$bootstrap = new Contento();
-			return $bootstrap->script('', '');
-		}
-        
         /* =============================================================
-          CLASS FUNCTIONS
+            CLASS FUNCTIONS
        	============================================================ */
+        /**
+         * Returns HTML Table for the Inspection Notes
+         * @return string HTML Table for the Inspection Notes
+         */
         protected function generate_inspectiontable() {
-            // echo json_encode($this->json);
             $tb = new Table('class=table table-striped table-condensed table-excel');
             $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($this->json['columns']['inspection notes'] as $column) {
-                    $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+                    $class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
                     $tb->td("class=$class", $column['heading']);
                 }
             $tb->closetablesection('thead');
@@ -43,7 +45,7 @@
                 foreach ($this->json['data']['inspection notes'] as $note) {
                     $tb->tr();
                     foreach (array_keys($this->json['columns']['inspection notes']) as $column) {
-                        $class = Processwire\wire('config')->textjustify[$this->json['columns']['inspection notes'][$column]['datajustify']];
+                        $class = DplusWire::wire('config')->textjustify[$this->json['columns']['inspection notes'][$column]['datajustify']];
                         $tb->td("class=$class", $note[$column]);
                     }
                 }
@@ -51,12 +53,16 @@
             return $tb->close();
         }
         
+        /**
+         * Returns HTML Table for the Internal Notes
+         * @return string HTML Table for the Internal Notes
+         */
         protected function generate_internaltable() {
             $tb = new Table('class=table table-striped table-condensed table-excel');
             $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($this->json['columns']['internal notes'] as $column) {
-                    $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+                    $class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
                     $tb->td("class=$class", $column['heading']);
                 }
             $tb->closetablesection('thead');
@@ -64,7 +70,7 @@
                 foreach ($this->json['data']['internal notes'] as $note) {
                     $tb->tr();
                     foreach ($this->json['columns']['internal notes'] as $key => $column) {
-                        $class = Processwire\wire('config')->textjustify[$column['datajustify']];
+                        $class = DplusWire::wire('config')->textjustify[$column['datajustify']];
                         $tb->td("class=$class", $note[$key]);
                     }
                 }
@@ -72,12 +78,16 @@
             return $tb->close();
         }
         
+        /**
+         * Returns HTML Table for the Order Notes
+         * @return string HTML Table for the Order Notes
+         */
         protected function generate_orderstable() {
             $tb = new Table('class=table table-striped table-condensed table-excel');
             $tb->tablesection('thead');
                 $tb->tr();
                 foreach ($this->json['columns']['order notes'] as $column) {
-                    $class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+                    $class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
                     $tb->td("class=$class", $column['heading']);
                 }
             $tb->closetablesection('thead');
@@ -85,7 +95,7 @@
                 foreach ($this->json['data']['order notes'] as $note) {
                     $tb->tr();
                     foreach ($this->json['columns']['order notes'] as $key => $column) {
-                        $class = Processwire\wire('config')->textjustify[$column['datajustify']];
+                        $class = DplusWire::wire('config')->textjustify[$column['datajustify']];
                         $tb->td("class=$class", $note[$key]);
                     }
                 }

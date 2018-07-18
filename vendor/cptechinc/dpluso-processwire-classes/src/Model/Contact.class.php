@@ -168,6 +168,51 @@
 		}
 
         /**
+		 * Returns AR Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the AR Contact
+		 */
+		public function get_arcontact() {
+            return !empty($this->arcontact) ? $this->arcontact : 'N';
+        }
+
+        /**
+		 * Returns Dunning Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the Dunning Contact
+		 */
+		public function get_dunningcontact() {
+            return !empty($this->dunningcontact) ? $this->dunningcontact : 'N';
+        }
+
+        /**
+		 * Returns Buying Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the Buying Contact
+		 */
+		public function get_buyingcontact() {
+            return !empty($this->buyingcontact) ? $this->buyingcontact : 'N';
+        }
+
+        /**
+		 * Returns Certificate Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the Certificate Contact
+		 */
+		public function get_certcontact() {
+            return !empty($this->certcontact) ? $this->certcontact : 'N';
+        }
+
+        /**
+		 * Returns Acknowledgement Contact value
+		 * // NOTE if empty will return 'N'
+		 * @return string Is this the Acknowledgement Contact
+		 */
+		public function get_ackcontact() {
+            return !empty($this->ackcontact) ? $this->ackcontact : 'N';
+        }
+
+        /**
          * Returns if User can edit this contact
          * @param  string $loginID User loginID
          * @return bool          Does the user have the right permissions to edit this contact
@@ -364,24 +409,12 @@
 		/**
 		 * Creates a new contact in the database
 		 * Custid is trimmed to match the character length in the Cobol Dplus
-		 * Checks if custperm records exist by using Customer::can_useraccess
 		 * @param  bool $debug Determines if query will execute and if SQL is returned or Contact object
 		 * @return Contact         OR SQL QUERY
 		 */
 		public function create($debug = false) {
             $this->custid = substr($this->custid, 0, 6);
-
-            $sql = insert_customerindexrecord($this, true) . " <br> " . insert_custperm($this, true);
-
-            if ($debug) {
-                return $sql;
-            } else {
-                insert_customerindexrecord($this);
-                if (!Customer::can_useraccess($this->custid, $this->shiptoid)) {
-                    insert_custperm($this);
-                }
-                return $sql;
-            }
+            return insert_customerindexrecord($this, $debug);
 		}
 
 		/**

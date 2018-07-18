@@ -29,15 +29,15 @@
 		<div class="col-sm-2">
 			<h4>Order Total</h4>
 			<div class="input-group form-group">
-				<input class="form-control form-group inline input-sm" type="text" name="ordertotal[]" id="sales-history-ordertotal-min" value="<?= $orderpanel->get_filtervalue('ordertotal'); ?>" placeholder="From Order Total">
+				<input class="form-control form-group inline input-sm" type="text" name="total_order[]" id="sales-history-total_order-min" value="<?= $orderpanel->get_filtervalue('total_order'); ?>" placeholder="From Order Total">
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#sales-history-ordertotal-min').val('<?= get_minsaleshistoryordertotal(session_id()); ?>')"> <span class="fa fa-angle-double-down" aria-hidden="true"></span> <span class="sr-only">Min</span> </button>
+					<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#sales-history-total_order-min').val('<?= get_minsaleshistoryordertotal(session_id()); ?>')"> <span class="fa fa-angle-double-down" aria-hidden="true"></span> <span class="sr-only">Min</span> </button>
 				</span>
 			</div>
 			<div class="input-group form-group">
-				<input class="form-control form-group inline input-sm" type="text" name="ordertotal[]" id="sales-history-ordertotal-max" value="<?= $orderpanel->get_filtervalue('ordertotal', 1); ?>" placeholder="Through Order Total">
+				<input class="form-control form-group inline input-sm" type="text" name="total_order[]" id="sales-history-total_order-max" value="<?= $orderpanel->get_filtervalue('total_order', 1); ?>" placeholder="Through Order Total">
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#sales-history-ordertotal-max').val('<?= get_maxsaleshistoryordertotal(session_id()); ?>')"> <span class="fa fa-angle-double-up" aria-hidden="true"></span> <span class="sr-only">Max</span> </button>
+					<button type="button" class="btn btn-default btn-sm not-round" onclick="$('#sales-history-total_order-max').val('<?= get_maxsaleshistoryordertotal(session_id()); ?>')"> <span class="fa fa-angle-double-up" aria-hidden="true"></span> <span class="sr-only">Max</span> </button>
 				</span>
 			</div>
 		</div>
@@ -53,11 +53,11 @@
 		</div>
 		<div class="col-sm-2">
 			<h4>Invoice Date</h4>
-			<?php $name = 'invdate[]'; $value = $orderpanel->get_filtervalue('invdate'); ?>
+			<?php $name = 'invoice_date[]'; $value = $orderpanel->get_filtervalue('invoice_date'); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">From Date </label>
 
-			<?php $name = 'invdate[]'; $value = $orderpanel->get_filtervalue('invdate', 1); ?>
+			<?php $name = 'invoice_date[]'; $value = $orderpanel->get_filtervalue('invoice_date', 1); ?>
 			<?php include $config->paths->content."common/date-picker.php"; ?>
 			<label class="small text-muted">Through Date </label>
 		</div>

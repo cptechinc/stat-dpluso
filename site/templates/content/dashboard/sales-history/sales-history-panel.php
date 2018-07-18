@@ -36,8 +36,14 @@
 			</div>
 		  </div>
 		<div class="table-responsive">
-			<?php include $config->paths->content.'dashboard/sales-history/table.php'; ?>
-			<?= $paginator; ?>
+			<?php
+				if ($modules->isInstalled('QtyPerCase')) {
+					include $config->paths->siteModules.'QtyPerCase/content/dashboard/sales-history/table.php';
+				} else {
+					include $config->paths->content.'dashboard/sales-history/table.php';
+				}
+				echo $paginator;
+			?>
 		</div>
 	 </div>
 </div>

@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * Formatter for VI Open Invoices Screen
+	 * Formattable
+	 */
 	class VI_OpenInvoicesFormatter extends TableScreenFormatter {
         protected $tabletype = 'normal';
 		protected $type = 'vi-open-invoices'; 
@@ -10,6 +14,9 @@
 			"detail" => "Detail"
 		);
 		
+		/* =============================================================
+            PUBLIC FUNCTIONS
+       	============================================================= */
         public function generate_screen() {
             $bootstrap = new Contento();
             $content = '';
@@ -23,7 +30,7 @@
         			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
         				if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
         					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-        					$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
+        					$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
         					$colspan = $column['col-length'];
         					$tb->th("colspan=$colspan|class=$class", $column['label']);
         				} else {
@@ -46,7 +53,7 @@
         					for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
         						if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
         							$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-        							$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+        							$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
         							$colspan = $column['col-length'];
         							$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
 									
@@ -77,7 +84,7 @@
 	    			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 	    				if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
 	    					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-	    					$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+	    					$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
 	    					$colspan = $column['col-length'];
 	    					$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $invoice, $column);
 	    					$tb->td("colspan=$colspan|class=$class", $celldata);

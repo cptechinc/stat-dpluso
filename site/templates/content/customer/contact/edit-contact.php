@@ -8,7 +8,7 @@
 	<div class="col-sm-6">
 		<div class="panel panel-primary not-round">
 			<div class="panel-heading not-round">
-				<h3 class="panel-title">Edit Contact Details</h3>
+				<h3 class="panel-title">Contact Details</h3>
 			</div>
 			<table class="table table-striped table-condensed table-user-information">
 				<tr>
@@ -63,15 +63,25 @@
 				</tr>
 				<tr class="<?= $contact->has_shipto() ? 'hidden' : ''; ?>">
 					<td class="control-label">AR Contact</td>
-					<td><?= array_flip($config->yesnoarray)[$contact->arcontact]; ?></td>
+					<td>
+						<?php if ($contact->arcontact == '0') : ?>
+        				    <?= array_flip($config->yesnoarray)['N']; ?>
+                        <?php else : ?>
+                            <?= array_flip($config->yesnoarray)[$contact->arcontact]; ?>
+                        <?php endif; ?>
+					</td>
 				</tr>
 				<tr class="<?= $contact->has_shipto() ? 'hidden' : ''; ?>">
 					<td class="control-label">Dunning Contact</td>
-					<td><?= array_flip($config->yesnoarray)[$contact->dunningcontact]; ?></td>
+					<td>
+                        <?= array_flip($config->yesnoarray)[$contact->dunningcontact]; ?>
+					</td>
 				</tr>
 				<tr class="<?= $contact->has_shipto() ? 'hidden' : ''; ?>">
 					<td class="control-label">Acknowledgement Contact</td>
-					<td><?= array_flip($config->yesnoarray)[$contact->ackcontact]; ?></td>
+					<td>
+                        <?= array_flip($config->yesnoarray)[$contact->ackcontact]; ?>
+					</td>
 				</tr>
 				<tr>
 					<?php if ($primarycontact) : ?>
@@ -79,7 +89,9 @@
 					<?php else : ?>
 						<td class="control-label">Buying Contact</td>
 					<?php endif; ?>
-					<td><?= $config->buyertypes[$contact->buyingcontact]; ?></td>
+					<td>
+                        <?= $config->buyertypes[$contact->buyingcontact]; ?>
+					</td>
 				</tr>
 				<tr>
 					<?php if ($config->cptechcustomer == 'stat') : ?>
@@ -87,7 +99,9 @@
 					<?php else : ?>
 						<td class="control-label">Certificate Contact</td>
 					<?php endif; ?>
-					<td><?= array_flip($config->yesnoarray)[$contact->certcontact]; ?></td>
+					<td>
+                        <?= array_flip($config->yesnoarray)[$contact->certcontact]; ?>
+					</td>
 				</tr>
 			</table>
 		</div> <!-- end panel round -->

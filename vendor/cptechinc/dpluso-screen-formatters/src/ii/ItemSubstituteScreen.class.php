@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * Formatter for II Item Substitute Screen
+     * Not Formattable
+     */
      class II_ItemSubstituteScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-substitute'; 
@@ -8,9 +12,8 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
+            PUBLIC FUNCTIONS
        	============================================================ */
-        
         public function generate_screen() {
             $bootstrap = new Contento();
             $content = '';
@@ -29,6 +32,13 @@
             return $content;
         }
         
+        /* =============================================================
+            PROTECTED FUNCTIONS
+       	============================================================ */
+        /**
+         * Returns HTML table for Item Summary
+         * @return string HTML table for Item Summary
+         */
         protected function generate_itemtable() {
             $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
         	$tb->tr();
@@ -46,6 +56,10 @@
         	return $tb->close();
         }
         
+        /**
+         * Returns HTML table for Item UoM and Pricing
+         * @return string HTML table for Item UoM and Pricing
+         */
         protected function generate_saletable() {
             $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
         	$tb->tr();
@@ -57,12 +71,16 @@
         	return $tb->close();
         }
         
+        /**
+         * Returns HTML table for Item substitutes
+         * @return string HTML table for Item Usubstitutes
+         */
         protected function generate_substitutetable() {
             $tb = new Table('class=table table-striped table-bordered table-condensed table-excel');
         	$tb->tablesection('thead');
         		$tb->tr();
         		foreach ($this->json['columns'] as $column) {
-        			$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+        			$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
         			$tb->td("class=$class", $column['heading']);
         		}
         	$tb->closetablesection('thead');
@@ -70,7 +88,7 @@
         	$tb->tablesection('tbody');
         		foreach ($this->json['data']['sub items'] as $item) {
         			$tb->tr();
-        			$class = Processwire\wire('config')->textjustify[$this->json['columns']["sub item"]['datajustify']];
+        			$class = DplusWire::wire('config')->textjustify[$this->json['columns']["sub item"]['datajustify']];
         			$tb->td("colspan=2|class=$class", $item["sub item"]);
         			$tb->td('', $item['same/like']);
         			$colspan = sizeof($this->json['columns']) - 3;
@@ -88,7 +106,7 @@
         					if ($column == 'sub item') {
         						$tb->td();
         					} else {
-        						$class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+        						$class = DplusWire::wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
         						$tb->td("class=$class", $whse[$column]);
         					}
         				}
@@ -97,15 +115,4 @@
         	$tb->closetablesection('tbody');
         	return $tb->close();
         }
-        
-        public function generate_javascript() {
-			$bootstrap = new Contento();
-			$content = $bootstrap->open('script', '');
-				$content .= "\n";
-                // TODO
-				$content .= "\n";
-			$content .= $bootstrap->close('script');
-			return $content;
-		}
-        
     }

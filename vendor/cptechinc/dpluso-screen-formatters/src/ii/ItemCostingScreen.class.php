@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * II Item Costing Screen
+     * Not Formattable
+     */
      class II_ItemCostingScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-cost'; 
@@ -8,8 +12,8 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
-       	============================================================ */
+            PUBLIC FUNCTIONS
+       	============================================================= */
         public function generate_screen() {
             $bootstrap = new Contento();
             $content = $this->generate_itemtable();
@@ -36,6 +40,10 @@
 			return $content;
         }
 		
+        /**
+         * Returns HTML Item Description Table
+         * @return string HTML Item Description Table
+         */
 		public function generate_itemtable() {
 			$tb = new Table('class=table table-striped table-condensed table-excel');
 			$tb->tr();
@@ -50,6 +58,10 @@
 			return $tb->close();
 		}
 		
+        /**
+         * Returns HTML for the Warehouse Section with lot information
+         * @return string HTML for the Warehouse Section
+         */
 		public function generate_whsesection() {
 			$bootstrap = new Contento();
 			$content = '';
@@ -78,6 +90,10 @@
 			return $content;
 		}
 		
+        /**
+         * Returns HTML for the Vendor Section
+         * @return string HTML for the Vendor Section
+         */
 		public function generate_vendorsection() {
 			$bootstrap = new Contento();
 			$content = '';
@@ -116,12 +132,15 @@
 						$tb->closetablesection('tbody');
 						$content .= $tb->close();
 					$content .= $bootstrap->close('div'); // CLOSES col-sm-6
-					
 				$content .= $bootstrap->close('div');
 			}
 			return $content;
 		}
 		
+        /**
+         * Returns HTML Table for the last purchased
+         * @return string HTML Table for the last purchased
+         */
 		function generate_lastpurchasedtable() {
 			$tb = new Table('class=table table-striped table-bordered table-condensed table-excel no-bottom');
 			$tb->tr();

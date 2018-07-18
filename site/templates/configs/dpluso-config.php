@@ -25,7 +25,9 @@
 		'ii-purchase-history' => 'AP',
 		'ci-sales-history' => 'AR',
 		'ci-sales-orders' => 'SO',
-		'vi' => 'VI'
+		'vi' => 'VI',
+		'ci-quotes' => 'QT',
+		'ii-quotes' => 'QT'
 	);
 	$config->specialordercodes = array('"special_order" => "S", "dropship" => "D"');
 

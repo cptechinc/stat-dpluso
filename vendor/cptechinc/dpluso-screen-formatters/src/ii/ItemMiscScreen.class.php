@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * Formatter for Item Misc Screen
+     * Not Formattable
+     */
      class II_ItemMiscScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-misc'; 
@@ -8,19 +12,14 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
+            PUBLIC FUNCTIONS
        	============================================================ */
         public function generate_screen() {
             return $this->generate_misctable();
         }
         
-        public function generate_javascript() {
-			$bootstrap = new Contento();
-			return $bootstrap->script('', '');
-		}
-        
         /* =============================================================
-          CLASS FUNCTIONS
+            CLASS FUNCTIONS
        	============================================================ */
         protected function generate_misctable() {
             $bootstrap = new Contento();
@@ -29,7 +28,7 @@
                 foreach (array_keys($this->json['columns']['misc info']) as $column) {
                     $tb->tr();
                     $tb->td('', $this->json['columns']['misc info'][$column]['heading']);
-                    $class = Processwire\wire('config')->textjustify[$this->json['columns']['misc info'][$column]['datajustify']];
+                    $class = DplusWire::wire('config')->textjustify[$this->json['columns']['misc info'][$column]['datajustify']];
                     $tb->td("class=$class", $misc[$column]);
                 }
             }

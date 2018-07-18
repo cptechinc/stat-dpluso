@@ -76,7 +76,7 @@
         /**
          * Convert PHP Date Format code to MYSQL format code
          * @param  string $filter      key of filter array
-         * @param  array $filtertypes  has data on filter
+         * @param  array  $filtertypes  has data on filter
          * @return string              MySQL date format code
          * @uses
          */

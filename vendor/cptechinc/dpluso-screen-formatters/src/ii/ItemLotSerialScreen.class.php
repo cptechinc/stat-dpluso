@@ -1,4 +1,8 @@
-<?php 
+<?php
+    /**
+     * Formatter for II Lot Serial Screen
+     * Not Formattable
+     */
      class II_ItemLotSerialScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-lot-serial'; 
@@ -25,7 +29,7 @@
 			$tb->tablesection('thead');
 				$tb->tr();
 				foreach($this->json['columns'] as $column) {
-					$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+					$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
 					$tb->th("class=$class", $column['heading']);
 				}
 			$tb->closetablesection('thead');
@@ -33,7 +37,7 @@
 				foreach ($this->json['data']['lots'] as $lot) {
 					$tb->tr();
 					foreach($columns as $column) {
-						$class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+						$class = DplusWire::wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
 						$tb->td("class=$class", $lot[$column]);
 					}
 				}
@@ -41,15 +45,4 @@
 			$content = $tb->close();
             return $content;
         }
-        
-        public function generate_javascript() {
-			$bootstrap = new Contento();
-			$content = $bootstrap->open('script', '');
-				$content .= "\n";
-                // TODO
-				$content .= "\n";
-			$content .= $bootstrap->close('script');
-			return $content;
-		}
-        
     }

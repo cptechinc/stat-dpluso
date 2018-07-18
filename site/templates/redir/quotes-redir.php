@@ -222,18 +222,25 @@
 		case 'add-to-quote':
 			$qnbr = $input->post->text('qnbr');
 			$itemID = $input->post->text('itemID');
+			$fororder = $input->get->order ? true : false;
 			$qty = determine_qty($input, $requestmethod, $itemID);
 			$data = array('DBNAME' => $config->dbName, 'UPDATEQUOTEDETAIL' => false, 'QUOTENO' => $qnbr, 'ITEMID' => $itemID, 'QTY' => "$qty");
-			$session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
+			if ($input->post->page) {
+				$session->loc = $input->post->text('page');
+			} else {
+				$session->loc = $fororder ? $config->pages->edit."quote-to-order/?qnbr=$qnbr" : $config->pages->edit."quote/?qnbr=$qnbr";
+			}
+			
 			$session->editdetail = true;
 			break;
 		case 'add-multiple-items':
 			$qnbr = $input->post->text('qnbr');
 			$itemids = $input->post->itemID;
 			$qtys = $input->post->qty;
+			$fororder = $input->get->order ? true : false;
 			$data = array("DBNAME=$config->dbName", 'ORDERADDMULTIPLE', "QUOTENO=$qnbr");
 			$data = writedataformultitems($data, $itemids, $qtys);
-            $session->loc = $config->pages->edit."quote/?qnbr=".$qnbr;
+            $session->loc = $fororder ? $config->pages->edit."quote-to-order/?qnbr=$qnbr" : $config->pages->edit."quote/?qnbr=$qnbr";
 			break;
 		case 'add-nonstock-item':
 			$qnbr = $input->post->text('qnbr');

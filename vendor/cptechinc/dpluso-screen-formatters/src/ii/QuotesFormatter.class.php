@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * Formatter for II Item Quotes
+	 * Formattable
+	 */
 	class II_Quotes extends TableScreenFormatter {
         protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-quotes'; // ii-sales-history
@@ -11,7 +15,11 @@
 			"detail" => "Detail",
 		);
 		
+		/* =============================================================
+            PUBLIC FUNCTIONS
+       	============================================================ */
         public function generate_screen() {
+			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajaxload."ii/ii-documents/quote/");
             $bootstrap = new Contento();
             $content = '';
 			$this->generate_tableblueprint();
@@ -27,7 +35,7 @@
             			for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
             				if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
             					$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-            					$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
+            					$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
             					$colspan = $column['col-length'];
             					$tb->th("colspan=$colspan|class=$class", $column['label']);
             				} else {
@@ -48,11 +56,19 @@
             				for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
             					if (isset($this->tableblueprint['header']['rows'][$x]['columns'][$i])) {
             						$column = $this->tableblueprint['header']['rows'][$x]['columns'][$i];
-            						$class = Processwire\wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
+            						$class = DplusWire::wire('config')->textjustify[$this->fields['data']['header'][$column['id']]['datajustify']];
             						$colspan = $column['col-length'];
             						$celldata = strlen($column['label']) ? '<b>'.$column['label'].'</b>: ' : '';
             						$celldata .= TableScreenMaker::generate_formattedcelldata($this->fields['data']['header'][$column['id']]['type'], $quote, $column);
-            						$tb->td("colspan=$colspan|class=$class", $celldata);
+									
+									if ($i == 1 && !empty($quote["Quote ID"])) {
+										$qnbr = $quote["Quote ID"];
+										$itemID = $this->json['itemid'];
+										$url->query->setData(array('itemID' => $this->json['itemid'], 'qnbr' => $qnbr, 'returnpage' => urlencode(DplusWire::wire('page')->fullURL->getUrl())));
+										$href = $url->getUrl();
+										$celldata .= "&nbsp; " . $bootstrap->openandclose('a', "href=$href|class=load-quote-documents|title=Load Quote Documents|aria-label=Load Quote Documents|data-qnbr=$qnbr|data-itemid=$itemID|data-type=ii-quotes", $bootstrap->createicon('fa fa-file-text'));
+									}
+									$tb->td("colspan=$colspan|class=$class", $celldata);
             					} else {
 									if ($columncount < $this->tableblueprint['cols']) {
 										$colspan = 1;
@@ -70,7 +86,7 @@
             					for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
             						if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
             							$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-            							$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+            							$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
             							$colspan = $column['col-length'];
             							$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $item, $column);
             							$tb->td("colspan=$colspan|class=$class", $celldata);

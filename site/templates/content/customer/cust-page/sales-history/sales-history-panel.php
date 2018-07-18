@@ -33,7 +33,14 @@
 					 </div>
 				</div>
 			<div id="cust-sales-history-search-div" class="<?= (empty($orderpanel->filters)) ? 'collapse' : ''; ?>">
-				<?php include $config->paths->content.'customer/cust-page/sales-history/search-form.php'; ?>
+				<?php
+					if ($modules->isInstalled('QtyPerCase')) {
+						include $config->paths->siteModules.'QtyPerCase/content/customer/sales-history/table.php';
+					} else {
+						include $config->paths->content.'customer/cust-page/sales-history/table.php';
+					}
+					echo $paginator;
+				?>
 			</div>
 		  </div>
 		<div class="table-responsive">

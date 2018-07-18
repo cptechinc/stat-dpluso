@@ -58,6 +58,7 @@
 				$config->scripts->append(hashtemplatefile('scripts/edit/edit-pricing.js'));
 				$itemlookup->set_customer($quote->custid, $quote->shiptoid);
 				$itemlookup = $itemlookup->set_qnbr($qnbr);
+				$itemlookup->set('to_order', true);
 				$formconfig = new FormFieldsConfig('quote');
 			} else {
 				throw new Wire404Exception();

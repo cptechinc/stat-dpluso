@@ -627,9 +627,7 @@ $(document).ready(function() {
 
 		$('body').on('submit', '#add-multiple-item-form', function(e) {
 			var form = $(this);
-            if ($(this).attr('data-checked') == 'true') {
-                $(this).submit();
-            } else {
+            if ($(this).attr('data-checked') != 'true') {
                 e.preventDefault();
                 $(this).validateitemids(function() {
 					if (parseInt($(this).data('invaliditems')) < 1) {
@@ -1191,16 +1189,20 @@ $(document).ready(function() {
             var custID = $(this).find('input[name="custID"]').val();
             var valid = true;
 			var form = $(this);
-			form.postform({formdata: false, jsoncallback: true, action: config.urls.json.validateitems}, function(json) {
+			var formdata = form.serialize();
+			var url = URI(config.urls.json.validateitems).query(formdata).toString();
+			
+			$.getJSON(url, function(json) {
 				form.attr('data-invaliditems', json.invalid);
 				form.find('.itemid').each(function() {
 	                var field = $(this);
 	                var itemID = $(this).val();
-				    if (!json.items[itemID]) {
+				    if (!json.items.valid[itemID]) {
 						field.parent().addClass('has-error');
 					}
 	            });
 				form.attr('data-checked', 'true');
+				
 				if (json.invalid) {
 	                form.find('.response').createalertpanel('Double Check your itemIDs', '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>', 'warning');
 	            } else {

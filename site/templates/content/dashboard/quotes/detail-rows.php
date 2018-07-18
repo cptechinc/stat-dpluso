@@ -20,9 +20,9 @@
             <?php if (strlen($detail->vendoritemid)) { echo ' '.$detail->vendoritemid."<br>";} ?>
             <?= $detail->desc1; ?>
         </td>
-        <td class="text-right">$ <?= formatmoney($detail->quotprice); ?></td>
+        <td class="text-right">$ <?= $page->stringerbell->format_money($detail->quotprice); ?></td>
         <td class="text-right"><?= intval($detail->quotqty); ?></td>
-        <td class="text-right">$ <?= formatmoney($detail->quotprice * $detail->quotqty); ?></td>
+        <td class="text-right">$ <?= $page->stringerbell->format_money($detail->quotprice * $detail->quotqty); ?></td>
         <td></td>
         <td><?= $quotepanel->generate_loaddplusnoteslink($quote, $detail->linenbr); ?></td>
         <td></td>

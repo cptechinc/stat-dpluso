@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * II Item Activity Screen Formatter
+     * Not Formattable
+     */
      class II_ItemActivityScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-activity'; 
@@ -8,8 +12,8 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
-       	============================================================ */
+            PUBLIC FUNCTIONS
+       	============================================================= */
         public function generate_screen() {
             $bootstrap = new Contento();
             $content = '';
@@ -21,7 +25,7 @@
 				$tb->tablesection('thead');
 					$tb->tr();
 					foreach($this->json['columns'] as $column)  {
-						$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+						$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
 						$tb->th("class=$class", $column['heading']);
 					}
 				$tb->closetablesection('thead');
@@ -29,7 +33,7 @@
 					foreach($warehouse['orders'] as $order) {
 						$tb->tr();
 						foreach(array_keys($this->json['columns']) as $column) {
-							$class = Processwire\wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
+							$class = DplusWire::wire('config')->textjustify[$this->json['columns'][$column]['datajustify']];
 							$tb->td("class=$class", $order[$column]);
 						}
 					}
@@ -42,6 +46,7 @@
         public function generate_javascript() {
 			$bootstrap = new Contento();
 			$content = $bootstrap->open('script', '');
+            
             if (!$this->forprint) {
                 $content .= "\n";
 				$content .= $bootstrap->indent().'$(function() {';

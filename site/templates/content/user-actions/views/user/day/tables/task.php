@@ -2,7 +2,7 @@
     <tr>
         <th>Due</th> <th>Subtype</th> <th>Customer</th> <th>Regarding / Title</th> <th colspan="2">View / Complete</th>
     </tr>
-    
+
     <?php if (strtotime($day) == strtotime(date('m/d/y')) && !empty($actionpanel->count_daypriorincompletetasks($day))) : ?>
         <?php foreach ($actionpanel->get_daypriorincompletetasks($day) as $task) : ?>
             <tr class="<?= $actionpanel->generate_rowclass($task); ?>">
@@ -15,8 +15,8 @@
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
-    
-    <?php if (!$actionpanel->count_daytasks($day)) : ?>
+
+    <?php if ($actionpanel->count_daytasks($day)) : ?>
         <?php foreach ($actionpanel->get_daytasks($day) as $task) : ?>
             <tr class="<?= $actionpanel->generate_rowclass($task); ?>">
                 <td><?= $task->generate_duedatedisplay('m/d/Y'); ?></td>

@@ -42,20 +42,20 @@
 				'label' => 'Expire Date'
 			)
 		);
-		
+
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
 			$this->pageurl = $this->pageurl = new Purl\Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
-		
+
 		public function setup_pageurl() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
 			$this->pageurl->paginationinsertafter = 'quotes';
 		}
-		
+
 		/* =============================================================
 			SalesOrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
@@ -69,7 +69,7 @@
 			$count = count_userquotes($this->sessionID, $this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
-		
+
 		/**
 		 * Returns the Quotes into the property $quotes
 		 * @param  bool   $debug Whether to run query to return quotes
@@ -84,18 +84,18 @@
 				} elseif ($this->tablesorter->orderby == 'revdate') {
 					$quotes = get_userquotesrevdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'expdate') {
-					$quotes = get_userquotesexpdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug); 
+					$quotes = get_userquotesexpdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
 					$quotes = get_userquotesorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
-				$this->tablesorter->sortrule = 'DESC'; 
+				$this->tablesorter->sortrule = 'DESC';
 				$quotes = get_userquotesquotedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				//$quotes = get_userquotes($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $quotes: $this->quotes = $quotes;
 		}
-		
+
 		/* =============================================================
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
@@ -106,7 +106,7 @@
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Quotes");
 		}
-		
+
 		public function generate_refreshlink() {
 			$bootstrap = new Contento();
 			$href = $this->generate_loadurl();
@@ -114,10 +114,10 @@
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Quotes");
 		}
-		
+
 		public function generate_expandorcollapselink(Order $quote) {
 			$bootstrap = new Contento();
-			
+
 			if ($this->activeID == $quote->quotnbr) {
 				$href = $this->generate_closedetailsurl();
 				$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -131,18 +131,18 @@
 			}
 			return $bootstrap->openandclose('a', "href=$href|class=btn btn-sm btn-primary $addclass|$ajaxdata", $icon);
 		}
-		
-		public function generate_closedetailsurl() { 
+
+		public function generate_closedetailsurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->query->setData(array('qnbr' => false, 'show' => false));
 			return $url->getUrl();
 		}
-		
+
 		public function generate_rowclass(Order $quote) {
 			return ($this->activeID == $quote->quotnbr) ? 'selected' : '';
 		}
-		
-		function generate_shiptopopover(Order $quote) {
+
+		public function generate_shiptopopover(Order $quote) {
 			$bootstrap = new Contento();
 			$address = $quote->shipaddress.'<br>';
 			$address .= (!empty($quote->shipaddress2)) ? $quote->shipaddress2."<br>" : '';
@@ -151,32 +151,32 @@
 			$attr .= "|data-placement=top|data-trigger=focus|data-html=true|title=Ship-To Address|data-content=$address";
 			return $bootstrap->openandclose('a', $attr, '<b>?</b>');
 		}
-		
+
 		public function generate_iconlegend() {
 			$bootstrap = new Contento();
 			$content = $bootstrap->openandclose('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
-			$content .= $bootstrap->openandclose('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>'; 
+			$content .= $bootstrap->openandclose('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
 			$content .= $bootstrap->openandclose('i', 'class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
 			$content .= $bootstrap->openandclose('i', 'class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
-			$content .= $bootstrap->openandclose('i', 'class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>'; 
+			$content .= $bootstrap->openandclose('i', 'class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>';
 			$content = str_replace('"', "'", $content);
 			$attr = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
 			return $bootstrap->openandclose('a', $attr, 'Icon Definitions');
 		}
 
-		public function generate_loadurl() { 
+		public function generate_loadurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->quotes.'redir/';
 			$url->query->setData(array('action' => 'load-quotes'));
 			return $url->getUrl();
 		}
-		
+
 		public function generate_loaddetailsurl(Order $quote) {
 			$url = new \Purl\Url($this->generate_loaddetailsurltrait($quote));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
-			
+
 			if (!empty($this->filters)) {
 				$url->query->set('filter', 'filter');
 				foreach ($this->filters as $filter => $value) {
@@ -185,7 +185,7 @@
 			}
 			return $url->getUrl();
 		}
-		
+
 		/* =============================================================
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
@@ -193,7 +193,7 @@
 		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
 			$bootstrap = new Contento();
 			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
-			
+
 			if ($quote->can_edit()) {
 				$title = ($quote->has_notes()) ? "View and Create Quote Notes" : "Create Quote Notes";
 				$addclass = ($quote->has_notes()) ? '' : 'text-muted';
@@ -205,24 +205,24 @@
 			$link = $bootstrap->openandclose('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
-		
+
 		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
 			$url = new \Purl\Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
-		
+
 		public function generate_viewlinkeduseractionslink(Order $quote) {
 			$bootstrap = new Contento();
 			$href = $this->generate_viewlinkeduseractionsurl($quote);
 			$icon = $bootstrap->openandclose('span','class=h3', $bootstrap->createicon('glyphicon glyphicon-check'));
 			return $bootstrap->openandclose('a', "href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
-		
+
 		public function generate_editlink(Order $quote) {
 			$bootstrap = new Contento();
-			
+
 			if (DplusWire::wire('user')->hasquotelocked) {
 				if ($quote->quotnbr == DplusWire::wire('user')->lockedqnbr) {
 					$icon = $bootstrap->createicon('glyphicon glyphicon-wrench');
@@ -235,30 +235,30 @@
 				$icon = $bootstrap->createicon('glyphicon glyphicon-pencil');
 				$title = "Edit Quote";
 			}
-		
+
 			$href = $this->generate_editurl($quote);
 			return $bootstrap->openandclose('a', "href=$href|class=edit-order h3|title=$title", $icon);
 		}
-		
+
 		public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
 			$bootstrap = new Contento();
 			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
 			$icon = $bootstrap->createicon('material-icons md-36', '&#xE873;');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			
+
 			if ($quote->has_documents()) {
 				return $bootstrap->openandclose('a', "href=$href|class=generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
 			} else {
 				return $bootstrap->openandclose('a', "href=#|class=text-muted|title=No Documents Available", $icon);
 			}
 		}
-		
+
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new Contento();
 			$href = $this->generate_detailviewediturl($quote, $detail);
-			return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);	
+			return $bootstrap->openandclose('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);
 		}
-		
+
 		public function generate_lastloadeddescription() {
 			if (DplusWire::wire('session')->{'quotes-loaded-for'}) {
 				if (DplusWire::wire('session')->{'quotes-loaded-for'} == DplusWire::wire('user')->loginid) {
@@ -267,47 +267,47 @@
 			}
 			return '';
 		}
-		
+
 		public function generate_filter(ProcessWire\WireInput $input) {
 			$stringerbell = new StringerBell();
 			parent::generate_filter($input);
-			
+
 			if (isset($this->filters['quotdate'])) {
 				if (empty($this->filters['quotdate'][0])) {
 					$this->filters['quotdate'][0] = date('m/d/Y', strtotime(get_minquotedate($this->sessionID, 'quotdate')));
 				}
-				
+
 				if (empty($this->filters['quotdate'][1])) {
 					$this->filters['quotdate'][1] = date('m/d/Y');
 				}
 			}
-			
+
 			if (isset($this->filters['revdate'])) {
 				if (empty($this->filters['revdate'][0])) {
 					$this->filters['revdate'][0] = date('m/d/Y', strtotime(get_minquotedate($this->sessionID, 'revdate')));
 				}
-				
+
 				if (empty($this->filters['revdate'][1])) {
 					$this->filters['revdate'][1] = date('m/d/Y');
 				}
 			}
-			
+
 			if (isset($this->filters['expdate'])) {
 				if (empty($this->filters['expdate'][0])) {
 					$this->filters['expdate'][0] = date('m/d/Y', strtotime(get_minquotedate($this->sessionID, 'expdate')));
 				}
-				
+
 				if (empty($this->filters['expdate'][1])) {
 					$this->filters['expdate'][1] = date('m/d/Y');
 				}
 			}
-			
+
 			if (isset($this->filters['subtotal'])) {
-				
+
 				if (!strlen($this->filters['subtotal'][0])) {
 					$this->filters['subtotal'][0] = '0.00';
 				}
-				
+
 				for ($i = 0; $i < (sizeof($this->filters['subtotal']) + 1); $i++) {
 					if (isset($this->filters['subtotal'][$i])) {
 						if (strlen($this->filters['subtotal'][$i])) {

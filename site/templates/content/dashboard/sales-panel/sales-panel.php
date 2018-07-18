@@ -1,6 +1,7 @@
 <?php
 	$customers = get_topxsellingcustomers(25);
 	$data = array();
+	$page->has_salesdata = sizeof($customers);
 ?>
 <div class="panel panel-primary not-round" id="customer-sales-panel">
 	<div class="panel-heading not-round" id="customer-sale-panel-heading">
@@ -30,7 +31,7 @@
 										<tr>
 											<td id="<?= $customer['custid'].'-cust'; ?>"></td>
 											<td>
-												<a href="<?= $cust->generate_ciloadurl(); ?>" class="btn btn-primary btn-sm"><?= $customer['custid']; ?></a>
+												<a href="<?= $cust->generate_ciloadurl(); ?>" class="btn btn-primary btn-block btn-sm"><?= $customer['custid']; ?></a>
 											</td>
 											<td><?= $cust->get_name(); ?></td>
 											<td class="text-right">$ <?= $page->stringerbell->format_money($customer['amountsold']); ?></td>
@@ -53,27 +54,3 @@
 		<?php endif; ?>
 	</div>
 </div>
-
-<?php if (!(empty($data))) : ?>
-	<script>
-		$(function() {
-			var pie = Morris.Donut({
-				element: 'cust-sales-graph',
-				data: <?= json_encode($data); ?>,
-				colors: <?= json_encode(array_rand(array_flip($config->allowedcolors), 25)); ?>
-			});
-
-			pie.options.data.forEach(function(label, i) {
-				var index = i;
-				if (pie.options.colors.length < 11) {
-					if (index >= 10) {
-						var multiply = parseInt(i / 10);
-						var subtract = 10 * multiply;
-						index = i - subtract;
-					}
-				}
-				$('#cust-sales').find('#'+label['custid']+'-cust').css('backgroundColor', pie.options.colors[index]);
-			});
-		});
-	</script>
-<?php endif; ?>

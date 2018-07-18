@@ -6,23 +6,23 @@
 	    	<table class="table-condensed table table-striped">
 	        	<tr>
 	        		<td>Subtotal</td>
-	        		<td class="text-right">$ <?php echo formatmoney($quote->subtotal); ?></td>
+	        		<td class="text-right">$ <?= $page->stringerbell->format_money($quote->subtotal); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Tax</td>
-	        		<td class="text-right">$ <?php echo formatmoney($quote->salestax); ?></td>
+	        		<td class="text-right">$ <?= $page->stringerbell->format_money($quote->salestax); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Freight</td>
-	        		<td class="text-right">$ <?php echo formatmoney($quote->freight); ?></td>
+	        		<td class="text-right">$ <?= $page->stringerbell->format_money($quote->freight); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Misc.</td>
-	        		<td class="text-right">$ <?php echo formatmoney($quote->misccost); ?></td>
+	        		<td class="text-right">$ <?= $page->stringerbell->format_money($quote->misccost); ?></td>
 	        	</tr>
 	        	<tr>
 	        		<td>Total</td>
-	        		<td class="text-right">$ <?php echo formatmoney($quote->ordertotal); ?></td>
+	        		<td class="text-right">$ <?= $page->stringerbell->format_money($quote->ordertotal); ?></td>
 	        	</tr>
 	        </table>
 	    </div>

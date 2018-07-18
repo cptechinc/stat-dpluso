@@ -1,4 +1,8 @@
 <?php 
+    /**
+     * Formatter for II Item Kit Screen
+     * Not Formattable
+     */
      class II_ItemKitScreen extends TableScreenMaker {
 		protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'ii-kit'; 
@@ -8,7 +12,7 @@
 		protected $datasections = array();
         
         /* =============================================================
-          PUBLIC FUNCTIONS
+            PUBLIC FUNCTIONS
        	============================================================ */
         public function generate_screen() {
             $bootstrap = new Contento();
@@ -21,14 +25,14 @@
 				$tb->tablesection('thead');
 					$tb->tr();
 					foreach($this->json['columns']['component'] as $column) {
-						$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+						$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
 						$tb->th("class=$class", $column['heading']);
 					}
 				$tb->closetablesection('thead');
 				$tb->tablesection('tbody');
 					$tb->tr();
 					foreach (array_keys($this->json['columns']['component']) as $column) {
-						$class = Processwire\wire('config')->textjustify[$this->json['columns']['component'][$column]['datajustify']];
+						$class = DplusWire::wire('config')->textjustify[$this->json['columns']['component'][$column]['datajustify']];
 						$tb->td("class=$class", $component[$column]);
 					}
 				$tb->closetablesection('tbody');
@@ -39,14 +43,14 @@
 				$tb->tablesection('thead');
 					$tb->tr();
 					foreach($this->json['columns']['warehouse'] as $column) {
-						$class = Processwire\wire('config')->textjustify[$column['headingjustify']];
+						$class = DplusWire::wire('config')->textjustify[$column['headingjustify']];
 						$tb->th("class=$class", $column['heading']);
 					}
 				$tb->closetablesection('thead');
 				$tb->tablesection('tbody');
 					foreach ($component['warehouse'] as $whse) {
 						foreach (array_keys($this->json['columns']['warehouse']) as $column) {
-							$class = Processwire\wire('config')->textjustify[$this->json['columns']['warehouse'][$column]['datajustify']];
+							$class = DplusWire::wire('config')->textjustify[$this->json['columns']['warehouse'][$column]['datajustify']];
 							$tb->td("class=$class", $whse[$column]);
 						}
 					}

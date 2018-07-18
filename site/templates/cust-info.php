@@ -15,7 +15,6 @@
 	                $page->title = 'CI: ' . $customer->generate_title();
 
 	                if (file_exists($config->jsonfilepath.session_id()."-cicustomer.json")) {
-
 	                    if ($customer->has_shipto()) {
 	                        $tableformatter = $page->screenformatterfactory->generate_screenformatter('ci-customer-shipto-page');
 	                        $buttonsjson = json_decode(file_get_contents($config->jsonfilepath.session_id()."-cistbuttons.json"), true);

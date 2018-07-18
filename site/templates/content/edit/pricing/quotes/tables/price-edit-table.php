@@ -1,16 +1,16 @@
 <table class="table table-bordered table-striped table-condensed">
-    <tr> <td>Price </td> <td class="text-right">$ <?= formatmoney($linedetail->quotprice); ?></td> </tr>
+    <tr> <td>Price </td> <td class="text-right">$ <?= $page->stringerbell->format_money($linedetail->quotprice); ?></td> </tr>
     <tr> <td>Unit of Measurement</td> <td> <?= $linedetail->uom ?></td> </tr>
     <tr> <td>Qty</td> <td class="text-right"><?= $linedetail->quotqty+0; ?></td> </tr>
-    <tr> <td>Original Ext. Amt.</td> <td class="text-right">$ <?= formatmoney($linedetail->quotprice * $linedetail->quotqty); ?></td> </tr>
+    <tr> <td>Original Ext. Amt.</td> <td class="text-right">$ <?= $page->stringerbell->format_money($linedetail->quotprice * $linedetail->quotqty); ?></td> </tr>
     <?php if ($appconfig->child('name=sales-orders')->show_originalprice) : ?>
-        <tr> <td>Original Price</td> <td class="text-right">$ <?= formatmoney($linedetail->quotprice); ?></td> </tr>
+        <tr> <td>Original Price</td> <td class="text-right">$ <?= $page->stringerbell->format_money($linedetail->quotprice); ?></td> </tr>
     <?php endif; ?>
     <?php if ($appconfig->child('name=sales-orders')->show_listprice) : ?>
-        <tr> <td>List Price</td> <td class="text-right">$ <?= formatmoney($linedetail->listquotprice); ?></td> </tr>
+        <tr> <td>List Price</td> <td class="text-right">$ <?= $page->stringerbell->format_money($linedetail->listquotprice); ?></td> </tr>
     <?php endif; ?>
     <?php if ($appconfig->child('name=sales-orders')->show_cost) : ?>
-        <tr> <td>Cost</td> <td class="text-right">$ <?= formatmoney($linedetail->cost); ?></td> </tr>
+        <tr> <td>Cost</td> <td class="text-right">$ <?= $page->stringerbell->format_money($linedetail->cost); ?></td> </tr>
     <?php endif; ?>
     <tr><td>Kit:</td><td><?php echo $linedetail->kititemflag; ?></td></tr>
 </table>
@@ -23,7 +23,7 @@
         <td>
             <div class="input-group">
                 <div class="input-group-addon input-sm">$ </div>
-                <input type="text" class="form-control input-sm text-right price" name="price" value="<?= formatmoney($linedetail->quotprice); ?>">
+                <input type="text" class="form-control input-sm text-right price" name="price" value="<?= $page->stringerbell->format_money($linedetail->quotprice); ?>">
             </div>
         </td>
     </tr>
@@ -34,7 +34,7 @@
             <td>
                 <div class="input-group">
                     <div class="input-group-addon input-sm">$</div>
-                    <input type="text" class="form-control input-sm text-right discount-amt" value="<?= formatmoney(($linedetail->discpct / 100) * $linedetail->quotprice); ?>">
+                    <input type="text" class="form-control input-sm text-right discount-amt" value="<?= $page->stringerbell->format_money(($linedetail->discpct / 100) * $linedetail->quotprice); ?>">
                 </div>
             </td>
         </tr>
@@ -42,7 +42,7 @@
             <td class="control-label">Discount %</td>
             <td>
                 <div class="input-group">
-                    <input type="text" class="form-control input-sm text-right discount-percent" name="discount" value="<?= formatmoney($linedetail->discpct); ?>">
+                    <input type="text" class="form-control input-sm text-right discount-percent" name="discount" value="<?= $page->stringerbell->format_money($linedetail->discpct); ?>">
                     <div class="input-group-addon input-sm">%</div>
                 </div>
             </td>
@@ -53,7 +53,7 @@
         <td>
             <div class="input-group">
                 <div class="input-group-addon input-sm">$</div>
-                <input type="text" class="form-control input-sm text-right totalquotprice" value="<?= formatmoney($linedetail->quotprice * $linedetail->quotqty); ?>" disabled>
+                <input type="text" class="form-control input-sm text-right totalquotprice" value="<?= $page->stringerbell->format_money($linedetail->quotprice * $linedetail->quotqty); ?>" disabled>
             </div>
         </td>
     </tr>

@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * Formatter for VI Purchase History Screen
+	 * Formattable
+	 */
 	class VI_PurchaseHistoryFormatter extends TableScreenFormatter {
         protected $tabletype = 'normal'; // grid or normal
 		protected $type = 'vi-purchase-history'; // ii-sales-history
@@ -10,6 +14,9 @@
 			"detail" => "Detail"
 		);
 		
+		/* =============================================================
+            PUBLIC FUNCTIONS
+       	============================================================= */
         public function generate_screen() {
             $bootstrap = new Contento();
             $content = '';
@@ -23,7 +30,7 @@
 					for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 						if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
 							$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-							$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
+							$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['headingjustify']];
 							$colspan = $column['col-length'];
 							$tb->th("colspan=$colspan|class=$class", $column['label']);
 						} else {
@@ -45,7 +52,7 @@
 							for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 								if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
 									$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-									$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+									$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
 									$colspan = $column['col-length'];
 									$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $detail, $column);
 									$tb->td("colspan=$colspan|class=$class", $celldata);
@@ -67,7 +74,7 @@
 						for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 							if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
 								$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-								$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+								$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
 								$colspan = $column['id'] == "Purchase Order Number" ? 2 : $column['col-length'];
 								$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $pototals, $column);
 								$tb->td("colspan=$colspan|class=$class", $celldata);
@@ -89,7 +96,7 @@
 					for ($i = 1; $i < $this->tableblueprint['cols'] + 1; $i++) {
 						if (isset($this->tableblueprint['detail']['rows'][$x]['columns'][$i])) {
 							$column = $this->tableblueprint['detail']['rows'][$x]['columns'][$i];
-							$class = Processwire\wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
+							$class = DplusWire::wire('config')->textjustify[$this->fields['data']['detail'][$column['id']]['datajustify']];
 							$colspan = $column['id'] == "Purchase Order Number" ? 2 : $column['col-length'];
 							$celldata = TableScreenMaker::generate_formattedcelldata($this->fields['data']['detail'][$column['id']]['type'], $vendortotal, $column);
 							$tb->td("colspan=$colspan|class=$class", $celldata);

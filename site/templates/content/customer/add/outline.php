@@ -196,7 +196,7 @@
                             </td>
                         <?php else : ?>
                             <td>
-                                <?= $page->bootstrap->select('name=salesperson1|class=form-control input-sm', $salespeople, $user->loginid); ?>
+                                <?= $page->bootstrap->select('name=salesperson1|class=form-control input-sm', $salespeople, $user->salespersonid); ?>
                             </td>
                         <?php endif; ?>
                     </tr>

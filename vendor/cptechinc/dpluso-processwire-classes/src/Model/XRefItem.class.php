@@ -186,14 +186,34 @@
 		============================================================ */
 		/**
 		 * Returns an object with XrefItem Class after
-		 * inputing the crossreferences as needed
+		 * inputing the cross references as needed
 		 * @param  string  $itemID   Item ID / Part #
-		 * @param  mixed $custID   Customer ID to use Cross-reference or false
-		 * @param  mixed $vendorID Vendor ID to use Cross-reference or false
-		 * @param  bool $debug    Whether XrefItem object is returned or the SQL for retreiving it
-		 * @return XrefItem            Or SQL Query for it
+		 * @param  mixed   $custID   Customer ID to use Cross-reference or false
+		 * @param  mixed   $vendorID Vendor ID to use Cross-reference or false
+		 * @param  bool    $debug    Whether XrefItem object is returned or the SQL for retreiving it
+		 * @return XRefItem            Or SQL Query for it
 		 */
 		public static function load($itemID, $custID = false, $vendorID = false, $debug = false) {
 			return get_xrefitem($itemID, $custID, $vendorID, $debug);
 		}
+        
+        /**
+         * Returns Item Description
+         * @param  string  $itemID   Item ID / Part #
+         * @param  bool    $debug    Run in Debug? If true, will return SQL Query
+         * @return string            Item Description
+         */
+        public static function get_itemdescription($itemID, $debug = false) {
+            return get_xrefitemdescription($itemID, $debug);
+        }
+        
+        /**
+         * Returns the itemID for the next or previous Item
+         * @param  string $itemID     Item ID / Part Number
+         * @param  string $nextorprev Grab the next or (prev)ious item
+         * @return string             Item ID
+         */
+        public static function get_nextorpreviousitemid($itemID, $nextorprev = 'next') {
+            return get_itemidbyrecno(get_nextitemrecno($itemID, $nextorprev));
+        }
     }

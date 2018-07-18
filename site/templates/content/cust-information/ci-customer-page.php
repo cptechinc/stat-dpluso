@@ -62,3 +62,8 @@
 		<?php include $config->paths->content.'customer/cust-page/sales-history/sales-history-panel.php'; ?>
 	</div>
 </div>
+<?php 
+	if ($page->has_bookings) {
+		include $config->paths->content."customer/cust-page/bookings/bookings-line-chart.js.php";
+	}
+?>

@@ -96,3 +96,9 @@
 		console.log(url);
 		$.get(url, function() {	callback(); });
 	}
+	
+	function ii_getquotedocuments(itemID, qnbr, type, callback) {
+		var url = config.urls.products.redir.ii_quote_documents+"&itemID="+urlencode(itemID)+"&ordn="+qnbr+"&type="+urlencode(type);
+		console.log(url);
+		$.get(url, function() {	callback(); });
+	}

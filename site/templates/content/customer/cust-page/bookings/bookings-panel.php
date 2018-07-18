@@ -3,7 +3,8 @@
 	$bookingspanel->generate_filter($input);
     $bookingspanel->set_customer($customer->custid, $customer->shiptoid);
 	$bookings = $bookingspanel->get_bookings();
-
+	$bookingdata = array();
+	
 	foreach ($bookings as $booking) {
 		$bookdata = array(
 			'bookdate' => DplusDateTime::format_date($booking['bookdate'], 'Y-m-d'),
@@ -15,6 +16,7 @@
 
 		$bookingdata[] = $bookdata;
 	}
+	$page->has_bookings = empty($bookingdata) ? false : true;
 ?>
 <div class="panel panel-primary not-round" id="bookings-panel">
 	<div class="panel-heading not-round" id="bookings-panel">
@@ -66,8 +68,3 @@
 		<?php endif; ?>
 	</div>
 </div>
-<?php
-	if (!empty($bookingdata)) {
-		include $config->paths->content."customer/cust-page/bookings/bookings-line-chart.js.php";
-	}
-?>

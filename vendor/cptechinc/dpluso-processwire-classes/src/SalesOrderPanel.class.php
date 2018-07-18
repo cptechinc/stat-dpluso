@@ -38,6 +38,11 @@
 				'querytype' => 'in',
 				'datatype' => 'char',
 				'label' => 'Status'
+			),
+			'salesperson_1' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Sales Person 1'
 			)
 		);
 		
@@ -211,7 +216,7 @@
 						}
 					}
 				}
-			}
+			}		
 		}
 		
 		/* =============================================================

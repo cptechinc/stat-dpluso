@@ -13,8 +13,8 @@
 	</th>
 	<th>Ship-To</th>
 	<th>
-		<a href="<?= $orderpanel->generate_tablesortbyurl("ordertotal") ; ?>" class="load-link" <?= $orderpanel->ajaxdata; ?>>
-			Order Totals <?= $orderpanel->tablesorter->generate_sortsymbol('ordertotal'); ?>
+		<a href="<?= $orderpanel->generate_tablesortbyurl("total_order") ; ?>" class="load-link" <?= $orderpanel->ajaxdata; ?>>
+			Order Totals <?= $orderpanel->tablesorter->generate_sortsymbol('total_order'); ?>
 		</a>
 	</th>
 	<th>
@@ -23,8 +23,8 @@
 		</a>
 	</th>
 	<th>
-		<a href="<?= $orderpanel->generate_tablesortbyurl("invdate") ; ?>" class="load-link" <?= $orderpanel->ajaxdata; ?>>
-			Invoice Date: <?= $orderpanel->tablesorter->generate_sortsymbol('invdate'); ?>
+		<a href="<?= $orderpanel->generate_tablesortbyurl("invoice_date") ; ?>" class="load-link" <?= $orderpanel->ajaxdata; ?>>
+			Invoice Date: <?= $orderpanel->tablesorter->generate_sortsymbol('invoice_date'); ?>
 		</a>
 	</th>
 	<th colspan="3">

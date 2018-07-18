@@ -150,7 +150,7 @@
 	*		FLD1DATA=$itemID
 	*		FLD21DESC=$desc
 	*		break;
-	*	case 'ii-order-documents':
+	*	case 'ii-uments':
 	*		DBNAME=$config->DBNAME
 	*		DOCVIEW
 	*		FLD1CD=SO
@@ -293,16 +293,23 @@
             $session->loc = $config->page->index;
             break;
 		case 'ii-documents':
-			$desc = getitemdescription($itemID, false);
-			$session->sql = getitemdescription($itemID, true);
+			$desc = XRefItem::get_itemdescription($itemID);
+			$session->sql = XRefItem::get_itemdescription($itemID);
 			$data = array('DBNAME' => $config->dbName, 'DOCVIEW' => false, 'FLD1CD' => 'IT', 'FLD1DATA' => $itemID, 'FLD1DESC' => $desc);
             $session->loc = $config->page->index;
             break;
 		case 'ii-order-documents':
 			$ordn = $input->get->text('ordn');
 			$type = $input->get->text('type');
-			$desc = getitemdescription($itemID, false);
+			$desc = XRefItem::get_itemdescription($itemID);
 			$data = array('DBNAME' => $config->dbName, 'DOCVIEW' => false, 'FLD1CD' => $config->documentstoragetypes[$type], 'FLD1DATA' => $ordn, 'FLD2CD' => 'IT', 'FLD2DATA' => $itemID);
+            $session->loc = $config->page->index;
+            break;
+		case 'ii-order-documents':
+			$qnbr = $input->get->text('qnbr');
+			$type = $input->get->text('type');
+			$desc = XrefItem::get_itemdescription($itemID);
+			$data = array('DBNAME' => $config->dbName, 'DOCVIEW' => false, 'FLD1CD' => $config->documentstoragetypes[$type], 'FLD1DATA' => $qnbr, 'FLD2CD' => 'IT', 'FLD2DATA' => $itemID);
             $session->loc = $config->page->index;
             break;
     }

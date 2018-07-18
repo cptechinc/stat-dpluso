@@ -92,8 +92,8 @@
 			<td class="text-center"><?= $detail->itemid; ?></td>
 			<td><?= $detail->desc1; ?></td>
 			<td><?=$detail->uom; ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->quotprice); ?></td>
-			<td class="text-right">$ <?= formatmoney($detail->quotprice * intval($detail->quotqty)) ?> </td>
+			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->quotprice); ?></td>
+			<td class="text-right">$ <?= $page->stringerbell->format_money($detail->quotprice * intval($detail->quotqty)) ?> </td>
 		</tr>
 	<?php endforeach; ?>
 </table>
@@ -102,11 +102,11 @@
 	<div class="col-xs-9"></div>
 	<div class="col-xs-3">
 		<table class="table table-condensed pull-right">
-			<tr><td class="col-xs-6"><label>Subtotal</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->subtotal); ?></td></tr>
-			<tr><td class="col-xs-6"><label>Tax</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->salestax); ?></td></tr>
-			<tr><td class="col-xs-6"><label>Freight</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->freight); ?></td></tr>
-			<tr><td class="col-xs-6"><label>Misc.</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->misccost); ?></td></tr>
-			<tr class="active"><td class="col-xs-6"><label>Total</label></td> <td class="text-right col-xs-6">$ <?= formatmoney($quote->ordertotal); ?></td></tr>
+			<tr><td class="col-xs-6"><label>Subtotal</label></td> <td class="text-right col-xs-6">$ <?= $page->stringerbell->format_money($quote->subtotal); ?></td></tr>
+			<tr><td class="col-xs-6"><label>Tax</label></td> <td class="text-right col-xs-6">$ <?= $page->stringerbell->format_money($quote->salestax); ?></td></tr>
+			<tr><td class="col-xs-6"><label>Freight</label></td> <td class="text-right col-xs-6">$ <?= $page->stringerbell->format_money($quote->freight); ?></td></tr>
+			<tr><td class="col-xs-6"><label>Misc.</label></td> <td class="text-right col-xs-6">$ <?= $page->stringerbell->format_money($quote->misccost); ?></td></tr>
+			<tr class="active"><td class="col-xs-6"><label>Total</label></td> <td class="text-right col-xs-6">$ <?= $page->stringerbell->format_money($quote->ordertotal); ?></td></tr>
 		</table>
 	</div>
 </div>

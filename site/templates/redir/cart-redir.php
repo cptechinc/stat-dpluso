@@ -124,7 +124,7 @@
 			$itemids = $input->post->itemID;
 			$qtys = $input->post->qty;
 			$data = array("DBNAME=$config->dbName", 'CARTADDMULTIPLE', "CUSTID=$custID");
-			
+
 			if (DplusWire::wire('modules')->isInstalled('QtyPerCase')) {
 				$case_qtys = $input->post->{'case-qty'};
 				$bottle_qtys = $input->post->{'bottle-qty'};

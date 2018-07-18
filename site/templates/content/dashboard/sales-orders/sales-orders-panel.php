@@ -13,7 +13,7 @@
 			<a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">
 				<?= $orderpanel->generate_filterdescription(); ?> <span class="caret"></span> <span class="badge"><?= $orderpanel->count; ?></span> &nbsp; | &nbsp;
 				<?= $orderpanel->generate_refreshlink(); ?>
-				</a>
+			</a>
 		<?php elseif ($orderpanel->count > 0) : ?>
 				<a href="#orders-div" data-parent="#orders-panel" data-toggle="collapse">Your Orders <span class="caret"></span></a> &nbsp; <span class="badge"> <?= $orderpanel->count; ?></span> &nbsp; | &nbsp;
 				<?= $orderpanel->generate_refreshlink(); ?>

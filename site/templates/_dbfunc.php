@@ -264,7 +264,7 @@
 		} else {
 			$q->where('source', Contact::$types['customer']);
 		}
-		
+
 		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
@@ -3666,7 +3666,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Returns the Item Description from the cross reference table
 	 * @param  string $itemID Item ID / Part Number
@@ -3687,7 +3687,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Returns the record number for the next item
 	 * @param  string $itemID     Item ID / Part Number
@@ -3709,7 +3709,7 @@
 			return $sql->fetchColumn();
 		}
 	}
-	
+
 	/**
 	 * Returns the itemID for the record with the provided recno
 	 * @param  int    $recno      Record Number
@@ -3744,7 +3744,7 @@
 		$itemquery->field('itemid');
 		$itemquery->where('itemid', $itemID);
 		$itemquery->where('origintype', ['I', 'L']); // ITEMID found by the ITEMID, or by short item lookup // NOTE USED at Stempf
-		
+
 		if (!empty($custID)) {
 			$custquery = (new QueryBuilder())->table('itemsearch');
 			$custquery->field('itemid');
@@ -3996,7 +3996,6 @@
 	function get_logmuser($loginID, $debug = false) {
 		$q = (new QueryBuilder())->table('logm');
 		$q->where('loginid', $loginID);
-
 		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
@@ -4008,8 +4007,21 @@
 		}
 	}
 
+	function get_logmuserlist($debug = false) {
+		$q = (new QueryBuilder())->table('logm');
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'LogmUser');
+			return $sql->fetchAll();
+		}
+	}
+
 	/* =============================================================
-		LOGM FUNCTIONS
+		OOKING FUNCTIONS
 	============================================================ */
 	/**
 	 * Return the Number of bookings made that day, for a salesrep, if need be
@@ -4534,8 +4546,6 @@
 
 		if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
 			$q->where('salesrep', DplusWire::wire('user')->salespersonid);
-		} else {
-
 		}
 
 		$q->where('custid', $custID);
@@ -4565,5 +4575,118 @@
 		} else {
 			$sql->execute($q->params);
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
+
+	/* =============================================================
+		SIGNIN LOG FUNCTIONS
+	============================================================ */
+
+	/**
+	 * Return the user signins for today that the User has access to
+	 * @param  string $day  Date      current day's date
+	 * @uses User dplusrole
+	 */
+	function get_daysignins($day, $debug = false) {
+		$day = empty(date('Y-m-d', strtotime($day))) ? date('Y-m-d') : date('Y-m-d', strtotime($day));
+		$q = (new QueryBuilder())->table('log_signin');
+		$q->where($q->expr("DATE(date) = STR_TO_DATE([], '%Y-%m-%d')", [$day]));
+		$q->order('date DESC');
+
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			$sql->setFetchMode(PDO::FETCH_CLASS, 'SigninLog');
+			return $sql->fetchAll();
+		}
+	}
+
+	/**
+	 * Return the number of user signins for today that the User has access to
+	 * @param  string $day  Date
+	 * @uses User dplusrole
+	 */
+	function count_daysignins($day, $debug = false) {
+		$day = empty(date('Y-m-d', strtotime($day))) ? date('Y-m-d') : date('Y-m-d', strtotime($day));
+		$q = (new QueryBuilder())->table('log_signin');
+		$q->field('COUNT(*)');
+		$q->where($q->expr("DATE(date) = STR_TO_DATE([], '%Y-%m-%d')", [$day]));
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
+		}
+	}
+
+	/**
+	 * Returns the log_signin records that match the filter
+	 * @param  array $filter      Array of filters and values for each filter (column)
+	 * @param  array $filtertypes Array of the possible filters and their properties
+	 * @param  bool  $debug       Run in debug? If so, return SQL Query
+	 * @return array              log_signin records
+	 */
+	function get_logsignins($filter, $filtertypes, $debug = false) {
+		$q = (new QueryBuilder())->table('log_signin');
+		$q->order('date DESC');
+
+		if (!empty($filter)) {
+			$q->generate_filters($filter, $filtertypes);
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchAll();
+		}
+	}
+
+	/**
+	 * Inserts log of user signins for today that the User has access to
+	 * @param  string $sessionID  sessionid
+	 * @param  string $userID     loginID
+	 * @uses User dplusrole
+	 */
+	function insert_logsignin($sessionID, $userID, $debug) {
+		$date = date('Y-m-d H:i:s');
+		$q = (new QueryBuilder())->table('log_signin');
+		$q->mode('insert');
+		$q->set('sessionid', $sessionID);
+		$q->set('user', $userID);
+		$q->set('date', $date);
+
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $q->generate_sqlquery($q->params);
+		}
+	}
+
+	/**
+	 * Checks to see if sessionid already exists in log-signin table
+	 * @param  string $sessionID  sessionid
+	 * @uses User dplusrole
+	 */
+	function has_loggedsignin($sessionID, $debug = false) {
+		$q = (new QueryBuilder())->table('log_signin');
+		$q->field('COUNT(*)');
+		$q->where('sessionid', $sessionID);
+		$sql = DplusWire::wire('database')->prepare($q->render());
+
+		if ($debug) {
+			return $q->generate_sqlquery($q->params);
+		} else {
+			$sql->execute($q->params);
+			return $sql->fetchColumn();
 		}
 	}

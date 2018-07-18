@@ -74,5 +74,5 @@
 		<div>
 			<?= $orderpanel->generate_clearsearchlink(); ?>
 		</div>
-	 <?php endif; ?>
+	<?php endif; ?>
 </form>

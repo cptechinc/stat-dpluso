@@ -40,3 +40,4 @@
     $config->pages->vendor = $config->urls->root . "vendors/";
     $config->pages->vendorinfo = $config->urls->root . "vendors/vend-info/";
     $config->pages->sys = $config->urls->root . "sys/";
+    $config->pages->reports = $config->urls->root . "reports/";

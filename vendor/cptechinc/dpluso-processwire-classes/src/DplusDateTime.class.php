@@ -9,7 +9,7 @@
 		static $shorttimestring = 'Hi';
 
 	/**
-	 * [format_dplustime description]
+	 * Formats Time
 	 * @param  string $time          time string ex 16063372
 	 * @param  string $currentformat format the time is in, default is Hi
 	 * @param  string $desiredformat desired format, default is h:i A -> 10:19 AM

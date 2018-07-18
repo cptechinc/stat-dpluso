@@ -11,4 +11,5 @@ return array(
     'mikehaertl\\shellcommand\\' => array($vendorDir . '/mikehaertl/php-shellcommand/src'),
     'atk4\\dsql\\' => array($vendorDir . '/atk4/dsql/src'),
     'atk4\\core\\' => array($vendorDir . '/atk4/core/src'),
+    'Picqer\\Barcode\\' => array($vendorDir . '/picqer/php-barcode-generator/src'),
 );

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17d38af129f5dd73a97cefc47f003610",
+    "content-hash": "3ec3e500220c971a70dabbe9a3ec5653",
     "packages": [
         {
             "name": "atk4/core",
@@ -239,7 +239,7 @@
                 "manipulation",
                 "url"
             ],
-            "time": "2017-10-07 02:48:32"
+            "time": "2017-10-07T02:48:32+00:00"
         },
         {
             "name": "mikehaertl/php-shellcommand",
@@ -364,7 +364,7 @@
         },
         {
             "name": "picqer/php-barcode-generator",
-            "version": "v0.2.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/picqer/php-barcode-generator.git",
@@ -436,7 +436,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "jwage/purl": 20
+        "jwage/purl": 20,
+        "picqer/php-barcode-generator": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

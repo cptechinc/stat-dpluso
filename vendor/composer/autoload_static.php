@@ -22,6 +22,10 @@ class ComposerStaticInit2a810780675e3506dcf842a48fb147fe
             'atk4\\dsql\\' => 10,
             'atk4\\core\\' => 10,
         ),
+        'P' => 
+        array (
+            'Picqer\\Barcode\\' => 15,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -44,6 +48,10 @@ class ComposerStaticInit2a810780675e3506dcf842a48fb147fe
         'atk4\\core\\' => 
         array (
             0 => __DIR__ . '/..' . '/atk4/core/src',
+        ),
+        'Picqer\\Barcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/picqer/php-barcode-generator/src',
         ),
     );
 

@@ -2753,8 +2753,10 @@
 	function get_itemsearchresults($sessionID, $limit = 10, $page = 1, $debug = false) {
 		$q = (new QueryBuilder())->table('pricing');
 		$q->where('sessionid', $sessionID);
-		$q->limit($limit, $q->generate_offset($page, $limit));
-		$sql = Processwire\wire('database')->prepare($q->render());
+		if (!empty($limit)) {
+			$q->limit($limit, $q->generate_offset($page, $limit));
+		}
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -2769,7 +2771,7 @@
 		$q = (new QueryBuilder())->table('pricing');
 		$q->field($q->expr('COUNT(*)'));
 		$q->where('sessionid', $sessionID);
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);

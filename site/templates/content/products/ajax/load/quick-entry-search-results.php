@@ -4,8 +4,8 @@
     $itemcount = count_itemsearchresults(session_id());
     $paginator = new Paginator($input->pageNum, $itemcount, $page->fullURL, 'quick-entry-search', 'data-loadinto=".results" data-focus=".results"');
 ?>
-<div class="results">
-    <h3>Item Results for <?= $q; ?></h3>
+<div class="item-results">
+    <h3>Item Results for "<?= $q; ?>"</h3>
 
     <?php if (!$itemcount) : ?>
         <p>No items found.</p>
@@ -19,7 +19,8 @@
                     <tr class="qe-results-row">
                         <td class="col-md-6">
                             <a href="#" class="qe-item-results" data-itemid="<?= $item->itemID; ?>"><?= $item->itemID; ?></a></br>
-                            <small><?= $item->name1; ?></small>
+                            <small><?= $item->name1; ?></small></br>
+                            <small><?= $item->name2; ?></small>
                         </td>
                         <td class="col-md-4"><?= $item->unit; ?></td>
                         <td class="col-md-2"><?= $item->price; ?></td>

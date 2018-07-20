@@ -12,7 +12,7 @@ $(document).ready(function() {
 	=============================================================*/
 		$('body').popover({selector: '[data-toggle="popover"]', placement: 'top'});
 		$('body').tooltip({selector: '[data-toggle="tooltip"]', placement: 'top'});
-		
+
 		init_datepicker();
 		init_timepicker();
 		init_bootstraptoggle();
@@ -226,7 +226,7 @@ $(document).ready(function() {
 				}
 			});
 		});
-		
+
 		$("body").on('keypress', 'form input', function(e) {
 			if ($(this).closest('form').hasClass('allow-enterkey-submit')) {
 				return true;
@@ -234,7 +234,7 @@ $(document).ready(function() {
 				return e.which !== 13;
 			}
 		});
-		
+
 	/*==============================================================
 	  AJAX LOAD FUNCTIONS
 	=============================================================*/
@@ -972,7 +972,7 @@ $(document).ready(function() {
 			var action = form.attr('action');
 			var elementreload = form.data('refresh');
 			var isformcomplete = form.formiscomplete('tr');
-			
+
 			if (isformcomplete) {
 				$(formid).postform({formdata: false, jsoncallback: true, action: false}, function(json) {
 					$.notify({
@@ -1182,7 +1182,7 @@ $(document).ready(function() {
 			var form = $(this);
 			var formdata = form.serialize();
 			var url = URI(config.urls.json.validateitems).query(formdata).toString();
-			
+
 			$.getJSON(url, function(json) {
 				form.attr('data-invaliditems', json.invalid);
 				form.find('.itemid').each(function() {
@@ -1193,7 +1193,7 @@ $(document).ready(function() {
 					}
 	            });
 				form.attr('data-checked', 'true');
-				
+
 				if (json.invalid) {
 	                form.find('.response').createalertpanel('Double Check your itemIDs', '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>', 'warning');
 	            } else {

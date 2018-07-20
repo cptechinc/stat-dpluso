@@ -37,7 +37,7 @@
 
 	</br>
 	<div>
-		<div class="results">
+		<div class="item-results">
 
 		</div>
 	</div>

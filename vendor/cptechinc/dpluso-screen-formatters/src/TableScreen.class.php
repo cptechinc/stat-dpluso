@@ -139,13 +139,8 @@
 		}
 
 		/**
-<<<<<<< HEAD
 		 * Turn on or off if this Page is printable
 		 * @param bool $forprint Is this for a Printable Page
-=======
-		 * Turn debug on or Off
-		 * @param bool $debug
->>>>>>> master
 		 */
 		public function set_printpage($forprint = false) {
 			$this->forprint = $forprint;
@@ -285,11 +280,8 @@
 		public static function generate_formattedcelldata($type, $parent, $column) {
 			$bootstrap = new Contento();
 			$celldata = '';
-<<<<<<< HEAD
-=======
 			$qtyregex = "/(quantity)/i";
->>>>>>> master
-
+			
 			if ($type == 'D') {
 				$celldata = (strlen($parent[$column['id']]) > 0) ? date($column['date-format'], strtotime($parent[$column['id']])) : $parent[$column['id']];
 			} elseif ($type == 'N') {

@@ -257,16 +257,7 @@ $(document).ready(function() {
 				init_bootstraptoggle();
 			});
 		});
-<<<<<<< HEAD
-		$("body").on("click", ".stuff", function(e) {
-		e.preventDefault();
-			console.log('clicked');
-			alert('sfd');
-			
-		}); 
-=======
 
->>>>>>> 462dccf2f... Merge pull request #177 from cptechinc/actions-reporting
 		$("body").on("click", ".load-and-show", function(e) {
 			e.preventDefault();
 			showajaxloading();

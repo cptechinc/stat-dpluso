@@ -110,4 +110,6 @@
 		</table>
 	</div>
 </div>
-	
+<div>
+	<p class="text-center"><small>*Sales tax and shipping charges are not included in this quote.</small></p>
+</div>

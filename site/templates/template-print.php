@@ -4,6 +4,8 @@
     $emailurl = new \Purl\Url($config->pages->ajaxload."email/email-file-form/");
     $emailurl->query->set('referenceID', $sessionID);
     $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
+	$notesurl = new \Purl\Url($page->fullURL->getUrl());
+	
 	
     switch ($page->name) { //$page->name is what we are printing
         case 'order':
@@ -23,6 +25,14 @@
             $qnbr = $input->get->text('qnbr');
             $quotedisplay = new QuoteDisplay($sessionID, $page->fullURL, '#ajax-modal', $qnbr);
             $quote = $quotedisplay->get_quote();
+			$notesurl->path = $config->pages->notes."redir/";
+			$notesurl->query->set('action', 'get-quote-notes');
+			$notesurl->query->set('qnbr', $qnbr);
+			$notesurl->query->set('linenbr', '0');
+			$notesurl->query->set('sessionID', session_id());
+			curl_redir($notesurl->getUrl());
+			$notes = get_qnotes(session_id(), $qnbr, '0', Qnote::get_qnotetype('quotes'), true); // TRUE is USE CLASS 
+
             $page->title = 'Quote #' . $qnbr;
             $emailurl->query->set('printurl', $quotedisplay->generate_sendemailurl($quote));
             

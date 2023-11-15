@@ -2,7 +2,6 @@
 	//$qnbr = is defined in notes router
 	//$linenbr is defined in notes-router
 	$notes = get_qnotes(session_id(), $qnbr, $linenbr, Qnote::get_qnotetype('quotes'), true); // TRUE is USE CLASS 
-	
 ?>
 
 <div class="panel panel-primary">
@@ -58,7 +57,7 @@
 				<input type="hidden" name="action" class="action" value="add-note">
 				<input type="hidden" name="key1" class="key1"value="<?= $qnbr; ?>">
 				<input type="hidden" name="key2" class="key2" value="<?= $linenbr; ?>">
-				<input type="hidden" name="type" class="type" value="<?= Qnote::get_qnotetype('quote'); ?>">
+				<input type="hidden" name="type" class="type" value="<?= Qnote::get_qnotetype('quotes'); ?>">
 				<input type="hidden" name="recnbr" class="recnbr" value="">
 				<input type="hidden" name="notepage" class="notepage" value="<?= $config->filename; ?>">
 				<span class="help-block"></span>

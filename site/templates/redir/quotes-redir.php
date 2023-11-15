@@ -166,7 +166,7 @@
 						$session->loc = Paginator::paginateurl($config->pages->ajax."load/quotes/cust/{$input->get->custID}/?qnbr=".$qnbr.$linkaddon, $pagenumber, $input->get->custID, '');
 					}
 				} else {
-					$session->loc = Paginator::paginateurl($config->pages->ajax."load/quotes/salesrep/?qnbr=".$qnbr.$linkaddon, $pagenumber, "quotes", '');
+					$session->loc = Paginator::paginateurl($config->pages->ajax."load/quotes/?qnbr=".$qnbr.$linkaddon, $pagenumber, "quotes", '');
 				}
 			}
 			break;

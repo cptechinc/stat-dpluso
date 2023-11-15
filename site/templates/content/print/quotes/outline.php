@@ -97,7 +97,6 @@
 		</tr>
 	<?php endforeach; ?>
 </table>
-
 <div class="row">
 	<div class="col-xs-9"></div>
 	<div class="col-xs-3">
@@ -110,6 +109,14 @@
 		</table>
 	</div>
 </div>
-<div>
+<div class="form-group">
 	<p class="text-center"><small>*Sales tax and shipping charges are not included in this quote.</small></p>
+</div>
+<div class="form-group">
+	<div class="address-header"><h3>Notes</h3></div>
+	<?php foreach ($notes as $note) : ?>
+		<?php if ($note->form1 == 'Y') : ?>
+			<p><?= $note->notefld; ?></p>
+		<?php endif; ?>
+	<?php endforeach; ?>
 </div>

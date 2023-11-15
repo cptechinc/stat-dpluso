@@ -2682,12 +2682,14 @@
 	function add_qnote($sessionID, Qnote $qnote, $debug = false) {
 		$q = (new QueryBuilder())->table('qnote');
 		$q->mode('insert');
-		$qnote->recno = get_maxqnoterecnbr($qnote->sessionid, $qnote->key1, $qnote->key2, $qnote->rectype) + 1;
-
+		$qnote->set('recno', get_maxqnoterecnbr($qnote->sessionid, $qnote->key1, $qnote->key2, $qnote->rectype) + 1);
+		$qnote->set('date', date('Ymd'));
+		$qnote->set('time', date('His'));
+		
 		foreach ($qnote->_toArray() as $property => $value) {
 			$q->set($property, $value);
 		}
-		$sql = Processwire\wire('database')->prepare($q->render());
+		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -2753,10 +2755,8 @@
 	function get_itemsearchresults($sessionID, $limit = 10, $page = 1, $debug = false) {
 		$q = (new QueryBuilder())->table('pricing');
 		$q->where('sessionid', $sessionID);
-		if (!empty($limit)) {
-			$q->limit($limit, $q->generate_offset($page, $limit));
-		}
-		$sql = DplusWire::wire('database')->prepare($q->render());
+		$q->limit($limit, $q->generate_offset($page, $limit));
+		$sql = Processwire\wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -2771,7 +2771,7 @@
 		$q = (new QueryBuilder())->table('pricing');
 		$q->field($q->expr('COUNT(*)'));
 		$q->where('sessionid', $sessionID);
-		$sql = DplusWire::wire('database')->prepare($q->render());
+		$sql = Processwire\wire('database')->prepare($q->render());
 
 		if ($debug) {
 			return $q->generate_sqlquery($q->params);
@@ -3627,6 +3627,7 @@
 			$q->where('origintype', ['I', 'V', 'C']);
 			$q->where($q->expr("UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2))"), 'like', $q->expr("UCASE([])",[$search]));
 		}
+		$q->where('itemstatus', '!=', 'I');
 		$q->order($q->expr("itemid LIKE UCASE([]) DESC", [$search]));
 		$q->group('itemid');
 		$q->limit($limit, $q->generate_offset($page, $limit));
@@ -3659,6 +3660,7 @@
 			$q->where('origintype', ['I', 'V', 'C']);
 			$q->where($q->expr("UCASE(CONCAT(itemid, ' ', refitemid, ' ', desc1, ' ', desc2))"), 'like', $q->expr("UCASE([])",[$search]));
 		}
+		$q->where('itemstatus', '!=', 'I');
 		$sql = Processwire\wire('database')->prepare($q->render());
 
 		if ($debug) {
@@ -3702,6 +3704,7 @@
 		$expression = $nextorprev == 'next' ? "MAX(recno) + 1" : "MIN(recno) - 1";
 		$q->field($q->expr($expression));
 		$q->where('itemid', $itemID);
+		$q->where('itemstatus', '!=', 'I');
 		$sql = DplusWire::wire('database')->prepare($q->render());
 
 		if ($debug) {
